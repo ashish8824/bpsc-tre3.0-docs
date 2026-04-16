@@ -1,929 +1,1092 @@
-# 📅 DAY 17 — BPSC TRE 4.0 COMPLETE STUDY MATERIAL
-## CS: Stack — Expression Conversion (Infix / Postfix / Prefix)
-## GS: India Geography — Physical Features (Eastern Ghats, Western Ghats, Peninsular Plateau)
-
-> **Target:** TOP RANK | **Format:** 5-option BPSC ABCDE | **PYQs integrated throughout**
-> ⚠️ **RULE:** Solve ALL 50 questions FIRST → Answers are at the END of this file.
+# 📅 BPSC TRE 4.0 — DAY 17 COMPLETE STUDY MODULE
+### Expression Conversion (Infix/Postfix/Prefix) using Stack + India Geography — Eastern Ghats
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-# ═══════════════════════════════════════════
-# 🖥️ COMPUTER SCIENCE SECTION
-# STACK: EXPRESSION CONVERSION
-# ═══════════════════════════════════════════
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): Expression Types, Operator Precedence, Infix→Postfix, Infix→Prefix, Evaluation
+> - Afternoon (1 hr): India Geography — Eastern Ghats
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-## 📌 CONCEPT 1: What is an Expression?
-
-An **expression** is a combination of **operands** (variables/numbers) and **operators** (+, -, *, /) arranged in a specific notation.
-
-There are **3 types** of notation:
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│              THREE NOTATIONS AT A GLANCE                        │
-│                                                                 │
-│  Expression: A plus B                                           │
-│                                                                 │
-│  INFIX    →   A + B   (operator BETWEEN operands)               │
-│  POSTFIX  →   A B +   (operator AFTER operands)                 │
-│  PREFIX   →   + A B   (operator BEFORE operands)                │
-│                                                                 │
-│  Infix    = Human-readable  (we use this daily)                 │
-│  Postfix  = Computer-friendly (also: Reverse Polish Notation)   │
-│  Prefix   = Polish Notation                                     │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Real World Analogy:
-- **Infix:** "Ram **loves** India" → Subject-Verb-Object (normal English)
-- **Postfix:** "Ram India **loves**" → like Yoda speech ("Luke, I am your father" style)
-- **Prefix:** "**loves** Ram India" → Verb-Subject-Object
+# PART 1: COMPUTER SCIENCE
+## 📘 Expression Conversion using Stack — Complete Guide
 
 ---
 
-## 📌 CONCEPT 2: Why do we need Postfix/Prefix?
+## 🔷 SECTION 1: What is an Expression?
 
-**Problem with Infix:**
-1. Requires **parentheses** to resolve ambiguity → `(A + B) * C` vs `A + (B * C)`
-2. Requires knowledge of **operator precedence** and **associativity**
-3. Computers cannot directly evaluate infix — they must first convert it
-
-**Advantage of Postfix:**
-1. ✅ No parentheses needed — order is already embedded
-2. ✅ No precedence rules needed during evaluation
-3. ✅ Easily evaluated using a single Stack
-4. ✅ Used internally by compilers and calculators
-
-> **PYQ FACT:** Postfix notation is also called **Reverse Polish Notation (RPN)**. It was invented by Jan Łukasiewicz.
-
----
-
-## 📌 CONCEPT 3: Operator Precedence & Associativity
-
-This is CRITICAL for correct conversion. Memorize this table:
+### Real-Life Analogy:
+An expression is like a **mathematical sentence** — it combines numbers/variables with operators to produce a result. But computers and humans prefer to READ and EVALUATE expressions differently.
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│           OPERATOR PRECEDENCE TABLE (HIGH to LOW)           │
-│                                                             │
-│  Priority 1 (Highest): ^ (Exponentiation)                   │
-│                         Associativity: RIGHT to LEFT        │
-│                                                             │
-│  Priority 2:            * / % (Multiply, Divide, Modulo)   │
-│                         Associativity: LEFT to RIGHT        │
-│                                                             │
-│  Priority 3 (Lowest):   + - (Addition, Subtraction)        │
-│                         Associativity: LEFT to RIGHT        │
-│                                                             │
-│  TRICK: "BODMAS" → Exponent > Multiply/Divide > Add/Sub    │
-└─────────────────────────────────────────────────────────────┘
+Human writes:   3 + 4 × 2    (Infix — operator BETWEEN operands)
+Calculator evaluates in a special order
+Computer prefers: 3 4 2 × +  (Postfix — no brackets needed!)
 ```
 
-**Associativity matters when precedence is EQUAL:**
-- `A - B - C` → Evaluated as `(A - B) - C` → LEFT to RIGHT
-- `A ^ B ^ C` → Evaluated as `A ^ (B ^ C)` → RIGHT to LEFT
-
----
-
-## 📌 CONCEPT 4: Infix to Postfix — The Stack Algorithm
-
-### Visual Diagram of the Algorithm:
-
+### The Problem with Infix:
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│              INFIX TO POSTFIX ALGORITHM                             │
-│                                                                     │
-│  INPUT: Read expression from LEFT to RIGHT                          │
-│  OUTPUT: Postfix string                                             │
-│  TOOL: One Stack (for operators)                                    │
-│                                                                     │
-│  RULES:                                                             │
-│  ┌─────────────────────────────────────────────────────────────┐   │
-│  │ TOKEN      │ ACTION                                          │   │
-│  ├────────────┼─────────────────────────────────────────────── │   │
-│  │ Operand    │ → DIRECTLY add to OUTPUT                        │   │
-│  │ (          │ → PUSH to Stack                                 │   │
-│  │ )          │ → POP from Stack and add to OUTPUT until (      │   │
-│  │            │   found. Discard both parentheses               │   │
-│  │ Operator   │ → POP operators with HIGHER or EQUAL precedence │   │
-│  │            │   from Stack to OUTPUT, then PUSH current op    │   │
-│  │            │   (For ^: only POP if strictly HIGHER)          │   │
-│  │ End        │ → POP all remaining operators to OUTPUT         │   │
-│  └─────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────┘
-```
+Consider: A + B * C
 
-### Time & Space Complexity:
-| Metric | Value |
-|--------|-------|
-| Time Complexity | **O(N)** — each character processed once |
-| Space Complexity | **O(N)** — Stack can hold at most N operators |
+Should this be: (A + B) * C  → first add, then multiply?
+            or:  A + (B * C) → first multiply, then add?
 
-> **⭐ PYQ DIRECT FACT:** Time complexity of Infix to Postfix = **O(N)**. This appeared in TRE 2.0!
+Infix is AMBIGUOUS without brackets or precedence rules.
+Computers must use brackets or convert to postfix/prefix
+to evaluate correctly and efficiently.
 
----
-
-## 📌 CONCEPT 5: Worked Example — Infix to Postfix
-
-### Example 1: `A + B * C - D`
-
-```
-┌──────────────────────────────────────────────────────────────────┐
-│  Expression: A + B * C - D                                       │
-│                                                                  │
-│  STEP-BY-STEP TRACE:                                             │
-│                                                                  │
-│  Token │ Stack (bottom→top) │ Output                            │
-│  ──────┼────────────────────┼────────────────────────────────── │
-│  A     │ (empty)            │ A                                  │
-│  +     │ +                  │ A                                  │
-│  B     │ +                  │ A B                                │
-│  *     │ + *                │ A B      (* has higher prec. than+)│
-│  C     │ + *                │ A B C                              │
-│  -     │ -                  │ A B C * +  (pop * then +, push -)  │
-│  D     │ -                  │ A B C * + D                        │
-│  END   │ (empty)            │ A B C * + D -  (pop -)             │
-│                                                                  │
-│  FINAL POSTFIX: A B C * + D -                                    │
-└──────────────────────────────────────────────────────────────────┘
-```
-
-**Verification:** `A + B * C - D`
-- First evaluate `B * C` = X
-- Then `A + X` = Y
-- Then `Y - D`
-✅ Postfix `A B C * + D -` gives same result.
-
----
-
-### Example 2: `(A + B) * (C - D)` — With Parentheses
-
-```
-┌──────────────────────────────────────────────────────────────────┐
-│  Token │ Stack           │ Output                                │
-│  ──────┼─────────────────┼───────────────────────────────────── │
-│  (     │ (               │                                       │
-│  A     │ (               │ A                                     │
-│  +     │ ( +             │ A                                     │
-│  B     │ ( +             │ A B                                   │
-│  )     │ (empty)         │ A B +     ← pop + until (, discard (  │
-│  *     │ *               │ A B +                                 │
-│  (     │ * (             │ A B +                                 │
-│  C     │ * (             │ A B + C                               │
-│  -     │ * ( -           │ A B + C                               │
-│  D     │ * ( -           │ A B + C D                             │
-│  )     │ *               │ A B + C D -  ← pop -, discard (       │
-│  END   │ (empty)         │ A B + C D - *                         │
-│                                                                  │
-│  FINAL POSTFIX: A B + C D - *                                    │
-└──────────────────────────────────────────────────────────────────┘
+Postfix version: A B C * +   → UNAMBIGUOUS, no brackets needed
+Evaluate right to left: B*C first, then add A
 ```
 
 ---
 
-### Example 3: `A ^ B ^ C` — Right-to-Left Associativity
+## 🔷 SECTION 2: Three Types of Expressions
 
+### Type 1: INFIX Expression
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│  Token │ Stack │ Output                                          │
-│  ──────┼───────┼──────────────────────────────────────────────  │
-│  A     │       │ A                                               │
-│  ^     │ ^     │ A                                               │
-│  B     │ ^     │ A B                                             │
-│  ^     │ ^ ^   │ A B   ← ^ has EQUAL prec; but ^ is RIGHT assoc │
-│        │       │   so we DO NOT pop the existing ^               │
-│  C     │ ^ ^   │ A B C                                           │
-│  END   │       │ A B C ^ ^                                       │
-│                                                                  │
-│  FINAL POSTFIX: A B C ^ ^                                        │
-│  Which means: A ^ (B ^ C)  ✓ Right-to-Left                      │
-└──────────────────────────────────────────────────────────────────┘
+Format:  operand  OPERATOR  operand
+Example: A + B
+         A + B * C - D
+         (A + B) * (C - D)
+
+Position of operator: BETWEEN the two operands
+How humans naturally write mathematics
+Requires precedence rules AND brackets for clarity
 ```
 
-> **⚠️ TRAP:** For `^` with equal precedence, do NOT pop (right-associative). For `+,-,*,/` with equal precedence, DO pop (left-associative). **This is a classic BPSC trap question!**
-
----
-
-## 📌 CONCEPT 6: Infix to Prefix — The Algorithm
-
-Converting to Prefix is slightly different:
-
+### Type 2: POSTFIX Expression (Reverse Polish Notation — RPN)
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│              INFIX TO PREFIX — 3-STEP METHOD                    │
-│                                                                 │
-│  STEP 1: REVERSE the infix expression                           │
-│          (Also swap all '(' with ')' and vice versa)            │
-│                                                                 │
-│  STEP 2: Apply the INFIX TO POSTFIX algorithm on reversed expr  │
-│          BUT: for equal precedence, use RIGHT-to-LEFT for all   │
-│                                                                 │
-│  STEP 3: REVERSE the result → This is your PREFIX expression    │
-└─────────────────────────────────────────────────────────────────┘
+Format:  operand  operand  OPERATOR
+Example: A B +          (means A + B)
+         A B C * +      (means A + B*C)
+         A B + C D - *  (means (A+B)*(C-D))
+
+Position of operator: AFTER both operands
+Used by compilers and calculators internally
+NO brackets needed — completely unambiguous
+NO precedence rules needed during evaluation
 ```
 
-### Example: `A + B * C` → Prefix
-
-- **Step 1:** Reverse → `C * B + A`
-- **Step 2:** Infix to Postfix of `C * B + A` → `C B * A +`
-- **Step 3:** Reverse → `+ A * B C`
-- **Final PREFIX:** `+ A * B C` ✅
-
-**Verification:** `+ A * B C` → `A + (B * C)` ✓
-
----
-
-## 📌 CONCEPT 7: Postfix Evaluation using Stack
-
-Once you have a Postfix expression, how does the computer evaluate it?
-
+### Type 3: PREFIX Expression (Polish Notation)
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│              POSTFIX EVALUATION ALGORITHM                       │
-│                                                                 │
-│  RULES:                                                         │
-│  ┌────────────────────────────────────────────────────────┐    │
-│  │ TOKEN     │ ACTION                                      │    │
-│  ├───────────┼─────────────────────────────────────────── │    │
-│  │ Operand   │ PUSH onto Stack                             │    │
-│  │ Operator  │ POP two operands from Stack                 │    │
-│  │           │ Apply operator: (second_popped OP first_pop)│    │
-│  │           │ PUSH result back onto Stack                 │    │
-│  │ End       │ Stack top = FINAL ANSWER                    │    │
-│  └────────────────────────────────────────────────────────┘    │
-│                                                                 │
-│  ⚠️ ORDER MATTERS: If A and B are popped (B first, A second):  │
-│     Operation is: A OP B   (first popped is right operand)     │
-└─────────────────────────────────────────────────────────────────┘
+Format:  OPERATOR  operand  operand
+Example: + A B          (means A + B)
+         + A * B C      (means A + B*C)
+         * + A B - C D  (means (A+B)*(C-D))
+
+Position of operator: BEFORE both operands
+Also called Polish Notation (invented by Jan Łukasiewicz)
+Also unambiguous, no brackets needed
 ```
 
-### Example: Evaluate `3 4 2 * + 1 -` (which is `3 + 4 * 2 - 1`)
-
+### Side-by-Side Comparison:
 ```
-Token │ Stack (bottom→top) │ Action
-──────┼────────────────────┼──────────────────────────────
-3     │ 3                  │ Push 3
-4     │ 3 4                │ Push 4
-2     │ 3 4 2              │ Push 2
-*     │ 3 8                │ Pop 2,4 → 4*2=8 → Push 8
-+     │ 11                 │ Pop 8,3 → 3+8=11 → Push 11
-1     │ 11 1               │ Push 1
--     │ 10                 │ Pop 1,11 → 11-1=10 → Push 10
+Expression:  (A + B) * (C - D)
 
-FINAL ANSWER = 10 ✅
+Infix:    (A + B) * (C - D)   ← human-friendly, brackets needed
+Postfix:  A B + C D - *       ← compiler-friendly, no brackets
+Prefix:   * + A B - C D       ← also no brackets
+
+KEY PATTERN:
+Infix   → operator is INSIDE/BETWEEN  (In  = Inside)
+Postfix → operator is at the END/AFTER (Post = After)
+Prefix  → operator is at the START/BEFORE (Pre = Before)
 ```
 
 ---
 
-## 📌 CONCEPT 8: Quick Conversion Reference Table
+## 🔷 SECTION 3: Operator Precedence & Associativity
 
-| Infix Expression | Postfix | Prefix |
-|-----------------|---------|--------|
+### Precedence Table — Highest to Lowest:
+
+| Priority | Operator(s) | Associativity | Example |
+|----------|-------------|---------------|---------|
+| 1 (Highest) | `^` (exponentiation) | **Right to Left** | 2^3^2 = 2^(3^2) = 2^9 |
+| 2 | `*` `/` `%` (multiply, divide, mod) | Left to Right | 6/2*3 = (6/2)*3 = 9 |
+| 3 (Lowest) | `+` `-` (add, subtract) | Left to Right | 5+3-2 = (5+3)-2 = 6 |
+
+### Associativity Rules:
+```
+LEFT to RIGHT associativity (most operators):
+  A + B + C  →  (A + B) + C  ← evaluate left first
+
+RIGHT to LEFT associativity (exponentiation only):
+  A ^ B ^ C  →  A ^ (B ^ C)  ← evaluate right first
+
+MEMORY TRICK for precedence:
+"Please Excuse My Dear Aunt Sally"
+→ Parentheses, Exponents, Multiply/Divide, Add/Subtract
+
+Or simpler: "BODMAS" / "PEMDAS" — you know this from school!
+```
+
+### 🚨 PYQ TRAP #1: Exponentiation Associativity
+> `^` (power/exponentiation) is RIGHT associative — the ONLY common operator that is.
+> `2 ^ 3 ^ 2` = `2 ^ (3^2)` = `2 ^ 9` = 512 (NOT (2^3)^2 = 64)
+
+### Precedence Inside Parentheses:
+```
+Parentheses have HIGHEST precedence of all.
+Whatever is inside ( ) is evaluated first.
+For conversion algorithms, treat ( as a special token.
+```
+
+---
+
+## 🔷 SECTION 4: Infix → Postfix Conversion Using Stack
+
+### The Full Algorithm:
+
+```
+ALGORITHM: Infix to Postfix
+
+Setup:
+  - Stack: holds operators (and left parenthesis)
+  - Output: the postfix expression being built
+  - Scan input LEFT to RIGHT, one token at a time
+
+Rules for each token:
+  1. If token is OPERAND (letter/number) → directly ADD to output
+  2. If token is LEFT parenthesis '(' → PUSH onto stack
+  3. If token is RIGHT parenthesis ')':
+       → POP and output stack elements UNTIL '(' is found
+       → Discard BOTH parentheses (don't add to output)
+  4. If token is OPERATOR (+,-,*,/,^):
+       → While stack is NOT empty AND
+             top of stack is NOT '(' AND
+             precedence(top) >= precedence(current token):
+               POP and add to output
+       → PUSH current operator onto stack
+  5. After scanning all tokens:
+       → POP and output ALL remaining stack elements
+
+Special note for ^ (right associative):
+  → Use STRICTLY GREATER (>) instead of >= when comparing
+     with ^ on the stack (don't pop equal precedence ^ from stack)
+```
+
+---
+
+### DRY RUN #1 — Convert: `A + B * C - D`
+
+**Setup:** Output = [ ], Stack = [ ]
+
+| Step | Token | Action | Stack (bottom→top) | Output |
+|------|-------|--------|-------------------|--------|
+| 1 | A | Operand → add to output | [ ] | A |
+| 2 | + | Stack empty → push + | [+] | A |
+| 3 | B | Operand → add to output | [+] | A B |
+| 4 | * | prec(*) > prec(+) → push * | [+ *] | A B |
+| 5 | C | Operand → add to output | [+ *] | A B C |
+| 6 | - | prec(-) <= prec(*): pop * → output; prec(-) <= prec(+): pop + → output; stack empty → push - | [-] | A B C * + |
+| 7 | D | Operand → add to output | [-] | A B C * + D |
+| End | — | Pop remaining: pop - → output | [ ] | A B C * + D - |
+
+**Result: `A B C * + D -`**
+
+### Verification:
+```
+Original infix: A + B * C - D
+                = A + (B*C) - D    (precedence: * before +)
+
+Postfix: A B C * + D -
+Evaluation:
+  A B C * → computes B*C, call it X
+  A X +   → computes A+X, call it Y
+  Y D -   → computes Y-D = A+B*C-D  ✅ Correct!
+```
+
+---
+
+### DRY RUN #2 — Convert: `(A + B) * C`
+
+| Step | Token | Action | Stack | Output |
+|------|-------|--------|-------|--------|
+| 1 | ( | Push ( | [(] | |
+| 2 | A | Operand → output | [(] | A |
+| 3 | + | Push + (top is '(', can't pop past it) | [( +] | A |
+| 4 | B | Operand → output | [( +] | A B |
+| 5 | ) | Pop until '(': pop + → output; discard ( | [ ] | A B + |
+| 6 | * | Stack empty → push * | [*] | A B + |
+| 7 | C | Operand → output | [*] | A B + C |
+| End | — | Pop *: output | [ ] | A B + C * |
+
+**Result: `A B + C *`**  ✅ (meaning: (A+B)*C)
+
+---
+
+### DRY RUN #3 — Convert: `A ^ B ^ C` (Right Associativity)
+
+```
+Rule for ^ (right associative):
+  When current token is ^ AND top of stack is also ^:
+  Do NOT pop the ^ from stack (because right-associative means
+  we want the rightmost ^ to evaluate first)
+
+| Step | Token | Action | Stack | Output |
+|------|-------|--------|-------|--------|
+| 1 | A | Operand | [ ] | A |
+| 2 | ^ | Stack empty → push | [^] | A |
+| 3 | B | Operand | [^] | A B |
+| 4 ^ | Current ^ vs top ^: for right assoc, do NOT pop → push | [^ ^] | A B |
+| 5 | C | Operand | [^ ^] | A B C |
+| End | | Pop ^ → output, pop ^ → output | [ ] | A B C ^ ^ |
+
+Result: A B C ^ ^
+
+This means: A ^ (B ^ C)  ← right associative ✅
+NOT: (A ^ B) ^ C  ← which would be A B ^ C ^
+```
+
+---
+
+### DRY RUN #4 — Comprehensive: `A * B + C / D - E`
+
+| Step | Token | Action | Stack | Output |
+|------|-------|--------|-------|--------|
+| 1 | A | Operand | [ ] | A |
+| 2 | * | Push | [*] | A |
+| 3 | B | Operand | [*] | A B |
+| 4 | + | prec(+) < prec(*): pop * → out; stack empty → push + | [+] | A B * |
+| 5 | C | Operand | [+] | A B * C |
+| 6 | / | prec(/) > prec(+): push / | [+ /] | A B * C |
+| 7 | D | Operand | [+ /] | A B * C D |
+| 8 | - | prec(-) <= prec(/): pop / → out; prec(-) <= prec(+): pop + → out; stack empty → push - | [-] | A B * C D / + |
+| 9 | E | Operand | [-] | A B * C D / + E |
+| End | | Pop - → output | [ ] | A B * C D / + E - |
+
+**Result: `A B * C D / + E -`**
+
+Verification: `A*B + C/D - E` = `(A*B) + (C/D) - E` → postfix correct ✅
+
+---
+
+## 🔷 SECTION 5: Time Complexity of Infix → Postfix
+
+```
+Scanning all tokens: O(N) — visit each character once
+Each operator is pushed and popped AT MOST ONCE: O(1) per operator
+Total operators ≤ N
+
+TOTAL TIME COMPLEXITY = O(N)
+
+Space Complexity = O(N) for the stack in worst case
+(all operators could be on the stack at once)
+
+This is the #1 BPSC PYQ fact about expression conversion:
+"Time complexity of Infix to Postfix = O(N)"
+```
+
+---
+
+## 🔷 SECTION 6: Infix → Prefix Conversion
+
+### Algorithm (3 Steps):
+```
+Step 1: REVERSE the infix expression
+        → Also swap '(' with ')' and vice versa
+
+Step 2: Apply the POSTFIX algorithm on the reversed expression
+
+Step 3: REVERSE the result
+
+That's it! The result is the PREFIX expression.
+```
+
+### Why This Works:
+```
+Postfix = operators come AFTER their operands
+Prefix  = operators come BEFORE their operands
+
+If you reverse a postfix expression, operators end up BEFORE → prefix!
+So: convert to "postfix of reversed" → reverse that → get prefix
+```
+
+### DRY RUN: Convert `A + B * C` to Prefix
+
+**Step 1: Reverse `A + B * C`**
+```
+Original:  A + B * C
+Reversed:  C * B + A
+(no brackets to swap here)
+```
+
+**Step 2: Apply Postfix algorithm to `C * B + A`**
+
+| Step | Token | Action | Stack | Output |
+|------|-------|--------|-------|--------|
+| 1 | C | Operand | [ ] | C |
+| 2 | * | Push | [*] | C |
+| 3 | B | Operand | [*] | C B |
+| 4 | + | prec(+) < prec(*): pop * → out; push + | [+] | C B * |
+| 5 | A | Operand | [+] | C B * A |
+| End | | Pop + → out | [ ] | C B * A + |
+
+Intermediate postfix of reversed: `C B * A +`
+
+**Step 3: Reverse `C B * A +`**
+```
+Reversed: + A * B C
+```
+
+**Result: `+ A * B C`**
+
+Verification: `+ A * B C` means `A + (B * C)` ✅
+
+---
+
+## 🔷 SECTION 7: Postfix Evaluation Using Stack
+
+### Algorithm:
+```
+POSTFIX EVALUATION:
+
+Scan tokens LEFT to RIGHT:
+  If token is OPERAND → PUSH onto stack
+  If token is OPERATOR → POP two operands, APPLY operator, PUSH result
+
+At the end: the single remaining value on the stack = RESULT
+
+NOTE: When popping for an operator:
+  First pop  → RIGHT operand (b)
+  Second pop → LEFT operand (a)
+  Apply: a OPERATOR b
+  (Order matters for -, / which are NOT commutative)
+```
+
+### DRY RUN: Evaluate `5 3 2 * + 8 -`
+
+```
+Expression (original infix): 5 + 3 * 2 - 8
+
+Postfix: 5 3 2 * + 8 -
+
+| Token | Action | Stack (bottom→top) |
+|-------|--------|-------------------|
+| 5 | Push | [5] |
+| 3 | Push | [5, 3] |
+| 2 | Push | [5, 3, 2] |
+| * | Pop 2 and 3; 3*2=6; Push 6 | [5, 6] |
+| + | Pop 6 and 5; 5+6=11; Push 11 | [11] |
+| 8 | Push | [11, 8] |
+| - | Pop 8 and 11; 11-8=3; Push 3 | [3] |
+
+RESULT = 3 ✅
+
+Verify: 5 + 3*2 - 8 = 5 + 6 - 8 = 11 - 8 = 3 ✅
+```
+
+### 🚨 PYQ TRAP #2: Order of operands during evaluation
+```
+For operator OP, when popping:
+  first_pop  = b (right operand)
+  second_pop = a (left operand)
+  result = a OP b (NOT b OP a!)
+
+Example: evaluate "8 3 -" (means 8 - 3)
+  Push 8, Push 3
+  Operator -: pop b=3, pop a=8
+  Result = a - b = 8 - 3 = 5 ✅
+
+If you did b - a = 3 - 8 = -5 ← WRONG!
+```
+
+---
+
+## 🔷 SECTION 8: Prefix Evaluation Using Stack
+
+### Algorithm:
+```
+PREFIX EVALUATION:
+
+Scan tokens RIGHT to LEFT (opposite of postfix!):
+  If token is OPERAND → PUSH onto stack
+  If token is OPERATOR → POP two operands, APPLY operator, PUSH result
+
+For prefix, when popping:
+  First pop  → LEFT operand (a)
+  Second pop → RIGHT operand (b)
+  Apply: a OPERATOR b
+```
+
+### DRY RUN: Evaluate `+ 5 * 3 2`
+
+```
+Scan right to left: 2 → 3 → * → 5 → +
+
+| Token | Action | Stack |
+|-------|--------|-------|
+| 2 | Push | [2] |
+| 3 | Push | [2, 3] |
+| * | Pop a=2, pop b=3; Wait... |
+```
+
+Correction — for prefix, right to left:
+```
+Expression: + 5 * 3 2
+Scan R→L: 2, 3, *, 5, +
+
+| Token | Action | Stack |
+|-------|--------|-------|
+| 2 | Push | [2] |
+| 3 | Push | [2, 3] |
+| * | Pop a=3 (first), pop b=2 (second); 3*2=6; push | [6] |
+| 5 | Push | [6, 5] |
+| + | Pop a=5, pop b=6; 5+6=11; push | [11] |
+
+RESULT = 11
+Verify: 5 + 3*2 = 5 + 6 = 11 ✅
+```
+
+---
+
+## 🔷 SECTION 9: Quick Conversion Reference Table
+
+### Expression Types — Identification:
+```
+Look at WHERE the operator is relative to operands:
+
+A + B     → Operator between operands → INFIX
+A B +     → Operator after operands → POSTFIX
++ A B     → Operator before operands → PREFIX
+
+For longer expressions, look at the FIRST TOKEN:
+  If first token = operand → could be Infix or Postfix
+  If first token = operator → PREFIX
+
+Or last token:
+  If last token = operator → POSTFIX
+  If last token = operand → could be Infix or Prefix
+```
+
+### Common Conversions Quick Reference:
+
+| Infix | Postfix | Prefix |
+|-------|---------|--------|
 | A + B | A B + | + A B |
 | A + B * C | A B C * + | + A * B C |
 | (A + B) * C | A B + C * | * + A B C |
 | A * B + C * D | A B * C D * + | + * A B * C D |
-| A + B - C | A B + C - | - + A B C |
+| A + B * C - D | A B C * + D - | - + A * B C D |
 | A ^ B ^ C | A B C ^ ^ | ^ A ^ B C |
 
 ---
 
-## 📌 CONCEPT 9: Important Facts & Traps for BPSC
+## 🔷 SECTION 10: Summary & PYQ Pattern
+
+### Most Tested Facts:
+```
+1. Time complexity of conversion = O(N)
+2. Postfix evaluation: pop b first (right), then a (left), compute a OP b
+3. ^ is RIGHT associative → do NOT pop equal-precedence ^ during conversion
+4. '(' is pushed but never triggers a pop (unless ')' encountered)
+5. Parentheses are DISCARDED in output (never appear in postfix/prefix)
+6. After scanning all tokens: pop ALL remaining stack elements to output
+```
+
+### 🚨 PYQ TRAP #3: Parentheses in output
+> Postfix and Prefix expressions NEVER contain parentheses.
+> If you see `( )` in a postfix answer, it is WRONG.
+
+### 🚨 PYQ TRAP #4: Which expression needs no brackets?
+> **Postfix and Prefix** never require brackets — they are inherently unambiguous.
+> **Infix** requires brackets when natural precedence is overridden.
+
+### 🚨 PYQ TRAP #5: What is Polish Notation?
+> **Prefix = Polish Notation** (named after Polish mathematician Jan Łukasiewicz)
+> **Postfix = Reverse Polish Notation (RPN)**
+
+---
+
+## 📊 VISUAL SUMMARY
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│            ⭐ HIGH-YIELD BPSC FACTS — MEMORIZE THESE            │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  1. Infix → Postfix uses STACK  ✓                               │
-│  2. Infix → Postfix time = O(N) ✓ (Direct PYQ!)                │
-│  3. Postfix is also called: REVERSE POLISH NOTATION (RPN)       │
-│  4. Prefix is also called: POLISH NOTATION                      │
-│  5. Postfix evaluation uses STACK                               │
-│  6. Parentheses are NOT needed in Prefix or Postfix             │
-│  7. ^ is RIGHT associative; +,-,*,/ are LEFT associative        │
-│  8. Postfix/Prefix avoids ambiguity without parentheses         │
-│  9. Algorithm invented by: Dijkstra's Shunting Yard Algorithm   │
-│  10. In Postfix eval: first popped = RIGHT operand              │
-│                                                                 │
-│  ⚠️ TRAPS TO WATCH:                                             │
-│  ❌ "Postfix is read right-to-left" → FALSE (read left-to-right)│
-│  ❌ "Prefix needs Stack for eval" → TRUE (same stack approach)  │
-│  ❌ "A + B = BA+" → FALSE, correct is "A B +"                   │
-│  ❌ "Time complexity is O(N²)" → FALSE, it's O(N)               │
-└─────────────────────────────────────────────────────────────────┘
+EXPRESSION CONVERSION (Stack-based)
+
+                    INFIX (A + B * C)
+                         │
+           ┌─────────────┴─────────────┐
+    Infix→Postfix                  Infix→Prefix
+    (direct stack algorithm)       (Reverse→Postfix→Reverse)
+           │                            │
+    POSTFIX (A B C * +)          PREFIX (+ A * B C)
+           │                            │
+    Evaluate: scan L→R           Evaluate: scan R→L
+    operand→push                  operand→push
+    operator→pop 2, compute       operator→pop 2, compute
+    push result                   push result
+           │                            │
+         RESULT ←────────────────── RESULT
+
+All conversions: O(N) time
+No brackets in Postfix or Prefix output
+```
+
+---
+---
+
+# PART 2: GENERAL STUDIES
+## 🗺️ India Geography — Eastern Ghats
+
+---
+
+## 🔷 WHY THIS MATTERS FOR BPSC TRE:
+- Eastern vs Western Ghats comparison = very high frequency PYQ topic
+- Peaks, rivers, and states covered appear as direct questions
+- Tribal communities and biodiversity also tested
+
+---
+
+## 🔷 EASTERN GHATS — OVERVIEW
+
+### What Are the Eastern Ghats?
+```
+The Eastern Ghats are a DISCONTINUOUS chain of hills along the
+EASTERN COAST (Coromandel Coast) of India, running roughly
+parallel to the Bay of Bengal.
+
+KEY WORD: DISCONTINUOUS ← most important exam fact
+(Unlike Western Ghats which are CONTINUOUS)
+
+Direction: Run roughly NE to SW along the eastern coast
+Length: Approximately 1,750 km
+States: Odisha, Andhra Pradesh, Telangana, Tamil Nadu
+        (and small portions of Jharkhand, West Bengal)
+```
+
+### Location Summary:
+```
+EASTERN GHATS:
+West boundary: Deccan Plateau (interior)
+East boundary: Coastal plains (Bay of Bengal coast)
+They run BETWEEN the Deccan Plateau and the Eastern Coastal Plains
+
+Northern end: Odisha / Jharkhand / West Bengal border area
+Southern end: Nilgiri Hills (where Eastern & Western Ghats meet)
 ```
 
 ---
 
-## 📌 CONCEPT 10: Complete Notation Comparison
+## 🔷 STATES COVERED BY EASTERN GHATS
 
 ```
-┌────────────────────────────────────────────────────────────────────┐
-│                  NOTATION COMPARISON CHART                         │
-├──────────────────┬────────────────┬──────────────┬────────────────┤
-│ Feature          │ Infix          │ Postfix      │ Prefix         │
-├──────────────────┼────────────────┼──────────────┼────────────────┤
-│ Operator Place   │ Between        │ After        │ Before         │
-│ Human Readable   │ ✅ Yes         │ ❌ No        │ ❌ No          │
-│ Computer Friendly│ ❌ No          │ ✅ Yes       │ ✅ Yes         │
-│ Needs Parens     │ Sometimes      │ Never        │ Never          │
-│ Needs Precedence │ Yes            │ No           │ No             │
-│ Also Called      │ -              │ RPN          │ Polish Notation│
-│ Eval Uses Stack  │ No (indirect)  │ Yes          │ Yes            │
-│ Read Direction   │ L to R         │ L to R       │ R to L         │
-└──────────────────┴────────────────┴──────────────┴────────────────┘
-```
+State            Coverage Area
+─────────────────────────────────────────────────────
+Odisha           Northernmost part — Maliya Hills, Koraput hills
+                 → Simlipal Hills (biosphere reserve)
 
----
+Andhra Pradesh   Major portion — Nallamala, Palakonda, Lankamala
+                 → Largest area under Eastern Ghats
 
-# ═══════════════════════════════════════════════════
-# 🌍 GENERAL STUDIES SECTION
-# INDIA GEOGRAPHY — PHYSICAL FEATURES
-# Eastern Ghats | Western Ghats | Peninsular Plateau
-# ═══════════════════════════════════════════════════
+Telangana        Pakhal hills, Nallamala range continues
 
----
+Tamil Nadu       Southernmost portion — meets Nilgiri hills here
+                 (Javadi Hills, Shevaroy Hills, Biligiriranga Hills)
 
-## 📌 GS CONCEPT 1: The Big Picture — India's Physical Divisions
-
-```
-┌────────────────────────────────────────────────────────────────────┐
-│              INDIA'S PHYSICAL DIVISIONS                            │
-│                                                                    │
-│  1. The Himalayas (Northern Mountain Wall)                         │
-│  2. The Northern Plains (Indo-Gangetic Plain)                      │
-│  3. The Peninsular Plateau ← TODAY'S MAIN FOCUS                    │
-│  4. The Coastal Plains (East & West)                               │
-│  5. The Islands (Andaman & Nicobar + Lakshadweep)                  │
-│  6. The Thar Desert (Rajasthan)                                     │
-│                                                                    │
-│         [NORTH]                                                    │
-│    ~~~~~~~~~~~~~~~~~~~~ HIMALAYAS ~~~~~~~~~~~~~~~~~~~              │
-│    ════════════════ NORTHERN PLAINS ════════════════               │
-│         THAR │    ┌──────────────────────┐                        │
-│        DESERT │    │   PENINSULAR PLATEAU │                        │
-│               │    │   (DECCAN PLATEAU)   │                        │
-│               │    │                      │                        │
-│    WESTERN    │    │     EASTERN           │                       │
-│    GHATS      │    │     GHATS             │                       │
-│    (West      │    │     (East Coast)      │                       │
-│     Coast)   │    └──────────────────────┘                        │
-│    [Arabian   │                  [Bay of Bengal]                   │
-│    Sea Coast] │                                                    │
-└────────────────────────────────────────────────────────────────────┘
+West Bengal /    Marginal northern part
+Jharkhand
 ```
 
 ---
 
-## 📌 GS CONCEPT 2: The Peninsular Plateau
+## 🔷 IMPORTANT PEAKS OF EASTERN GHATS
 
-The **Peninsular Plateau** is one of the oldest and most stable landmasses of India (part of the **Gondwana Supercontinent**).
+| Peak Name | Height | State | Notes |
+|-----------|--------|-------|-------|
+| **Mahendragiri** | 1,501 m | Odisha (Gajapati dist.) | **Highest peak of Eastern Ghats** |
+| Jindhagada | 1,690 m | Andhra Pradesh | Some sources give this as highest in AP |
+| Arma Konda | 1,680 m | Andhra Pradesh (Visakhapatnam) | Also called Gali Konda; highest in AP |
+| Sinkram Gutta | 1,620 m | AP/Telangana |  |
+| Shevaroy Hills | 1,623 m | Tamil Nadu | |
+| Kollimalai | 1,300 m | Tamil Nadu | |
+| Nallamalai | — | Andhra Pradesh | Part of Nallamala range |
 
-### Key Facts:
-
-| Feature | Detail |
-|---------|--------|
-| Formation | Part of ancient Gondwana land |
-| Age | One of the OLDEST landmasses — Archaean rocks |
-| Composition | Hard crystalline, igneous & metamorphic rocks |
-| Area | About 16 lakh sq. km |
-| Shape | Triangular |
-| Highest point | Anamudi (2695 m) in Western Ghats |
-| Rivers direction | Most rivers flow WEST to EAST (drain into Bay of Bengal) |
-| Exception | Narmada & Tapi flow WEST (fault valleys / rift valleys) |
-
-### Sub-divisions of Peninsular Plateau:
-1. **Central Highlands** — North of Narmada river, slope towards north
-   - Aravalli Hills (oldest fold mountain of India)
-   - Vindhya Range
-   - Satpura Range
-   
-2. **Deccan Plateau** — South of Narmada river; bounded by:
-   - Western Ghats on the west
-   - Eastern Ghats on the east
-   - Slopes gently from **west to east**
-
-> **PYQ FACT:** Deccan Plateau slopes from **West to East**, which is why most rivers flow **East** into the Bay of Bengal.
+### 🚨 PYQ TRAP: Highest Peak of Eastern Ghats
+> **Mahendragiri (1,501 m) in Odisha** is widely cited as the highest peak of the Eastern Ghats in standard textbooks used for competitive exams.
+> Some sources cite Jindhagada or Arma Konda as higher — but for BPSC exam purposes, **Mahendragiri = highest peak of Eastern Ghats** is the accepted answer.
 
 ---
 
-## 📌 GS CONCEPT 3: Western Ghats (Sahyadri)
+## 🔷 RIVERS ASSOCIATED WITH EASTERN GHATS
 
+### Rivers Crossing Through Eastern Ghats (West to East):
 ```
-┌────────────────────────────────────────────────────────────────────┐
-│                    WESTERN GHATS — KEY FACTS                       │
-├──────────────────────────────────────────────────────────────────  │
-│  Also called: SAHYADRI Mountains                                   │
-│  Location: Parallel to West Coast of India                         │
-│  Stretch: From Tapi River (Gujarat) to Kanyakumari (Tamil Nadu)   │
-│  Length: About 1600 km                                             │
-│  UNESCO Status: World Heritage Site (2012)                         │
-│                                                                    │
-│  KEY PASSES (Ghats):                                               │
-│  • Thalghat / Thal Ghat → Mumbai to Nashik (Maharashtra)           │
-│  • Bhorghat / Bhor Ghat → Mumbai to Pune (Maharashtra)             │
-│  • Palakkad Gap (Palghat Gap) → Connects Kerala & Tamil Nadu        │
-│    (Lowest pass in Western Ghats - very important!)                │
-│                                                                    │
-│  HIGHEST PEAKS:                                                    │
-│  • Anamudi → 2695 m → HIGHEST peak of Peninsular India            │
-│    (in Kerala, in Anaimalai Hills)                                 │
-│  • Doddabetta → 2637 m → Highest peak of Nilgiri Hills             │
-│  • Kudremukh → 1892 m → Karnataka                                 │
-│                                                                    │
-│  RIVERS ORIGINATING from Western Ghats:                            │
-│  • Godavari, Krishna, Cauvery (flow EAST to Bay of Bengal)         │
-│  • Periyar, Bharathapuzha (flow WEST to Arabian Sea)               │
-└────────────────────────────────────────────────────────────────────┘
+The major peninsular rivers flow from WEST to EAST, crossing
+the Eastern Ghats before meeting the Bay of Bengal.
+
+River         States                 Enters Bay of Bengal at
+──────────────────────────────────────────────────────────────
+Mahanadi      Chhattisgarh→Odisha   Paradip (Odisha)
+Godavari      Maharashtra→AP        Rajahmundry (AP) — LARGEST
+Krishna       Maharashtra/AP        Hamsaladeevi (AP)
+Kaveri        Karnataka→Tamil Nadu  Cuddalore/Kaveripattinam (TN)
+
+All these rivers PIERCE through the Eastern Ghats, creating
+gorges and gaps (called "Ghats" = passes/steps)
 ```
 
-### Biodiversity Hotspot:
-- Western Ghats is a **Biodiversity Hotspot** (one of 34 in the world)
-- Home to: Lion-tailed macaque, Nilgiri Tahr, Purple frog
-- Declared as **UNESCO World Natural Heritage Site in 2012**
-
-> **PYQ TRAP:** "Which is higher — Western Ghats or Eastern Ghats?" → **Western Ghats** are higher (steeper escarpment on western side). Eastern Ghats are **discontinuous and lower**.
-
----
-
-## 📌 GS CONCEPT 4: Eastern Ghats
-
+### Why Rivers Cross Easily Here:
 ```
-┌────────────────────────────────────────────────────────────────────┐
-│                    EASTERN GHATS — KEY FACTS                       │
-├──────────────────────────────────────────────────────────────────  │
-│  Location: Parallel to East Coast of India (Coromandel Coast)      │
-│  Stretch: From Mahanadi (Odisha) to Nilgiri Hills (Tamil Nadu)    │
-│  Length: About 1750 km                                             │
-│  Nature: DISCONTINUOUS (cut by rivers into separate ranges)        │
-│  Average height: 600 m (LOWER than Western Ghats)                 │
-│                                                                    │
-│  WHY DISCONTINUOUS?                                                │
-│  → Major rivers (Mahanadi, Godavari, Krishna, Kaveri) cross        │
-│    Eastern Ghats and break them into separate hill ranges          │
-│                                                                    │
-│  KEY HILL RANGES within Eastern Ghats:                             │
-│  • Shevroy Hills                                                   │
-│  • Javadi Hills                                                    │
-│  • Nallamalai Hills                                                │
-│  • Mahendragiri Hills (Odisha — highest point of Eastern Ghats)   │
-│  • Shevaroy Hills / Servaroyan Hills (Tamil Nadu)                  │
-│                                                                    │
-│  HIGHEST PEAK:                                                     │
-│  • Mahendragiri → 1501 m (Odisha)                                  │
-│  • Jindhagada Peak → 1690 m (Andhra Pradesh) [some sources differ]│
-│                                                                    │
-│  STATES covered: Odisha, Andhra Pradesh, Tamil Nadu                │
-└────────────────────────────────────────────────────────────────────┘
+Eastern Ghats are DISCONTINUOUS — rivers flow through the GAPS
+between the hill ranges. This is unlike the Western Ghats
+which form a continuous barrier.
+
+Example: Godavari flows through Eastern Ghats near Papikonda range
+         creating scenic gorges (Papi Hills / Papikonda National Park)
 ```
 
 ---
 
-## 📌 GS CONCEPT 5: Western Ghats vs Eastern Ghats — COMPARISON
+## 🔷 EASTERN GHATS vs WESTERN GHATS — MASTER COMPARISON TABLE
 
-This comparison is a **DIRECT PYQ topic** — memorize every row:
+| Feature | Eastern Ghats | Western Ghats |
+|---------|--------------|---------------|
+| **Continuity** | **DISCONTINUOUS** (broken) | **CONTINUOUS** (unbroken) |
+| **Coast** | Eastern coast (Bay of Bengal) | Western coast (Arabian Sea) |
+| **Direction** | NE to SW | North-South |
+| **Length** | ~1,750 km | ~1,600 km |
+| **Elevation (avg)** | Lower (~600 m avg) | Higher (~1,000 m avg) |
+| **Highest Peak** | Mahendragiri (1,501 m) | Anamudi (2,695 m) in Kerala |
+| **Rainfall** | Less — rain shadow of W.Ghats | High — intercepts SW monsoon |
+| **Forests** | Dry deciduous | Tropical evergreen (dense) |
+| **Biodiversity** | Less than W. Ghats | **Hotspot** — one of world's 36 biodiversity hotspots |
+| **Rivers** | Godavari, Krishna, Mahanadi | Narmada, Tapi (flow West) + Krishna, Kaveri sources |
+| **States** | Odisha, AP, Telangana, TN | Gujarat, Goa, Maharashtra, Karnataka, Kerala, TN |
+| **UNESCO** | — | UNESCO World Heritage Site |
+| **Tribal groups** | Kondhs, Gondi, Sora, Savara | Todas, Kotas (Nilgiri) |
 
-```
-┌────────────────────────────────────────────────────────────────────┐
-│         WESTERN GHATS vs EASTERN GHATS — COMPARISON               │
-├────────────────────┬────────────────────────┬──────────────────────┤
-│ Feature            │ Western Ghats          │ Eastern Ghats        │
-├────────────────────┼────────────────────────┼──────────────────────┤
-│ Other Name         │ Sahyadri               │ No standard alt name │
-│ Location           │ West Coast             │ East Coast           │
-│ Length             │ ~1600 km               │ ~1750 km             │
-│ Continuity         │ CONTINUOUS             │ DISCONTINUOUS        │
-│ Height             │ HIGHER (~900-1500 m)   │ LOWER (~600 m avg)   │
-│ Highest Peak       │ Anamudi (2695 m)       │ Mahendragiri (1501 m)│
-│ Rainfall           │ HEAVY (windward side)  │ Moderate             │
-│ UNESCO Status      │ World Heritage (2012)  │ Not UNESCO listed    │
-│ Biodiversity       │ Hotspot                │ Not a hotspot        │
-│ Passes             │ Palakkad, Thal, Bhor   │ No major passes      │
-│ Escarpment         │ Steep on western side  │ Gentle slopes        │
-│ Rivers             │ Periyar flows West;    │ Mahanadi, Krishna,   │
-│                    │ Godavari flows East    │ Godavari cut through │
-└────────────────────┴────────────────────────┴──────────────────────┘
-```
+### 🚨 PYQ TRAP: Western Ghats = Biodiversity Hotspot
+> The **Western Ghats** is one of the **world's 8 biodiversity hotspots** in India (along with Himalayas, Indo-Burma, Sundaland).
+> Eastern Ghats are biologically rich but NOT a recognized global hotspot.
 
----
-
-## 📌 GS CONCEPT 6: Important Hill Ranges in Peninsular India
-
-| Hill Range | State | Special Fact |
-|-----------|-------|-------------|
-| **Aravalli** | Rajasthan (mostly) | **Oldest fold mountain** of India; runs NE to SW |
-| **Vindhya Range** | MP, UP | Divides North India from South India historically |
-| **Satpura Range** | MP, Maharashtra | "Fold & Block" mountains; Pachmarhi hill station |
-| **Nilgiri Hills** | Kerala, TN, Karnataka | "Junction" of Western & Eastern Ghats; Ooty here |
-| **Cardamom Hills** | Kerala | Part of Western Ghats; spice region |
-| **Anaimalai Hills** | Tamil Nadu, Kerala | Contains Anamudi (highest peak of South India) |
-| **Nallamalai** | Andhra Pradesh | Part of Eastern Ghats |
-| **Mahendragiri** | Odisha | Highest point of Eastern Ghats |
-
-> **⭐ PYQ FACT:** Aravalli Hills is the **oldest fold mountain** of India. It is so old and worn down that it no longer appears as high mountains.
+### 🚨 PYQ TRAP: Highest Peaks
+> Highest in Eastern Ghats: **Mahendragiri** (Odisha) ~1,501 m
+> Highest in Western Ghats: **Anamudi** (Kerala) = 2,695 m — also highest peak of South India
+> Highest in India overall: Kangchenjunga (Sikkim) = 8,586 m (within India)
 
 ---
 
-## 📌 GS CONCEPT 7: Rivers of the Peninsular Plateau
-
-**Why do most peninsular rivers flow East?**
-Because the Deccan Plateau **tilts from West to East** (western side is higher due to Western Ghats).
+## 🔷 WHERE EASTERN & WESTERN GHATS MEET
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                PENINSULAR RIVERS                                 │
-│                                                                  │
-│  EAST-FLOWING (into Bay of Bengal):                              │
-│  • Mahanadi → Bay of Bengal (Odisha delta — largest delta)       │
-│  • Godavari → "Vriddha Ganga" or "Dakshin Ganga"; largest       │
-│    peninsular river; flows through AP & Telangana                │
-│  • Krishna → Flows through Telangana, AP                         │
-│  • Kaveri (Cauvery) → "Rice bowl river"; Karnataka & TN          │
-│    Disputes: Karnataka vs Tamil Nadu water dispute               │
-│  • Tungabhadra → Tributary of Krishna                            │
-│                                                                  │
-│  WEST-FLOWING (into Arabian Sea):                                │
-│  • Narmada → Flows through RIFT VALLEY (not delta, estuary!)    │
-│    → Marks boundary of Vindhya & Satpura; flows W to E... wait! │
-│    → Actually flows WEST (anomaly because it flows in rift valley)│
-│  • Tapi (Tapti) → Also flows WEST through rift valley            │
-│  • Periyar, Bharathapuzha → Kerala rivers flowing west           │
-│                                                                  │
-│  ⭐ KEY FACT: Narmada & Tapi form ESTUARIES (not deltas)         │
-│  because they flow through rift valleys at high speed            │
-└──────────────────────────────────────────────────────────────────┘
-```
+The Nilgiri Hills (also called Blue Mountains) in Tamil Nadu are
+where the Eastern and Western Ghats CONVERGE / MEET.
 
-> **PYQ TRAP:** "Which river forms a delta?" → Mahanadi, Godavari, Krishna, Kaveri form **deltas**. Narmada & Tapi form **estuaries** — common exam question!
+The Nilgiri Hills:
+→ Located in Tamil Nadu / Karnataka border
+→ Highest peak in Nilgiris: Doddabetta (2,637 m)
+→ This area = highest plateau in peninsular India
+→ Tea plantations of Ooty (Udhagamandalam) are here
 
----
-
-## 📌 GS CONCEPT 8: Coastal Plains of India
-
-```
-┌──────────────────────────────────────────────────────────────────┐
-│              COASTAL PLAINS COMPARISON                           │
-├────────────────────┬───────────────────────┬─────────────────────┤
-│ Feature            │ Western Coastal Plain  │ Eastern Coastal Plain│
-├────────────────────┼───────────────────────┼─────────────────────┤
-│ Coast Name         │ Konkan + Malabar Coast │ Coromandel Coast     │
-│ Width              │ NARROW (avg 64 km)     │ WIDER (avg 100-120km)│
-│ Rivers             │ Short, rapid rivers    │ Long, large rivers   │
-│ Lagoons/Lakes      │ Some                   │ Chilika, Pulicat,    │
-│                    │                        │ Kolleru lakes        │
-│ Backwaters         │ Kerala — famous        │ Less prominent       │
-│ Major Ports        │ Mumbai, Goa, Kochi,    │ Chennai, Visakhapatnam│
-│                    │ Mangalore              │ Paradip, Kolkata     │
-└────────────────────┴───────────────────────┴─────────────────────┘
-```
-
-### Famous Coastal Features:
-- **Chilika Lake** (Odisha) — Largest coastal lagoon in India; Ramsar site
-- **Vembanad Lake** (Kerala) — Longest lake in India; backwater
-- **Pulicat Lake** (AP/TN border) — Second largest coastal lagoon
-- **Kerala Backwaters** — Network of lagoons, canals, rivers along Malabar Coast
-
----
-
-## 📌 GS CONCEPT 9: Important Passes in India
-
-| Pass | State/Region | Connects |
-|------|-------------|---------|
-| **Palakkad Gap** | Kerala-Tamil Nadu | Only major gap in Western Ghats |
-| **Bhor Ghat** | Maharashtra | Mumbai ↔ Pune |
-| **Thal Ghat** | Maharashtra | Mumbai ↔ Nashik |
-| **Zoji La** | J&K/Ladakh | Srinagar ↔ Leh |
-| **Rohtang Pass** | Himachal Pradesh | Manali ↔ Lahaul-Spiti |
-| **Nathu La** | Sikkim | India ↔ Tibet (China) |
-| **Shipki La** | Himachal Pradesh | India ↔ Tibet |
-| **Bomdi La** | Arunachal Pradesh | India ↔ Tibet |
-
-> **PYQ FACT:** **Nathu La** in Sikkim is an important trade route between India and China. It was reopened in 2006 after 44 years.
-
----
-
-## 📌 GS CONCEPT 10: Bihar-Specific Geography (Always Asked!)
-
-Since this is Bihar exam, **Bihar geography questions appear every year**:
-
-```
-┌────────────────────────────────────────────────────────────────────┐
-│                 BIHAR GEOGRAPHY — MUST KNOW FACTS                  │
-├────────────────────────────────────────────────────────────────────┤
-│  Location: 24°20'N to 27°31'N latitude; 83°19'E to 88°17'E        │
-│  Area: 94,163 sq km → 12th largest state                           │
-│  Borders: Nepal (N), West Bengal (E), Jharkhand (S), UP (W)        │
-│                                                                    │
-│  RIVERS OF BIHAR:                                                  │
-│  • Ganga — main river, flows E-W through Bihar                     │
-│  • Sone — major south bank tributary of Ganga in Bihar             │
-│  • Gandak — north bank tributary; enters from Nepal                │
-│  • Kosi — "Sorrow of Bihar"; very prone to flooding                │
-│  • Bagmati — flows through North Bihar (from Nepal)                │
-│  • Punpun — flows through Patna district                           │
-│  • Falgu — flows through Gaya district (religious importance)      │
-│                                                                    │
-│  DIVISIONS & REGIONS:                                              │
-│  • North Bihar (Mithila, Saran) — alluvial, flood-prone            │
-│  • South Bihar (Magadha region) — Gaya, Patna; plateau-like       │
-│                                                                    │
-│  GEOGRAPHY FACTS:                                                  │
-│  • No coastline (landlocked state)                                 │
-│  • Mostly flat alluvial plains (part of Indo-Gangetic Plain)       │
-│  • Kaimur Plateau (south-west) — part of Vindhya Range             │
-│  • Rajgir Hills — oldest geological formations in Bihar            │
-│  • Highest point: Soma Peak (in Kaimur district)                   │
-└────────────────────────────────────────────────────────────────────┘
+Meeting point significance:
+→ Creates a continuous upland from east coast to west coast
+→ Acts as barrier between the Deccan and coastal plains
+→ Very rich in biodiversity at this meeting zone
 ```
 
 ---
 
-# ═══════════════════════════════════════════════════
-# 📝 PRACTICE QUESTIONS
-# ⚠️ SOLVE ALL QUESTIONS FIRST — ANSWERS ARE AT THE END
-# ═══════════════════════════════════════════════════
+## 🔷 IMPORTANT HILL RANGES WITHIN EASTERN GHATS
+
+```
+From North to South:
+
+1. SIMLIPAL HILLS (Odisha)
+   → Part of Simlipal Tiger Reserve / Biosphere Reserve
+   → Elephant, tiger habitat
+   → Baripada (HQ) area
+
+2. NALLAMALA RANGE (AP / Telangana)
+   → Largest continuous forest in Andhra Pradesh
+   → Srisailam Tiger Reserve / Nagarjunasagar-Srisailam
+   → Krishna river flows through here
+
+3. PALAKONDA RANGE (AP)
+   → Arma Konda peak here (Visakhapatnam)
+
+4. SHEVAROY HILLS (Tamil Nadu)
+   → Also called Servarayan Hills
+   → Coffee, orange plantations
+   → Highest point: Servarayan peak
+
+5. JAVADI HILLS (Tamil Nadu)
+   → Part of Vellore district
+
+6. BILIGIRIRANGAN HILLS (Karnataka/Tamil Nadu border)
+   → BR Hills — known for elephants and sandal wood
+```
 
 ---
 
-# 🖥️ CS PRACTICE QUESTIONS (25 Questions)
-### Topic: Stack — Expression Conversion (Infix/Postfix/Prefix)
+## 🔷 BIODIVERSITY & TRIBAL COMMUNITIES
+
+### Key Tribal Groups of Eastern Ghats:
+```
+Odisha:    Kondh (Kondha) — famous tribe of Koraput region
+           Sora (Savara) — Ganjam, Gajapati
+           Bonda — one of the most isolated tribes (Koraput)
+
+AP:        Gondi (Gond) — shared with central India
+           Chenchu — Nallamala area (forest dwellers)
+           Konda Reddi — Krishna-Godavari delta area
+
+Tamil Nadu: Irula, Kota — Nilgiri region
+```
+
+### Biosphere Reserves & Tiger Reserves:
+```
+Simlipal (Odisha) → Both Tiger Reserve AND Biosphere Reserve
+Nagarjunasagar-Srisailam (AP/Telangana) → Largest tiger reserve in India by area
+Kalakad-Mundanthurai (Tamil Nadu) → In Western but relevant for Ghats comparison
+```
 
 ---
 
-**Q1.** The postfix form of the expression `A + B * C - D` is:
+## 🔷 COROMANDEL COAST — CONNECTION TO EASTERN GHATS
 
-(A) A B C * + D -
-(B) A B + C * D -
-(C) A B C * D + -
+```
+The Coromandel Coast = the southeastern coastal plain EAST of the Eastern Ghats
+  → Runs along Tamil Nadu, Andhra Pradesh, Odisha coast
+  → Faces Bay of Bengal
+  → Major feature: receives rainfall from RETREATING (NE) monsoon
+    (October-December) — unlike rest of India which gets SW monsoon
+
+Key cities on Coromandel Coast:
+  → Chennai (Tamil Nadu)
+  → Visakhapatnam / Vizag (AP)
+  → Machilipatnam (AP)
+```
+
+---
+
+## 🔷 MEMORY TRICKS — Eastern Ghats
+
+### States: "OATT" (Odisha, AP, Telangana, Tamil Nadu)
+```
+"Old Apes Talk Tamil"
+O = Odisha (north)
+A = Andhra Pradesh (major portion)
+T = Telangana
+T = Tamil Nadu (south end)
+```
+
+### Eastern vs Western Quick Recall:
+```
+EASTERN = Discontinuous, Lower, Drier, Bay of Bengal, Mahendragiri
+WESTERN = Continuous, Higher, Wetter, Arabian Sea, Anamudi, Biodiversity Hotspot
+
+Trick: "EASTERN is BROKEN (discontinuous), WESTERN is WHOLE (continuous)"
+```
+
+### Rivers through Eastern Ghats (North to South):
+```
+"My Great King Came" 
+M = Mahanadi
+G = Godavari
+K = Krishna
+C = Kaveri (Cauvery)
+```
+
+---
+
+# PART 3: PRACTICE QUESTIONS
+
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: Expression Types, Infix→Postfix, Prefix, Precedence, Stack Usage
+
+---
+
+**Q1.** In Postfix expression, the operator appears:
+(A) Between operands
+(B) Before all operands
+(C) After all operands
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q2.** The notation in which the operator comes AFTER its operands is called:
-
-(A) Infix notation
-(B) Prefix notation
-(C) Polish notation
+**Q2.** What is the Postfix form of the Infix expression `A + B`?
+(A) + A B
+(B) A + B
+(C) A B +
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q3.** What is the time complexity of converting an infix expression to postfix using a stack?
+**Q3.** What is the Prefix (Polish Notation) form of `A + B`?
+(A) A B +
+(B) + A B
+(C) A + B
+(D) More than one of the above
+(E) None of the above
 
-(A) O(log N)
-(B) O(N²)
+---
+
+**Q4.** The time complexity of converting an Infix expression of length N to Postfix is:
+(A) O(N²)
+(B) O(N log N)
 (C) O(N)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q4.** The infix expression `(A + B) * (C - D)` when converted to postfix becomes:
-
-(A) A B + C D - *
-(B) A B C D + - *
-(C) + A B - C D *
+**Q5.** Which of the following operators has the HIGHEST precedence in expression evaluation?
+(A) +
+(B) *
+(C) ^
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q5.** Which data structure is primarily used for converting infix expression to postfix?
-
-(A) Queue
-(B) Linked List
-(C) Stack
+**Q6.** Which operator has RIGHT-to-LEFT associativity?
+(A) +
+(B) -
+(C) ^
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q6.** The Reverse Polish Notation (RPN) is another name for which type of expression?
-
-(A) Infix
-(B) Prefix
-(C) Postfix
+**Q7.** Convert `A + B * C` to Postfix:
+(A) A + B C *
+(B) A B + C *
+(C) A B C * +
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q7.** The prefix form of `A + B * C` is:
-
-(A) A B C * +
-(B) + A * B C
-(C) * + A B C
+**Q8.** Convert `(A + B) * C` to Postfix:
+(A) A B + C *
+(B) A B * C +
+(C) A + B C *
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q8.** When evaluating a postfix expression `5 3 2 * +`, what is the final result?
-
-(A) 25
-(B) 11
-(C) 16
+**Q9.** What is the Postfix form of `A * B + C * D`?
+(A) A B * C D * +
+(B) A B C D * * +
+(C) A B + C * D *
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q9.** Which of the following is a correct property of postfix notation?
-
-(A) Parentheses are NOT needed
-(B) Operator precedence rules are not required during evaluation
-(C) It uses a Stack for evaluation
+**Q10.** During Infix to Postfix conversion, what happens when a LEFT parenthesis '(' is encountered?
+(A) It is added directly to the output
+(B) It is pushed onto the stack and never triggers a pop
+(C) All stack elements are popped
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q10.** The infix expression `A ^ B ^ C` converts to postfix as:
+**Q11.** During Infix to Postfix conversion, what happens when a RIGHT parenthesis ')' is encountered?
+(A) Push ')' onto stack
+(B) Pop and output all stack elements until '(' is found; discard both parentheses
+(C) Clear the entire stack
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q12.** After all tokens are scanned during Infix to Postfix conversion, what is done?
+(A) The stack is discarded
+(B) All remaining operators in the stack are popped and added to output
+(C) The output is reversed
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q13.** Which of the following is TRUE about Postfix expressions?
+(A) They require parentheses
+(B) They require knowledge of operator precedence during evaluation
+(C) They do not require parentheses or precedence rules during evaluation
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q14.** Evaluate the Postfix expression `5 4 3 * +`:
+(A) 17
+(B) 35
+(C) 27
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q15.** Evaluate the Postfix expression `8 3 - 4 *`:
+(A) 44
+(B) 4
+(C) 20
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q16.** Prefix notation is also called:
+(A) Reverse Polish Notation
+(B) Polish Notation
+(C) Infix Notation
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q17.** When evaluating a Postfix expression and an operator is encountered, the two operands are popped. Which operand is the LEFT operand?
+(A) The first one popped from the stack
+(B) The second one popped from the stack
+(C) Both are the same
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q18.** What is the Postfix of `A ^ B ^ C` (where ^ is right-associative)?
 (A) A B ^ C ^
 (B) A B C ^ ^
-(C) ^ A ^ B C
+(C) A ^ B C ^
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q11.** In the Infix to Postfix conversion algorithm, when we encounter a closing parenthesis `)`, we should:
-
-(A) Push it onto the stack
-(B) Pop operators until opening parenthesis `(` is found, and discard both parentheses
-(C) Immediately add it to output
+**Q19.** Convert `A - B + C` to Postfix (+ and - are left-associative):
+(A) A B - C +
+(B) A B C - +
+(C) A B + C -
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q12.** Which expression notation was invented by Jan Łukasiewicz?
-
-(A) Infix notation
-(B) Postfix notation (RPN)
-(C) Prefix (Polish) notation
+**Q20.** What is the first step in converting Infix to Prefix?
+(A) Pop all operators to output
+(B) Reverse the infix expression (swapping brackets too)
+(C) Push all operands to stack
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q13.** During postfix expression evaluation, two operands are popped. The operation is performed as:
-
-(A) First_popped OPERATOR Second_popped
-(B) Second_popped OPERATOR First_popped
-(C) The order doesn't matter
+**Q21.** The expression `A B + C *` in Infix form is:
+(A) A + B * C
+(B) A * B + C
+(C) (A + B) * C
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q14.** Consider the postfix expression: `A B C + * D -`. What is its equivalent infix?
-
-(A) A * B + C - D
-(B) A * (B + C) - D
-(C) (A * B) + (C - D)
+**Q22.** The expression `+ * A B C` in Infix form is:
+(A) A + B * C
+(B) A * B + C
+(C) (A * B) + C
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q15.** Which of the following operators has the HIGHEST precedence during infix to postfix conversion?
-
-(A) + (Addition)
-(B) * (Multiplication)
-(C) ^ (Exponentiation)
+**Q23.** Which data structure is used for evaluating both Postfix and Prefix expressions?
+(A) Queue
+(B) Stack
+(C) Linked List
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q16.** The expression `A + B + C` in postfix is:
-
-(A) A B C + +
-(B) A B + C +
-(C) + + A B C
+**Q24.** Evaluate the Prefix expression `+ 3 * 4 2`:
+(A) 14
+(B) 11
+(C) 24
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q17.** Postfix notation is preferred over infix notation in computer systems primarily because:
+**Q25.** Which of the following does NOT contain parentheses in its representation?
+(A) Infix (always)
+(B) Postfix and Prefix
+(C) Prefix only
+(D) More than one of the above
+(E) None of the above
 
-(A) It is more human-readable
-(B) It does not require knowledge of operator precedence during evaluation
-(C) It always produces shorter expressions
+---
+---
+
+## 📝 GENERAL STUDIES — 25 MCQs
+### India Geography — Eastern Ghats
+
+---
+
+**Q26.** The Eastern Ghats run along which coast of India?
+(A) Western coast (Konkan coast)
+(B) Eastern coast (Coromandel coast)
+(C) Northern coast
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q18.** The space complexity of Infix to Postfix conversion using a Stack is:
-
-(A) O(1)
-(B) O(log N)
-(C) O(N)
+**Q27.** Which of the following is the most important distinguishing feature of the Eastern Ghats?
+(A) They are the highest mountain range in peninsular India
+(B) They are discontinuous and dissected by rivers
+(C) They form a continuous range along the coast
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q19.** When converting `A + B * C + D` to postfix, which is correct?
-
-(A) A B C * + D +
-(B) A B + C * D +
-(C) A B C + * D +
+**Q28.** The highest peak of the Eastern Ghats is:
+(A) Anamudi
+(B) Doddabetta
+(C) Mahendragiri
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q20.** The prefix expression `* + A B - C D` is equivalent to which infix expression?
-
-(A) A + B * C - D
-(B) (A + B) * (C - D)
-(C) A * B + C * D
+**Q29.** Mahendragiri peak is located in which state?
+(A) Andhra Pradesh
+(B) Tamil Nadu
+(C) Odisha
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q21.** Evaluate the postfix expression: `2 3 ^ 4 -`
-
-(A) 2
-(B) 5
-(C) 4
+**Q30.** The Eastern and Western Ghats meet at:
+(A) Cardamom Hills
+(B) Nilgiri Hills
+(C) Anaimalai Hills
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q22.** The operator `^` (exponentiation) has which type of associativity?
-
-(A) Left-to-Right
-(B) Right-to-Left
-(C) No associativity (not used)
+**Q31.** Which of the following rivers does NOT flow through the Eastern Ghats?
+(A) Godavari
+(B) Krishna
+(C) Narmada
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q23.** Which of the following statements about Infix, Prefix, and Postfix is/are TRUE?
-
-(i) Infix expressions sometimes require parentheses
-(ii) Postfix expressions never require parentheses
-(iii) Prefix expressions are read from Right to Left during evaluation
-
-(A) Only (i) and (ii)
-(B) Only (i)
-(C) All of (i), (ii), and (iii)
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q24.** If we reverse an infix expression, swap all `(` with `)` and vice versa, then apply infix-to-postfix algorithm, and finally reverse the result — we get:
-
-(A) Postfix expression
-(B) Prefix expression
-(C) Same infix expression
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q25.** In the Shunting Yard Algorithm developed by Edsger Dijkstra, operators with equal precedence are handled based on:
-
-(A) Their ASCII value
-(B) Their associativity (left or right)
-(C) The length of the expression
-(D) More than one of the above
-(E) None of the above
-
----
-
-# 🌍 GS PRACTICE QUESTIONS (25 Questions)
-### Topic: India Geography — Physical Features (Eastern Ghats, Western Ghats, Peninsular Plateau)
-
----
-
-**Q26.** Western Ghats is also known as:
-
-(A) Satpura
-(B) Sahyadri
-(C) Aravalli
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q27.** The highest peak of Peninsular India (South of Narmada) is:
-
+**Q32.** The highest peak of the Western Ghats is:
 (A) Doddabetta
 (B) Mahendragiri
 (C) Anamudi
@@ -932,785 +1095,353 @@ Since this is Bihar exam, **Bihar geography questions appear every year**:
 
 ---
 
-**Q28.** Eastern Ghats are described as "discontinuous" because:
-
-(A) They are lower in height than Western Ghats
-(B) Major rivers like Godavari, Krishna, and Mahanadi cut through them
-(C) They were formed later than Western Ghats
+**Q33.** The Western Ghats are a recognized:
+(A) UNESCO World Heritage Site and global biodiversity hotspot
+(B) National Park of India
+(C) Tiger Reserve
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q29.** The Palakkad Gap (Palghat Gap) is located in:
-
-(A) Maharashtra
-(B) Karnataka
-(C) Kerala — Tamil Nadu border
+**Q34.** The Coromandel Coast receives most of its rainfall from:
+(A) South-West Monsoon
+(B) North-East (Retreating) Monsoon
+(C) Western disturbances
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q30.** Which of the following rivers forms an estuary and NOT a delta?
-
-(A) Godavari
-(B) Mahanadi
-(C) Narmada
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q31.** The Deccan Plateau generally slopes from:
-
-(A) East to West
-(B) West to East
-(C) North to South
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q32.** Which of the following is a correct statement about Western Ghats?
-
-(A) It was declared a UNESCO World Heritage Site in 2012
-(B) It is a global biodiversity hotspot
-(C) It is continuous (unlike Eastern Ghats)
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q33.** The oldest fold mountain in India is:
-
-(A) Vindhya Range
-(B) Satpura Range
-(C) Aravalli Hills
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q34.** Chilika Lake, the largest coastal lagoon in India, is located in:
-
-(A) Andhra Pradesh
+**Q35.** Which of the following states has the LARGEST area under the Eastern Ghats?
+(A) Odisha
 (B) Tamil Nadu
-(C) Odisha
+(C) Andhra Pradesh
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q35.** The "Sorrow of Bihar" refers to which river?
-
-(A) Gandak
-(B) Kosi
-(C) Ganga
+**Q36.** Simlipal Tiger Reserve and Biosphere Reserve is located in which state?
+(A) Andhra Pradesh
+(B) Odisha
+(C) Telangana
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q36.** Nathu La pass, reopened in 2006 for trade with China, is located in:
-
-(A) Arunachal Pradesh
-(B) Himachal Pradesh
-(C) Sikkim
+**Q37.** Which of the following hill ranges is part of the Eastern Ghats in Andhra Pradesh?
+(A) Nilgiri Hills
+(B) Nallamala Range
+(C) Cardamom Hills
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q37.** The Narmada river flows westward (contrary to most Peninsular rivers) because:
-
-(A) It originates in the Western Ghats
-(B) It flows through a rift valley (fault valley)
-(C) It is the longest Peninsular river
+**Q38.** The Mahanadi river meets the Bay of Bengal at:
+(A) Kakinada
+(B) Paradip (Odisha)
+(C) Rajahmundry
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q38.** Which of the following hill ranges form the junction of Eastern and Western Ghats?
-
-(A) Cardamom Hills
-(B) Shevaroy Hills
-(C) Nilgiri Hills
+**Q39.** Which tribal group is MOST associated with the Nallamala forest region of the Eastern Ghats (Andhra Pradesh)?
+(A) Bonda
+(B) Chenchu
+(C) Toda
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q39.** The Peninsular Plateau of India is considered one of the oldest landmasses because:
-
-(A) It is part of the ancient Gondwana supercontinent
-(B) It is made of hard crystalline Archaean rocks
-(C) It was formed by volcanic activity
+**Q40.** The Eastern Ghats are described as "discontinuous" because:
+(A) They run parallel to the coast
+(B) Major rivers flowing east have broken them into separate hill ranges
+(C) They were formed later than the Western Ghats
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q40.** The Western Coastal Plain (Malabar Coast) is known for which of the following unique features?
-
-(A) Backwaters and lagoons (Kerala)
-(B) Highest rainfall area in India (Cherrapunji)
-(C) Delta formation by Narmada and Tapi
+**Q41.** Doddabetta peak is the highest point of which hills?
+(A) Anaimalai Hills
+(B) Nilgiri Hills
+(C) Shevaroy Hills
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q41.** Which river is called "Dakshin Ganga" or "Vriddha Ganga"?
+**Q42.** Which of the following is a CORRECT comparison between Eastern and Western Ghats?
+(A) Eastern Ghats are higher and more continuous than Western Ghats
+(B) Western Ghats receive higher rainfall and are more continuous than Eastern Ghats
+(C) Both receive equal rainfall and have similar biodiversity
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q43.** The Nagarjunasagar-Srisailam Tiger Reserve is located in:
+(A) Odisha
+(B) Tamil Nadu
+(C) Andhra Pradesh / Telangana
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q44.** Papikonda (Papi Hills) gorge is formed by which river cutting through the Eastern Ghats?
 (A) Krishna
-(B) Kaveri
+(B) Mahanadi
 (C) Godavari
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q42.** The state of Bihar is bordered by which neighboring country to the north?
-
-(A) China
-(B) Bhutan
-(C) Nepal
+**Q45.** The approximate total length of the Eastern Ghats is:
+(A) ~800 km
+(B) ~1,750 km
+(C) ~3,000 km
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q43.** Mahendragiri, the highest point of Eastern Ghats, is located in:
-
+**Q46.** The Kondh (Kondha) tribal group is primarily found in:
 (A) Andhra Pradesh
-(B) Tamil Nadu
-(C) Odisha
+(B) Odisha (Koraput region)
+(C) Tamil Nadu
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q44.** The Kaveri river dispute is between which two states?
-
-(A) Andhra Pradesh and Karnataka
-(B) Karnataka and Tamil Nadu
-(C) Tamil Nadu and Kerala
+**Q47.** Visakhapatnam (Vizag) port city of Andhra Pradesh is located:
+(A) To the west of the Eastern Ghats
+(B) On the coast, east of the Eastern Ghats
+(C) In the Deccan Plateau
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q45.** Which of the following is/are tributary/tributaries of the Ganga in Bihar?
-
-(A) Sone
-(B) Gandak
-(C) Kosi
+**Q48.** Which of the following is NOT a state that the Eastern Ghats pass through?
+(A) Odisha
+(B) Kerala
+(C) Andhra Pradesh
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q46.** The Kaimur Plateau in Bihar is geologically part of:
-
-(A) Eastern Ghats
-(B) Satpura Range
-(C) Vindhya Range
+**Q49.** The Shevaroy Hills (Servarayan Hills) are part of the Eastern Ghats in:
+(A) Odisha
+(B) Andhra Pradesh
+(C) Tamil Nadu
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q47.** The Vembanad Lake, the longest lake in India, is located in:
-
-(A) Goa
-(B) Odisha
-(C) Kerala
+**Q50.** The forests of the Eastern Ghats are primarily classified as:
+(A) Tropical wet evergreen forests
+(B) Tropical dry deciduous forests
+(C) Alpine forests
 (D) More than one of the above
 (E) None of the above
 
 ---
+---
 
-**Q48.** Which pass in Maharashtra connects Mumbai to Pune?
+# ANSWER KEY
 
-(A) Thal Ghat
-(B) Bhor Ghat
-(C) Palakkad Gap
-(D) More than one of the above
-(E) None of the above
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
 
 ---
 
-**Q49.** The Godavari river drains into:
+### CS Answers (Q1–Q25):
 
-(A) Arabian Sea
-(B) Bay of Bengal
-(C) Gulf of Kutch
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q50.** Which of the following statements is/are CORRECT about Bihar?
-
-(A) Bihar is a landlocked state with no coastline
-(B) Bihar's Kosi river is known for frequent floods
-(C) The Falgu river flows through Gaya district and has religious significance
-(D) More than one of the above
-(E) None of the above
-
----
-
----
----
-
-# ═══════════════════════════════════════════════════
-# ✅ ANSWER KEY — DAY 17
-# (Check only AFTER attempting all 50 questions)
-# ═══════════════════════════════════════════════════
-
----
-
-## 🖥️ CS ANSWERS (Q1–Q25)
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (C) | Postfix = operator AFTER operands |
+| 2 | (C) | A+B in postfix = A B + |
+| 3 | (B) | A+B in prefix = + A B |
+| 4 | (C) | O(N) — each token processed once |
+| 5 | (C) | ^ has highest precedence |
+| 6 | (C) | ^ (exponentiation) is right-associative |
+| 7 | (C) | * before +: A B C * + |
+| 8 | (A) | (A+B)*C: A B + C * |
+| 9 | (A) | A*B first, C*D first, then +: A B * C D * + |
+| 10 | (B) | '(' pushed; never triggers pop of stack content |
+| 11 | (B) | ')' pops until '('; both discarded |
+| 12 | (B) | After scanning: pop all remaining stack operators to output |
+| 13 | (C) | Postfix: no brackets, no precedence needed during eval |
+| 14 | (A) | 5 + 4*3 = 5+12 = 17 |
+| 15 | (C) | (8-3)*4 = 5*4 = 20 |
+| 16 | (B) | Prefix = Polish Notation |
+| 17 | (B) | Second pop = left operand; first pop = right operand |
+| 18 | (B) | Right associative: A^(B^C) → A B C ^ ^ |
+| 19 | (A) | Left assoc: (A-B)+C → A B - C + |
+| 20 | (B) | Infix→Prefix: first step = reverse infix (swap brackets) |
+| 21 | (C) | A B + C * = (A+B)*C |
+| 22 | (C) | + * A B C = (A*B) + C |
+| 23 | (B) | Both use Stack |
+| 24 | (B) | + 3 * 4 2 = 3 + (4*2) = 3+8 = 11 |
+| 25 | (B) | Postfix and Prefix: never contain parentheses |
 
 ---
 
-### Q1. Answer: **(A) A B C * + D -**
+### GS Answers (Q26–Q50):
 
-**Explanation:**
-Expression: `A + B * C - D`
-
-Step-by-step trace:
-- `A` → Output: `A`
-- `+` → Stack: `+`
-- `B` → Output: `A B`
-- `*` → Stack: `+ *` (higher precedence than +)
-- `C` → Output: `A B C`
-- `-` → Pop `*` (higher prec), pop `+` (equal prec to -), push `-`; Output: `A B C * +`
-- `D` → Output: `A B C * + D`
-- END → Pop `-`; Output: `A B C * + D -`
-
-✅ Answer = A B C * + D -
-
----
-
-### Q2. Answer: **(E) None of the above**
-
-**Explanation:**
-The notation where operator comes AFTER operands is called **Postfix notation** (also called Reverse Polish Notation). None of the options (A), (B), (C) says "Postfix" explicitly. Option (C) says "Polish notation" which is actually **PREFIX** notation. So the correct term is **Postfix**, which is not in options A/B/C → **(E) None of the above**.
-
-⚠️ **TRAP:** Polish Notation = PREFIX; Reverse Polish Notation = POSTFIX. Don't confuse!
-
----
-
-### Q3. Answer: **(C) O(N)**
-
-**Explanation:**
-Each character of the expression is processed exactly ONCE — either pushed to stack or added to output. Hence Time = O(N). This was a **direct PYQ in TRE 2.0**.
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (B) | Eastern Ghats = Eastern/Coromandel coast |
+| 27 | (B) | Discontinuous — rivers dissect them |
+| 28 | (C) | Mahendragiri = highest of Eastern Ghats |
+| 29 | (C) | Mahendragiri = Odisha (Gajapati district) |
+| 30 | (B) | Eastern + Western Ghats meet at Nilgiri Hills |
+| 31 | (C) | Narmada flows WEST (not through Eastern Ghats) |
+| 32 | (C) | Anamudi (Kerala) = highest Western Ghats peak = 2,695 m |
+| 33 | (A) | Western Ghats = UNESCO World Heritage + biodiversity hotspot |
+| 34 | (B) | Coromandel Coast = NE monsoon (October-December) |
+| 35 | (C) | Andhra Pradesh has largest area under Eastern Ghats |
+| 36 | (B) | Simlipal = Odisha |
+| 37 | (B) | Nallamala = AP/Telangana Eastern Ghats |
+| 38 | (B) | Mahanadi → Paradip, Odisha |
+| 39 | (B) | Chenchu = Nallamala forest, AP |
+| 40 | (B) | Rivers flowing east broke the ghats → discontinuous |
+| 41 | (B) | Doddabetta = highest in Nilgiri Hills |
+| 42 | (B) | Western = higher rainfall, continuous; correct comparison |
+| 43 | (C) | Nagarjunasagar-Srisailam = AP/Telangana |
+| 44 | (C) | Godavari creates Papi Hills gorge |
+| 45 | (B) | Eastern Ghats ≈ 1,750 km |
+| 46 | (B) | Kondh = Odisha, Koraput region |
+| 47 | (B) | Vizag = coastal city, east of Eastern Ghats |
+| 48 | (B) | Kerala is NOT in Eastern Ghats (it's Western Ghats) |
+| 49 | (C) | Shevaroy Hills = Tamil Nadu |
+| 50 | (B) | Eastern Ghats = tropical dry deciduous forests |
 
 ---
-
-### Q4. Answer: **(A) A B + C D - ***
-
-**Explanation:**
-`(A + B) * (C - D)`:
-- `(` → push
-- `A` → output: A
-- `+` → stack: `( +`
-- `B` → output: A B
-- `)` → pop `+` → output: A B +
-- `*` → stack: `*`
-- `(` → stack: `* (`
-- `C` → output: A B + C
-- `-` → stack: `* ( -`
-- `D` → output: A B + C D
-- `)` → pop `-` → output: A B + C D -
-- END → pop `*` → output: A B + C D - *
-
-✅ = A B + C D - *
-
 ---
 
-### Q5. Answer: **(C) Stack**
+# 🔁 DAY 17 — CRISP REVISION NOTES
 
-**Explanation:**
-The Infix to Postfix algorithm requires exactly ONE Stack to hold operators temporarily. This is a fundamental data structure application question.
+## ⚡ RAPID FIRE — Expression Conversion
 
----
-
-### Q6. Answer: **(C) Postfix**
-
-**Explanation:**
-RPN = Reverse Polish Notation = POSTFIX. Polish Notation (PN) = PREFIX. Never mix these up in exam!
-
----
-
-### Q7. Answer: **(B) + A * B C**
-
-**Explanation:**
-`A + B * C` in Prefix means: `+` applied to `A` and `(* B C)`
-→ `+ A * B C`
-
-Verification: `+ A * B C` = A + (B * C) ✓
-
-Option (A) is the POSTFIX form, not prefix.
-
----
-
-### Q8. Answer: **(B) 11**
-
-**Explanation:**
-Postfix: `5 3 2 * +`
-- Push 5 → Stack: [5]
-- Push 3 → Stack: [5, 3]
-- Push 2 → Stack: [5, 3, 2]
-- `*` → Pop 2,3 → 3*2 = 6 → Stack: [5, 6]
-- `+` → Pop 6,5 → 5+6 = 11 → Stack: [11]
-
-Result = **11**
-
----
-
-### Q9. Answer: **(D) More than one of the above**
-
-**Explanation:**
-ALL THREE statements (A), (B), and (C) are correct properties of Postfix notation:
-- Parentheses NOT needed ✓
-- Operator precedence NOT required during evaluation ✓
-- Uses Stack for evaluation ✓
-
-When multiple options are correct → Answer is **(D)**. This is the classic BPSC TRE trap!
-
----
-
-### Q10. Answer: **(B) A B C ^ ^**
-
-**Explanation:**
-`A ^ B ^ C` — `^` is RIGHT-to-LEFT associative.
-This means: `A ^ (B ^ C)`.
-
-During conversion:
-- `A` → output: A
-- `^` → stack: `^`
-- `B` → output: A B
-- `^` → Because `^` is RIGHT associative, when we see same-precedence `^`, we DO NOT pop the existing `^`. Push → stack: `^ ^`
-- `C` → output: A B C
-- END → pop `^` → A B C ^, then pop `^` → A B C ^ ^
-
-Result = A B C ^ ^
-
----
-
-### Q11. Answer: **(B)**
-
-**Explanation:**
-When `)` is encountered: pop operators from stack and add to output UNTIL `(` is found. Discard BOTH `(` and `)`. The `(` is never added to output.
-
----
-
-### Q12. Answer: **(C) Prefix (Polish) notation**
-
-**Explanation:**
-Jan Łukasiewicz was a Polish logician who invented **Prefix notation**, which is why it's called **Polish Notation**. Postfix (RPN = Reverse Polish) was named after him too, but HE invented Prefix. Dijkstra invented the Shunting Yard algorithm for conversion.
-
----
-
-### Q13. Answer: **(B) Second_popped OPERATOR First_popped**
-
-**Explanation:**
-When we pop two operands: first pop = right operand, second pop = left operand.
-Example: Stack has [5, 3], pop gives 3 first (right), 5 second (left).
-`5 - 3` = 2, not `3 - 5` = -2.
-So: **second_popped OPERATOR first_popped** = correct.
-
----
-
-### Q14. Answer: **(B) A * (B + C) - D**
-
-**Explanation:**
-Evaluate postfix `A B C + * D -`:
-- A → push
-- B → push
-- C → push
-- `+` → pop C, B → B+C → push (B+C)
-- `*` → pop (B+C), A → A*(B+C) → push
-- D → push
-- `-` → pop D, A*(B+C) → A*(B+C) - D
-
-Result = **A * (B + C) - D**
-
----
-
-### Q15. Answer: **(C) ^ (Exponentiation)**
-
-**Explanation:**
-Operator precedence (High to Low): `^` > `* / %` > `+ -`
-Exponentiation has the HIGHEST precedence in standard expression evaluation.
-
----
-
-### Q16. Answer: **(B) A B + C +**
-
-**Explanation:**
-`A + B + C` — `+` is left-associative, so: `(A + B) + C`
-- A → output: A
-- `+` → stack: `+`
-- B → output: A B
-- `+` → equal prec, left-assoc → pop `+` → output: A B +, push new `+`
-- C → output: A B + C
-- END → pop `+` → A B + C +
-
-Result = **A B + C +**
-
----
-
-### Q17. Answer: **(B)**
-
-**Explanation:**
-The PRIMARY reason postfix is preferred is: **no need for precedence rules during evaluation**. This makes it efficient for stack-based computer evaluation. It is NOT more human-readable (that's infix's advantage). Expressions aren't necessarily shorter in postfix.
-
----
-
-### Q18. Answer: **(C) O(N)**
-
-**Explanation:**
-The Stack used in Infix-to-Postfix can hold at most N operators (in case of all operators, no operands). Hence Space Complexity = **O(N)**.
-
----
-
-### Q19. Answer: **(A) A B C * + D +**
-
-**Explanation:**
-`A + B * C + D`:
-- A → output: A
-- `+` → stack: `+`
-- B → output: A B
-- `*` → stack: `+ *` (higher prec)
-- C → output: A B C
-- `+` → pop `*` → output: A B C *, pop `+` → output: A B C * +, push `+`
-- D → output: A B C * + D
-- END → pop `+` → A B C * + D +
-
-Result = **A B C * + D +**
-
----
-
-### Q20. Answer: **(B) (A + B) * (C - D)**
-
-**Explanation:**
-Prefix `* + A B - C D`:
-- `*` applied to (`+ A B`) and (`- C D`)
-- `+ A B` = A + B
-- `- C D` = C - D
-- Result = (A + B) * (C - D)
-
----
-
-### Q21. Answer: **(B) 5**
-
-**Explanation:**
-Postfix: `2 3 ^ 4 -`
-- Push 2 → [2]
-- Push 3 → [2, 3]
-- `^` → pop 3,2 → 2^3 = 8 → [8]
-- Push 4 → [8, 4]
-- `-` → pop 4, 8 → 8 - 4 = 4... 
-
-Wait — recalculate: 2^3 = 8, then 8 - 4 = **4**.
-
-Hmm — re-checking: 2^3 = 8. 8 - 4 = 4. 
-
-So answer is **(E) None of the above** since 4 is option C... Actually option C is 4.
-
-✅ **Answer: (C) 4**
-
-*(The answer for Q21 is (C) 4. Correction: 2^3 = 8, 8-4 = 4)*
-
----
-
-### Q22. Answer: **(B) Right-to-Left**
-
-**Explanation:**
-Exponentiation `^` has RIGHT-to-LEFT associativity. This means `A ^ B ^ C` = `A ^ (B ^ C)`. This is critical for correct postfix conversion and a BPSC trap question!
-
----
-
-### Q23. Answer: **(D) More than one of the above**
-
-**Explanation:**
-All three statements are correct:
-- (i) Infix sometimes needs parentheses ✓
-- (ii) Postfix never needs parentheses ✓
-- (iii) Prefix expressions are evaluated by reading from Right to Left ✓
-
-All three are true → **(D)** which means "More than one of the above"
-
----
-
-### Q24. Answer: **(B) Prefix expression**
-
-**Explanation:**
-This is the standard algorithm for **Infix to PREFIX conversion**:
-1. Reverse the infix (and swap parentheses)
-2. Apply Infix-to-Postfix algorithm
-3. Reverse the result
-
-This gives you the PREFIX (Polish Notation) of the original expression.
-
----
-
-### Q25. Answer: **(B) Their associativity (left or right)**
-
-**Explanation:**
-In Dijkstra's Shunting Yard Algorithm: when two operators have EQUAL precedence, the decision to pop or not pop is based on **associativity**:
-- Left-associative: Pop the existing operator (push new one)
-- Right-associative: Do NOT pop (push the new one directly)
-
----
-
-## 🌍 GS ANSWERS (Q26–Q50)
-
----
-
-### Q26. Answer: **(B) Sahyadri**
-
-**Explanation:**
-Western Ghats = **Sahyadri** Mountains. This is a direct and frequently asked BPSC question. Satpura is a separate range in Madhya Pradesh. Aravalli is in Rajasthan.
-
----
-
-### Q27. Answer: **(C) Anamudi**
-
-**Explanation:**
-**Anamudi** (2695 m) is the highest peak of Peninsular India (South of Narmada), located in Kerala's Anaimalai Hills. Doddabetta (2637 m) is the highest peak of Nilgiri Hills but lower than Anamudi. Mahendragiri (1501 m) is the highest peak of Eastern Ghats only.
-
----
-
-### Q28. Answer: **(B)**
-
-**Explanation:**
-Eastern Ghats are **discontinuous** because major rivers — Mahanadi, Godavari, Krishna, Kaveri — flow through them (east-draining rivers), cutting the range into isolated hills. This is a direct PYQ-level fact!
-
-Option (D) would be "More than one" — but only (B) is correct here. (A) is a fact but doesn't explain WHY they're discontinuous.
-
----
-
-### Q29. Answer: **(C) Kerala — Tamil Nadu border**
-
-**Explanation:**
-**Palakkad Gap** (also called Palghat Gap) is the only significant gap/break in the Western Ghats, located between Kerala and Tamil Nadu. It is an important route for railways and roads connecting these two states. Highest point avoided! Many rivers and transport routes pass through here.
-
----
-
-### Q30. Answer: **(C) Narmada**
-
-**Explanation:**
-**Narmada** and Tapi (Tapti) form **estuaries** (not deltas) because they flow through rift/fault valleys with fast-moving water. They don't deposit enough sediment to form deltas. Godavari and Mahanadi form **deltas**. Classic BPSC exam question!
-
----
-
-### Q31. Answer: **(B) West to East**
-
-**Explanation:**
-The Deccan Plateau slopes from **West to East**. Western Ghats form the western rim and are higher, so water drains eastward. This is why most peninsular rivers (Godavari, Krishna, Kaveri) flow east into the Bay of Bengal.
-
----
-
-### Q32. Answer: **(D) More than one of the above**
-
-**Explanation:**
-ALL THREE statements (A), (B), and (C) are CORRECT:
-- UNESCO World Heritage Site (2012) ✓
-- Global biodiversity hotspot ✓
-- Continuous range ✓
-
-Classic **Option D trap** — when all options are correct, answer is D!
-
----
-
-### Q33. Answer: **(C) Aravalli Hills**
-
-**Explanation:**
-**Aravalli Hills** is the **oldest fold mountain** of India, running northeast to southwest through Rajasthan and Gujarat. It is so ancient and eroded that it barely looks like a mountain range anymore. Vindhya and Satpura are relatively younger geological formations.
-
----
-
-### Q34. Answer: **(C) Odisha**
-
-**Explanation:**
-**Chilika Lake** is located in Odisha and is India's largest coastal lagoon and saltwater lake. It is a **Ramsar site** (internationally important wetland). It is also famous for Irrawaddy dolphins and migratory birds.
-
----
-
-### Q35. Answer: **(B) Kosi**
-
-**Explanation:**
-**Kosi river** is called the "**Sorrow of Bihar**" because it frequently changes course and causes devastating floods in North Bihar. It is known as "the river that mourns" in local culture.
-
----
-
-### Q36. Answer: **(C) Sikkim**
-
-**Explanation:**
-**Nathu La** pass is located in **Sikkim**, on the India-China (Tibet) border. It was a historic Silk Route pass. It was reopened in 2006 after being closed since the 1962 Indo-China war.
-
----
-
-### Q37. Answer: **(B)**
-
-**Explanation:**
-Narmada flows westward because it flows through a **rift valley** (also called fault valley or graben) formed by geological faults. The Vindhya and Satpura ranges form the boundaries of this rift. This creates a funnel that directs the river westward into the Arabian Sea — forming an estuary, not a delta.
-
----
-
-### Q38. Answer: **(C) Nilgiri Hills**
-
-**Explanation:**
-**Nilgiri Hills** form the point where Eastern and Western Ghats meet (the junction). This is why Nilgiri Hills are broader and higher than the Eastern Ghats. The famous hill station Ooty (Udhagamandalam) is located here. Cardamom Hills are part of Western Ghats only.
-
----
-
-### Q39. Answer: **(D) More than one of the above**
-
-**Explanation:**
-BOTH (A) and (B) are correct:
-- Part of ancient **Gondwana supercontinent** ✓
-- Made of hard **crystalline Archaean rocks** ✓
-
-(C) is not entirely correct — not formed by volcanic activity (that's Deccan Traps, a different feature). Since A and B are both correct → **(D)**.
-
----
-
-### Q40. Answer: **(A)**
-
-**Explanation:**
-The Western Coastal Plain (Malabar Coast, Kerala) is specifically famous for **backwaters and lagoons** — a unique network of canals, rivers, and lagoons. Cherrapunji (highest rainfall) is in Meghalaya, not Western Coast. Narmada & Tapi form estuaries, not deltas.
-
----
-
-### Q41. Answer: **(C) Godavari**
-
-**Explanation:**
-**Godavari** is called "**Dakshin Ganga**" (Ganga of the South) or "**Vriddha Ganga**" (Old Ganga) because it is the largest peninsular river. It flows through Maharashtra, Telangana, and Andhra Pradesh before entering the Bay of Bengal.
-
----
-
-### Q42. Answer: **(C) Nepal**
-
-**Explanation:**
-Bihar shares its northern border with **Nepal**. Bihar's borders: Nepal (North), West Bengal (East), Jharkhand (South), Uttar Pradesh (West). Several rivers like Kosi, Gandak, and Bagmati enter Bihar from Nepal.
-
----
-
-### Q43. Answer: **(C) Odisha**
-
-**Explanation:**
-**Mahendragiri** (approximately 1501 m) is considered the highest point of Eastern Ghats, located in **Odisha** (Gajapati district). Some sources give Jindhagada Peak in Andhra Pradesh as higher, but in standard BPSC/competitive exams, Mahendragiri is the accepted answer.
-
----
-
-### Q44. Answer: **(B) Karnataka and Tamil Nadu**
-
-**Explanation:**
-The **Kaveri (Cauvery) water dispute** is between **Karnataka** (upstream) and **Tamil Nadu** (downstream). The Cauvery Water Tribunal gave its final award in 2007. This dispute has been ongoing for decades and is a frequently asked GK question.
-
----
-
-### Q45. Answer: **(D) More than one of the above**
-
-**Explanation:**
-ALL THREE — Sone, Gandak, and Kosi — are tributaries of Ganga in Bihar:
-- **Sone** — south bank tributary ✓
-- **Gandak** — north bank, from Nepal ✓
-- **Kosi** — north bank, from Nepal ✓
-
-All three are correct → **(D)**.
-
----
-
-### Q46. Answer: **(C) Vindhya Range**
-
-**Explanation:**
-The **Kaimur Plateau** in southwestern Bihar is geologically an extension of the **Vindhya Range**. It runs along the Bihar-UP-MP border. This is a frequently asked Bihar geography question. The plateau contains forests and is part of the Kaimur Wildlife Sanctuary.
-
----
-
-### Q47. Answer: **(C) Kerala**
-
-**Explanation:**
-**Vembanad Lake** is located in **Kerala** and is the longest lake in India (96.5 km long). It is a backwater lake. The famous Nehru Trophy Boat Race is held on Vembanad Lake. It is also a Ramsar Wetland site.
-
----
-
-### Q48. Answer: **(B) Bhor Ghat**
-
-**Explanation:**
-**Bhor Ghat** (Bhorghat) connects **Mumbai to Pune** in Maharashtra. Thal Ghat connects Mumbai to Nashik. Both are important passes in the Western Ghats through which major railway and road routes pass.
-
----
-
-### Q49. Answer: **(B) Bay of Bengal**
-
-**Explanation:**
-**Godavari** flows from Nasik in Maharashtra and empties into the **Bay of Bengal** near Rajahmundry in Andhra Pradesh, forming a large delta. All major east-flowing peninsular rivers (Mahanadi, Godavari, Krishna, Kaveri) drain into the Bay of Bengal.
-
----
-
-### Q50. Answer: **(D) More than one of the above**
-
-**Explanation:**
-ALL THREE statements are correct about Bihar:
-- (A) Bihar is landlocked — no coastline ✓
-- (B) Kosi = Sorrow of Bihar, known for floods ✓
-- (C) Falgu river flows through Gaya; it has immense religious significance (Pindadan — offering to ancestors; site of Buddha's enlightenment nearby) ✓
-
-All three correct → **(D)** — the classic BPSC D-option trap!
-
----
-
-# ═══════════════════════════════════════════════════
-# 📋 DAY 17 — QUICK REVISION SUMMARY
-# ═══════════════════════════════════════════════════
-
-## CS Quick Facts to Remember:
-
+### 3 Expression Types — 3-Second Identification:
 ```
-1. Infix → uses operators BETWEEN operands (A + B)
-2. Postfix → uses operators AFTER operands (A B +) = RPN
-3. Prefix → uses operators BEFORE operands (+ A B) = Polish Notation
-4. Infix to Postfix: uses STACK, Time O(N), Space O(N)
-5. ^ is RIGHT-to-LEFT associative; +,-,*,/ are LEFT-to-RIGHT
-6. Postfix needs NO parentheses, NO precedence during evaluation
-7. When evaluating postfix: 2nd popped is LEFT operand, 1st popped is RIGHT
-8. Shunting Yard Algorithm (Dijkstra) → converts infix to postfix
-9. Postfix evaluation: operand→push; operator→pop 2, operate, push result
-10. Prefix: read RIGHT to LEFT for evaluation
+Infix:   Operator BETWEEN operands  →  A + B
+Postfix: Operator AFTER operands    →  A B +
+Prefix:  Operator BEFORE operands   →  + A B
+
+Postfix = Reverse Polish Notation (RPN)
+Prefix  = Polish Notation
 ```
 
-## GS Quick Facts to Remember:
-
+### Operator Precedence (High → Low):
 ```
-1. Western Ghats = SAHYADRI; Continuous; Higher; Biodiversity Hotspot
-2. Eastern Ghats = Discontinuous (cut by rivers); Lower; No UNESCO status
-3. Highest peak South India = ANAMUDI (2695 m) in Kerala
-4. Highest peak Eastern Ghats = MAHENDRAGIRI (Odisha)
-5. Oldest fold mountain India = ARAVALLI HILLS
-6. Deccan Plateau slopes WEST to EAST → rivers flow EAST
-7. Narmada & Tapi form ESTUARIES (not deltas) — flow through RIFT valleys
-8. Godavari = Dakshin Ganga / Vriddha Ganga
-9. Kosi = Sorrow of Bihar
-10. Chilika Lake = Largest coastal lagoon (Odisha) = Ramsar site
-11. Palakkad Gap = only break in Western Ghats (Kerala-TN border)
-12. Nathu La = Sikkim → Trade pass with China (reopened 2006)
-13. Nilgiri Hills = Junction of Eastern + Western Ghats
-14. Bihar: Landlocked; bordered by Nepal (N), WB (E), Jharkhand (S), UP (W)
+^ (power)   → Highest, RIGHT associative
+* / %       → Medium, Left associative
++ -         → Lowest, Left associative
+( )         → Override everything (not an operator)
+```
+
+### Infix → Postfix Algorithm (5 Rules):
+```
+1. Operand → directly to OUTPUT
+2. '(' → PUSH (never pops anything)
+3. ')' → POP until '(' found; discard both parentheses
+4. Operator → POP while top has equal/higher precedence → then PUSH
+   (for ^: only pop if STRICTLY higher, due to right-associativity)
+5. End of expression → POP all remaining stack elements to output
+```
+
+### Infix → Prefix (3 Steps):
+```
+Step 1: Reverse infix (swap '(' ↔ ')')
+Step 2: Apply postfix algorithm
+Step 3: Reverse the result
+```
+
+### Postfix Evaluation:
+```
+Scan L→R: operand → PUSH; operator → pop b (right), pop a (left), compute a OP b, push result
+Final value on stack = ANSWER
+```
+
+### Time Complexity:
+```
+Infix → Postfix/Prefix conversion = O(N)
+Postfix/Prefix evaluation = O(N)
+```
+
+### Quick Conversion Reference:
+```
+A + B * C      → Postfix: A B C * +    → Prefix: + A * B C
+(A + B) * C    → Postfix: A B + C *    → Prefix: * + A B C
+A * B + C * D  → Postfix: A B * C D * + → Prefix: + * A B * C D
+A ^ B ^ C      → Postfix: A B C ^ ^    → Prefix: ^ A ^ B C
+```
+
+### TRAPS to Avoid:
+```
+❌ Never include parentheses in Postfix or Prefix output
+❌ For Postfix evaluation: first pop = RIGHT operand (not left!)
+❌ ^ is RIGHT associative → A^B^C = A^(B^C), postfix = A B C ^ ^
+❌ After scanning: pop ALL remaining operators from stack
 ```
 
 ---
 
-*Day 17 Complete | Next: Day 18 → Queue: FIFO, Types & Operations | GS: India Physical Geography (Peninsular Plateau)*
+## ⚡ RAPID FIRE — Eastern Ghats
+
+### 5 Core Facts:
+```
+1. DISCONTINUOUS (most important word for exam)
+2. Eastern coast / Coromandel Coast / Bay of Bengal
+3. Highest peak = Mahendragiri (Odisha, ~1,501 m)
+4. States = Odisha, AP, Telangana, Tamil Nadu
+5. Meet Western Ghats at NILGIRI HILLS
+```
+
+### Eastern vs Western — 5 Key Differences:
+```
+                 EASTERN          WESTERN
+Continuity:      Broken           Continuous
+Height:          Lower (~600m)    Higher (~1000m+)
+Highest Peak:    Mahendragiri     Anamudi (2,695m)
+Rainfall:        Less             More (intercepts SW monsoon)
+Forests:         Dry deciduous    Tropical evergreen
+Biodiversity:    Moderate         Global HOTSPOT (UNESCO)
+```
+
+### Rivers through Eastern Ghats (N→S):
+```
+"My Great King Came"
+Mahanadi → Godavari → Krishna → Kaveri
+```
+
+### Key Wildlife:
+```
+Simlipal (Odisha) = Tiger Reserve + Biosphere Reserve
+Nagarjunasagar-Srisailam (AP/Telangana) = Largest tiger reserve by area
+Papikonda/Papi Hills = Godavari gorge through Eastern Ghats
+```
 
 ---
-> **Score yourself:** CS ___/25 | GS ___/25 | Total ___/50
-> **Target:** 45+ → Excellent | 40+ → Good | Below 35 → Revise concepts again
+
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. Postfix = operator AFTER operands; no brackets needed; Infix→Postfix conversion = O(N)
+2. Operator precedence: ^ > */% > +-; ^ is the ONLY right-associative common operator
+3. Postfix evaluation: scan L→R; for operator, pop b(right), pop a(left), compute a OP b
+4. Eastern Ghats = DISCONTINUOUS; Highest peak = Mahendragiri (Odisha); meet Western Ghats at Nilgiri Hills
+5. Western Ghats = CONTINUOUS, higher, wetter, UNESCO World Heritage, global biodiversity hotspot; Anamudi = highest peak
+
+---
+
+*Next: Day 18 — Queue Data Structure (FIFO, Operations, Types) + Bihar Geography — Nalanda, Vaishali districts*

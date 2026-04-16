@@ -1,1381 +1,1556 @@
-# 📅 DAY 11 — BPSC TRE 4.0 COMPLETE STUDY MATERIAL
-### CS Topic: File Handling in C++ | GS Topic: Civil Disobedience Movement & Salt March (1930)
-**Target: TOP RANK | Prepared for Prag | Phase 1 — Week 2**
+# 📅 BPSC TRE 4.0 — DAY 11 COMPLETE STUDY MODULE
+### C++ File Handling (File I/O) + Civil Disobedience Movement 1930
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-> **⚡ TOPPER MINDSET FOR TODAY:**
-> File Handling is a **DIRECT PYQ TOPIC** — file modes (`ios::trunc`, `ios::app`) appeared
-> in TRE 1.0 and TRE 2.0 with exact option-matching questions.
-> Civil Disobedience / Dandi March = **MOST HIGH-VALUE Modern History topic** in Bihar GS.
-> Learn both cold today → guaranteed 4–6 marks in the real exam.
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): C++ File Handling — streams, modes, operations, binary vs text
+> - Afternoon (1 hr): Civil Disobedience Movement — story-based deep understanding
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5-bullet revision notes in your notebook
 
 ---
 
-# ═══════════════════════════════════════════
-# PART A — COMPUTER SCIENCE
-## File Handling in C++ — Complete Concept Guide
-# ═══════════════════════════════════════════
+# PART 1: COMPUTER SCIENCE
+## 📘 C++ File Handling — Complete Deep Dive
 
 ---
 
-## 🔷 1. WHY FILE HANDLING?
+## 🔷 SECTION 1: What is File Handling? (The Foundation)
 
-When a program runs, data is stored in **RAM (temporary)**. When the program ends, all data is lost.
-
-**File Handling** allows a program to store data **permanently on disk** (hard drive/SSD) so it can be read later.
-
+### Real-Life Analogy — The Office Filing Cabinet:
 ```
-WITHOUT FILE HANDLING:          WITH FILE HANDLING:
-Program runs                    Program runs
-↓                               ↓
-Data in RAM ──→ Program ends    Data in RAM ──→ Written to FILE on disk
-↓                               ↓
-Data LOST ❌                    Data SAVED PERMANENTLY ✅
-                                ↓
-                                Next program run → READ from file
+Imagine an office with a FILING CABINET (= hard disk storage).
+You need to:
+  → OPEN a drawer (file) to start working
+  → READ documents from the drawer
+  → WRITE new documents into it
+  → CLOSE the drawer when done
+
+Without filing cabinet:
+  → All data lives only in RAM (lost when program ends)
+  → Like writing on a whiteboard — erased when power off
+
+With file handling:
+  → Data persists on disk PERMANENTLY
+  → Like writing in a notebook — survives closing the program
+```
+
+### Why File Handling?
+```
+Problem without files:
+  → Program runs → data stored in memory (RAM)
+  → Program closes → ALL data is LOST forever
+  → Cannot share data between program runs
+
+Solution with files:
+  → Write data to file on disk
+  → File persists after program ends
+  → Next program run can READ the saved data
+  → Multiple programs can share the same file
+```
+
+### What is a Stream?
+```
+STREAM = a sequence/flow of data between your program and a source/destination
+
+Types:
+  Input stream  → data FLOWS INTO  your program (from file/keyboard)
+  Output stream → data FLOWS OUT OF your program (to file/screen)
+
+Think of a stream like a water pipe:
+  → Data flows through it in one direction
+  → You can read from it or write to it
 ```
 
 ---
 
-## 🔷 2. THE THREE STREAM CLASSES
+## 🔷 SECTION 2: File Stream Classes — The Core Three
 
-C++ uses **stream classes** from the `<fstream>` header for file I/O:
-
-```
-          <fstream> header
-               │
-    ┌──────────┼──────────┐
-    ▼          ▼          ▼
-ifstream   ofstream   fstream
-(Input     (Output    (Both Input
- only)      only)      AND Output)
-
-ifstream = "input file stream"  → READ from file
-ofstream = "output file stream" → WRITE to file
-fstream  = "file stream"        → READ + WRITE both
-```
-
-### Declaration and Opening:
+### Header Required:
 ```cpp
-#include <fstream>
-using namespace std;
-
-// Method 1: Declare + open in one step
-ifstream fin("input.txt");      // open for reading
-ofstream fout("output.txt");    // open for writing
-fstream  fio("data.txt");       // open for both
-
-// Method 2: Declare first, then open separately
-ifstream fin;
-fin.open("input.txt");
-
-// Closing a file
-fin.close();
-fout.close();
+#include <fstream>   // includes all three file stream classes
 ```
+
+### The Three File Stream Classes:
+
+```
+FILE STREAM HIERARCHY:
+                    ios (base class)
+                     │
+              ┌──────┴──────┐
+           istream        ostream
+              │               │
+           ifstream    ofstream
+              │               │
+              └──────┬──────┘
+                  fstream
+```
+
+### 1. `ifstream` — Input File Stream
+```
+Purpose: READ data FROM a file INTO the program
+Think:   i = input = "I want to READ"
+Default mode: ios::in (open for reading)
+```
+
+```cpp
+ifstream inFile;           // declare input file stream
+inFile.open("data.txt");   // open file for reading
+int x;
+inFile >> x;               // read from file into variable
+inFile.close();            // close the file
+```
+
+### 2. `ofstream` — Output File Stream
+```
+Purpose: WRITE data FROM the program INTO a file
+Think:   o = output = "I want to WRITE"
+Default mode: ios::out | ios::trunc (open for writing, truncates file)
+```
+
+```cpp
+ofstream outFile;             // declare output file stream
+outFile.open("result.txt");   // open file for writing
+outFile << "Hello Bihar";     // write to file
+outFile.close();              // close the file
+```
+
+### 3. `fstream` — File Stream (Both Read and Write)
+```
+Purpose: Both READ and WRITE to same file
+Think:   f = file = "full access"
+Must specify mode explicitly (no safe default for both operations)
+```
+
+```cpp
+fstream file;
+file.open("data.txt", ios::in | ios::out);  // open for both
+file << "Write this";    // write
+file >> someVar;         // read
+file.close();
+```
+
+### Quick Comparison Table:
+
+| Class | Purpose | Default Mode | Header |
+|-------|---------|-------------|--------|
+| `ifstream` | Read from file | `ios::in` | `<fstream>` |
+| `ofstream` | Write to file | `ios::out \| ios::trunc` | `<fstream>` |
+| `fstream` | Read + Write | Must specify | `<fstream>` |
 
 ---
 
-## 🔷 3. FILE MODES — THE HEART OF BPSC PYQs
+## 🔷 SECTION 3: File Modes — The Exam Goldmine
 
-File modes are **flags** that tell C++ HOW to open a file. They are defined in the `ios` class.
+### What are File Modes?
+File modes tell the system **HOW** to open the file — should it read? write? append? start fresh?
 
-### Complete File Mode Table:
+### Complete File Modes Table:
 
 | Mode Flag | Full Name | Meaning |
 |-----------|-----------|---------|
 | `ios::in` | input | Open file for **reading** |
-| `ios::out` | output | Open file for **writing** (creates file if not exists) |
-| `ios::app` | append | **Append** — write at END of file (existing data preserved) |
-| `ios::trunc` | truncate | **Truncate** — delete all existing content, start fresh (zero length) |
+| `ios::out` | output | Open file for **writing** |
+| `ios::app` | append | Write at the **END** of file (existing content preserved) |
+| `ios::trunc` | truncate | **DELETE** existing content when opening (start fresh) |
 | `ios::binary` | binary | Open in **binary mode** (not text mode) |
-| `ios::ate` | at end | Open and move pointer to **end** of file immediately |
+| `ios::ate` | at end | Open and move file pointer to **end** of file |
 
 ---
 
-### 🔴 MOST IMPORTANT — `ios::trunc` vs `ios::app`
+## 🔷 SECTION 4: `ios::trunc` — The #1 PYQ Trap
 
-This distinction is **the #1 BPSC PYQ topic** in file handling:
-
+### What Does `ios::trunc` Do?
 ```
-ios::app  (APPEND)                    ios::trunc (TRUNCATE)
-─────────────────────────             ──────────────────────────
-File BEFORE opening:                  File BEFORE opening:
-Hello World                           Hello World
-This is Line 2                        This is Line 2
+ios::trunc = TRUNCATE = CUT/DELETE all existing content
 
-After opening and writing "NEW":      After opening and writing "NEW":
-Hello World                           NEW
-This is Line 2
-NEW
+When you open a file with ios::trunc:
+→ If file EXISTS     → ALL existing content is DELETED
+→ File becomes EMPTY → You start writing from scratch
+→ If file DOES NOT EXIST → New file is created (same as ios::out)
 
-→ PRESERVES old data                  → DESTROYS old data
-→ Adds new content at END             → File becomes ZERO LENGTH first
-                                      → Then writes new content
+"Trunc" comes from "truncate" = to cut short = to make zero length
 ```
 
-> **🎯 PYQ GOLD FACT:** `ios::trunc` truncates the file to **zero length** (empties it completely) when the file is opened. `ios::out` **also** truncates by default if the file exists (same as `ios::out | ios::trunc`).
+### Visual Explanation:
+```
+BEFORE opening with ios::trunc:
+┌─────────────────────────────────┐
+│ data.txt                        │
+│ Line 1: Hello                   │
+│ Line 2: World                   │
+│ Line 3: BPSC TRE 2026           │
+└─────────────────────────────────┘
 
----
+AFTER opening with ios::trunc:
+┌─────────────────────────────────┐
+│ data.txt                        │
+│ (empty — all content deleted)   │
+└─────────────────────────────────┘
 
-## 🔷 4. DEFAULT FILE MODES
+NOW writing "New Content":
+┌─────────────────────────────────┐
+│ data.txt                        │
+│ New Content                     │
+└─────────────────────────────────┘
+```
+
+### `ios::trunc` vs `ios::app` — KEY DIFFERENCE:
+
+```
+ios::trunc (TRUNCATE):
+  → DELETES old content
+  → Starts writing from beginning
+  → Old data is GONE FOREVER
+  Example: Like tearing out all pages and writing fresh
+
+ios::app (APPEND):
+  → PRESERVES old content
+  → Adds new content at the END
+  → Old data is SAFE
+  Example: Like turning to a new blank page and continuing
+```
 
 ```cpp
-// ifstream default mode:
-ifstream fin("file.txt");
-// Equivalent to: fin.open("file.txt", ios::in)
+// ios::trunc — DESTROYS old content:
+ofstream f1("notes.txt", ios::out | ios::trunc);
+f1 << "New note";  // Previous content erased, only "New note" remains
 
-// ofstream default mode:
-ofstream fout("file.txt");
-// Equivalent to: fout.open("file.txt", ios::out | ios::trunc)
-// ⚠️ TRAP: ofstream TRUNCATES by default!
-
-// fstream default mode:
-fstream fio("file.txt");
-// Equivalent to: fio.open("file.txt", ios::in | ios::out)
+// ios::app — PRESERVES old content:
+ofstream f2("notes.txt", ios::out | ios::app);
+f2 << "Added note";  // Previous content + "Added note" at end
 ```
 
-> **⚠️ CRITICAL TRAP:** When you open a file with `ofstream` (or `ios::out`), it **automatically truncates** the existing content! If you want to preserve content, you MUST use `ios::app`.
+### 🚨 PYQ TRAP #1:
+> **Default behavior of `ofstream`** when you just do `ofstream f("file.txt")`:
+> It uses `ios::out | ios::trunc` by default.
+> This means **simply opening a file with ofstream DESTROYS existing content!**
+> To preserve content, you MUST explicitly use `ios::app`.
 
 ---
 
-## 🔷 5. COMBINING FILE MODES WITH `|` OPERATOR
+## 🔷 SECTION 5: Combining File Modes with `|`
 
-Modes can be **combined using the bitwise OR operator `|`**:
-
+### The Bitwise OR Operator for Modes:
 ```cpp
-// Open for both reading AND writing:
+// Use | (bitwise OR) to combine multiple modes:
+fstream f;
+f.open("data.txt", ios::in | ios::out);              // read + write
+f.open("data.txt", ios::out | ios::app);             // write + append
+f.open("data.txt", ios::in | ios::out | ios::binary); // read + write + binary
+```
+
+### Common Mode Combinations:
+
+| Combination | Effect |
+|-------------|--------|
+| `ios::in` | Read only |
+| `ios::out` | Write only (truncates by default) |
+| `ios::out \| ios::trunc` | Write + destroy old content |
+| `ios::out \| ios::app` | Write + preserve old content (append) |
+| `ios::in \| ios::out` | Read + write (file must exist) |
+| `ios::in \| ios::binary` | Read binary file |
+| `ios::out \| ios::binary` | Write binary file |
+| `ios::in \| ios::out \| ios::binary` | Read + write binary file |
+
+---
+
+## 🔷 SECTION 6: File Operations — open(), close(), eof()
+
+### Opening a File:
+
+#### Method 1: Constructor (at object creation):
+```cpp
+ifstream fin("marks.txt");         // open at creation
+ofstream fout("output.txt");       // open at creation
 fstream f("data.txt", ios::in | ios::out);
-
-// Open for writing in binary mode:
-ofstream f("data.bin", ios::out | ios::binary);
-
-// Open for appending in binary mode:
-ofstream f("log.bin", ios::app | ios::binary);
-
-// Open for reading + writing + append:
-fstream f("data.txt", ios::in | ios::out | ios::app);
-
-// Open for reading and KEEP existing content (no truncation):
-fstream f("data.txt", ios::in | ios::out);
-// vs
-fstream f("data.txt", ios::in | ios::out | ios::trunc); // EMPTIES file first
 ```
 
-> **🎯 PYQ FACT:** The `|` operator (bitwise OR) is used to combine file modes. This is a direct answer choice in BPSC TRE questions.
-
----
-
-## 🔷 6. READING AND WRITING OPERATIONS
-
-### Reading from a file:
-```cpp
-ifstream fin("marks.txt");
-int x;
-string name;
-
-fin >> x;        // reads one integer (stops at whitespace)
-fin >> name;     // reads one word
-getline(fin, name);  // reads entire line including spaces
-
-fin.close();
-```
-
-### Writing to a file:
-```cpp
-ofstream fout("result.txt");
-
-fout << "Prag scored: " << 95 << endl;
-fout << "Subject: Computer Science" << endl;
-
-fout.close();
-```
-
-### Checking End of File:
-```cpp
-ifstream fin("data.txt");
-int val;
-
-while (!fin.eof()) {    // eof() = end of file reached?
-    fin >> val;
-    cout << val << " ";
-}
-fin.close();
-```
-
----
-
-## 🔷 7. FILE OPEN AND CLOSE — GOOD PRACTICES
-
+#### Method 2: open() function:
 ```cpp
 ifstream fin;
-fin.open("data.txt");
+fin.open("marks.txt");             // open separately
+fin.open("marks.txt", ios::in);    // with explicit mode
+```
 
-// Always check if file opened successfully:
-if (!fin) {
-    cout << "Error: File could not be opened!" << endl;
+### Checking if File Opened Successfully:
+```cpp
+ifstream fin("data.txt");
+if (!fin) {                        // if file failed to open
+    cout << "Error: File not found!";
     return 1;
 }
 // OR:
-if (!fin.is_open()) {
-    cout << "File not found!" << endl;
+if (fin.fail()) {
+    cout << "File opening failed";
 }
-
-// Process file...
-
-fin.close();  // Always close the file when done!
+// OR:
+if (!fin.is_open()) {
+    cout << "File not open";
+}
 ```
 
-> **🎯 PYQ FACT:** `is_open()` returns `true` if the file was opened successfully, `false` otherwise.
+### 🚨 PYQ TRAP #2:
+> Always check if file opened successfully before reading/writing.
+> If you read from a file that doesn't exist without checking:
+> → No compile error, but UNDEFINED BEHAVIOR at runtime
+
+### Closing a File:
+```cpp
+fin.close();    // always close files when done!
+fout.close();
+```
+
+**Why close?**
+```
+→ Flushes buffered data to disk (writes actually happen)
+→ Releases file handle (OS resource)
+→ Allows other programs to access the file
+→ Prevents data loss (buffer may not be written without close)
+```
+
+### Reading from Files:
+
+#### Using `>>` operator (word by word):
+```cpp
+ifstream fin("data.txt");
+int num;
+string word;
+fin >> num;       // reads next integer
+fin >> word;      // reads next word (stops at space)
+```
+
+#### Using `getline()` (line by line):
+```cpp
+ifstream fin("data.txt");
+string line;
+while (getline(fin, line)) {    // reads entire line
+    cout << line << endl;
+}
+```
+
+#### Using `get()` (character by character):
+```cpp
+ifstream fin("data.txt");
+char ch;
+while (fin.get(ch)) {          // reads one char at a time
+    cout << ch;
+}
+```
+
+### Writing to Files:
+```cpp
+ofstream fout("output.txt");
+fout << "Hello" << endl;       // write string
+fout << 42 << " " << 3.14;    // write numbers
+fout.close();
+```
 
 ---
 
-## 🔷 8. BINARY FILE OPERATIONS
+## 🔷 SECTION 7: `eof()` — End of File Detection
 
-Binary mode stores data as **raw bytes** (not human-readable text):
+### What is `eof()`?
+```
+eof() = End Of File function
+Returns: true  (1) when file pointer has reached the END of file
+         false (0) when there is still data to read
+```
 
+### Usage:
 ```cpp
-// Writing binary data:
-ofstream fout("student.dat", ios::binary);
-int roll = 101;
-fout.write((char*)&roll, sizeof(roll));
-fout.close();
-
-// Reading binary data:
-ifstream fin("student.dat", ios::binary);
-int roll;
-fin.read((char*)&roll, sizeof(roll));
-cout << roll;  // 101
+ifstream fin("data.txt");
+int num;
+while (!fin.eof()) {        // loop until end of file
+    fin >> num;
+    cout << num << " ";
+}
 fin.close();
 ```
 
-```
-TEXT MODE vs BINARY MODE:
-─────────────────────────────────────────────
-Text:   Stores 65 as characters '6','5' + '\n' converted to '\r\n' on Windows
-Binary: Stores 65 as binary 01000001 (exact byte representation)
+### 🚨 PYQ TRAP #3 — The eof() Trap:
+```cpp
+// WRONG approach:
+while (!fin.eof()) {
+    fin >> num;
+    cout << num;   // ⚠️ May print last value TWICE!
+}
+// WHY? eof() becomes true AFTER the failed read, not before.
+// The last read may fail (eof reached) but eof() returns false
+// just BEFORE that last read — so loop runs one extra time.
 
-Binary is FASTER and more COMPACT for large data
-Text is HUMAN-READABLE
+// CORRECT approach:
+while (fin >> num) {        // read and check in one step
+    cout << num << " ";
+}
+// This is cleaner — loop exits when read fails (eof or error)
 ```
 
 ---
 
-## 🔷 9. COMPLETE FILE HANDLING EXAMPLE
+## 🔷 SECTION 8: Text File vs Binary File
+
+### Text File:
+```
+→ Data stored as human-readable characters (ASCII)
+→ Numbers stored as their text representation
+   Example: 65 stored as '6' '5' (two characters = 2 bytes)
+→ Newlines may be converted (\n → \r\n on Windows)
+→ Used for: config files, source code, log files
+→ Mode: default (no special flag needed)
+```
+
+### Binary File:
+```
+→ Data stored in raw binary format (exact memory representation)
+→ Numbers stored as their binary value
+   Example: 65 stored as 01000001 (1 byte, direct binary)
+→ No newline conversion — exact bytes preserved
+→ Used for: images, executables, databases, serialized data
+→ Mode: ios::binary flag required
+```
+
+### Comparison:
+
+| Feature | Text File | Binary File |
+|---------|-----------|-------------|
+| Storage format | ASCII characters | Raw binary bytes |
+| Human readable | Yes (open in notepad) | No (appears as garbage) |
+| Number storage | As text (65 = "6","5") | As binary (65 = 0x41) |
+| Newline handling | OS-dependent conversion | No conversion |
+| Size | Usually larger | Usually smaller |
+| Mode flag | Default (no flag) | `ios::binary` |
+| Used for | Text, config, logs | Images, exe, databases |
 
 ```cpp
-#include <iostream>
-#include <fstream>
-using namespace std;
+// Text file write:
+ofstream ftxt("text.txt");
+ftxt << 65;          // writes "65" (two ASCII chars)
 
-int main() {
-    // WRITE to file
-    ofstream fout("bpsc.txt");
-    fout << "BPSC TRE 4.0" << endl;
-    fout << "Computer Science" << endl;
-    fout.close();
+// Binary file write:
+ofstream fbin("data.bin", ios::binary);
+int n = 65;
+fbin.write((char*)&n, sizeof(n));   // writes 4 bytes (binary int)
+```
 
-    // READ from file
-    ifstream fin("bpsc.txt");
-    string line;
-    while (getline(fin, line)) {
-        cout << line << endl;
-    }
-    fin.close();
+### Binary File Functions:
+```cpp
+// write() — write binary data:
+fout.write((char*)&variable, sizeof(variable));
 
-    // APPEND to file
-    ofstream fapp("bpsc.txt", ios::app);
-    fapp << "Added New Line" << endl;
-    fapp.close();
-
-    return 0;
-}
-/*
-Output on screen:
-BPSC TRE 4.0
-Computer Science
-*/
-// After append, bpsc.txt contains:
-// BPSC TRE 4.0
-// Computer Science
-// Added New Line
+// read() — read binary data:
+fin.read((char*)&variable, sizeof(variable));
 ```
 
 ---
 
-## 🔷 10. TURBO C++ SHORTCUTS — PYQ DIRECT QUESTION
+## 🔷 SECTION 9: File Handling Workflow — Complete Picture
+
+```
+COMPLETE FILE HANDLING WORKFLOW:
+═══════════════════════════════════════════════════════
+
+Step 1: INCLUDE HEADER
+  #include <fstream>
+
+Step 2: DECLARE stream object
+  ifstream fin;   OR   ofstream fout;   OR   fstream f;
+
+Step 3: OPEN the file
+  fin.open("filename.txt");
+  fin.open("filename.txt", mode_flags);
+  OR: ifstream fin("filename.txt");
+
+Step 4: CHECK if opened
+  if (!fin) { handle error; }
+
+Step 5: PERFORM operations
+  fin >> variable;          // read
+  fout << data;             // write
+  getline(fin, line);       // read line
+  fin.get(ch);              // read char
+
+Step 6: CHECK eof while reading
+  while (fin >> data) { ... }
+  OR: while (!fin.eof()) { ... }
+
+Step 7: CLOSE the file
+  fin.close();
+  fout.close();
+
+═══════════════════════════════════════════════════════
+```
+
+---
+
+## 🔷 SECTION 10: Turbo C++ Shortcut
+
+### Important Keyboard Shortcuts (Exam Context):
 
 | Shortcut | Action |
 |----------|--------|
-| **Ctrl + F9** | **Compile and Run** the program |
-| Alt + F9 | Compile only |
-| F9 | Make (link + compile) |
-| Ctrl + F5 | User screen |
-| Alt + X | Exit Turbo C++ |
+| **Ctrl + F9** | Compile and Run the program |
+| Alt + F9 | Compile only (without running) |
+| Ctrl + F10 | Run without compiling |
+| F8 | Step over (debugging) |
+| F7 | Step into (debugging) |
+| Alt + F5 | View output window |
 
-> **🎯 PYQ GOLD:** `Ctrl + F9` = Compile and Run in Turbo C++. This appeared as a direct question in TRE PYQs.
+### 🚨 PYQ TRAP #4:
+> **Ctrl + F9** = "Compile AND Run" in Turbo C++
+> This is the most frequently tested shortcut in BPSC TRE CS exams.
+> Alt + F9 = Compile ONLY (not run)
+> These two are commonly confused in exam questions!
 
 ---
 
-## 🔷 11. SEEK FUNCTIONS — RANDOM FILE ACCESS
+## 📊 VISUAL SUMMARY — File Handling Complete Map
 
-```cpp
-// seekg = seek get (for reading) → moves READ pointer
-// seekp = seek put (for writing) → moves WRITE pointer
-// tellg = tell get → returns current READ position
-// tellp = tell put → returns current WRITE position
+```
+C++ FILE HANDLING — MASTER STRUCTURE
+│
+├── HEADER: #include <fstream>
+│
+├── CLASSES:
+│   ├── ifstream  → READ  (default: ios::in)
+│   ├── ofstream  → WRITE (default: ios::out | ios::trunc)
+│   └── fstream   → BOTH  (must specify mode)
+│
+├── MODES:
+│   ├── ios::in     → read
+│   ├── ios::out    → write
+│   ├── ios::app    → append (preserve old content)
+│   ├── ios::trunc  → truncate (DELETE old content) ← #1 TRAP
+│   ├── ios::binary → binary mode
+│   └── ios::ate    → start at end of file
+│
+├── OPERATIONS:
+│   ├── open()   → opens file
+│   ├── close()  → closes + flushes buffer
+│   ├── >>       → reads word/value
+│   ├── <<       → writes value
+│   ├── getline()→ reads entire line
+│   ├── eof()    → checks end of file
+│   ├── read()   → binary read
+│   └── write()  → binary write
+│
+├── FILE TYPES:
+│   ├── Text   → ASCII, human readable, default
+│   └── Binary → raw bytes, ios::binary flag
+│
+└── SHORTCUT:
+    └── Ctrl + F9 → Compile and Run (Turbo C++)
+```
 
-ifstream fin("data.txt");
-fin.seekg(10);         // move read pointer to byte 10
-fin.seekg(5, ios::beg);  // 5 bytes from beginning
-fin.seekg(-3, ios::end); // 3 bytes before end
-fin.seekg(2, ios::cur);  // 2 bytes from current position
+---
+---
 
-long pos = fin.tellg(); // get current position
+# PART 2: GENERAL STUDIES
+## 🏛️ Civil Disobedience Movement (1930) — Story-Based Deep Dive
+
+---
+
+## 🔷 THE BACKGROUND — THREE TRIGGERS
+
+### Background 1: Simon Commission — 1927
+
+```
+Why it was formed:
+  → Government of India Act 1919 required review after 10 years
+  → British government formed a 7-member commission in 1927
+
+The Problem:
+  → ALL 7 members were BRITISH — no Indian member!
+  → "Indians can't decide their own constitutional future?"
+  → This was seen as a deep insult
+
+Indian Response:
+  → ALL major parties boycotted: INC + Muslim League + others
+  → "Simon Go Back" slogan — everywhere Simon went
+  → Massive protests and demonstrations
+
+Bihar Connection — Lala Lajpat Rai:
+  → October 30, 1928: Simon Commission arrived in Lahore
+  → Lala Lajpat Rai led a peaceful protest march
+  → Police officer Saunders ordered a brutal lathi charge
+  → Lala Lajpat Rai was severely beaten
+  → He said: "Every blow struck on me is a nail in the coffin of British imperialism"
+  → He died on November 17, 1928 from his injuries
+  → Called: "Punjab Kesari" (Lion of Punjab)
+  → Bhagat Singh vowed revenge → killed Saunders (mistaking for another officer)
+```
+
+### Background 2: Nehru Report — 1928
+```
+What: INC's own proposed constitution for India
+Author: Motilal Nehru (committee chairman) → hence "Nehru Report"
+Key demand: DOMINION STATUS (self-governance within British Empire)
+              NOT complete independence
+
+Jinnah's objection:
+  → Wanted separate electorate for Muslims
+  → Nehru Report rejected separate electorates
+  → This widened INC–Muslim League divide
+
+Subhas Bose and young Nehru:
+  → They wanted COMPLETE INDEPENDENCE, not just Dominion Status
+  → Congress gave British a 1-year deadline to grant Dominion Status
+```
+
+### Background 3: Lahore Session — December 1929
+```
+Date: December 31, 1929 (midnight)
+Location: Banks of River Ravi, Lahore
+President: Jawaharlal Nehru (just 39 years old)
+Resolution: PURNA SWARAJ (Complete Independence)
+
+The Midnight Moment:
+  → As the clock struck midnight (Jan 1, 1930 began)
+  → Congress passed the Purna Swaraj resolution
+  → The tri-colour flag was hoisted on the riverbank
+  → January 26, 1930 declared as "Independence Day"
+    (celebrated annually until actual independence — this is
+     why January 26 became our Republic Day in 1950)
+
+Key declaration: "We believe it is the inalienable right of
+the Indian people to have freedom"
 ```
 
 ---
 
-## 🔷 12. MASTER SUMMARY TABLE
+## 🔷 GANDHI'S STRATEGY — WHY SALT?
 
+### Gandhi's Letter to the Viceroy:
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│              C++ FILE HANDLING QUICK REFERENCE                  │
-├────────────────┬───────────────────────────────────────────────┤
-│ Class          │ Purpose                                       │
-├────────────────┼───────────────────────────────────────────────┤
-│ ifstream       │ Read only                                     │
-│ ofstream       │ Write only (TRUNCATES by default!)           │
-│ fstream        │ Read + Write                                  │
-├────────────────┼───────────────────────────────────────────────┤
-│ Mode           │ Effect                                        │
-├────────────────┼───────────────────────────────────────────────┤
-│ ios::in        │ Open for reading                              │
-│ ios::out       │ Open for writing                              │
-│ ios::app       │ Append — add at END, preserves data          │
-│ ios::trunc     │ Truncate — EMPTIES file to zero length       │
-│ ios::binary    │ Binary mode                                   │
-│ ios::ate       │ Open and go to END immediately               │
-├────────────────┼───────────────────────────────────────────────┤
-│ Function       │ Purpose                                       │
-├────────────────┼───────────────────────────────────────────────┤
-│ open()         │ Open a file                                   │
-│ close()        │ Close a file                                  │
-│ eof()          │ Check if end of file reached                  │
-│ is_open()      │ Check if file opened successfully             │
-│ read()         │ Binary read                                   │
-│ write()        │ Binary write                                  │
-│ seekg/seekp    │ Move file pointer (random access)             │
-│ tellg/tellp    │ Get current file pointer position             │
-├────────────────┼───────────────────────────────────────────────┤
-│ Turbo C++      │ Ctrl+F9 = Compile and Run                    │
-└────────────────┴───────────────────────────────────────────────┘
+Date: March 2, 1930
+Recipient: Lord Irwin (Viceroy of India)
+Content: Gandhi gave ADVANCE WARNING of his plan
+→ "I intend to break the salt law unless demands are met"
+→ 11 demands listed (including reduction of land revenue, salt tax)
+→ Gandhi gave the Viceroy a chance to respond
+
+Lord Irwin's response: IGNORED Gandhi's letter
+
+Gandhi's reaction: "I will launch Civil Disobedience"
 ```
 
----
-
-## 🔷 13. TRICKY OUTPUT PREDICTION EXAMPLES
-
-### Example 1 — ios::trunc trap:
-```cpp
-// File "test.txt" contains: "Hello World"
-ofstream f("test.txt");  // opens with ios::out (which includes ios::trunc)
-f << "Hi";
-f.close();
-
-// What does test.txt contain NOW?
-// Answer: "Hi"   (NOT "Hi World" — trunc deleted "Hello World" first!)
+### Why Salt? Gandhi's Brilliance:
 ```
+Salt was the PERFECT symbol because:
 
-### Example 2 — ios::app:
-```cpp
-// File "test.txt" contains: "Hello"
-ofstream f("test.txt", ios::app);
-f << " World";
-f.close();
+1. UNIVERSAL: Every Indian — rich, poor, Hindu, Muslim,
+   man, woman, farmer, trader — ALL use salt daily
 
-// What does test.txt contain NOW?
-// Answer: "Hello World"   (app PRESERVED "Hello" and added " World")
-```
+2. BASIC NECESSITY: You cannot live without salt
+   (Unlike sugar or cloth — salt is survival)
 
-### Example 3 — eof() loop:
-```cpp
-// File contains: 10 20 30
-ifstream f("nums.txt");
-int n;
-while(f >> n) {       // reads until EOF
-    cout << n << " ";
-}
-// Output: 10 20 30
+3. BRITISH MONOPOLY: British government had TOTAL control
+   over salt production and sale
+
+4. SALT TAX: Indians had to pay tax even on this basic necessity
+   → Poor Indians suffered most from salt tax
+
+5. ILLEGAL TO MAKE YOUR OWN: Indians couldn't collect salt
+   from the sea — even though India has a vast coastline
+
+Gandhi's genius: By choosing salt, he included EVERYONE in
+the struggle, from the poorest peasant to the richest merchant.
 ```
 
 ---
 
-# ═══════════════════════════════════════════
-# CS PRACTICE QUESTIONS — 25 MCQs
-## File Handling in C++ | BPSC TRE Pattern
-# ═══════════════════════════════════════════
+## 🔷 THE DANDI MARCH — THE MOST ICONIC EVENT
 
-> **📌 INSTRUCTIONS:** Solve ALL 25 questions FIRST. Answers are given AFTER question 25 (after the GS section). Cover the answer key with paper while solving!
-
----
-
-**Q1.** Which header file must be included for file handling in C++?
-
-(A) `<iostream>`
-(B) `<stdio.h>`
-(C) `<fstream>`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q2.** Which C++ class is used ONLY for reading from a file?
-
-(A) `ofstream`
-(B) `fstream`
-(C) `ifstream`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q3.** What does `ios::trunc` do when a file is opened?
-
-(A) Moves the file pointer to the end of the file
-(B) Truncates (empties) the file to zero length before writing
-(C) Appends new data at the end of the existing content
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q4.** A file named "data.txt" already contains the text: `"Old Data"`.
-The following code is executed:
-```cpp
-ofstream f("data.txt");
-f << "New";
-f.close();
+### Complete Details:
 ```
-What does "data.txt" contain after execution?
-
-(A) `"Old DataNew"`
-(B) `"New"`
-(C) `"NewOld Data"`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q5.** Which file mode should be used if you want to **add** new content at the END of a file WITHOUT destroying existing content?
-
-(A) `ios::out`
-(B) `ios::trunc`
-(C) `ios::app`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q6.** What is the keyboard shortcut to **Compile and Run** a program in Turbo C++?
-
-(A) `Alt + F9`
-(B) `Ctrl + F5`
-(C) `Ctrl + F9`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q7.** Which operator is used to **combine** two or more file modes in C++?
-
-(A) `&&` (logical AND)
-(B) `+` (addition)
-(C) `|` (bitwise OR)
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q8.** Which of the following correctly opens a file for **both reading and writing** without truncating it?
-
-(A) `fstream f("data.txt", ios::in | ios::out);`
-(B) `fstream f("data.txt", ios::in | ios::out | ios::trunc);`
-(C) `ofstream f("data.txt", ios::in);`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q9.** What does the `eof()` function return?
-
-(A) The size of the file in bytes
-(B) `true` when the end of the file has been reached
-(C) The current position of the file pointer
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q10.** Which class is used to handle BOTH reading AND writing to the same file?
-
-(A) `ifstream`
-(B) `ofstream`
-(C) `fstream`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q11.** What is the **default mode** when a file is opened using `ofstream`?
-
-(A) `ios::in`
-(B) `ios::out | ios::app`
-(C) `ios::out | ios::trunc`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q12.** Consider: `fstream f("log.txt", ios::app | ios::binary);`
-Which of the following is TRUE about this file opening?
-
-(A) The file is opened in text mode and existing data is deleted
-(B) The file is opened in binary mode and new data is appended at the end
-(C) The file is opened in binary mode and existing data is truncated
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q13.** What does `is_open()` return if the file was successfully opened?
-
-(A) `false`
-(B) `0`
-(C) `true`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q14.** What is the purpose of `seekg()` in C++ file handling?
-
-(A) To write data at a specific position in a file
-(B) To move the **read** pointer to a specific position in the file
-(C) To check if end of file is reached
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q15.** Which of the following file modes is used when you want to open a file in **binary mode** for writing?
-
-(A) `ios::out`
-(B) `ios::binary`
-(C) `ios::out | ios::binary`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q16.** A file "marks.txt" contains:
-```
-85
-90
-78
-```
-What will the following code output?
-```cpp
-ifstream fin("marks.txt");
-int n, sum = 0;
-while (fin >> n) {
-    sum += n;
-}
-cout << sum;
-fin.close();
-```
-(A) 85
-(B) 78
-(C) 253
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q17.** What is the difference between `seekg()` and `seekp()` in C++?
-
-(A) `seekg()` is for reading position; `seekp()` is for writing position
-(B) `seekg()` is used in binary files; `seekp()` is for text files
-(C) They are identical functions with different names
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q18.** Which mode flag moves the file pointer to the END of the file immediately after opening?
-
-(A) `ios::end`
-(B) `ios::app`
-(C) `ios::ate`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q19.** When `getline(fin, str)` is used with a file stream, it reads:
-
-(A) Only one word from the file
-(B) An entire line including spaces, until newline or EOF
-(C) Only numeric values
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q20.** Consider the following code:
-```cpp
-ofstream f1("test.txt");
-f1 << "BPSC";
-f1.close();
-
-ofstream f2("test.txt", ios::app);
-f2 << " TRE";
-f2.close();
-```
-What does "test.txt" contain after both operations?
-
-(A) `" TRE"`
-(B) `"BPSC"`
-(C) `"BPSC TRE"`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q21.** What does the `write()` function in C++ file handling do?
-
-(A) Writes formatted text data to a file
-(B) Writes a block of raw binary data (specified number of bytes) to a file
-(C) Writes only integers to a file
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q22.** Which of the following statements about `ios::app` is/are CORRECT?
-
-(A) It opens the file and positions the write pointer at the end
-(B) Existing data in the file is preserved
-(C) New data is always written at the end regardless of `seekp()` calls
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q23.** The `tellg()` function in C++ file handling:
-
-(A) Tells the total size of the file
-(B) Returns the current position of the READ pointer
-(C) Returns the current position of the WRITE pointer
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q24.** What will happen if you try to open a file for reading (`ifstream`) that does NOT exist?
-
-(A) A new empty file is created automatically
-(B) The file stream goes into a FAIL state (is_open() returns false)
-(C) Compiler gives an error
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q25.** Which of the following is/are TRUE about file handling in C++?
-
-(A) `ios::out` by default truncates the file (same effect as `ios::out | ios::trunc`)
-(B) `fstream` requires `<fstream>` header
-(C) `close()` should be called after file operations are done
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
----
-
-# ═══════════════════════════════════════════════
-# PART B — GENERAL STUDIES
-## Civil Disobedience Movement & Salt March (1930)
-# ═══════════════════════════════════════════════
-
----
-
-## 🔶 1. BACKGROUND — WHY 1930?
-
-After the **suspension of the Non-Cooperation Movement (1922)** and the disappointing results of the Simon Commission, Gandhi needed a new strategy. Several events set the stage:
-
-```
-TIMELINE OF EVENTS LEADING TO CIVIL DISOBEDIENCE:
-
-1922 → NCM suspended (Chauri Chaura)
-1923 → Swaraj Party formed (C.R. Das + Motilal Nehru)
-1927 → Simon Commission appointed (ALL BRITISH — no Indian member)
-        → "Simon Go Back" protests; Lala Lajpat Rai lathi-charged → dies
-1928 → Nehru Report (Motilal Nehru) — demands Dominion Status
-1929 → Lahore Session of Congress
-        → Jawaharlal Nehru becomes Congress President
-        → "PURNA SWARAJ" (Complete Independence) declared on Dec 19, 1929
-        → January 26, 1930 = First Independence Day celebrated
-           (This is why Jan 26 was chosen as Republic Day in 1950!)
-1930 → Civil Disobedience Movement launched
+Start date:   March 12, 1930
+Start point:  Sabarmati Ashram, Ahmedabad, Gujarat
+End point:    Dandi (a coastal village in Gujarat)
+Distance:     241 miles (approximately 385 km)
+Duration:     24 days (March 12 – April 5, 1930)
+Participants: Gandhi + 78 selected volunteers (his disciples)
 ```
 
-> **🎯 BPSC KEY FACT:** **Purna Swaraj** was declared at the **Lahore Session (1929)** presided by **Jawaharlal Nehru**. **January 26, 1930** was celebrated as the first Independence Day — which is why **January 26, 1950** was chosen as Republic Day.
-
----
-
-## 🔶 2. THE SIMON COMMISSION — TRIGGER
-
-| Fact | Detail |
-|------|--------|
-| Appointed | November 1927 by British PM Baldwin |
-| Purpose | Review the Government of India Act 1919 |
-| Problem | All 7 members were BRITISH — NO Indian member |
-| Protests | "Simon Go Back" — boycotted by all parties |
-| Lala Lajpat Rai | Led protest in Lahore; lathi-charged by Superintendent Scott; died November 1928 |
-| Bhagat Singh | Avenged Lajpat Rai's death by shooting J.P. Saunders (1928) |
-
----
-
-## 🔶 3. THE DANDI MARCH — SALT SATYAGRAHA
-
-### Why SALT?
-
+### The Route and Significance:
 ```
-BRITISH SALT TAX FACTS:
-─────────────────────────────────────────────────────
-• British had MONOPOLY on salt production
-• Indians could NOT make or sell salt without British permission
-• Heavy tax on salt — poorest people most affected
-• Salt used by EVERYONE — rich, poor, Hindu, Muslim, farmer, worker
-• Gandhi chose salt because:
-  → Universal — affects every Indian regardless of religion/caste
-  → Symbolic — British control over basic necessity
-  → Non-violent — making salt is not violent
-  → Easy for masses to understand and participate
+Day 1 (March 12):
+  → Gandhi and 78 followers begin the march from Sabarmati
+  → Each day, they walked through villages
+  → Thousands joined along the way
+  → Gandhi gave speeches in every village
+
+April 5, 1930:
+  → They reach Dandi on the Gujarat coast
+  → Massive crowds gathered
+
+April 6, 1930:
+  → Gandhi picks up a handful of salt from the seashore
+  → He MAKES salt — breaking the Salt Law
+  → This act of picking up salt = Civil Disobedience begins!
+  → This moment was witnessed and reported worldwide
 ```
 
-### Dandi March Details:
-
+### 🚨 PYQ TRAP — Exact Details:
 ```
-DANDI MARCH ROUTE:
-Sabarmati Ashram (Ahmedabad)
-         │
-         │ 241 miles (388 km) on foot
-         │ 24 days of walking
-         │ March 12, 1930 → April 6, 1930
-         │
-         ▼
-    Dandi (coastal village, Gujarat)
-    April 6, 1930 → Gandhi picks up salt from seashore
-    → Breaks the salt law → Civil Disobedience officially begins!
+Start: Sabarmati Ashram, Ahmedabad (NOT Sabarmati village)
+End: DANDI (Gujarat coast) — NOT Champaran, NOT Karachi
+Date of salt-making: APRIL 6, 1930 (NOT March 12 which was start of march)
+Distance: 241 miles (sometimes given as ~388 km)
+Number of initial volunteers: 78
+Duration of march: 24 days
 ```
 
-| Fact | Detail |
-|------|--------|
-| **Start date** | March 12, 1930 |
-| **End date (reached Dandi)** | April 6, 1930 |
-| **Starting point** | Sabarmati Ashram, Ahmedabad |
-| **Destination** | Dandi, coastal village in Gujarat |
-| **Distance** | 241 miles / 388 km |
-| **Duration** | 24 days |
-| **Companions** | 78 selected volunteers/followers |
-| **Gandhi's age** | 61 years old |
-
-> **🎯 BPSC DIRECT FACT:** Gandhi started the Dandi March on **March 12, 1930** from **Sabarmati Ashram** with **78 followers**, reached **Dandi** on **April 6, 1930**, and broke the salt law.
-
----
-
-## 🔶 4. SPREAD OF CIVIL DISOBEDIENCE ACROSS INDIA
-
-After Gandhi broke the salt law at Dandi, CDM spread across India:
-
+### Impact of the Salt March:
 ```
-REGIONAL MANIFESTATIONS:
+Immediate:
+→ Civil Disobedience Movement launched nationwide
+→ People everywhere began making salt illegally
+→ Massive boycott of British goods
+→ Police began arresting thousands
 
-Northwest Frontier Province (NWFP):
-→ Khan Abdul Ghaffar Khan ("Frontier Gandhi") / "Badshah Khan"
-→ Led the "Khudai Khidmatgar" (Servants of God) / Red Shirts movement
-→ Non-violent Pashtun movement — very significant
+International:
+→ Global media coverage — TIME magazine cover
+→ World saw Britain's repression of peaceful protesters
+→ International sympathy for India grew
 
-Tamil Nadu (Vedaranyam):
-→ C. Rajagopalachari (Rajaji) led salt march
-
-Dharasana Salt Works (Gujarat):
-→ May 1930 — Sarojini Naidu led march on salt depot
-→ Police beat non-violent protesters with steel-tipped batons
-→ American journalist Webb Miller reported this → global outrage
-
-Bihar:
-→ Rajendra Prasad led movement in Bihar
-→ Massive peasant participation
-
-Bengal / Maharashtra / UP:
-→ Widespread no-tax campaigns, forest law violations, picketing of liquor shops
+In India:
+→ Women participated massively for the first time
+→ Merchants, lawyers, students all joined
+→ British faced economic damage from boycott
 ```
 
 ---
 
-## 🔶 5. THE GANDHI-IRWIN PACT (1931)
+## 🔷 KEY EVENTS DURING CDM
+
+### Arrests and Repression:
+```
+April 1930: Jawaharlal Nehru arrested
+May 4-5, 1930: Gandhi arrested (before Dharasana)
+May 21, 1930: Dharasana Salt Works Raid
+  → Sarojini Naidu led 2,500 volunteers to raid salt works
+  → Police brutally beat the non-violent volunteers
+  → Webb Miller (American journalist) reported it globally
+  → This report turned world opinion against Britain
+
+June 1930: Congress declared illegal organization
+December 1930: Round Table Conference 1 (Gandhi NOT present — in jail)
+```
+
+### Spread Beyond Salt:
+```
+→ Forest laws broken (tribals cut forest wood)
+→ No-revenue campaigns in various regions
+→ Boycott of foreign cloth intensified
+→ Picketing of liquor shops
+→ Women's participation was historic (first large-scale)
+```
+
+---
+
+## 🔷 CIVIL DISOBEDIENCE TIMELINE
 
 ```
-Context:
-Gandhi arrested → March 1930
-Released → January 1931
-↓
-Negotiations between Gandhi and Lord Irwin (Viceroy)
-↓
-Gandhi-Irwin Pact signed: March 5, 1931
+CIVIL DISOBEDIENCE MOVEMENT — KEY DATES
+══════════════════════════════════════════════════
+
+December 31, 1929
+   │  Lahore Session — Purna Swaraj declared
+   │  January 26, 1930 = first "Independence Day" celebration
+   │
+March 2, 1930
+   │  Gandhi writes to Lord Irwin — advance warning
+   │
+March 12, 1930
+   │  DANDI MARCH BEGINS — Sabarmati Ashram
+   │  Gandhi + 78 volunteers
+   │
+April 5, 1930
+   │  Gandhi reaches Dandi (Gujarat coast)
+   │
+April 6, 1930 ← CIVIL DISOBEDIENCE OFFICIALLY LAUNCHES
+   │  Gandhi makes salt at Dandi — breaks salt law
+   │
+April 1930
+   │  Jawaharlal Nehru arrested
+   │  Mass arrests across India
+   │
+May 4-5, 1930
+   │  Gandhi arrested
+   │
+May 21, 1930
+   │  Dharasana Salt Works Raid (Sarojini Naidu leads)
+   │
+1930 (Nov-Dec)
+   │  Round Table Conference 1 — Gandhi ABSENT (in jail)
+   │
+January 26, 1931
+   │  Gandhi released from jail
+   │
+March 5, 1931
+   │  GANDHI-IRWIN PACT signed ← MOVEMENT SUSPENDED
+   │
+September 1931
+   │  Round Table Conference 2 — Gandhi PRESENT
+   │  RTC 2 fails (no agreement)
+   │
+January 1932
+   │  Gandhi re-arrested — CDM re-launched (Phase 2)
+   │
+1932 (September)
+   │  Poona Pact (Gandhi + Ambedkar)
+   │
+1934
+   │  CDM formally withdrawn
+```
+
+---
+
+## 🔷 GANDHI-IRWIN PACT — MARCH 5, 1931
+
+### What Was the Pact?
+```
+Date: March 5, 1931
+Parties: Gandhi (representing INC) + Lord Irwin (Viceroy)
+Also called: "Delhi Pact"
 ```
 
 ### Terms of the Pact:
-
-| British Agreed To | Congress Agreed To |
-|-------------------|--------------------|
-| Release all political prisoners | Suspend the Civil Disobedience Movement |
-| Allow Indians to make salt near sea | Participate in 2nd Round Table Conference |
-| Return confiscated properties | Stop boycott of foreign cloth |
-| Allow peaceful picketing | |
-
-> **⚠️ CONTROVERSY:** Bhagat Singh, Rajguru, and Sukhdev were to be hanged on **March 23, 1931** (just 18 days after the pact). Congress could not get their sentences commuted. Subhas Bose and others criticized Gandhi for signing the pact without saving Bhagat Singh.
-
----
-
-## 🔶 6. ROUND TABLE CONFERENCES
-
-| Conference | Year | Gandhi's Participation | Key Points |
-|-----------|------|------------------------|------------|
-| **1st RTC** | Nov 1930 – Jan 1931 | **NOT attended** (CDM ongoing) | Muslim League, princes attended; no outcome |
-| **2nd RTC** | Sep–Dec 1931 | **ATTENDED** (after Gandhi-Irwin Pact) | No agreement on communal representation |
-| **3rd RTC** | Nov–Dec 1932 | **NOT attended** (re-arrested) | Minor reforms discussed; Congress absent |
-
-> **🎯 PYQ FACT:** Gandhi attended **only the 2nd Round Table Conference** in London (1931). He represented the Indian National Congress.
-
----
-
-## 🔶 7. POONA PACT (1932) — DR. AMBEDKAR & GANDHI
-
 ```
-Communal Award (August 1932) by British PM Ramsay MacDonald:
-→ Separate electorates for Depressed Classes (Dalits/Harijans)
-→ Gandhi OPPOSED this — feared it would permanently divide Hindu society
+BRITISH AGREED TO:
+→ Release all political prisoners (except those convicted of violence)
+→ Return confiscated properties of satyagrahis
+→ Allow collection of salt from coastal areas for personal use
+→ Allow peaceful picketing of foreign goods
 
-Gandhi's response:
-→ Started FAST UNTO DEATH in Yerwada Jail (September 20, 1932)
-
-Negotiations:
-→ Dr. B.R. Ambedkar (leader of Depressed Classes)
-→ Agreed to negotiate
-
-Poona Pact (September 24, 1932):
-→ No separate electorates for Depressed Classes
-→ BUT reserved seats increased significantly (from 71 to 147 seats)
-→ Gandhi ended his fast
-
-Gandhi's term for Dalits: "HARIJANS" (Children of God)
-Ambedkar disagreed with this term
+GANDHI/CONGRESS AGREED TO:
+→ SUSPEND Civil Disobedience Movement
+→ Attend Round Table Conference 2 in London
+→ Cooperate with British constitutional process
 ```
 
-> **🎯 BPSC KEY FACT:** **Poona Pact** was signed on **September 24, 1932** between Gandhi and Ambedkar. Gandhi was in **Yerwada Jail** (Pune) during the fast. Ramsay MacDonald's Communal Award gave separate electorates to Dalits — which Gandhi fasted against.
+### 🚨 PYQ TRAP #5:
+> Pact only SUSPENDED the movement — NOT ended.
+> Gandhi attended RTC 2 (September 1931) but it FAILED.
+> CDM was RE-LAUNCHED in January 1932.
+> CDM was formally WITHDRAWN only in 1934.
 
----
-
-## 🔶 8. CDM SUSPENSION AND REVIVAL
-
+### Reactions to Pact:
 ```
-CDM Timeline:
-March 12, 1930 → Dandi March begins
-April 6, 1930 → Salt law broken; CDM begins
-March 5, 1931 → Gandhi-Irwin Pact; CDM SUSPENDED (1st time)
-Sep 1931 → Gandhi attends 2nd RTC in London
-Dec 1931 → Returns; re-arrested
-Jan 4, 1932 → Gandhi re-arrested; CDM RESUMED
-1932–33 → CDM continues weakly
-May 1933 → Gandhi suspends CDM (second time) for his fast
-April 1934 → CDM FORMALLY WITHDRAWN
+Subhas Chandra Bose: Called it a "sell-out" — no Poorna Swaraj achieved
+Bhagat Singh: Being hanged (March 23, 1931) — Gandhi's pact did not save him
+              Controversy: Gandhi could have demanded Bhagat Singh's release but did not
 ```
 
 ---
 
-## 🔶 9. SIGNIFICANCE AND RESULTS OF CDM
-
-### Major Achievements:
-
-```
-✅ OUTCOMES:
-├── Made India's freedom struggle INTERNATIONAL news
-│   (Dharasana — Webb Miller's reports went worldwide)
-├── Women participated massively for first time
-│   (Sarojini Naidu, Kamala Nehru, Kasturba Gandhi)
-├── Government of India Act 1935 — direct result of RTC discussions
-├── Salt — symbol of self-reliance and swadeshi
-├── Broke psychological barrier — showed Indians could defy British law
-└── Khan Abdul Ghaffar Khan proved non-violence works even among Pathans
-
-❌ LIMITATIONS:
-├── CDM did not achieve immediate independence
-├── Gandhi-Irwin Pact criticized for not saving Bhagat Singh
-└── 2nd RTC failed to produce agreement
-```
-
----
-
-## 🔶 10. KEY PERSONALITIES — CDM
+## 🔷 KEY PERSONALITIES — MASTER TABLE
 
 | Person | Role |
 |--------|------|
-| **Mahatma Gandhi** | Launched CDM, Dandi March |
-| **Jawaharlal Nehru** | Congress President 1929, Purna Swaraj declaration |
-| **Khan Abdul Ghaffar Khan** | "Frontier Gandhi" — NWFP movement, Khudai Khidmatgar |
-| **Sarojini Naidu** | Led Dharasana march after Gandhi's arrest |
-| **C. Rajagopalachari** | Led Vedaranyam salt march in Tamil Nadu |
-| **Subhas Chandra Bose** | Critical of Gandhi-Irwin Pact |
-| **Lord Irwin** | Viceroy — signed Gandhi-Irwin Pact |
-| **Ramsay MacDonald** | British PM — gave Communal Award 1932 |
-| **Dr. B.R. Ambedkar** | Signed Poona Pact with Gandhi |
-| **Rajendra Prasad** | Led CDM in **Bihar** |
+| **Mahatma Gandhi** | Led CDM, Dandi March, Gandhi-Irwin Pact |
+| **Lord Irwin** | Viceroy; signed Gandhi-Irwin Pact |
+| **Jawaharlal Nehru** | Presided over Lahore Session (1929); arrested April 1930 |
+| **Lala Lajpat Rai** | Died after Simon Commission lathi charge (1928) |
+| **Sarojini Naidu** | Led Dharasana Salt Works Raid (May 1930) — "Nightingale of India" |
+| **Subhas Chandra Bose** | Opposed Lahore session dominion status debate; critiqued Gandhi-Irwin Pact |
+| **Motilal Nehru** | Authored Nehru Report (1928) |
+| **Bhagat Singh** | Killed Saunders (to avenge Lala Lajpat Rai); hanged March 23, 1931 |
 
 ---
 
-## 🔶 11. COMPARISON: NCM vs CDM
-
-| Feature | Non-Cooperation (1920–22) | Civil Disobedience (1930–34) |
-|---------|--------------------------|------------------------------|
-| Launch | August 1, 1920 | March 12, 1930 (Dandi March) |
-| Trigger | Jallianwala + Rowlatt + Khilafat | Simon Commission + Salt Tax |
-| Method | Non-cooperation, boycott | Direct law-breaking |
-| Key symbol | Khadi | Salt |
-| Ended by | Chauri Chaura violence | Gandhi-Irwin Pact (1931) |
-| Key demand | Swaraj | Purna Swaraj (already declared) |
-| Muslim unity | Strong (Khilafat link) | Weaker |
-| Women | Moderate | Very large-scale |
-| International coverage | Limited | Global (Webb Miller reports) |
-
----
-
-## 🔶 12. KEY DATES — RAPID MEMORIZATION CHART
+## 🔷 BIHAR CONNECTION — CDM
 
 ```
-Dec 19, 1929  → Purna Swaraj declared at Lahore Session (Nehru presides)
-Jan 26, 1930  → First Independence Day celebrated
-Mar 12, 1930  → Dandi March begins (Sabarmati → 78 followers)
-Apr 6, 1930   → Dandi reached; salt law broken; CDM officially begins
-May 1930      → Dharasana salt works march (Sarojini Naidu)
-              → Gandhi arrested
-Mar 5, 1931   → Gandhi-Irwin Pact signed
-Mar 23, 1931  → Bhagat Singh, Rajguru, Sukhdev hanged
-Sep 1931      → Gandhi attends 2nd Round Table Conference (London)
-Aug 1932      → Communal Award (Ramsay MacDonald)
-Sep 20, 1932  → Gandhi begins fast unto death in Yerwada Jail
-Sep 24, 1932  → Poona Pact (Gandhi + Ambedkar)
-Apr 1934      → CDM formally withdrawn
+Bihar's role in Civil Disobedience Movement:
+→ Salt marches organized in Bihar by Rajendra Prasad
+→ Bihar farmers participated in no-revenue campaigns
+→ Champaran and Saran districts saw strong participation
+→ Rajendra Prasad was arrested during CDM
+→ Bihar Vidyapeeth students boycotted studies to join CDM
 ```
 
 ---
 
-## 🔶 13. BIHAR CONNECTION — BPSC SPECIAL
+## 🔷 MEMORY TRICKS
 
-Since this is a **Bihar exam**, these Bihar-specific facts are EXAM-CRITICAL:
+```
+"SIMON → NEHRU REPORT → LAHORE → DANDI → CDM"
+(The logical 5-step build-up to CDM)
 
-| Bihar Fact | Detail |
-|-----------|--------|
-| **Rajendra Prasad** | Led CDM in Bihar; first President of India |
-| **Champaran** | Gandhi's first Satyagraha (1917) — already happened here |
-| **Bihar Earthquake (1934)** | Gandhi called it "divine punishment for untouchability" — controversial |
-| **Bihar's salt movement** | Peasants participated actively in CDM |
-| **Jayaprakash Narayan (JP)** | Was active in Bihar politics during this era (though major role came later) |
+"SABARMATI to DANDI = 241 miles in 24 days with 78 people"
+(Numbers: 241, 24, 78 — learn all three!)
+
+"April 6 = Salt Day" (Gandhi made salt on April 6, 1930)
+
+"GANDHI-IRWIN PACT = March 5, 1931 = Delhi Pact"
+
+"RTC Attendance:
+  RTC 1 → Gandhi ABSENT (in jail)
+  RTC 2 → Gandhi PRESENT (pact allowed release)
+  RTC 3 → Gandhi ABSENT (back in jail)"
+
+"DHARASANA = SAROJINI NAIDU" (her most famous act)
+
+"LALA died in 1928 → BHAGAT SINGH avenged 1928 →
+ BHAGAT hanged 1931 → DURING Gandhi-Irwin Pact negotiations"
+```
 
 ---
 
-# ═══════════════════════════════════════════
-# GS PRACTICE QUESTIONS — 25 MCQs
-## Civil Disobedience Movement | BPSC TRE Pattern
-# ═══════════════════════════════════════════
+## 🔷 COMPARISON: NCM vs CDM vs QUIT INDIA
 
-> **📌 INSTRUCTIONS:** Solve ALL 25 questions FIRST. Answers appear AFTER question 50 (below). Don't peek!
+| Feature | NCM (1920) | CDM (1930) | Quit India (1942) |
+|---------|-----------|-----------|------------------|
+| Key method | Boycott | Break laws (salt) | "Do or Die" rebellion |
+| Trigger | JWB + Rowlatt | Simon + Lahore | WWII context |
+| Ended by | Chauri Chaura | Gandhi-Irwin Pact | 1947 independence |
+| Women's role | Limited | Large (first time) | Very large |
+| International coverage | Limited | Massive (Dandi) | Significant |
+| Gandhi arrested | 1922 | 1930 | 1942 |
+| Phase 2? | No | Yes (relaunched 1932) | No |
 
 ---
 
-**Q26.** The Dandi March (Salt March) was started by Mahatma Gandhi on:
+# PART 3: PRACTICE QUESTIONS
 
-(A) January 26, 1930
-(B) March 12, 1930
-(C) April 6, 1930
-(D) More than one of the above is correct
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: File Streams, File Modes, ios::trunc, Operations, Binary/Text
+
+---
+
+**Q1.** Which header file is required for file handling in C++?
+(A) `<iostream>`
+(B) `<fstream>`
+(C) `<filestream>`
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q27.** Gandhi started the Dandi March from which place?
-
-(A) Dandi, Gujarat
-(B) Wardha Ashram
-(C) Sabarmati Ashram, Ahmedabad
-(D) More than one of the above is correct
+**Q2.** Which class is used to READ data from a file in C++?
+(A) `ofstream`
+(B) `fstream`
+(C) `ifstream`
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q28.** How many followers accompanied Gandhi at the start of the Dandi March?
-
-(A) 100
-(B) 25
-(C) 78
-(D) More than one of the above is correct
+**Q3.** What does `ios::trunc` do when opening a file?
+(A) Opens file at the end (truncates nothing)
+(B) Appends new content after existing content
+(C) Deletes all existing content in the file
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q29.** "Purna Swaraj" (Complete Independence) was declared at which session of the Indian National Congress?
-
-(A) Calcutta Session, 1928
-(B) Lahore Session, 1929
-(C) Nagpur Session, 1929
-(D) More than one of the above is correct
+**Q4.** What is the default mode when opening a file with `ofstream`?
+(A) `ios::in`
+(B) `ios::app`
+(C) `ios::out | ios::trunc`
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q30.** Who presided over the Lahore Session of Congress (1929) where Purna Swaraj was declared?
-
-(A) Mahatma Gandhi
-(B) Subhas Chandra Bose
-(C) Jawaharlal Nehru
-(D) More than one of the above is correct
+**Q5.** Which file mode should be used to ADD content at the END of an existing file without deleting old content?
+(A) `ios::out`
+(B) `ios::trunc`
+(C) `ios::app`
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q31.** The Civil Disobedience Movement was officially launched when Gandhi:
-
-(A) Declared Purna Swaraj at Lahore
-(B) Picked up salt at Dandi beach, breaking the salt law on April 6, 1930
-(C) Signed the Gandhi-Irwin Pact
-(D) More than one of the above is correct
+**Q6.** What is the keyboard shortcut to Compile and Run a program in Turbo C++?
+(A) `Alt + F9`
+(B) `Ctrl + F9`
+(C) `Ctrl + F5`
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q32.** Why did Gandhi choose SALT as the symbol of Civil Disobedience?
-
-(A) Salt was a luxury item used only by the rich
-(B) Salt was used by every Indian regardless of religion, caste, or economic status — making it universally relatable
-(C) Salt was the most highly taxed item under British rule
-(D) More than one of the above is correct
+**Q7.** Which of the following is TRUE about `eof()` in C++?
+(A) It returns true before reading the last element
+(B) It returns true AFTER the file pointer has passed the end
+(C) It is called before opening the file
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q33.** The Gandhi-Irwin Pact was signed on:
+**Q8.** To open a file for BOTH reading and writing, which class should be used?
+(A) `ifstream`
+(B) `ofstream`
+(C) `fstream`
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q9.** Which mode combination correctly opens a file for writing in binary format?
+(A) `ios::in | ios::binary`
+(B) `ios::out | ios::binary`
+(C) `ios::app | ios::text`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q10.** Why must `close()` be called after file operations?
+(A) To open the next file
+(B) To flush buffered data to disk and release file resources
+(C) Because the file becomes read-only after operations
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q11.** In a binary file, how is the integer `65` stored?
+(A) As the characters '6' and '5' (two bytes)
+(B) As its raw binary representation (4 bytes for int)
+(C) As the character 'A' (ASCII 65)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q12.** Which function is used to read binary data from a file?
+(A) `get()`
+(B) `getline()`
+(C) `read()`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q13.** What happens if you open a non-existent file with `ifstream` without checking?
+(A) File is created automatically
+(B) Compile error
+(C) File stream fails (no compile error, but stream state is bad)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q14.** `ios::ate` mode means:
+(A) File is opened and pointer placed at END of file
+(B) File content is deleted (truncated)
+(C) File is opened in append mode
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q15.** Which of the following is the correct way to check if a file opened successfully?
+(A) `if (file.open()) { ... }`
+(B) `if (!file) { ... }`
+(C) `if (file.fail()) { ... }`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q16.** What is the difference between `ios::app` and `ios::ate`?
+(A) No difference — both append to end
+(B) `ios::app` always writes at end; `ios::ate` moves pointer to end but allows seeking
+(C) `ios::ate` deletes content; `ios::app` does not
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q17.** Which of the following reads an entire line from a file (including spaces)?
+(A) `fin >> line;`
+(B) `getline(fin, line);`
+(C) `fin.get(line);`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q18.** What is Alt + F9 in Turbo C++?
+(A) Compile and Run
+(B) Compile ONLY (without running)
+(C) Run without compiling
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q19.** To open a binary file for reading, which mode is correct?
+(A) `ios::out | ios::binary`
+(B) `ios::in | ios::binary`
+(C) `ios::binary` alone
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q20.** In which of the following does the file stream `fstream` differ from `ifstream` and `ofstream`?
+(A) `fstream` can both read and write; the others are specialized
+(B) `fstream` does not support binary mode
+(C) `fstream` automatically closes files
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q21.** Which of the following classes is used to WRITE data TO a file?
+(A) `ifstream`
+(B) `ofstream`
+(C) `iostream`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q22.** Which of the following is TRUE about text files vs binary files?
+(A) Text files store numbers in ASCII; binary files store raw binary
+(B) Binary files are always larger than text files
+(C) Text files cannot store numbers
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q23.** What does `fout.write((char*)&n, sizeof(n))` do?
+(A) Writes n as a text string
+(B) Writes the raw bytes of variable n to the file
+(C) Writes the address of n to the file
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q24.** If a file already has content and you open it with `ios::out` (default ofstream), what happens?
+(A) New content is appended at the end
+(B) Existing content is preserved; file pointer goes to beginning
+(C) Existing content is DELETED (truncated) — new content replaces it
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q25.** Which of the following is the parent/base class of `ifstream`, `ofstream`, and `fstream`?
+(A) `iostream`
+(B) `filebase`
+(C) `ios`
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+## 📝 GENERAL STUDIES — 25 MCQs
+### Civil Disobedience Movement 1930
+
+---
+
+**Q26.** The Civil Disobedience Movement was formally launched on:
+(A) March 12, 1930 (start of Dandi March)
+(B) April 6, 1930 (Gandhi made salt at Dandi)
+(C) December 31, 1929 (Purna Swaraj declaration)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q27.** The Dandi March began from which location?
+(A) Wardha Ashram, Maharashtra
+(B) Sabarmati Ashram, Ahmedabad, Gujarat
+(C) Sevagram Ashram, Nagpur
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q28.** How many initial volunteers accompanied Gandhi on the Dandi March?
+(A) 78
+(B) 100
+(C) 241
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q29.** The Gandhi-Irwin Pact was signed on:
 (A) April 6, 1930
 (B) March 5, 1931
-(C) September 24, 1932
-(D) More than one of the above is correct
+(C) January 26, 1931
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q34.** Khan Abdul Ghaffar Khan was associated with which movement during the Civil Disobedience era?
-
-(A) Red Shirts / Khudai Khidmatgar movement in the Northwest Frontier Province
-(B) Khilafat Movement in Bengal
-(C) Moplah Rebellion in Kerala
-(D) More than one of the above is correct
+**Q30.** The Lahore Session of INC (December 1929) was presided over by:
+(A) Mahatma Gandhi
+(B) Motilal Nehru
+(C) Jawaharlal Nehru
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q35.** The Poona Pact (September 24, 1932) was signed between:
-
-(A) Gandhi and Lord Irwin
-(B) Gandhi and Dr. B.R. Ambedkar
-(C) Gandhi and Muhammad Ali Jinnah
-(D) More than one of the above is correct
+**Q31.** The Simon Commission was opposed because:
+(A) It recommended partition of India
+(B) It had no Indian members — all 7 members were British
+(C) It proposed heavy taxes on Indian farmers
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q36.** What was the Communal Award (1932) given by British PM Ramsay MacDonald?
-
-(A) Separate electorates for Muslims only
-(B) Separate electorates for Depressed Classes (Dalits)
-(C) Partition of India into Hindu and Muslim zones
-(D) More than one of the above is correct
+**Q32.** Lala Lajpat Rai died due to injuries sustained during protests against:
+(A) Rowlatt Act
+(B) Simon Commission's visit to Lahore
+(C) Salt Tax
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q37.** In which PRISON was Gandhi fasting when the Poona Pact was signed?
-
-(A) Cellular Jail, Andaman
-(B) Alipore Jail, Calcutta
-(C) Yerwada Jail, Pune
-(D) More than one of the above is correct
+**Q33.** Who led the raid on Dharasana Salt Works on May 21, 1930 after Gandhi's arrest?
+(A) Kasturba Gandhi
+(B) Aruna Asaf Ali
+(C) Sarojini Naidu
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q38.** Gandhi attended which of the Round Table Conferences?
-
-(A) First Round Table Conference (1930–31)
-(B) Second Round Table Conference (1931)
-(C) Third Round Table Conference (1932)
-(D) More than one of the above is correct
+**Q34.** The distance covered during the Dandi March was approximately:
+(A) 100 miles
+(B) 200 miles
+(C) 241 miles
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q39.** The Dharasana Salt Works incident (1930) was significant because:
-
-(A) Gandhi personally led the march and broke the salt law there
-(B) Sarojini Naidu led non-violent protesters; brutal police beating was reported internationally by journalist Webb Miller
-(C) It was where Gandhi signed the Gandhi-Irwin Pact
-(D) More than one of the above is correct
+**Q35.** Purna Swaraj (Complete Independence) was declared at which Congress session?
+(A) Nagpur Session, 1920
+(B) Calcutta Session, 1928
+(C) Lahore Session, December 1929
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q40.** Why is January 26, 1950 celebrated as Republic Day (and not any other date)?
-
-(A) It was the date the Constitution of India was written
-(B) January 26, 1930 was the first Independence Day (Purna Swaraj Day) — so this date was chosen for the Republic
-(C) It was Mahatma Gandhi's birthday
-(D) More than one of the above is correct
+**Q36.** Gandhi gave ADVANCE WARNING to which Viceroy before starting the Civil Disobedience Movement?
+(A) Lord Curzon
+(B) Lord Irwin
+(C) Lord Chelmsford
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q41.** Bhagat Singh, Rajguru, and Sukhdev were hanged on:
+**Q37.** The Nehru Report (1928) was primarily authored under the chairmanship of:
+(A) Jawaharlal Nehru
+(B) Motilal Nehru
+(C) Gandhi
+(D) More than one of the above
+(E) None of the above
 
-(A) March 5, 1931
+---
+
+**Q38.** January 26, 1930 was significant because:
+(A) India got independence on this day
+(B) The first "Independence Day" was celebrated after Lahore Purna Swaraj resolution
+(C) Gandhi launched the Dandi March
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q39.** Which of the following is TRUE about the Gandhi-Irwin Pact?
+(A) It permanently ended the Civil Disobedience Movement
+(B) It SUSPENDED CDM; Gandhi attended RTC 2; CDM was later relaunched
+(C) Bhagat Singh was released as part of the pact
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q40.** Bhagat Singh, Rajguru and Sukhdev were hanged on:
+(A) March 23, 1930
 (B) March 23, 1931
 (C) April 6, 1931
-(D) More than one of the above is correct
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q42.** The Simon Commission (1927) was boycotted by Indians because:
-
-(A) It proposed the partition of India
-(B) All its 7 members were British — no Indian was included
-(C) It recommended abolishing the Indian National Congress
-(D) More than one of the above is correct
+**Q41.** Which of the following CORRECTLY describes why Gandhi chose salt as the symbol of Civil Disobedience?
+(A) Salt was the most expensive commodity in India
+(B) Salt was a universal necessity under British monopoly, taxed even on the poorest
+(C) Salt was unique to coastal India only
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q43.** Lala Lajpat Rai died as a result of injuries sustained during:
+**Q42.** Arrange in CORRECT CHRONOLOGICAL ORDER:
+1. Gandhi-Irwin Pact
+2. Dandi March begins
+3. Gandhi makes salt at Dandi
+4. Lahore Session — Purna Swaraj
 
-(A) Jallianwala Bagh Massacre (1919)
-(B) Protests against the Simon Commission in Lahore (1928)
-(C) Chauri Chaura incident (1922)
-(D) More than one of the above is correct
+(A) 4 → 2 → 3 → 1
+(B) 2 → 4 → 3 → 1
+(C) 4 → 3 → 2 → 1
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q44.** Who led the Civil Disobedience Movement in Bihar?
-
-(A) Mazharul Haque
-(B) Jayaprakash Narayan
-(C) Rajendra Prasad
-(D) More than one of the above is correct
+**Q43.** At which Round Table Conference did Gandhi participate?
+(A) RTC 1 (1930)
+(B) RTC 2 (1931)
+(C) RTC 3 (1932)
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q45.** The term "Harijans" (Children of God) was used by Gandhi to refer to:
-
-(A) Poor farmers of Bihar
-(B) Depressed Classes / Dalits / Untouchables
-(C) Muslim participants in the Khilafat Movement
-(D) More than one of the above is correct
+**Q44.** The "Simon Go Back" slogan was raised during protests against:
+(A) Simon Commission (1927–28)
+(B) Salt March (1930)
+(C) Rowlatt Act (1919)
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q46.** The approximate distance of the Dandi March from Sabarmati Ashram to Dandi was:
-
-(A) 100 miles
-(B) 241 miles (about 388 km)
-(C) 500 km
-(D) More than one of the above is correct
+**Q45.** Which of the following statements about the Nehru Report (1928) is CORRECT?
+(A) It demanded Purna Swaraj (complete independence)
+(B) It demanded Dominion Status for India
+(C) It was authored by Jawaharlal Nehru
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q47.** Which of the following is/are correctly matched?
-
-(A) Vedaranyam salt march → C. Rajagopalachari → Tamil Nadu
-(B) Dharasana salt works → Sarojini Naidu → Gujarat
-(C) NWFP → Khan Abdul Ghaffar Khan → Khudai Khidmatgar
-(D) More than one of the above is correct
+**Q46.** Sarojini Naidu's title "Nightingale of India" was given because of her work as a:
+(A) Singer
+(B) Poet
+(C) Dancer
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q48.** The Government of India Act 1935, which was a landmark in Indian constitutional history, was a direct outcome of discussions at:
-
-(A) Lahore Session of Congress 1929
-(B) Round Table Conferences (1930–32)
-(C) Gandhi-Irwin Pact (1931)
-(D) More than one of the above is correct
+**Q47.** MATCH THE FOLLOWING:
+```
+Event                              Year
+1. Simon Commission formed         A. 1930 (March 12)
+2. Dandi March begins              B. 1931 (March 5)
+3. Gandhi-Irwin Pact               C. 1927
+4. Purna Swaraj declared           D. 1929 (December)
+```
+(A) 1-C, 2-A, 3-B, 4-D
+(B) 1-A, 2-C, 3-D, 4-B
+(C) 1-D, 2-A, 3-B, 4-C
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q49.** What did the Gandhi-Irwin Pact allow Indians to do as a key concession from the British?
-
-(A) Run their own government in the provinces
-(B) Make and collect salt for personal use near the seashore
-(C) Boycott British courts permanently
-(D) More than one of the above is correct
+**Q48.** Which American journalist's report on the Dharasana Salt Works raid created international outrage?
+(A) Ernest Hemingway
+(B) Webb Miller
+(C) Mark Twain
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q50.** Which of the following statements about the Civil Disobedience Movement is/are TRUE?
-
-(A) Women participated in large numbers, especially in picketing liquor shops and foreign cloth bonfires
-(B) Khan Abdul Ghaffar Khan's success proved non-violence could work among Pashtuns (Pathans)
-(C) The Dharasana incident led to international coverage of Indian freedom struggle
-(D) More than one of the above is correct
+**Q49.** The Civil Disobedience Movement was formally WITHDRAWN in:
+(A) 1931 (after Gandhi-Irwin Pact)
+(B) 1932
+(C) 1934
+(D) More than one of the above
 (E) None of the above
 
 ---
 
----
----
----
+**Q50.** Which of the following is CORRECT about the Dandi March?
+(A) It started on April 6 and ended on March 12
+(B) It started on March 12, 1930 and Gandhi made salt on April 6, 1930
+(C) Gandhi was accompanied by 500 volunteers from the start
+(D) More than one of the above
+(E) None of the above
+
 ---
 ---
 
-# ═══════════════════════════════════════════════════════
-# ✅ ANSWER KEY — DID YOU TRY ALL 50 FIRST?
-# ═══════════════════════════════════════════════════════
+# ANSWER KEY
 
----
-
-## CS ANSWERS (Q1–Q25) — File Handling in C++
-
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| **Q1** | **(C) `<fstream>`** | `<fstream>` is the header for ifstream, ofstream, fstream |
-| **Q2** | **(C) `ifstream`** | `ifstream` = input file stream = read only |
-| **Q3** | **(B) Truncates to zero length** | `ios::trunc` empties the file completely before writing |
-| **Q4** | **(B) `"New"`** | `ofstream` uses `ios::out \| ios::trunc` by default → "Old Data" was DELETED first |
-| **Q5** | **(C) `ios::app`** | `app` = append = preserves existing content, adds at end |
-| **Q6** | **(C) Ctrl + F9** | Classic PYQ — Ctrl+F9 = Compile and Run in Turbo C++ |
-| **Q7** | **(C) `\|` (bitwise OR)** | File modes are combined with the `\|` operator |
-| **Q8** | **(A) `fstream f("data.txt", ios::in \| ios::out);`** | Opens for R+W without truncating |
-| **Q9** | **(B) Returns true at EOF** | `eof()` = `true` when end of file is reached |
-| **Q10** | **(C) `fstream`** | Only `fstream` supports both reading AND writing |
-| **Q11** | **(C) `ios::out \| ios::trunc`** | `ofstream` truncates by default — CRITICAL TRAP |
-| **Q12** | **(B) Binary mode, appends at end** | `ios::app` preserves data; `ios::binary` = binary mode |
-| **Q13** | **(C) `true`** | `is_open()` returns `true` if file opened successfully |
-| **Q14** | **(B) Moves the READ pointer** | `seekg` = seek-get = controls READ position |
-| **Q15** | **(C) `ios::out \| ios::binary`** | Need both flags: `out` for writing + `binary` for binary mode |
-| **Q16** | **(C) 253** | 85 + 90 + 78 = 253; while loop reads all three values |
-| **Q17** | **(A) seekg = read; seekp = write** | g = get (read), p = put (write) |
-| **Q18** | **(C) `ios::ate`** | `ate` = "at end" — moves pointer to end on open; `ios::app` also goes to end but for writes only |
-| **Q19** | **(B) Entire line with spaces** | `getline()` reads the whole line until `\n` or EOF |
-| **Q20** | **(C) `"BPSC TRE"`** | First `ofstream` writes "BPSC"; second opens with `ios::app` → appends " TRE" |
-| **Q21** | **(B) Raw binary data** | `write()` writes specified bytes of raw binary data |
-| **Q22** | **(D) More than one** | Both (A) and (B) are correct — `ios::app` positions at end AND preserves data |
-| **Q23** | **(B) Returns current READ pointer position** | `tellg` = tell-get = returns current read position |
-| **Q24** | **(B) Stream enters FAIL state** | `ifstream` of non-existent file → fails; `is_open()` returns false; no auto-creation |
-| **Q25** | **(D) More than one** | All three (A), (B), (C) are correct statements |
+## ⚠️ Attempt all 50 questions BEFORE checking answers!
 
 ---
 
-## GS ANSWERS (Q26–Q50) — Civil Disobedience Movement
+### CS Answers (Q1–Q25):
 
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| **Q26** | **(B) March 12, 1930** | Dandi March STARTED March 12; REACHED Dandi April 6 |
-| **Q27** | **(C) Sabarmati Ashram, Ahmedabad** | Starting point of Dandi March |
-| **Q28** | **(C) 78** | Exactly 78 followers accompanied Gandhi |
-| **Q29** | **(B) Lahore Session, 1929** | Purna Swaraj declared December 19, 1929, Lahore |
-| **Q30** | **(C) Jawaharlal Nehru** | Nehru presided over Lahore 1929; youngest Congress President at 40 |
-| **Q31** | **(B) Broke salt law at Dandi, April 6, 1930** | CDM officially started when Gandhi violated salt law |
-| **Q32** | **(D) More than one** | Both (B) and (C) are correct — salt was universal AND heavily taxed |
-| **Q33** | **(B) March 5, 1931** | Gandhi-Irwin Pact = March 5, 1931 |
-| **Q34** | **(A) Khudai Khidmatgar / Red Shirts, NWFP** | "Frontier Gandhi" = Khan Abdul Ghaffar Khan |
-| **Q35** | **(B) Gandhi and Dr. B.R. Ambedkar** | Poona Pact on Dalit representation |
-| **Q36** | **(B) Separate electorates for Depressed Classes** | Communal Award gave Dalits separate electorates — Gandhi opposed this |
-| **Q37** | **(C) Yerwada Jail, Pune** | Gandhi fasted in Yerwada (also spelled Yeravda) Jail |
-| **Q38** | **(B) Second Round Table Conference (1931)** | Gandhi attended ONLY the 2nd RTC in London |
-| **Q39** | **(B) Sarojini Naidu led; Webb Miller reported** | Dharasana = Sarojini Naidu + international media coverage |
-| **Q40** | **(B) Jan 26, 1930 was first Independence Day** | Jan 26, 1930 = first Purna Swaraj Day → Jan 26, 1950 = Republic Day |
-| **Q41** | **(B) March 23, 1931** | Bhagat Singh, Rajguru, Sukhdev hanged March 23, 1931 |
-| **Q42** | **(B) All members were British** | "Simon Go Back" — 7 British members, 0 Indians |
-| **Q43** | **(B) Simon Commission protests, Lahore, 1928** | Lathi-charged by Scott; died November 17, 1928 |
-| **Q44** | **(C) Rajendra Prasad** | Later became India's first President; led CDM in Bihar |
-| **Q45** | **(B) Depressed Classes / Dalits** | Gandhi coined "Harijans"; Ambedkar later rejected this term |
-| **Q46** | **(B) 241 miles (about 388 km)** | 24 days walking, 241 miles from Sabarmati to Dandi |
-| **Q47** | **(D) More than one** | All three (A), (B), (C) are correctly matched |
-| **Q48** | **(B) Round Table Conferences** | Government of India Act 1935 came from RTC discussions |
-| **Q49** | **(B) Make salt near seashore** | Key British concession in Gandhi-Irwin Pact |
-| **Q50** | **(D) More than one** | All three (A), (B), (C) are TRUE about CDM |
-
----
-
-# ═══════════════════════════════════════════
-# 📝 NIGHT REVISION — 5 BULLET POINTS EACH
-## Write These from Memory Before Sleeping
-# ═══════════════════════════════════════════
-
-### CS — File Handling:
-1. **Three classes:** `ifstream` (read), `ofstream` (write), `fstream` (both) — all from `<fstream>`
-2. **`ios::trunc`** = empties file to ZERO LENGTH; `ios::app` = APPENDS at end, preserves data
-3. **`ofstream` default** = `ios::out | ios::trunc` — opens with AUTO-TRUNCATION (trap!)
-4. **Turbo C++ Ctrl+F9** = Compile and Run; modes combined with `|` (bitwise OR)
-5. **`seekg`** = move READ pointer; **`seekp`** = move WRITE pointer; **`eof()`** = true at end of file
-
-### GS — Civil Disobedience Movement:
-1. **Dandi March:** March 12, 1930 → April 6, 1930; Sabarmati → Dandi; 78 followers; 241 miles
-2. **Purna Swaraj** declared at **Lahore Session 1929** by **Jawaharlal Nehru** (Congress President); Jan 26, 1930 = first Independence Day
-3. **Gandhi-Irwin Pact** = March 5, 1931; Gandhi attended only **2nd Round Table Conference** (1931, London)
-4. **Poona Pact** = Sep 24, 1932; Gandhi (Yerwada Jail) + **Dr. Ambedkar**; against Communal Award
-5. **Bihar:** Rajendra Prasad led CDM; Gandhi's first Satyagraha was **Champaran 1917** (Bihar!)
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (B) | `<fstream>` contains all file stream classes |
+| 2 | (C) | `ifstream` — i = input = read from file |
+| 3 | (C) | ios::trunc = truncate = delete all existing content |
+| 4 | (C) | Default for ofstream = ios::out | ios::trunc |
+| 5 | (C) | ios::app = append = add at end, preserve old content |
+| 6 | (B) | Ctrl + F9 = Compile and Run in Turbo C++ |
+| 7 | (B) | eof() returns true after file pointer passes the end |
+| 8 | (C) | fstream = both read AND write |
+| 9 | (B) | ios::out | ios::binary for writing binary |
+| 10 | (B) | Flushes buffer to disk + releases file resources |
+| 11 | (B) | Binary file: raw binary representation of the integer |
+| 12 | (C) | read() function for binary file reading |
+| 13 | (C) | Stream state becomes bad — no compile error |
+| 14 | (A) | ios::ate = "at end" — moves pointer to end of file |
+| 15 | (D) | Both `if (!file)` and `if (file.fail())` work |
+| 16 | (B) | ios::app always writes at end; ios::ate allows seeking |
+| 17 | (B) | getline(fin, line) reads entire line including spaces |
+| 18 | (B) | Alt + F9 = Compile ONLY (not run) |
+| 19 | (B) | ios::in | ios::binary for reading binary |
+| 20 | (A) | fstream can both read and write |
+| 21 | (B) | ofstream — o = output = write to file |
+| 22 | (A) | Text = ASCII representation; binary = raw binary |
+| 23 | (B) | Writes raw bytes of variable n (binary write) |
+| 24 | (C) | Default ofstream = ios::out | ios::trunc = deletes content |
+| 25 | (C) | ios is the base class of all stream classes |
 
 ---
 
-# 📊 DAY 11 PERFORMANCE TRACKER
+### GS Answers (Q26–Q50):
 
-| Section | Questions | Target Score | My Score |
-|---------|-----------|-------------|----------|
-| CS — File Handling | 25 | 22+ | _______ |
-| GS — CDM + Salt March | 25 | 22+ | _______ |
-| **Total** | **50** | **44+** | _______ |
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (B) | April 6, 1930 = Gandhi made salt = CDM officially launched |
+| 27 | (B) | Sabarmati Ashram, Ahmedabad, Gujarat |
+| 28 | (A) | 78 volunteers accompanied Gandhi |
+| 29 | (B) | March 5, 1931 = Gandhi-Irwin Pact = Delhi Pact |
+| 30 | (C) | Jawaharlal Nehru presided over Lahore Session 1929 |
+| 31 | (B) | All 7 members were British — no Indian representation |
+| 32 | (B) | Lathi charge during Simon Commission protest in Lahore |
+| 33 | (C) | Sarojini Naidu led Dharasana raid |
+| 34 | (C) | 241 miles (approximately 385 km) |
+| 35 | (C) | Lahore Session, December 1929 |
+| 36 | (B) | Lord Irwin — Viceroy who received Gandhi's March 2 letter |
+| 37 | (B) | Motilal Nehru chaired the committee |
+| 38 | (B) | January 26, 1930 = first "Independence Day" after Purna Swaraj |
+| 39 | (B) | Pact suspended CDM; CDM was relaunched in 1932 |
+| 40 | (B) | March 23, 1931 — during Gandhi-Irwin Pact period |
+| 41 | (B) | Universal necessity, British monopoly, taxed the poorest |
+| 42 | (A) | Lahore(Dec 1929) → Dandi starts(Mar 12) → Salt made(Apr 6) → Pact(Mar 1931) |
+| 43 | (B) | Gandhi attended only RTC 2 (September 1931) |
+| 44 | (A) | Simon Commission — all British members |
+| 45 | (B) | Nehru Report demanded Dominion Status (NOT Purna Swaraj) |
+| 46 | (B) | Sarojini Naidu was a poet — "Nightingale of India" |
+| 47 | (A) | Simon-1927, Dandi-Mar 12 1930, Pact-Mar 5 1931, Purna Swaraj-Dec 1929 |
+| 48 | (B) | Webb Miller — American journalist who reported Dharasana |
+| 49 | (C) | CDM formally withdrawn in 1934 |
+| 50 | (B) | March 12 = start; April 6 = salt made at Dandi; 78 volunteers |
 
-**If score < 38/50:** Re-read the flagged 🎯 facts and redo those questions.
-**If score 38–45/50:** Solid — review mistakes only, proceed to Day 12.
-**If score 46–50/50:** Topper level! 🏆 You're on track for TOP RANK.
+---
+---
+
+# 🔁 DAY 11 — CRISP REVISION NOTES
+
+## ⚡ RAPID FIRE — C++ File Handling
+
+### Stream Classes — One-Liners:
+1. **ifstream** = INPUT from file = READ | **ofstream** = OUTPUT to file = WRITE
+2. **fstream** = BOTH read and write (must specify mode manually)
+3. **Header**: `#include <fstream>` — ALL three classes included
+4. **Base class**: `ios` is parent of all stream classes
+
+### File Modes Cheat Sheet:
+```
+ios::in     → READ only
+ios::out    → WRITE only
+ios::app    → ADD AT END (old content safe)    ← "app" = append = ADD
+ios::trunc  → DELETE old content (start fresh) ← "trunc" = truncate = CUT
+ios::binary → binary mode (not text)
+ios::ate    → open and go to END (can seek back)
+
+DEFAULT for ofstream = ios::out | ios::trunc ← MAJOR TRAP!
+(Simply opening with ofstream DESTROYS existing file content!)
+```
+
+### Critical Traps:
+1. **ofstream default** = `ios::out | ios::trunc` → old content DELETED automatically
+2. **eof() trap**: eof() becomes true AFTER failed read, not before → use `while(fin >> x)` not `while(!fin.eof())`
+3. **ios::trunc** = truncate = DELETE | **ios::app** = append = ADD AT END (know both!)
+4. **`close()`** is essential — flushes buffer, releases OS file handle
+5. **Binary `write()`**: `fout.write((char*)&n, sizeof(n))` — remember the cast to `char*`
+
+### Turbo C++ Shortcuts:
+```
+Ctrl + F9  → Compile AND Run  ← most tested
+Alt  + F9  → Compile ONLY (not run)
+Alt  + F5  → View output window
+```
 
 ---
 
-> **⚡ TOPPER TIP FOR TOMORROW (Day 12):**
-> Day 12 covers **Exception Handling** (`try-catch-throw`) + **Inline Functions** (CS)
-> and **Quit India Movement 1942** (GS — "Do or Die!")
-> Notice today's D-option answers: Q12, Q22, Q25, Q32, Q47, Q50 were all "More than one"
-> — this is exactly the BPSC 20–25% D-option pattern. Never skip option D!
+## ⚡ RAPID FIRE — Civil Disobedience Movement
+
+### Critical Dates:
+```
+1927       → Simon Commission formed (all-British, 7 members)
+Oct 1928   → Lala Lajpat Rai beaten in Lahore (Simon protests)
+Nov 1928   → Lala Lajpat Rai dies → "Punjab Kesari"
+Dec 1928   → Bhagat Singh kills Saunders (to avenge Lala)
+1928       → Nehru Report (Motilal Nehru — demands DOMINION STATUS)
+Dec 1929   → Lahore Session (JN presides) — PURNA SWARAJ declared
+Jan 26 1930→ First "Independence Day" celebrated (hence Republic Day)
+Mar 2 1930 → Gandhi writes to Lord Irwin (11 demands, advance warning)
+Mar 12 1930→ DANDI MARCH BEGINS — Sabarmati Ashram, 78 volunteers
+Apr 6 1930 → Gandhi MAKES SALT at Dandi — CDM officially LAUNCHED
+May 1930   → Gandhi arrested | Sarojini Naidu leads Dharasana raid
+Dec 1930   → RTC 1 — Gandhi ABSENT (in jail)
+Mar 5 1931 → GANDHI-IRWIN PACT — CDM SUSPENDED ("Delhi Pact")
+Mar 23 1931→ Bhagat Singh, Rajguru, Sukhdev HANGED
+Sep 1931   → RTC 2 — Gandhi PRESENT (pact allowed it); RTC fails
+Jan 1932   → CDM RE-LAUNCHED; Gandhi re-arrested
+1932       → Poona Pact (Gandhi + Ambedkar)
+1934       → CDM formally WITHDRAWN
+```
+
+### Numbers to Remember:
+```
+Dandi March: 241 miles | 24 days | 78 volunteers | April 6 = salt made
+Simon Commission: 7 members — all British
+Lala died: November 17, 1928
+Bhagat Singh hanged: March 23, 1931
+RTC Gandhi attended: ONLY RTC 2 (1931)
+```
+
+### Common Exam Traps:
+1. CDM LAUNCHED = **April 6** (salt made) NOT March 12 (march began)
+2. Dandi March starts at **Sabarmati Ashram** (NOT Sabarmati village, NOT Wardha)
+3. Nehru Report = **Motilal** Nehru (NOT Jawaharlal Nehru)
+4. Nehru Report demanded **Dominion Status** (NOT Purna Swaraj)
+5. Gandhi-Irwin Pact **suspended** CDM — CDM was relaunched 1932, withdrawn 1934
+6. Gandhi attended **only RTC 2** — absent from RTC 1 and RTC 3
+7. **Webb Miller** = American journalist who reported Dharasana (international impact)
 
 ---
 
-*Day 11 Complete | Day 12: Exception Handling + Inline Functions | GS: Quit India Movement 1942*
-*Study plan: Phase 1, Week 2 | April 2026 | Target: 130+/150 → TOP RANK in BPSC TRE 4.0*
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. `ios::trunc` = DELETE old file content (default in ofstream); `ios::app` = add at END
+2. `Ctrl+F9` = Compile + Run in Turbo C++; `Alt+F9` = Compile ONLY
+3. Dandi March: March 12, 1930 (start) → April 6, 1930 (salt made); 78 volunteers; 241 miles
+4. Gandhi-Irwin Pact (March 5, 1931) only SUSPENDED CDM; relaunched 1932; withdrawn 1934
+5. Nehru Report (1928) by MOTILAL demanded DOMINION STATUS, NOT Purna Swaraj
+
+---
+
+*Next: Day 12 — C++ Functions (Types, Default Arguments, Inline, Recursion) + Quit India Movement 1942*

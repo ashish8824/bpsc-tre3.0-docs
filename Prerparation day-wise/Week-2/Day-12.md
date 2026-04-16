@@ -1,1584 +1,1752 @@
-# 📅 DAY 12 — BPSC TRE 4.0 COMPLETE STUDY MATERIAL
-### CS Topic: Exception Handling & Inline Functions | GS Topic: Quit India Movement 1942
-**Target: TOP RANK | Prepared for Prag | Phase 1 — Week 2**
+# 📅 BPSC TRE 4.0 — DAY 12 COMPLETE STUDY MODULE
+### C++ Exception Handling & Inline Functions + Quit India Movement 1942
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-> **⚡ TOPPER MINDSET FOR TODAY:**
-> Exception Handling (`try-catch-throw`) and Inline Functions are **confirmed PYQ topics**
-> from TRE 1.0, 2.0 & 3.0 — they appear as direct concept questions AND output-prediction traps.
-> Quit India Movement = **"Do or Die"** — highest-scoring Modern History topic in Bihar GS exams.
-> Learn both cold today → guaranteed 4–6 marks secured in actual exam.
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): Exception Handling (try/catch/throw) + Inline Functions
+> - Afternoon (1 hr): Quit India Movement — story-based deep understanding
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5-bullet revision notes in your notebook
 
 ---
 
-# ═══════════════════════════════════════════
-# PART A — COMPUTER SCIENCE
-## Exception Handling & Inline Functions — Complete Guide
-# ═══════════════════════════════════════════
+# PART 1: COMPUTER SCIENCE
+## 📘 C++ Exception Handling & Inline Functions
 
 ---
 
-## 🔷 SECTION 1: EXCEPTION HANDLING
+# ═══════════════════════════════════
+# TOPIC A: EXCEPTION HANDLING
+# ═══════════════════════════════════
 
----
+## 🔷 SECTION 1: What is an Exception? (The Foundation)
 
-### 1.1 WHAT IS AN EXCEPTION?
-
-In a program, an **exception** is an **unexpected/abnormal event** that occurs during runtime and disrupts the normal flow of execution.
-
+### Real-Life Analogy — The ATM Machine:
 ```
-NORMAL PROGRAM FLOW:           EXCEPTION OCCURS:
-Statement 1                    Statement 1
-Statement 2        VS          Statement 2  ← divide by zero HERE!
-Statement 3                    ↓
-Statement 4                    PROGRAM CRASHES ❌ (if not handled)
-                               OR
-                               Exception Handler takes over ✅ (if handled)
-```
+Normal Flow (no exception):
+  You insert card → Enter PIN → Withdraw money → Done ✅
 
-**Examples of exceptions:**
-- Division by zero → `std::runtime_error`
-- Array index out of bounds
-- File not found
-- Memory allocation failure (`std::bad_alloc`)
-- Stack overflow from infinite recursion
+Exceptional Flow (exception occurs):
+  You insert card → Enter PIN → Machine says "Insufficient Balance!"
+  → Normal flow BREAKS
+  → Error must be HANDLED
+  → You get an error message instead of cash
 
----
+In programming:
+  "Exception" = an UNEXPECTED event during program execution
+                that DISRUPTS the normal flow of the program
 
-### 1.2 THE THREE KEYWORDS: `try`, `catch`, `throw`
+Without exception handling:
+  → Program CRASHES with an ugly error
+  → No useful message to the user
+  → Data may be corrupted
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  EXCEPTION HANDLING — THREE PILLARS                     │
-│                                                         │
-│  TRY     → Block where exception MAY occur             │
-│  THROW   → Statement that RAISES/SIGNALS the exception │
-│  CATCH   → Block that HANDLES the exception            │
-└─────────────────────────────────────────────────────────┘
+With exception handling:
+  → Error is CAUGHT gracefully
+  → User sees a meaningful message
+  → Program can continue or shut down safely
 ```
 
-### Basic Syntax:
+### Technical Definition:
+> An **exception** is a runtime error or unexpected condition that interrupts the normal execution of a program. Exception handling is the mechanism to **detect, signal, and respond** to these conditions.
 
+### Types of Errors in C++ (Context):
+```
+Compile-time errors → Syntax mistakes → Fixed before running
+Runtime errors      → Happen during execution → Handled by exceptions
+Logic errors        → Wrong logic → Must be found by testing
+
+Exception handling deals with RUNTIME ERRORS.
+```
+
+---
+
+## 🔷 SECTION 2: The Three Keywords — try, catch, throw
+
+### The Core Mechanism:
+```
+THROW  = "Something went wrong! I'm signalling the error"
+TRY    = "Watch this block of code — it might throw an exception"
+CATCH  = "If an exception was thrown, handle it here"
+```
+
+### Syntax:
 ```cpp
 try {
-    // Code that might cause an exception
-    // If something goes wrong, use THROW
-    throw value;        // throws an exception
+    // Code that might throw an exception
+    // If something goes wrong, throw is used
+    throw exceptionValue;    // signals the exception
 }
-catch (type variable) {
-    // Code to HANDLE the exception
-    // Executes ONLY if matching exception was thrown
+catch (ExceptionType variable) {
+    // Code to handle the exception
+    // This block runs if throw threw ExceptionType
 }
 ```
 
----
-
-### 1.3 COMPLETE FLOW DIAGRAM
-
-```
-Program reaches try block
-         │
-         ▼
-   Execute statements in try
-         │
-    Exception?
-    /         \
-  NO           YES
-  │             │
-  │             ▼
-  │        throw executes
-  │             │
-  │             ▼
-  │     Matching catch found?
-  │        /          \
-  │      YES           NO
-  │       │             │
-  │       ▼             ▼
-  │  Execute catch   Program terminates
-  │  block           (std::terminate called)
-  │       │
-  ▼       ▼
-  Continue execution after try-catch block
-```
-
----
-
-### 1.4 SIMPLE EXAMPLE — DIVISION BY ZERO
-
+### Simple Example — Division by Zero:
 ```cpp
 #include <iostream>
 using namespace std;
 
 int divide(int a, int b) {
     if (b == 0) {
-        throw "Division by zero error!";  // throw a string
+        throw "Division by zero error!";   // throw a string
     }
     return a / b;
 }
 
 int main() {
     try {
-        cout << divide(10, 2) << endl;   // Output: 5
-        cout << divide(8, 0) << endl;    // throws exception!
-        cout << "This line never runs";  // SKIPPED after throw
+        int result = divide(10, 0);        // this will throw
+        cout << result;                    // NEVER reached
     }
-    catch (const char* msg) {            // catches string exceptions
-        cout << "Caught: " << msg;       // Output: Caught: Division by zero error!
+    catch (const char* msg) {             // catches string exception
+        cout << "Error: " << msg;         // Output: Error: Division by zero error!
     }
-    cout << "\nProgram continues...";    // This DOES execute
+    cout << "Program continues...";       // This IS reached
     return 0;
 }
-
-/*
-OUTPUT:
-5
-Caught: Division by zero error!
-Program continues...
-*/
 ```
 
-> **🎯 KEY INSIGHT:** After `throw`, control immediately jumps to the matching `catch` block. Any statements between `throw` and the end of `try` are **SKIPPED**.
+### Flow of Control — Visual:
+```
+EXCEPTION HANDLING FLOW:
+════════════════════════════════════════════════════════
+
+Program starts → Enters try block
+                     │
+                     ▼
+            Executes statements
+                     │
+            ┌────────┴─────────┐
+            │                  │
+    No exception           Exception thrown
+            │                  │
+            ▼                  ▼
+    try block completes    Stack unwinds
+    (catch skipped)        Matching catch found?
+            │                  │
+            │            ┌─────┴──────┐
+            │            │            │
+            │         YES: catch    NO: terminate()
+            │         executes      called (crash)
+            │            │
+            └────────────┤
+                         │
+                  Code AFTER
+                  try-catch block
+                  continues
+
+════════════════════════════════════════════════════════
+```
 
 ---
 
-### 1.5 MULTIPLE CATCH BLOCKS
+## 🔷 SECTION 3: throw — Signalling Exceptions
 
-You can have **multiple catch blocks** to handle different types of exceptions:
-
+### What Can Be Thrown?
 ```cpp
-#include <iostream>
-using namespace std;
+// You can throw ANY type in C++:
+throw 42;                     // throw int
+throw 3.14;                   // throw double
+throw "Error message";        // throw string literal (const char*)
+throw std::string("Error");   // throw std::string
+throw std::runtime_error("msg"); // throw exception object (best practice)
 
-int main() {
-    int choice = 2;   // Try changing this to 1, 2, or 3
+// Throw custom class objects:
+class MyException {
+public:
+    string message;
+    MyException(string m) : message(m) {}
+};
+throw MyException("Custom error");
+```
 
-    try {
-        if (choice == 1)
-            throw 100;          // throws int
-        else if (choice == 2)
-            throw 3.14;         // throws double
-        else
-            throw "Error!";     // throws string
-    }
-    catch (int e) {
-        cout << "Integer exception: " << e;    // prints if int thrown
-    }
-    catch (double e) {
-        cout << "Double exception: " << e;     // prints if double thrown
-    }
-    catch (const char* e) {
-        cout << "String exception: " << e;     // prints if string thrown
-    }
-
-    return 0;
+### throw in a Function:
+```cpp
+void checkAge(int age) {
+    if (age < 0) throw -1;         // throw int
+    if (age > 150) throw "Too old"; // throw string
+    cout << "Valid age: " << age;
 }
-
-/* When choice = 2:
-OUTPUT: Double exception: 3.14
-*/
 ```
 
-**Rule:** Catch blocks are checked **in order from top to bottom**. The FIRST matching one executes.
+### 🚨 PYQ TRAP #1 — throw outside try:
+```cpp
+// If throw is executed OUTSIDE a try block (or no matching catch):
+// → terminate() is called
+// → Program crashes (abnormal termination)
 
-```
-IMPORTANT ORDER RULE:
-catch(int)    ← checked FIRST
-catch(double) ← checked if int didn't match
-catch(...)    ← catches EVERYTHING (must be LAST)
+// If throw is inside try but NO matching catch exists:
+// → Exception propagates up the call stack
+// → If STILL no catch found → terminate() called
 ```
 
 ---
 
-### 1.6 CATCH-ALL: `catch(...)`
+## 🔷 SECTION 4: catch — Handling Exceptions
 
-The special syntax `catch(...)` catches **ALL types** of exceptions:
+### Basic catch Syntax:
+```cpp
+catch (int e) {
+    cout << "Integer exception: " << e;
+}
 
+catch (const char* e) {
+    cout << "String exception: " << e;
+}
+
+catch (double e) {
+    cout << "Double exception: " << e;
+}
+```
+
+### Multiple catch Blocks:
 ```cpp
 try {
-    throw 42;           // throws int
+    int choice = 2;
+    if (choice == 1) throw 100;         // throw int
+    if (choice == 2) throw 3.14;        // throw double
+    if (choice == 3) throw "Error!";    // throw string
 }
-catch (...) {           // three dots = catch EVERYTHING
-    cout << "Some exception occurred!";
+catch (int e) {
+    cout << "Caught int: " << e;
 }
-// Output: Some exception occurred!
+catch (double e) {
+    cout << "Caught double: " << e;    // THIS executes (choice==2)
+}
+catch (const char* e) {
+    cout << "Caught string: " << e;
+}
 ```
 
-> **🎯 PYQ CRITICAL:** `catch(...)` with **three dots** catches ALL exception types. It should be placed as the **LAST catch block** — otherwise it will catch everything and prevent specific handlers from running.
-
+### 🚨 PYQ TRAP #2 — Multiple catch order:
 ```cpp
-// CORRECT ORDER:
-try { ... }
-catch (int e)  { ... }     // specific first
-catch (char* e) { ... }    // specific
-catch (...) { ... }        // catch-all LAST ✅
+// WRONG ORDER — derived class after base class:
+try {
+    throw std::runtime_error("msg");
+}
+catch (std::exception& e) {    // BASE class — catches EVERYTHING
+    cout << "Exception caught";
+}
+catch (std::runtime_error& e) { // ⚠️ NEVER REACHED — already caught above!
+    cout << "Runtime error";
+}
 
-// WRONG ORDER (compiler warning/error):
-try { ... }
-catch (...) { ... }        // catch-all FIRST ❌ — unreachable code below
-catch (int e) { ... }      // NEVER reached!
+// CORRECT ORDER — derived (specific) before base (general):
+try {
+    throw std::runtime_error("msg");
+}
+catch (std::runtime_error& e) { // specific first
+    cout << "Runtime error";   // THIS executes
+}
+catch (std::exception& e) {    // general fallback
+    cout << "Some exception";
+}
+
+// RULE: Most specific (derived) catch blocks FIRST,
+//       Most general (base class) catch blocks LAST
 ```
 
 ---
 
-### 1.7 RE-THROWING AN EXCEPTION
+## 🔷 SECTION 5: catch(...) — The Catch-All Handler
 
-You can **re-throw** the current exception to pass it to an outer catch block:
-
+### Syntax and Usage:
 ```cpp
-void innerFunction() {
-    try {
-        throw 100;          // throw original exception
-    }
-    catch (int e) {
-        cout << "Inner caught: " << e << endl;  // handles partially
-        throw;                                   // RE-THROW to outer
-    }
+try {
+    throw 42;    // could throw anything
 }
-
-int main() {
-    try {
-        innerFunction();
-    }
-    catch (int e) {
-        cout << "Outer caught: " << e << endl;  // handles finally
-    }
-    return 0;
+catch (...) {    // catches EVERYTHING regardless of type
+    cout << "Some exception caught — type unknown";
 }
-
-/*
-OUTPUT:
-Inner caught: 100
-Outer caught: 100
-*/
 ```
 
-> **🎯 PYQ FACT:** `throw;` (without any value) inside a catch block **re-throws** the current exception to the next enclosing catch block.
-
----
-
-### 1.8 STANDARD EXCEPTION CLASSES
-
-C++ provides built-in exception classes from `<stdexcept>` and `<exception>`:
-
-```
-std::exception (BASE CLASS)
-       │
-       ├── std::runtime_error    → errors detectable only at runtime
-       │         ├── std::overflow_error
-       │         ├── std::underflow_error
-       │         └── std::range_error
-       │
-       ├── std::logic_error      → errors in program logic
-       │         ├── std::invalid_argument
-       │         ├── std::out_of_range
-       │         └── std::length_error
-       │
-       └── std::bad_alloc        → memory allocation failure (new fails)
-```
-
+### 🚨 PYQ TRAP #3 — catch(...) placement:
 ```cpp
-#include <stdexcept>
-#include <iostream>
-using namespace std;
+// catch(...) MUST always be the LAST catch block:
+try {
+    throw "hello";
+}
+catch (...) {           // ❌ WRONG — placed first
+    cout << "Catch all";
+}
+catch (const char* e) { // ⚠️ NEVER REACHED
+    cout << e;
+}
 
-int main() {
-    try {
-        throw runtime_error("File not found");
-    }
-    catch (exception& e) {         // catch by reference to base class
-        cout << e.what();          // .what() returns error message
-    }
-    // Output: File not found
+// CORRECT:
+try {
+    throw "hello";
+}
+catch (const char* e) { // specific types first
+    cout << e;          // THIS executes
+}
+catch (...) {           // ✅ catch-all LAST
+    cout << "Catch all fallback";
 }
 ```
 
-> **🎯 PYQ FACT:** The `.what()` method of `std::exception` returns a C-string (const char*) describing the exception.
-
----
-
-### 1.9 EXCEPTION HANDLING — KEY RULES SUMMARY
-
+### Why catch(...) is Useful:
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│              EXCEPTION HANDLING RULES — MEMORIZE!               │
-├─────────────────────────────────────────────────────────────────┤
-│ 1. If no exception occurs → catch blocks are SKIPPED           │
-│ 2. If exception is thrown → remaining try code is SKIPPED      │
-│ 3. catch blocks checked in ORDER (top to bottom)               │
-│ 4. catch(...) catches ALL types — must be LAST                 │
-│ 5. throw; (no value) = RE-THROW current exception              │
-│ 6. If no catch matches → std::terminate() is called            │
-│ 7. Objects created in try are DESTROYED when exception thrown  │
-│    (Stack unwinding)                                            │
-│ 8. try-catch can be NESTED inside each other                   │
-└─────────────────────────────────────────────────────────────────┘
+1. When you don't know what type of exception might be thrown
+2. As a safety net to prevent program crash from uncaught exceptions
+3. For cleanup code (logging, releasing resources)
 ```
 
 ---
 
-### 1.10 NESTED TRY-CATCH BLOCKS
+## 🔷 SECTION 6: Rethrowing Exceptions
 
-```cpp
-int main() {
-    try {                                    // OUTER try
-        cout << "Outer try" << endl;
-        try {                                // INNER try
-            throw 10;                        // throws int
-        }
-        catch (int e) {                      // INNER catch
-            cout << "Inner caught: " << e << endl;
-            throw;                           // re-throws to OUTER catch
-        }
-    }
-    catch (int e) {                          // OUTER catch
-        cout << "Outer caught: " << e << endl;
-    }
-    return 0;
-}
-
-/*
-OUTPUT:
-Outer try
-Inner caught: 10
-Outer caught: 10
-*/
-```
-
----
-
-## 🔷 SECTION 2: INLINE FUNCTIONS
-
----
-
-### 2.1 THE PROBLEM: FUNCTION CALL OVERHEAD
-
-Every time a regular function is called, the CPU performs several operations:
-
-```
-REGULAR FUNCTION CALL OVERHEAD:
-─────────────────────────────────────────────────────────
-1. Save current state (registers, return address) → PUSH onto stack
-2. Jump to function code location in memory
-3. Execute function body
-4. Restore saved state → POP from stack
-5. Return to call point
-─────────────────────────────────────────────────────────
-For SMALL functions called thousands of times:
-→ The OVERHEAD can be MORE expensive than the function itself!
-```
-
----
-
-### 2.2 THE SOLUTION: INLINE FUNCTIONS
-
-An **inline function** tells the compiler to **substitute the function body** directly at each call point — eliminating the overhead:
-
-```
-WITHOUT inline:                    WITH inline:
-─────────────────                  ──────────────────────────────
-main() {                           main() {
-  int r = square(5);   →  CALL →    int r = 5 * 5;  // substituted!
-  ...                               ...
-}                                  }
-
-int square(int x) {                (function body pasted here)
-  return x * x;
-}
-```
+### What is Rethrowing?
+> Catching an exception in one handler and then **throwing it again** to be caught by an outer handler.
 
 ### Syntax:
-
 ```cpp
-// Declare inline function with 'inline' keyword BEFORE return type:
+try {
+    try {
+        throw 100;              // inner throw
+    }
+    catch (int e) {
+        cout << "Inner catch: " << e << endl;
+        throw;                  // RETHROW — no argument needed!
+                                // re-throws the SAME exception (100)
+    }
+}
+catch (int e) {
+    cout << "Outer catch: " << e << endl;  // Output: Outer catch: 100
+}
+```
+
+### 🚨 PYQ TRAP #4 — throw vs throw e:
+```cpp
+catch (int e) {
+    throw;    // ✅ Rethrows ORIGINAL exception (same object, no copy)
+              // Preserves exception type (important for polymorphism)
+
+    throw e;  // ⚠️ Creates a NEW copy of e and throws it
+              // May cause slicing if e is a derived class object!
+}
+// For rethrowing, ALWAYS use bare "throw;" without argument
+```
+
+### When to Rethrow?
+```
+→ When current catch can partially handle the error
+→ When logging or recording the error before passing it up
+→ When outer function must also know about the error
+→ In cleanup operations that need to propagate errors
+```
+
+---
+
+## 🔷 SECTION 7: Stack Unwinding
+
+### What Happens When Exception is Thrown?
+```
+Stack unwinding = the process of destroying local objects
+                  and exiting functions as the exception
+                  propagates back through the call stack
+
+Example:
+  main() calls func1()
+  func1() calls func2()
+  func2() calls func3()
+  func3() throws exception
+
+Without matching catch in func3:
+  → func3 exits (local objects destroyed)
+  → func2 exits (local objects destroyed)
+  → func1 exits (local objects destroyed)
+  → main() has the catch → exception is caught here
+
+This UNWINDING ensures destructors are called for local objects!
+```
+
+```
+STACK UNWINDING VISUAL:
+main()  ←── catch block here
+  │
+  └── func1()
+        │
+        └── func2()
+               │
+               └── func3()  ← throw happens here
+                   ↑ unwind (func3 exits)
+               ↑ unwind (func2 exits)
+          ↑ unwind (func1 exits)
+     catch in main() catches the exception
+```
+
+---
+
+## 🔷 SECTION 8: Standard Exception Classes
+
+### C++ Standard Exception Hierarchy:
+```
+std::exception (base — in <stdexcept>)
+├── std::logic_error
+│   ├── std::invalid_argument
+│   ├── std::domain_error
+│   ├── std::length_error
+│   └── std::out_of_range
+├── std::runtime_error
+│   ├── std::overflow_error
+│   ├── std::underflow_error
+│   └── std::range_error
+├── std::bad_alloc          (thrown by new on failure)
+├── std::bad_cast           (thrown by dynamic_cast)
+└── std::bad_typeid         (thrown by typeid on null pointer)
+```
+
+### 🚨 PYQ TRAP #5 — bad_alloc:
+```cpp
+try {
+    int* p = new int[1000000000];  // request huge memory
+}
+catch (std::bad_alloc& e) {        // catches memory allocation failure
+    cout << "Memory allocation failed: " << e.what();
+}
+// new throws std::bad_alloc when memory is insufficient
+// malloc returns NULL (no exception) — key difference!
+```
+
+---
+
+## 🔷 SECTION 9: Exception Handling Complete Example
+```cpp
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+double safeDivide(double a, double b) {
+    if (b == 0)
+        throw std::runtime_error("Division by zero");
+    return a / b;
+}
+
+int main() {
+    try {
+        cout << safeDivide(10, 2) << endl;    // Output: 5
+        cout << safeDivide(10, 0) << endl;    // throws!
+        cout << "This line never runs" << endl;
+    }
+    catch (std::runtime_error& e) {
+        cout << "Runtime error: " << e.what() << endl;
+        // Output: Runtime error: Division by zero
+    }
+    catch (...) {
+        cout << "Unknown exception caught" << endl;
+    }
+    cout << "Program ends normally" << endl;
+    return 0;
+}
+```
+
+---
+
+# ═══════════════════════════════════
+# TOPIC B: INLINE FUNCTIONS
+# ═══════════════════════════════════
+
+## 🔷 SECTION 10: What is an Inline Function?
+
+### The Problem — Function Call Overhead:
+```
+Every time a function is called in C++, the CPU must:
+  1. Save current state (registers, return address) → push to stack
+  2. Jump to function code location in memory
+  3. Execute function code
+  4. Restore saved state → pop from stack
+  5. Jump back to where function was called
+
+This overhead is TINY for large functions (worth it).
+But for very SMALL functions (1-2 lines), this overhead
+can be LARGER than the actual work done!
+
+Example: A function that just adds two numbers:
+int add(int a, int b) { return a + b; }
+The "return a+b" takes 1 step.
+The call overhead takes 5 steps.
+→ 5 steps of overhead for 1 step of work = inefficient!
+```
+
+### The Solution — Inline Function:
+```
+Inline function = "Don't call the function — just INSERT the
+                  function's code directly at the call site"
+
+The COMPILER replaces the function call with the actual code.
+No call overhead. No stack operations. Just the code runs.
+
+Think of it as: COPY-PASTE the function body at every call point
+```
+
+### Real-Life Analogy:
+```
+Without inline (regular function):
+  Recipe says: "Make the sauce using Recipe #47 on page 82"
+  → You stop, go to page 82, make sauce, come back
+  → Time wasted travelling between pages
+
+With inline function:
+  Recipe has the sauce instructions printed RIGHT HERE:
+  "Add 2 tbsp tomato paste, 1 tsp salt, stir for 2 min"
+  → No page-flipping needed — everything is right here!
+```
+
+---
+
+## 🔷 SECTION 11: Syntax and Usage
+
+### Declaring an Inline Function:
+```cpp
+// keyword 'inline' before return type:
+inline int add(int a, int b) {
+    return a + b;
+}
+
 inline int square(int x) {
     return x * x;
 }
 
-int main() {
-    int a = square(5);   // compiler replaces with: int a = 5 * 5;
-    int b = square(3);   // compiler replaces with: int b = 3 * 3;
-    cout << a << " " << b;   // Output: 25 9
+inline void greet() {
+    cout << "Hello!";
 }
 ```
 
----
+### How the Compiler Handles It:
+```cpp
+// Source code:
+inline int square(int x) { return x * x; }
 
-### 2.3 VISUAL COMPARISON
+int main() {
+    int a = square(5);   // call to inline function
+    int b = square(3);   // another call
+}
 
-```
-NORMAL FUNCTION:                   INLINE FUNCTION:
-─────────────────────────          ─────────────────────────────
-CODE in memory:                    CODE in memory:
-main:                              main:
-  push registers                     a = 5 * 5;      ← body pasted
-  call square_func ──────┐           b = 3 * 3;      ← body pasted
-  pop registers          │           print a, b;
-  ...                    │
-square_func:    ←────────┘         (No separate square_func exists!)
-  return x * x
-
-→ SLOWER (overhead)                → FASTER (no overhead)
-→ SMALLER code size                → LARGER code size (body duplicated)
+// What compiler generates (conceptually):
+int main() {
+    int a = 5 * 5;       // code SUBSTITUTED directly (no call!)
+    int b = 3 * 3;       // code SUBSTITUTED again
+}
+// The function square() is "inlined" = inserted at call site
 ```
 
----
-
-### 2.4 WHEN COMPILER IGNORES `inline`
-
-The `inline` keyword is a **REQUEST** to the compiler, not a command. The compiler **ignores** the `inline` request when:
-
+### Inline vs Regular Function — Visual:
 ```
-COMPILER IGNORES inline WHEN:
-──────────────────────────────────────────────────────────
-❌ Function is TOO LARGE / COMPLEX
-❌ Function contains LOOPS (for, while, do-while)
-❌ Function contains SWITCH statements
-❌ Function is RECURSIVE
-❌ Function contains STATIC variables
-❌ Function is called via POINTER TO FUNCTION
-❌ Function contains goto statements
-──────────────────────────────────────────────────────────
-✅ IDEAL for inline: Small, simple, frequently-called functions
-   (1–3 lines, no loops, no recursion)
-```
+REGULAR FUNCTION CALL:
+main() code...
+CALL square(5) ──────────────────────→ [square function]
+               ←──────────────────── return 25
+main() code continues...
 
-> **🎯 PYQ GOLD FACT:** Inline functions are NOT suitable for large, complex functions. The compiler may IGNORE the inline keyword for recursive functions or functions with loops. This is a DIRECT exam question.
+          Stack frame created/destroyed — OVERHEAD!
 
----
+INLINE FUNCTION:
+main() code...
+a = 5 * 5;  ← CODE DIRECTLY HERE (no jump, no stack!)
+main() code continues...
 
-### 2.5 INLINE vs REGULAR FUNCTION — COMPARISON TABLE
-
-```
-┌────────────────────┬──────────────────────┬──────────────────────┐
-│ Feature            │ Regular Function     │ Inline Function      │
-├────────────────────┼──────────────────────┼──────────────────────┤
-│ Overhead           │ Has call overhead    │ NO overhead          │
-│ Speed              │ Slower               │ Faster               │
-│ Code size          │ Smaller              │ Larger (body copies) │
-│ Used for           │ All functions        │ Small, simple only   │
-│ Recursion          │ Yes                  │ NOT recommended      │
-│ Loops inside       │ Yes                  │ Compiler may ignore  │
-│ `inline` keyword   │ Not used             │ Required             │
-│ Evaluated at       │ Runtime              │ Compile time         │
-└────────────────────┴──────────────────────┴──────────────────────┘
+          No overhead — just the computation!
 ```
 
 ---
 
-### 2.6 INLINE FUNCTION WITH CLASS
+## 🔷 SECTION 12: When Inline Works vs When Compiler IGNORES It
 
-Inline functions inside a class definition are **automatically inline** (no keyword needed):
+### `inline` is a REQUEST, Not a Command:
+```
+The inline keyword is a HINT/REQUEST to the compiler.
+The compiler may IGNORE it and treat the function as regular.
 
+inline keyword = "Please compiler, make this inline"
+Compiler may say: "No, it's too complex. I'll ignore that."
+```
+
+### When Inline is SUITABLE (Compiler will likely honor):
+```
+✅ Very short functions (1–3 lines)
+✅ Simple computations (add, multiply, compare)
+✅ Functions called very frequently in tight loops
+✅ Accessor/getter functions in classes
+✅ No loops, no recursion, no complex control flow
+```
+
+### When Inline is IGNORED by Compiler:
+```
+❌ Functions with loops (for, while, do-while)
+❌ Recursive functions ← VERY IMPORTANT PYQ TRAP
+❌ Functions with large bodies (too many lines)
+❌ Functions containing static variables
+❌ Functions with complex control flow (multiple branches)
+❌ Virtual functions (generally — they need runtime dispatch)
+❌ Functions whose address is taken (&funcName)
+```
+
+### 🚨 PYQ TRAP #6 — Recursive inline:
+```cpp
+inline int factorial(int n) {  // marked as inline
+    if (n <= 1) return 1;
+    return n * factorial(n-1); // RECURSIVE call!
+}
+// Compiler CANNOT inline this — recursion can't be expanded!
+// Would require infinite substitution (factorial calls factorial calls...)
+// Compiler IGNORES the inline keyword here
+// Function is treated as a REGULAR function
+```
+
+### 🚨 PYQ TRAP #7 — Inline is compile-time:
+```cpp
+// Inline expansion happens at COMPILE TIME
+// Regular function calls resolved at RUNTIME (linker)
+// Inline functions are usually defined in HEADER FILES
+// (because compiler needs to see the body at each call site)
+```
+
+---
+
+## 🔷 SECTION 13: Advantages and Disadvantages of Inline
+
+### Advantages:
+```
+✅ Eliminates function call overhead
+✅ Faster execution for small, frequently called functions
+✅ Compiler can optimize the substituted code better
+✅ No stack frame creation/destruction
+```
+
+### Disadvantages:
+```
+❌ CODE BLOAT: Code size INCREASES
+   → If inline function called 100 times, its code appears 100 times
+   → Regular function: code exists once, called 100 times
+   → Trade-off: speed (inline) vs memory (regular)
+
+❌ Not suitable for large functions (bloat outweighs benefit)
+❌ Recompilation needed when inline function changes
+❌ Debugging can be harder (no single function location)
+```
+
+### 🚨 PYQ TRAP #8 — The Size Trade-off:
+```
+Inline → FASTER execution BUT LARGER code size
+Regular → SLOWER execution BUT SMALLER code size
+
+Key insight for exam:
+"Inline functions increase code size but decrease execution time"
+This trade-off is THE most tested fact about inline functions.
+```
+
+---
+
+## 🔷 SECTION 14: Inline Functions in Classes
+
+### Member Functions Defined Inside Class = Automatically Inline:
 ```cpp
 class Rectangle {
-private:
-    int length, width;
 public:
-    Rectangle(int l, int w) : length(l), width(w) {}
+    int length, width;
 
-    // This is AUTOMATICALLY inline (defined inside class):
+    // Defined inside class = AUTOMATICALLY inline (no keyword needed):
     int area() {
-        return length * width;
+        return length * width;   // ← implicitly inline
     }
 
-    // This is NOT inline (only declared inside, defined outside):
-    int perimeter();
+    // Defined outside class with inline keyword:
+    inline int perimeter();
 };
 
-// Defined outside — needs explicit inline keyword:
 inline int Rectangle::perimeter() {
     return 2 * (length + width);
 }
 ```
 
-> **🎯 PYQ FACT:** A function defined **inside a class definition** is **automatically treated as inline** by the compiler, even without the `inline` keyword.
+### 🚨 PYQ TRAP #9:
+> **Member functions defined inside the class body are automatically inline.**
+> You don't need to write the `inline` keyword explicitly.
+> This is a very commonly tested fact!
 
 ---
 
-### 2.7 MACRO vs INLINE FUNCTION
-
-This is a **classic BPSC comparison question**:
+## 📊 VISUAL SUMMARY — Exception Handling + Inline
 
 ```
-MACRO (#define):               INLINE FUNCTION:
-──────────────────────         ─────────────────────────────
-#define SQUARE(x) x*x          inline int square(int x) {
-                                    return x*x;
-                               }
+EXCEPTION HANDLING FLOW:
+try { code } → throw X → find matching catch(X) → execute catch
+                       → no match found → terminate()
+                       → catch(...) → always matches
 
-MACRO TRAP:                    INLINE SAFE:
-SQUARE(2+3) → 2+3*2+3 = 11!   square(2+3) → (2+3)*(2+3) = 25 ✓
-(WRONG ANSWER)                 (CORRECT)
+ORDER RULES:
+1. Specific catch blocks BEFORE general ones
+2. catch(...) MUST be LAST
+3. throw; (bare) = rethrow original | throw e; = rethrow copy
 
-No type checking               Has type checking ✅
-Processed by preprocessor      Processed by compiler ✅
-Can cause side effects         No side effects ✅
-```
-
-> **🎯 KEY ADVANTAGE of inline over macro:** Inline functions have **type checking** and are **safer** than macros because they follow proper C++ evaluation rules.
-
----
-
-### 2.8 COMPLETE EXAMPLE — try, catch, throw + inline together
-
-```cpp
-#include <iostream>
-#include <stdexcept>
-using namespace std;
-
-// Inline function for safe division
-inline double safeDivide(double a, double b) {
-    if (b == 0)
-        throw invalid_argument("Cannot divide by zero!");
-    return a / b;
-}
-
-int main() {
-    double results[3];
-    double num[] = {10, 20, 15};
-    double den[] = {2, 0, 3};
-
-    for (int i = 0; i < 3; i++) {
-        try {
-            results[i] = safeDivide(num[i], den[i]);
-            cout << "Result[" << i << "] = " << results[i] << endl;
-        }
-        catch (invalid_argument& e) {
-            cout << "Error at index " << i << ": " << e.what() << endl;
-            results[i] = 0;
-        }
-    }
-    return 0;
-}
-
-/*
-OUTPUT:
-Result[0] = 5
-Error at index 1: Cannot divide by zero!
-Result[2] = 5
-*/
+INLINE FUNCTION:
+Keyword: inline returnType funcName(params) { small body }
+Effect:  Compiler INSERTS code at call site (no function call)
+Honored: Short, simple, non-recursive functions
+Ignored: Loops, recursion, large body, virtual, static vars
+Trade-off: FASTER but LARGER code size
+Auto-inline: Member functions defined inside class body
 ```
 
 ---
+---
 
-### 2.9 MASTER QUICK REFERENCE — CS DAY 12
+# PART 2: GENERAL STUDIES
+## 🏛️ Quit India Movement (1942) — Story-Based Deep Dive
 
+---
+
+## 🔷 THE BACKGROUND — TWO TRIGGERS
+
+### Background 1: World War II Context (1939–1942)
 ```
-EXCEPTION HANDLING:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-try        → code that MAY throw an exception
-throw      → RAISES the exception
-catch(T e) → HANDLES exception of type T
-catch(...) → catches ALL types (must be LAST)
-throw;     → RE-THROWS current exception (no value)
-.what()    → returns error message string
-terminate()→ called when no catch matches
-Stack unwinding → objects destroyed when exception thrown
+September 1939: WWII begins in Europe
+                Britain declares war on Germany
 
-INLINE FUNCTIONS:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-inline keyword → REQUEST to compiler (not a command)
-Purpose        → eliminates function call overhead
-Good for       → SMALL, SIMPLE, frequently-called
-Bad for        → loops, recursion, switch, large code
-Auto-inline    → functions defined INSIDE class
-Advantage over → macros: type safety, no side effects
+India's position:
+→ Viceroy Lord Linlithgow declared India at war with Germany
+   WITHOUT CONSULTING Indian leaders — unilaterally!
+→ INC was outraged: "India's resources used for Britain's war
+   without India's consent"
+→ Congress demanded Independence BEFORE supporting war
+→ Muslims League: Wanted assurances for Muslims first
+
+Congress Provincial Governments RESIGNED (October 1939):
+→ Congress ministries in 7 provinces resigned in protest
+→ Muslim League celebrated this as "Day of Deliverance"
+   (December 22, 1939) — Jinnah was relieved Congress left power
+```
+
+### Background 2: Failure of Cripps Mission — March–April 1942
+```
+Who: Sir Stafford Cripps (British Labour Party leader)
+Why sent: Britain needed Indian support for WWII
+          Japan was advancing rapidly (had captured Burma, Singapore)
+          Japan was threatening India's eastern border
+
+What Cripps offered:
+→ Dominion Status AFTER the war (not immediately)
+→ Constituent Assembly to draft India's constitution AFTER war
+→ Provinces could opt out of the Indian Union (= accepting partition)
+
+Why Cripps Mission FAILED:
+→ Gandhi called it "a post-dated cheque on a crashing bank"
+   (= promised payment in future, but the bank might fail first)
+→ Congress wanted IMMEDIATE independence, not post-war promises
+→ No transfer of real power during war — British kept control
+→ Muslim League also unhappy (different reasons)
+
+Result of failure:
+→ Gandhi and Congress concluded: No compromise possible
+→ "British must leave India NOW, during the war"
+→ Decision: Launch the most powerful movement yet
 ```
 
 ---
 
-# ═══════════════════════════════════════════
-# CS PRACTICE QUESTIONS — 25 MCQs
-## Exception Handling & Inline Functions | BPSC TRE Pattern
-# ═══════════════════════════════════════════
+## 🔷 THE DECISION — ALL INDIA CONGRESS COMMITTEE
 
-> **📌 INSTRUCTIONS:** Attempt ALL 25 questions first. Answers are placed AFTER the GS section (after Q50). Use a piece of paper to cover the answer key!
-
----
-
-**Q1.** In C++ exception handling, which keyword is used to RAISE (signal) an exception?
-
-(A) `catch`
-(B) `try`
-(C) `throw`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q2.** What is the purpose of the `try` block in C++ exception handling?
-
-(A) It handles the exception after it is thrown
-(B) It encloses the code that might generate an exception
-(C) It terminates the program when an exception occurs
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q3.** What is the output of the following C++ code?
-```cpp
-try {
-    throw 10;
-    cout << "A";
-}
-catch (int e) {
-    cout << "B" << e;
-}
-cout << "C";
+### Wardha Resolution — July 14, 1942:
 ```
-(A) `ABC`
-(B) `A B10 C`
-(C) `B10C`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q4.** What does `catch(...)` mean in C++ exception handling?
-
-(A) It catches exceptions of type `char*` only
-(B) It is a syntax error
-(C) It catches ALL types of exceptions (catch-all handler)
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q5.** Where should `catch(...)` (catch-all) be placed relative to other catch blocks?
-
-(A) First — before all other catch blocks
-(B) Last — after all other specific catch blocks
-(C) It can be placed anywhere
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q6.** What happens when `throw;` is used inside a catch block (without any value)?
-
-(A) It throws a new integer exception with value 0
-(B) It terminates the program immediately
-(C) It re-throws the current (same) exception to the next enclosing catch
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q7.** What will be the output of the following code?
-```cpp
-try {
-    throw 3.14;
-}
-catch (int e) {
-    cout << "INT";
-}
-catch (double e) {
-    cout << "DOUBLE";
-}
-catch (...) {
-    cout << "ALL";
-}
-```
-(A) `INT`
-(B) `ALL`
-(C) `DOUBLE`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q8.** If an exception is thrown inside a `try` block and NO matching `catch` block is found, what happens?
-
-(A) The exception is silently ignored
-(B) The program continues to the next statement after the try-catch
-(C) `std::terminate()` is called and the program ends
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q9.** Which method of `std::exception` returns a string describing the exception?
-
-(A) `message()`
-(B) `what()`
-(C) `describe()`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q10.** Consider the following code. What is the output?
-```cpp
-try {
-    try {
-        throw 100;
-    }
-    catch (int e) {
-        cout << "Inner: " << e << " ";
-        throw;
-    }
-}
-catch (int e) {
-    cout << "Outer: " << e;
-}
-```
-(A) `Inner: 100`
-(B) `Outer: 100`
-(C) `Inner: 100 Outer: 100`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q11.** What is an **inline function** in C++?
-
-(A) A function that is always executed inside the `main()` function
-(B) A function whose body is substituted at every call point by the compiler
-(C) A function that runs in parallel with other functions
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q12.** What is the PRIMARY advantage of using inline functions?
-
-(A) They reduce code size
-(B) They eliminate function call overhead, making execution faster
-(C) They allow recursion more efficiently
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q13.** Which of the following functions is BEST suited to be declared as inline?
-
-(A) A recursive function to compute Fibonacci numbers
-(B) A function with a `while` loop that reads file data
-(C) A small function `int cube(int x) { return x*x*x; }`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q14.** Under which of the following conditions will the compiler IGNORE the `inline` request?
-
-(A) The function contains a loop
-(B) The function is recursive
-(C) The function is very large and complex
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q15.** A function defined **inside a class definition** in C++ is:
-
-(A) Always private and cannot be called outside
-(B) Automatically treated as inline by the compiler
-(C) Required to use the `inline` keyword explicitly
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q16.** What is the MAIN difference between an inline function and a `#define` macro in C++?
-
-(A) Inline functions are slower than macros
-(B) Inline functions perform type checking; macros do not
-(C) Macros are more reliable and safer than inline functions
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q17.** The `inline` keyword in C++ is:
-
-(A) A mandatory command — the compiler MUST inline the function
-(B) A REQUEST/HINT to the compiler; the compiler may choose to ignore it
-(C) Used only for member functions of a class
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q18.** What will the following code output?
-```cpp
-inline int add(int a, int b) {
-    return a + b;
-}
-int main() {
-    int x = add(3, 4);
-    int y = add(10, 20);
-    cout << x << " " << y;
-}
-```
-(A) `3 10`
-(B) `7 30`
-(C) Compile error — inline functions cannot be used in main
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q19.** Which of the following is/are TRUE about inline functions?
-
-(A) They increase the code size (binary size) because the body is duplicated at each call
-(B) They are evaluated at compile time (body inserted at compile time)
-(C) They are faster than regular functions because there is no call overhead
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q20.** Consider this macro: `#define SQUARE(x) x*x`
-What is `SQUARE(2+3)`?
-
-(A) 25
-(B) 11
-(C) 10
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q21.** What is the output of the following code?
-```cpp
-int main() {
-    try {
-        cout << "Start" << endl;
-        throw "Error!";
-        cout << "Middle" << endl;
-    }
-    catch (const char* msg) {
-        cout << msg << endl;
-    }
-    cout << "End" << endl;
-    return 0;
-}
-```
-(A) `Start Middle Error! End`
-(B) `Start End`
-(C) `Start Error! End`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q22.** Which standard C++ header file contains classes like `runtime_error`, `logic_error`, `invalid_argument`?
-
-(A) `<exception>`
-(B) `<error>`
-(C) `<stdexcept>`
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q23.** What is "stack unwinding" in the context of exception handling?
-
-(A) A technique to increase stack size dynamically
-(B) The process of destroying local objects in reverse order when an exception is thrown
-(C) A method to find which catch block matches the thrown exception
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q24.** How does exception handling in C++ affect performance in the **normal** (no exception) case?
-
-(A) It significantly slows down the program even when no exception occurs
-(B) Modern compilers implement zero-cost exception handling — minimal overhead when no exception is thrown
-(C) It always doubles the execution time
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q25.** Which of the following statements about exception handling AND inline functions is/are CORRECT?
-
-(A) `catch(...)` with three dots catches all exception types and should be last
-(B) Inline functions with loops are generally NOT honored by the compiler
-(C) `throw;` (without a value) re-throws the current exception
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
----
-
-# ═══════════════════════════════════════════════════════
-# PART B — GENERAL STUDIES
-## Quit India Movement 1942 — Complete Guide
-# ═══════════════════════════════════════════════════════
-
----
-
-## 🔶 1. BACKGROUND — WHY 1942?
-
-By 1942, India's freedom struggle had reached a **critical turning point**. Several factors made this moment explosive:
-
-```
-CHAIN OF EVENTS LEADING TO QUIT INDIA (1942):
-══════════════════════════════════════════════════════════
-
-1939 → World War II begins
-     → Viceroy Linlithgow declares India at war WITHOUT consulting
-       Indian leaders → Congress outraged!
-     → Congress ministers resign from provincial governments
-
-1940 → Muslim League's "Pakistan Resolution" at Lahore
-     → Jinnah's "Two-Nation Theory" gaining ground
-
-1941 → Japan enters WWII; advancing toward India
-     → Subhas Chandra Bose escapes India → forms INA in Southeast Asia
-
-March 1942 → CRIPPS MISSION (Sir Stafford Cripps)
-           → British offer: Dominion Status AFTER the war
-           → Gandhi called it "a post-dated cheque on a failing bank"
-           → Congress rejected it
-
-August 1942 → QUIT INDIA MOVEMENT launched
+Location: Wardha, Maharashtra (Gandhi's Sevagram Ashram area)
+What: Congress Working Committee passed a resolution
+Decision: Launch a mass movement for British withdrawal
+Gandhi's language: "An orderly British withdrawal from India"
 ```
 
-> **🎯 BPSC KEY FACT:** Gandhi called the Cripps Mission offer "a **post-dated cheque on a failing bank**." This rejection led directly to the Quit India Movement.
-
----
-
-## 🔶 2. THE WARDHA RESOLUTION — DECISION TO LAUNCH
-
+### AICC Session — August 8, 1942:
 ```
-Location: Wardha (Gandhi's Sevagram Ashram, Maharashtra)
-Date: July 14, 1942
-What happened: Congress Working Committee passed the "Quit India" resolution
-
-Key decision:
-→ Demand British IMMEDIATELY quit India
-→ If refused → launch mass civil disobedience
-→ Gandhi to lead the movement
+Location: Gowalia Tank Maidan, Bombay
+          (Now called "August Kranti Maidan")
+Date: August 8, 1942
+What happened:
+→ All India Congress Committee passed the Quit India Resolution
+→ Gandhi delivered his historic "Do or Die" speech
+→ The movement was officially LAUNCHED
 ```
 
 ---
 
-## 🔶 3. THE BOMBAY SESSION — "DO OR DIE"
+## 🔷 GANDHI'S "DO OR DIE" SPEECH — MOST FAMOUS WORDS
 
+### The Historic Call:
 ```
-Location: Gowalia Tank Maidan, Bombay (now August Kranti Maidan)
-Date: August 8, 1942 — ALL INDIA CONGRESS COMMITTEE (AICC) meeting
-Result: QUIT INDIA RESOLUTION passed unanimously
-
-Gandhi's immortal speech:
 "Here is a mantra, a short one, that I give you.
-You may imprint it on your hearts and let every breath of yours
-give expression to it. The mantra is:
-DO OR DIE.
-We shall either free India or die in the attempt!"
-```
+You may imprint it on your hearts and let every breath
+of yours give expression to it.
 
-> **🎯 BPSC DIRECT FACT:** The Quit India Resolution was passed on **August 8, 1942** at **Gowalia Tank Maidan, Bombay** (August Kranti Maidan). Gandhi gave the "**Do or Die**" speech here.
+The mantra is: 'DO OR DIE'
+We shall either free India or die in the attempt."
 
----
+Original Hindi: "Karo ya Maro"
+                Karo = Do | Maro = Die
 
-## 🔶 4. AUGUST 9, 1942 — THE GREAT ARREST
+Gandhi declared:
+"I want freedom immediately, this very night, before dawn,
+if it can be had."
 
-```
-British government's response was SWIFT:
-
-August 9, 1942 (the very next morning!):
-→ Operation Thunderbolt
-→ Gandhi arrested at 5:00 AM from Birla House, Bombay
-→ Taken to AGA KHAN PALACE, Pune (place of detention, not a jail)
-→ Kasturba Gandhi (wife) also arrested and detained
-→ Kasturba died in Aga Khan Palace on February 22, 1944
-→ Gandhi's secretary Mahadev Desai also died there (August 15, 1942)
-
-All Congress leaders arrested:
-→ Jawaharlal Nehru → Ahmednagar Fort
-→ Sardar Vallabhbhai Patel → Ahmednagar Fort
-→ Maulana Abul Kalam Azad → Ahmednagar Fort
-→ C. Rajagopalachari (Rajaji) → did NOT join (opposed the movement)
-```
-
-> **🎯 CRITICAL BPSC FACT:** Gandhi was detained in **Aga Khan Palace, Pune** (not a regular jail). He was released on **May 6, 1944** due to ill health.
-
----
-
-## 🔶 5. "UNDERGROUND MOVEMENT" — LEADERS WHO ESCAPED
-
-Since all top leaders were arrested, the movement was led by those who managed to escape:
-
-```
-UNDERGROUND LEADERS:
-──────────────────────────────────────────────────
-Jayaprakash Narayan (JP)    → escaped Hazaribagh Jail
-                            → became central figure of underground
-Aruna Asaf Ali              → hoisted Congress flag at Gowalia Tank
-                            → "Heroine of the 1942 movement"
-                            → went underground, operated secretly
-Ram Manohar Lohia           → underground operations, radio broadcasts
-Sucheta Kripalani           → underground work
-Usha Mehta                  → operated secret Congress Radio (August 14–Nov 12, 1942)
-                              from a secret location in Bombay
-```
-
-> **🎯 BPSC SPECIAL:** **Aruna Asaf Ali** hoisted the Congress flag at Gowalia Tank Maidan on August 9, 1942, after Gandhi was arrested. She is called the "**Grand Old Lady of Indian independence**" and "heroine of Quit India."
->
-> **Usha Mehta** ran a secret **Congress Radio** from Bombay, broadcasting nationalist messages.
-
----
-
-## 🔶 6. SPREAD OF THE MOVEMENT — MASS UPRISING
-
-The Quit India Movement became the **most violent** of Gandhi's movements (despite his non-violent intentions):
-
-```
-FORMS OF PROTEST ACROSS INDIA:
-─────────────────────────────────────────────────
-• Hartals (strikes) — shops, factories, transport shut
-• Cutting of telegraph wires
-• Destruction of railway tracks and stations
-• Attacks on government buildings, police stations
-• Parallel governments set up in many areas
-• Students left colleges and schools
-• Peasants refused to pay taxes
-```
-
-### Parallel Governments (Parallel Administrations):
-
-| Place | Leader | Period |
-|-------|--------|--------|
-| **Ballia (UP)** | Chittu Pandey | August 1942 |
-| **Satara (Maharashtra)** | Nana Patil | 1943–1945 (longest — "Prati Sarkar") |
-| **Tamluk (Bengal/Midnapur)** | Satish Samanta | 1942–1944 |
-| **Bhimavaram (Andhra)** | – | Brief period |
-
-> **🎯 PYQ FACT:** The **Satara parallel government** (Prati Sarkar) in Maharashtra under Nana Patil was the **longest-lasting** parallel government during Quit India — it ran until 1945!
-
----
-
-## 🔶 7. BRITISH REPRESSION
-
-```
-BRITISH CRACKDOWN — FACTS:
-─────────────────────────────────────────────────────
-• Over 100,000 people arrested
-• 60,000–70,000 jailed (largest mass arrest in Indian history)
-• 1,000+ killed in police/military firing
-• Newspapers censored; press freedom suspended
-• Military rule imposed in many areas
-• Ahmedabad, Bombay, Poona, Patna — heavily repressed
-• Bihar and UP saw maximum unrest
+He also gave other instructions:
+→ Every Indian is their own leader now
+→ "Do whatever you think is right to get freedom"
+→ Non-violence was the ideal but chaos was also acceptable
+   (This was a departure — one reason movement became violent)
 ```
 
 ---
 
-## 🔶 8. ROLE OF SUBHAS CHANDRA BOSE & INA
+## 🔷 THE BRITISH RESPONSE — OPERATION ZERO HOUR
 
-Simultaneously with Quit India, **Subhas Chandra Bose** was building a parallel liberation force:
-
+### Arrests Within Hours:
 ```
-INA (Indian National Army) TIMELINE:
-─────────────────────────────────────────────────────
-1941 → Bose escapes India (disguised as Pathan)
-     → Goes to Germany; meets Hitler; forms first Indian Legion
+August 9, 1942 — early morning (before sunrise):
+  → British arrested GANDHI at Birla House, Bombay (now Mumbai)
+  → Gandhi taken to Aga Khan Palace, Pune (as prison)
+  → Nehru, Patel, Azad, and ALL major Congress leaders arrested
+  → Literally overnight — all top leaders in jail!
 
-1943 → Goes to Southeast Asia via submarine
-     → Joins Rash Behari Bose's Indian Independence League
-
-Oct 21, 1943 → Bose establishes "AZAD HIND" government in Singapore
-              → Declares India provisionally FREE
-              → "Jai Hind!" becomes battle cry
-              → "Give me blood, I will give you freedom!"
-
-1944-45 → INA soldiers fight alongside Japanese army
-         → Battle of Imphal-Kohima (1944) — reached India's border
-         → Hoisted Indian flag on Indian soil (Moirang, Manipur)
-
-1945 → Japan defeated; INA collapses
-     → August 18, 1945 → Bose dies in air crash (Taipei, Taiwan)
-
-INA Officers put on Trial (Delhi, 1945-46):
-→ "Red Fort Trial" / "INA Trials"
-→ Bhulabhai Desai, Jawaharlal Nehru, Tej Bahadur Sapru defended them
-→ Sparked MASSIVE public sympathy
-→ Led to RIN (Royal Indian Navy) Mutiny, February 1946
+British strategy: "Decapitate the movement — arrest all leaders
+                  before the movement can organize itself"
 ```
 
-> **🎯 BPSC KEY FACTS:**
-> - Bose's slogan: **"Give me blood, I will give you freedom!"** and **"Jai Hind!"**
-> - Azad Hind Government declared: **October 21, 1943** in **Singapore**
-> - INA's women's regiment was called **"Rani of Jhansi Regiment"**
-> - Bose's title: **"Netaji"**
-
----
-
-## 🔶 9. END OF QUIT INDIA AND ROAD TO INDEPENDENCE
-
+### Gandhi's Imprisonment:
 ```
-SEQUENCE OF EVENTS TOWARD INDEPENDENCE:
-═════════════════════════════════════════════════════════════
-
-1942-44 → Quit India Movement runs
-May 1944 → Gandhi released (Aga Khan Palace)
-1945 → WWII ends; Labour Party wins in Britain (Clement Attlee)
-Feb 1946 → Royal Indian Navy (RIN) Mutiny — British realize
-           Indian armed forces can no longer be trusted
-1946 → Cabinet Mission Plan (May 1946)
-     → Interim Government formed (September 1946)
-     → Nehru as Vice President
-
-June 3, 1947 → Mountbatten Plan (Partition announced)
-August 14, 1947 → Pakistan Independence
-August 15, 1947 → INDIA INDEPENDENT! 🇮🇳
+Place: Aga Khan Palace, Pune
+Duration: August 9, 1942 – May 6, 1944 (nearly 2 years)
+Tragedies during imprisonment:
+→ Kasturba Gandhi (Gandhi's wife) died in detention — February 22, 1944
+→ Gandhi's personal secretary Mahadev Desai died — August 15, 1942
+→ Gandhi undertook 21-day fast (February 10 – March 2, 1943)
 ```
 
 ---
 
-## 🔶 10. SIGNIFICANCE OF QUIT INDIA MOVEMENT
+## 🔷 THE LEADERLESS MOVEMENT — UNDERGROUND HEROES
 
+### What Happened After Arrests?
 ```
-✅ WHY QUIT INDIA WAS A TURNING POINT:
-──────────────────────────────────────────────────────────────
-1. Showed British they COULD NOT hold India indefinitely
-2. Largest mass uprising since 1857 Revolt
-3. Demonstrated that ordinary Indians (not just leaders) wanted freedom
-4. Parallel governments proved Indians could self-govern
-5. International attention — especially from USA (Roosevelt pressured Churchill)
-6. Along with INA trials and RIN Mutiny → British realized they MUST leave
-7. Women played unprecedented role (Aruna Asaf Ali, Usha Mehta, Sucheta Kripalani)
+With all top leaders arrested:
+→ Movement became LEADERLESS and SPONTANEOUS
+→ People acted on their own without central direction
+→ Became more radical and sometimes violent
+→ British faced the most widespread uprising since 1857!
+```
+
+### Underground Leaders — VERY IMPORTANT FOR BPSC:
+
+#### JP (Jayaprakash Narayan) — BIHAR'S HERO:
+```
+Full name: Jayaprakash Narayan
+Bihar connection: FROM Bihar — born in Sitabdiara, Saran district
+Role in Quit India: LED the underground movement
+                    Organized secret resistance against British
+
+Most famous act:
+→ November 9, 1942: JP ESCAPED from HAZARIBAGH CENTRAL JAIL
+→ With 5 other prisoners, he scaled the jail wall and escaped!
+→ Became a symbol of resistance and defiance
+→ Continued organizing underground movement after escape
+
+Why this matters for BPSC:
+→ JP is Bihar's greatest freedom fighter of this period
+→ Hazaribagh jail escape = very high BPSC TRE probability
+→ JP later became the leader of 1974 Bihar Movement (JP Movement)
+```
+
+#### Aruna Asaf Ali:
+```
+Known as: "Grand Old Lady of the Independence Movement"
+         "Heroine of the Quit India Movement"
+Famous act: On August 9, 1942 at Gowalia Tank Maidan, Bombay
+→ After all leaders were arrested, the crowd was in shock
+→ Aruna Asaf Ali came forward and HOISTED THE INDIAN FLAG
+→ This defiant act became the most iconic image of Quit India
+
+Background:
+→ Wife of Asif Ali (a senior Congress leader)
+→ Went underground after hoisting the flag
+→ Organized resistance activities for years
+→ British put a reward of ₹5,000 on her head
+→ Posthumously awarded Bharat Ratna (1997)
+```
+
+#### Ram Manohar Lohia:
+```
+→ Organized underground radio — "Congress Radio"
+→ Broadcast from secret locations within Bombay
+→ Kept the movement's voice alive when all newspapers were banned
+→ Later became a major socialist leader of India
+```
+
+#### Sucheta Kripalani:
+```
+→ Another key underground organizer
+→ Worked with Aruna Asaf Ali in Bombay
+→ Later became the first female Chief Minister of any Indian state
+  (Uttar Pradesh, 1963)
 ```
 
 ---
 
-## 🔶 11. IMPORTANT PEOPLE — ALL IN ONE TABLE
+## 🔷 SPREAD OF THE MOVEMENT — ACROSS INDIA
+
+### Major Centers of Activity:
+```
+Bihar:
+→ MOST INTENSE participation in the entire country
+→ JP's escape from Hazaribagh jail
+→ Satara (Parallel Government): Nana Patil in Maharashtra
+→ Midnapore (Bengal): Tamralipta Jatiya Sarkar (parallel govt)
+→ Ballia (UP): "Independent Republic" declared by Chittu Pandey
+→ Bihar districts: Government buildings attacked, railways disrupted
+
+Why Bihar stood out:
+→ Strong base from Champaran (1917) and NCM
+→ JP's leadership and escape galvanized Bihar
+→ Peasant militancy already high
+→ Slogans: "Angrezi Raj Ka Nash Ho" (Destroy British Rule)
+```
+
+### Parallel Governments (Pratyantar Sarkar):
+```
+Several regions declared "independence" from British:
+→ Satara (Maharashtra): "Prati Sarkar" led by Nana Patil
+  → Ran for 3+ years! Had its own police, courts, schools
+→ Ballia (UP): "Ballia Republic" — lasted days
+→ Tamralipta (Bengal Midnapore): Had own Vidyut Bahini (army)
+→ These show the DEPTH of Quit India Movement's impact
+```
+
+---
+
+## 🔷 QUIT INDIA MOVEMENT TIMELINE
+
+```
+QUIT INDIA MOVEMENT — KEY DATES
+══════════════════════════════════════════════════
+
+March–April 1942
+   │  Cripps Mission — Gandhi calls it "post-dated cheque"
+   │  Mission FAILS
+   │
+July 14, 1942
+   │  Wardha Resolution — Congress decides to launch movement
+   │
+August 8, 1942
+   │  AICC Session — Gowalia Tank Maidan, BOMBAY
+   │  Quit India Resolution passed
+   │  Gandhi gives "Do or Die" speech
+   │
+August 9, 1942 (early morning) ← "August Kranti Diwas"
+   │  Gandhi arrested (taken to Aga Khan Palace, Pune)
+   │  ALL major Congress leaders arrested overnight
+   │  Aruna Asaf Ali hoists flag at Gowalia Tank Maidan
+   │  MOVEMENT BECOMES LEADERLESS
+   │
+August–December 1942
+   │  Widespread protests, sabotage of railways and telegraph
+   │  JP leads underground movement
+   │  Ram Manohar Lohia runs "Congress Radio"
+   │  British use brutal repression
+   │
+November 9, 1942
+   │  JP ESCAPES from HAZARIBAGH CENTRAL JAIL ← Bihar!
+   │
+August 15, 1942
+   │  Mahadev Desai (Gandhi's secretary) dies in detention
+   │
+February 10 – March 2, 1943
+   │  Gandhi's 21-day fast in Aga Khan Palace
+   │
+February 22, 1944
+   │  KASTURBA GANDHI dies in Aga Khan Palace, Pune
+   │
+May 6, 1944
+   │  Gandhi released from prison (on health grounds)
+   │
+June 1945
+   │  All Congress leaders released
+   │
+1945–1947
+   │  Movement's pressure + post-WWII exhaustion of Britain
+   │  Leads to independence negotiations
+   │
+August 15, 1947
+   │  INDIA INDEPENDENT
+```
+
+---
+
+## 🔷 OUTCOMES AND SIGNIFICANCE
+
+### Why Quit India Failed Immediately:
+```
+→ Mass arrests decapitated leadership overnight
+→ Movement became chaotic and violent without direction
+→ British used overwhelming force — 57 battalions deployed
+→ 100,000+ people arrested
+→ Many killed (official: 1,028; actual much higher)
+→ Lasted only ~6 months as organized movement
+```
+
+### Why Quit India Succeeded Ultimately:
+```
+→ Showed British that India could not be governed forever
+→ Demonstrated the DEPTH of anti-British feeling
+→ Exhausted both Britain and India's colonial relationship
+→ Post-WWII Britain was too weak to maintain empire
+→ International pressure (USA, others) on Britain
+→ INA trials after WWII showed Indian soldiers' loyalty to India
+→ Royal Indian Navy Mutiny (1946) showed cracks even in military
+```
+
+### Long-term Impact:
+```
+The Quit India Movement was the LAST major movement before independence.
+After QIM → WWII ends (1945) → Labour Party wins in Britain (1945)
+→ Clement Attlee becomes PM (more sympathetic to Indian independence)
+→ Cabinet Mission (1946) → Mountbatten Plan (1947) → Independence
+```
+
+---
+
+## 🔷 KEY PERSONALITIES — MASTER TABLE
 
 | Person | Role |
 |--------|------|
-| **Mahatma Gandhi** | Launched QIM; "Do or Die"; detained in Aga Khan Palace |
-| **Jawaharlal Nehru** | Imprisoned in Ahmednagar Fort |
-| **Aruna Asaf Ali** | Hoisted Congress flag; "Heroine of 1942" |
-| **Usha Mehta** | Ran secret Congress Radio from Bombay |
-| **Jayaprakash Narayan** | Led underground movement after escaping jail |
-| **Ram Manohar Lohia** | Underground operations |
-| **Nana Patil** | Led Satara Prati Sarkar (parallel govt — longest) |
-| **Chittu Pandey** | Led Ballia parallel government |
-| **Subhas Chandra Bose** | INA; Azad Hind government (parallel) |
-| **Kasturba Gandhi** | Died in Aga Khan Palace (Feb 22, 1944) |
-| **Lord Linlithgow** | Viceroy who ordered mass arrests |
-| **Stafford Cripps** | Led Cripps Mission (rejected by Gandhi) |
+| **Mahatma Gandhi** | Launched QIM; "Do or Die" speech; arrested to Aga Khan Palace |
+| **Jawaharlal Nehru** | Arrested August 9, 1942; Ahmednagar Fort prison |
+| **Aruna Asaf Ali** | Hoisted Congress flag at Gowalia Tank after arrests |
+| **JP (Jayaprakash Narayan)** | Led underground movement; ESCAPED Hazaribagh jail (Nov 9, 1942) |
+| **Ram Manohar Lohia** | Ran "Congress Radio" underground |
+| **Sucheta Kripalani** | Underground organizer; later first woman CM (UP) |
+| **Lord Linlithgow** | Viceroy who declared war without consulting Indians |
+| **Stafford Cripps** | Led failed Cripps Mission (1942) |
+| **Kasturba Gandhi** | Gandhi's wife — died in detention, Aga Khan Palace (Feb 22, 1944) |
+| **Nana Patil** | Led Satara Parallel Government (Prati Sarkar) |
 
 ---
 
-## 🔶 12. KEY DATES — RAPID FIRE MEMORIZATION
+## 🔷 BIHAR CONNECTION — QUIT INDIA MOVEMENT
 
 ```
-July 14, 1942    → Wardha Resolution — CWC decides to launch QIM
-August 8, 1942   → Quit India Resolution at Gowalia Tank Maidan, Bombay
-                   Gandhi's "Do or Die" speech
-August 9, 1942   → Gandhi arrested → Aga Khan Palace, Pune
-                   Aruna Asaf Ali hoists Congress flag
-Aug 14–Nov 1942  → Usha Mehta's secret Congress Radio broadcasts
-August 15, 1942  → Mahadev Desai (Gandhi's secretary) dies in Aga Khan Palace
-Feb 22, 1944     → Kasturba Gandhi dies in Aga Khan Palace
-May 6, 1944      → Gandhi released due to health
-Oct 21, 1943     → Azad Hind Government formed in Singapore (Bose)
-Aug 18, 1945     → Bose dies in Taipei (air crash)
-Feb 1946         → RIN Mutiny
-Aug 15, 1947     → India INDEPENDENT!
+Bihar's role was the MOST INTENSE of all provinces:
+
+1. JP (Jayaprakash Narayan) — from Sitabdiara, Saran, Bihar
+   → Led entire underground movement
+   → Escaped Hazaribagh Central Jail (November 9, 1942)
+
+2. Hazaribagh Central Jail — now in Jharkhand (was Bihar then)
+   → Site of JP's famous prison escape
+
+3. Mass rural mobilization across Bihar districts
+
+4. Bihar's peasant base (from Champaran → NCM → QIM)
+   meant the movement had deep roots here
+
+BPSC exam will almost certainly ask about:
+→ JP's escape from Hazaribagh jail
+→ JP's connection to Bihar/Saran district
+→ August Kranti Diwas (August 9)
 ```
 
 ---
 
-## 🔶 13. COMPARISON OF THREE MAJOR GANDHI MOVEMENTS
+## 🔷 MEMORY TRICKS
 
-| Feature | Non-Cooperation (1920) | Civil Disobedience (1930) | Quit India (1942) |
-|---------|----------------------|--------------------------|------------------|
-| Launched | August 1, 1920 | March 12, 1930 | August 8, 1942 |
-| Key symbol | Khadi | Salt | "Do or Die" |
-| Cause | Rowlatt + Jallianwala | Simon + Salt Tax | Cripps rejection + WWII |
-| How ended | Chauri Chaura → suspended | Gandhi-Irwin Pact | WWII end + arrests |
-| Violence | Minimal → 1 incident | Minimal | Widespread |
-| Muslim unity | Strong (Khilafat) | Moderate | Weak (Jinnah opposed) |
-| Govt response | Moderate | Moderate | Harshest (1 lakh arrested) |
-| Key hero | Ali Brothers | Sarojini Naidu | Aruna Asaf Ali |
+```
+"CRIPPS FAILED → GANDHI DECIDED → BOMBAY LAUNCHED → ARRESTS NEXT DAY"
+(Cripps Mission fail → Wardha Resolution → August 8 AICC → August 9 arrests)
+
+"DO OR DIE = KARO YA MARO"
+(Direct Hindi translation — both versions asked in exam)
+
+"Gowalia Tank = August Kranti Maidan"
+(Same place, two names — both used in exam questions)
+
+"ARUNA HOISTED the FLAG on August 9"
+(While Gandhi was being arrested, Aruna kept the spirit alive)
+
+"JP = JAYAPRAKASH = JAIL BREAK = JHARKHAND (Hazaribagh)"
+(The three J's help remember JP's role)
+
+"KASTURBA died in jail February 22, 1944"
+(Kasturba = February, 1944 — very emotional, often tested)
+
+"Gandhi in Aga Khan Palace, Pune"
+(His specific prison location — don't confuse with other jails)
+
+"RTC 1,2,3 = 1930, 1931, 1932"
+"QIM = 1942" (CDM 1930 + 12 years = QIM 1942)
+```
 
 ---
 
-# ═══════════════════════════════════════════
-# GS PRACTICE QUESTIONS — 25 MCQs
-## Quit India Movement 1942 | BPSC TRE Pattern
-# ═══════════════════════════════════════════
+## 🔷 COMPARISON: NCM vs CDM vs QUIT INDIA
 
-> **📌 INSTRUCTIONS:** Attempt ALL 25 questions first. Answers are placed AFTER question 50 below.
+| Feature | NCM (1920–22) | CDM (1930–34) | Quit India (1942) |
+|---------|--------------|--------------|-----------------|
+| Trigger | JWB + Rowlatt | Simon + Lahore | Cripps failure + WWII |
+| Method | Boycott | Break laws | "Do or Die" rebellion |
+| Leaders arrested | Gandhi (1922) | Gandhi (1930) | ALL leaders (Aug 9, 1942) |
+| Women's role | Limited | Large | Very large |
+| Ended by | Chauri Chaura violence | Gandhi-Irwin Pact | WWII + 1945 |
+| Bihar connection | Bihar Vidyapeeth | Rajendra Prasad | JP's jail escape |
+| Underground leader | None (suspended early) | Aruna Asaf Ali (partial) | JP, Aruna, Lohia |
+| Significance | First mass movement | Salt = universal symbol | Last major movement |
 
 ---
 
-**Q26.** The Quit India Resolution was passed by the All India Congress Committee on:
+# PART 3: PRACTICE QUESTIONS
 
-(A) July 14, 1942
-(B) August 9, 1942
-(C) August 8, 1942
-(D) More than one of the above is correct
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: Exception Handling (try/catch/throw), Inline Functions
+
+---
+
+**Q1.** What is the purpose of the `try` block in C++ exception handling?
+(A) To throw an exception to the operating system
+(B) To enclose code that might throw an exception
+(C) To catch and handle exceptions
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q27.** At which place was the Quit India Resolution passed?
+**Q2.** Which keyword is used to signal/raise an exception in C++?
+(A) `raise`
+(B) `signal`
+(C) `throw`
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q3.** What is `catch(...)` used for in C++?
+(A) Catches only integer exceptions
+(B) Catches ALL types of exceptions regardless of type
+(C) Is used to rethrow an exception
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q4.** When multiple catch blocks are present, which order should they follow?
+(A) Most general (base class) first, most specific (derived) last
+(B) Most specific (derived) first, most general (base class) last
+(C) Order doesn't matter — compiler handles it
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q5.** Where must `catch(...)` (catch-all handler) be placed?
+(A) As the first catch block
+(B) As the last catch block
+(C) Anywhere — position doesn't matter
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q6.** What happens if an exception is thrown but no matching catch block exists?
+(A) Program continues normally ignoring the exception
+(B) `terminate()` is called and the program crashes
+(C) The exception is silently discarded
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q7.** In exception handling, what does "rethrowing" mean?
+(A) Throwing a different exception from a catch block
+(B) Catching an exception and throwing it again (same exception)
+(C) Throwing an exception inside a nested try block
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q8.** To rethrow the SAME exception from a catch block, which syntax is correct?
+(A) `throw e;`
+(B) `throw;`
+(C) `rethrow;`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q9.** What exception does `new` throw when memory allocation fails?
+(A) `std::memory_error`
+(B) `std::bad_alloc`
+(C) `std::runtime_error`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q10.** Which of the following is TRUE about inline functions?
+(A) They always reduce code size
+(B) The `inline` keyword guarantees the function will be inlined
+(C) They eliminate function call overhead by substituting code at call site
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q11.** Which of the following functions should NOT be made inline?
+(A) `int add(int a, int b) { return a+b; }`
+(B) A recursive function
+(C) `int getX() { return x; }`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q12.** A member function defined INSIDE a class body in C++ is:
+(A) Always virtual
+(B) Automatically treated as inline
+(C) Always static
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q13.** Which of the following correctly declares an inline function?
+(A) `function inline int add(int a, int b) { return a+b; }`
+(B) `inline int add(int a, int b) { return a+b; }`
+(C) `int add inline(int a, int b) { return a+b; }`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q14.** What is the trade-off of using inline functions?
+(A) Slower execution but smaller code
+(B) Faster execution but larger code (code bloat)
+(C) Same speed but better readability
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q15.** Consider: `inline int fact(int n) { return n<=1 ? 1 : n*fact(n-1); }` — what happens?
+(A) Works perfectly — inline recursion is fully supported
+(B) Compiler ignores the inline hint (cannot inline recursive functions)
+(C) Compilation error — inline cannot be used with recursion
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q16.** What is "stack unwinding" in exception handling?
+(A) Clearing the stack of all data
+(B) Destroying local objects and exiting functions as exception propagates
+(C) Reversing the execution order of statements
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q17.** Which of the following types CAN be thrown using `throw` in C++?
+(A) int
+(B) std::string
+(C) User-defined class objects
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q18.** When inline functions are called multiple times, what effect does it have on code size?
+(A) Code size decreases (function body exists once)
+(B) Code size increases (function body copied at each call site)
+(C) No effect on code size
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q19.** Which of the following will cause the compiler to IGNORE the inline keyword?
+(A) Function containing a `for` loop
+(B) Function containing a `static` variable
+(C) Function that is recursive
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q20.** Consider the code:
+```cpp
+try { throw 10; }
+catch (double d) { cout << "double"; }
+catch (int i) { cout << "int"; }
+```
+What is the output?
+(A) double
+(B) int
+(C) Compilation error
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q21.** What is the correct base class for all standard C++ exceptions?
+(A) `std::error`
+(B) `std::exception`
+(C) `std::runtime_error`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q22.** Which of the following is an advantage of inline functions?
+(A) Reduced code size
+(B) Reduced execution time (no function call overhead)
+(C) Always guaranteed to be faster than regular functions
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q23.** In C++ exception handling, what does `e.what()` return for standard exceptions?
+(A) The exception type name
+(B) A descriptive error message string
+(C) The exception error code
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q24.** If `throw` is used without any argument inside a catch block, it:
+(A) Throws a null exception
+(B) Rethrows the currently handled exception
+(C) Clears the exception
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q25.** Which of the following statements about inline functions is CORRECT?
+(A) inline functions are resolved at runtime
+(B) inline functions are expanded at compile time at the call site
+(C) inline functions must always be defined in .cpp files
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+## 📝 GENERAL STUDIES — 25 MCQs
+### Quit India Movement 1942
+
+---
+
+**Q26.** The Quit India Movement was launched on:
+(A) August 8, 1942 (AICC resolution)
+(B) August 9, 1942 (actual launch / arrests)
+(C) July 14, 1942 (Wardha Resolution)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q27.** Gandhi's famous call during the Quit India Movement was:
+(A) "Jai Hind"
+(B) "Purna Swaraj"
+(C) "Do or Die" (Karo ya Maro)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q28.** Where was the historic AICC session held on August 8, 1942 where the Quit India Resolution was passed?
 (A) Wardha, Maharashtra
-(B) Gowalia Tank Maidan, Bombay (now August Kranti Maidan)
-(C) Sabarmati Ashram, Ahmedabad
-(D) More than one of the above is correct
+(B) Gowalia Tank Maidan, Bombay
+(C) Lahore
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q28.** Gandhi's famous "Do or Die" slogan was associated with which movement?
-
-(A) Non-Cooperation Movement (1920)
-(B) Civil Disobedience Movement (1930)
-(C) Quit India Movement (1942)
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q29.** After his arrest on August 9, 1942, Gandhi was detained in:
-
-(A) Cellular Jail, Andaman
-(B) Yerwada (Yeravda) Jail, Pune
-(C) Aga Khan Palace, Pune
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q30.** The Cripps Mission (1942) was rejected by Gandhi. What did he call the British offer?
-
-(A) "A sword aimed at India's heart"
-(B) "A post-dated cheque on a failing bank"
-(C) "A poisoned gift"
-(D) More than one of the above is correct
-(E) None of the above
-
----
-
-**Q31.** Who hoisted the Congress flag at Gowalia Tank Maidan on August 9, 1942, after Gandhi was arrested?
-
+**Q29.** After Gandhi's arrest on August 9, 1942, who hoisted the Congress flag at Gowalia Tank Maidan?
 (A) Sarojini Naidu
 (B) Kasturba Gandhi
 (C) Aruna Asaf Ali
-(D) More than one of the above is correct
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q32.** Usha Mehta is remembered in the Quit India Movement for:
-
-(A) Leading the underground movement in Bihar
-(B) Running a secret Congress Radio from Bombay (August–November 1942)
-(C) Hoisting the Congress flag at Gowalia Tank
-(D) More than one of the above is correct
+**Q30.** Gandhi was imprisoned during the Quit India Movement at:
+(A) Yerwada Prison, Pune
+(B) Aga Khan Palace, Pune
+(C) Andaman Cellular Jail
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q33.** The longest-lasting parallel government (Prati Sarkar) during the Quit India Movement was established at:
-
-(A) Ballia, Uttar Pradesh
-(B) Tamluk, Bengal
-(C) Satara, Maharashtra
-(D) More than one of the above is correct
+**Q31.** The Cripps Mission (1942) failed primarily because:
+(A) Cripps demanded complete Indian support for WWII
+(B) It offered Dominion Status only AFTER the war, with no immediate transfer of power
+(C) It proposed dissolution of INC
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q34.** Who led the Satara Prati Sarkar (parallel government) during the Quit India Movement?
-
-(A) Chittu Pandey
-(B) Satish Samanta
-(C) Nana Patil
-(D) More than one of the above is correct
+**Q32.** Gandhi described the Cripps Mission offer as:
+(A) "A gift from heaven"
+(B) "A post-dated cheque on a crashing bank"
+(C) "Too little, too late"
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q35.** Subhas Chandra Bose established the Azad Hind Government on:
-
-(A) August 15, 1942
-(B) October 21, 1943
-(C) January 26, 1943
-(D) More than one of the above is correct
+**Q33.** JP (Jayaprakash Narayan) escaped from which jail during the Quit India Movement?
+(A) Patna Central Jail
+(B) Hazaribagh Central Jail
+(C) Naini Central Jail, Allahabad
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q36.** Where was the Azad Hind Government established by Subhas Chandra Bose?
-
-(A) Berlin, Germany
-(B) Tokyo, Japan
-(C) Singapore
-(D) More than one of the above is correct
+**Q34.** When did JP escape from jail during the Quit India Movement?
+(A) August 9, 1942
+(B) November 9, 1942
+(C) December 9, 1942
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q37.** Which famous slogan is associated with Subhas Chandra Bose?
-
-(A) "Do or Die"
-(B) "Give me blood, I will give you freedom!"
-(C) "Swaraj is my birthright"
-(D) More than one of the above is correct
+**Q35.** JP (Jayaprakash Narayan) was born in which district of Bihar?
+(A) Patna
+(B) Saran (Sitabdiara village)
+(C) Champaran
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q38.** The women's regiment of the Indian National Army (INA) was named after:
-
-(A) Savitribai Phule
-(B) Rani of Jhansi (Rani Lakshmibai)
-(C) Kasturba Gandhi
-(D) More than one of the above is correct
+**Q36.** The underground "Congress Radio" during the Quit India Movement was operated by:
+(A) Aruna Asaf Ali
+(B) JP (Jayaprakash Narayan)
+(C) Ram Manohar Lohia
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q39.** Kasturba Gandhi (Gandhi's wife) died during his detention in Aga Khan Palace on:
-
-(A) August 15, 1942
-(B) February 22, 1944
-(C) May 6, 1944
-(D) More than one of the above is correct
+**Q37.** Kasturba Gandhi died during the Quit India Movement period at:
+(A) August 9, 1942 — Bombay
+(B) February 22, 1944 — Aga Khan Palace, Pune
+(C) May 6, 1944 — Yerwada Prison
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q40.** Jayaprakash Narayan (JP) became a central figure of the underground Quit India Movement after:
-
-(A) Escaping from Ahmednagar Fort
-(B) Escaping from Hazaribagh Jail
-(C) Escaping from Cellular Jail, Andaman
-(D) More than one of the above is correct
+**Q38.** The Wardha Resolution (July 14, 1942) was passed by:
+(A) The All India Congress Committee
+(B) The Congress Working Committee
+(C) The Indian National Army
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q41.** The Wardha Resolution (July 14, 1942) was passed by the:
-
-(A) All India Congress Committee (AICC)
-(B) Muslim League
-(C) Congress Working Committee (CWC)
-(D) More than one of the above is correct
+**Q39.** August 9 is celebrated in India as:
+(A) Independence Day
+(B) August Kranti Diwas (August Revolution Day)
+(C) Republic Day
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q42.** Which of the following leaders was NOT imprisoned during the Quit India Movement?
-
-(A) Jawaharlal Nehru
-(B) Sardar Vallabhbhai Patel
-(C) C. Rajagopalachari (Rajaji)
-(D) More than one of the above is correct
+**Q40.** The "Satara Parallel Government" (Prati Sarkar) during the Quit India Movement was led by:
+(A) JP (Jayaprakash Narayan)
+(B) Nana Patil
+(C) Aruna Asaf Ali
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q43.** The Ballia parallel government during Quit India 1942 was led by:
-
-(A) Nana Patil
-(B) Ram Manohar Lohia
-(C) Chittu Pandey
-(D) More than one of the above is correct
+**Q41.** Who was the Viceroy of India when the Quit India Movement was launched?
+(A) Lord Irwin
+(B) Lord Linlithgow
+(C) Lord Mountbatten
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q44.** The Royal Indian Navy (RIN) Mutiny of February 1946 was significant because:
-
-(A) It was the last major armed rebellion before independence
-(B) It showed the British that the Indian armed forces could no longer be relied upon to maintain colonial rule
-(C) It was led by Subhas Chandra Bose from Singapore
-(D) More than one of the above is correct
+**Q42.** The Quit India Movement is significant because:
+(A) It was Gandhi's first Satyagraha in India
+(B) It was the last and most massive mass movement before independence
+(C) It directly led to India's independence through negotiation
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q45.** INA officers were put on trial at the Red Fort, Delhi in 1945–46. Who among the following defended them?
+**Q43.** Arrange in CORRECT CHRONOLOGICAL ORDER:
+1. Quit India Resolution passed
+2. Gandhi arrested
+3. Aruna Asaf Ali hoists flag
+4. Cripps Mission fails
 
-(A) Jawaharlal Nehru
-(B) Bhulabhai Desai
-(C) Tej Bahadur Sapru
-(D) More than one of the above is correct
+(A) 4 → 1 → 3 → 2
+(B) 4 → 1 → 2 → 3
+(C) 1 → 4 → 2 → 3
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q46.** Subhas Chandra Bose died on:
-
-(A) August 15, 1945 (India's Independence Day)
-(B) August 18, 1945, in a plane crash in Taipei, Taiwan
-(C) October 21, 1945, in Singapore
-(D) More than one of the above is correct
+**Q44.** Which of the following shows Bihar's connection to the Quit India Movement?
+(A) Champaran was the site of the Quit India launch
+(B) JP led the underground movement and escaped Hazaribagh jail
+(C) Gandhi was imprisoned in Patna during the movement
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q47.** Which of the following about the Quit India Movement is/are TRUE?
-
-(A) It was the largest mass uprising in India since the 1857 revolt
-(B) Over 1 lakh (100,000) people were arrested
-(C) Women like Aruna Asaf Ali and Usha Mehta played leading roles
-(D) More than one of the above is correct
+**Q45.** Sucheta Kripalani, who was active in the Quit India underground movement, later became significant as:
+(A) First woman President of INC
+(B) First female Chief Minister of any Indian state (Uttar Pradesh, 1963)
+(C) First female Governor of an Indian state
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q48.** Gandhi was released from Aga Khan Palace on:
-
-(A) February 22, 1944
-(B) August 15, 1944
-(C) May 6, 1944
-(D) More than one of the above is correct
+**Q46.** Which of the following is CORRECT about the Cripps Mission?
+(A) Sir Stafford Cripps was a French diplomat
+(B) Sir Stafford Cripps was a British Labour Party leader sent by Churchill's government
+(C) The mission offered immediate independence to India
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q49.** The INA's famous battle cry / slogan was:
-
-(A) "Do or Die"
-(B) "Inqilab Zindabad"
-(C) "Jai Hind"
-(D) More than one of the above is correct
+**Q47.** MATCH THE FOLLOWING:
+```
+Person                    Role in Quit India
+1. Aruna Asaf Ali         A. Led underground movement, Hazaribagh escape
+2. JP (Jayaprakash)       B. Ran Congress Radio underground
+3. Ram Manohar Lohia      C. Hoisted flag at Gowalia Tank after arrests
+4. Nana Patil             D. Led Satara Parallel Government
+```
+(A) 1-C, 2-A, 3-B, 4-D
+(B) 1-A, 2-C, 3-D, 4-B
+(C) 1-B, 2-D, 3-A, 4-C
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q50.** Which of the following correctly describes the significance of the Quit India Movement?
+**Q48.** The Gowalia Tank Maidan in Bombay is also known as:
+(A) Azad Maidan
+(B) August Kranti Maidan
+(C) Shivaji Park
+(D) More than one of the above
+(E) None of the above
 
-(A) It demonstrated to the British that India could not be held indefinitely
-(B) Parallel governments in Satara, Ballia, and Tamluk proved Indians could self-govern
-(C) International pressure (especially from USA) increased on Britain to free India
-(D) More than one of the above is correct
+---
+
+**Q49.** The Congress Working Committee passed the Wardha Resolution calling for British withdrawal in:
+(A) August 8, 1942
+(B) July 14, 1942
+(C) March 2, 1942
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q50.** Which of the following correctly describes the immediate British response to the Quit India Movement on August 9, 1942?
+(A) British agreed to negotiate and granted partial independence
+(B) All major Congress leaders arrested overnight before the movement could organize
+(C) British withdrew from India immediately
+(D) More than one of the above
 (E) None of the above
 
 ---
 ---
----
----
----
 
-# ═══════════════════════════════════════════════════════
-# ✅ ANSWER KEY — CHECKED YOUR OWN ANSWERS FIRST? ✅
-# ═══════════════════════════════════════════════════════
+# ANSWER KEY
+
+## ⚠️ Attempt all 50 questions BEFORE checking answers!
 
 ---
 
-## CS ANSWERS (Q1–Q25) — Exception Handling & Inline Functions
+### CS Answers (Q1–Q25):
 
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| **Q1** | **(C) `throw`** | `throw` is used to RAISE/signal an exception |
-| **Q2** | **(B) Encloses code that might generate an exception** | `try` = the guarded region |
-| **Q3** | **(C) `B10C`** | `throw 10` skips `cout<<"A"` → catch prints `B10` → then `C` prints (after try-catch) |
-| **Q4** | **(C) Catches ALL types** | `catch(...)` with three dots = universal catch-all handler |
-| **Q5** | **(B) Last** | `catch(...)` must be LAST; if placed first, specific handlers are unreachable |
-| **Q6** | **(C) Re-throws current exception** | `throw;` with no value = re-throw to outer enclosing catch |
-| **Q7** | **(C) `DOUBLE`** | `3.14` is a `double`; matching `catch(double)` fires |
-| **Q8** | **(C) `std::terminate()` called** | If no matching catch found → `std::terminate()` → program ends |
-| **Q9** | **(B) `what()`** | `e.what()` returns the error description string |
-| **Q10** | **(C) `Inner: 100 Outer: 100`** | Inner catches and prints, then `throw;` re-throws to outer |
-| **Q11** | **(B) Body substituted at call point** | Compiler pastes function body where it is called |
-| **Q12** | **(B) Eliminates function call overhead** | Faster execution — no push/pop/jump overhead |
-| **Q13** | **(C) `int cube(int x) { return x*x*x; }`** | Small, simple, no loops, no recursion — perfect for inline |
-| **Q14** | **(D) More than one** | All three (A), (B), (C) are valid reasons to ignore inline |
-| **Q15** | **(B) Automatically treated as inline** | Functions defined inside class body are implicitly inline |
-| **Q16** | **(B) Inline functions perform type checking** | Key advantage: type safety + correct operator precedence |
-| **Q17** | **(B) A REQUEST/HINT to compiler** | Compiler may choose to ignore `inline` keyword |
-| **Q18** | **(B) `7 30`** | `add(3,4)=7`, `add(10,20)=30`; inline works normally |
-| **Q19** | **(D) More than one** | All three (A), (B), (C) are TRUE about inline functions |
-| **Q20** | **(B) 11** | Macro expansion: `2+3*2+3 = 2+6+3 = 11` (not 25!) — classic trap |
-| **Q21** | **(C) `Start Error! End`** | `throw "Error!"` skips "Middle"; catch prints "Error!"; then "End" |
-| **Q22** | **(C) `<stdexcept>`** | `runtime_error`, `logic_error`, etc. are in `<stdexcept>` |
-| **Q23** | **(B) Destroying local objects in reverse order** | Stack unwinding = cleanup of local objects when exception propagates |
-| **Q24** | **(B) Minimal overhead (zero-cost exception handling)** | Modern compilers optimize for no-exception path |
-| **Q25** | **(D) More than one** | All three (A), (B), (C) are correct statements |
-
----
-
-## GS ANSWERS (Q26–Q50) — Quit India Movement 1942
-
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| **Q26** | **(C) August 8, 1942** | AICC session at Gowalia Tank Maidan; Wardha (July 14) was CWC meeting |
-| **Q27** | **(B) Gowalia Tank Maidan, Bombay** | Now called August Kranti Maidan |
-| **Q28** | **(C) Quit India Movement (1942)** | "Do or Die" = Gandhi's August 8, 1942 speech |
-| **Q29** | **(C) Aga Khan Palace, Pune** | NOT a regular jail — a palace used as detention center |
-| **Q30** | **(B) "Post-dated cheque on a failing bank"** | Gandhi's exact famous quote about Cripps Mission |
-| **Q31** | **(C) Aruna Asaf Ali** | "Heroine of 1942" — hoisted flag after Gandhi's arrest |
-| **Q32** | **(B) Secret Congress Radio** | Broadcast nationalist messages Aug 14 – Nov 12, 1942 |
-| **Q33** | **(C) Satara, Maharashtra** | Prati Sarkar — longest lasting parallel government (1943–1945) |
-| **Q34** | **(C) Nana Patil** | Led the Satara Prati Sarkar |
-| **Q35** | **(B) October 21, 1943** | Azad Hind Government declared in Singapore |
-| **Q36** | **(C) Singapore** | Bose declared provisional Azad Hind Govt in Singapore |
-| **Q37** | **(B) "Give me blood, I will give you freedom!"** | Bose's most famous slogan |
-| **Q38** | **(B) Rani of Jhansi** | Women's regiment of INA = Rani of Jhansi Regiment |
-| **Q39** | **(B) February 22, 1944** | Kasturba died in Aga Khan Palace detention |
-| **Q40** | **(B) Escaping Hazaribagh Jail** | JP became underground hero after this escape |
-| **Q41** | **(C) Congress Working Committee (CWC)** | Wardha = CWC meeting (not full AICC); Aug 8 = AICC |
-| **Q42** | **(C) C. Rajagopalachari (Rajaji)** | Rajaji OPPOSED the Quit India Movement and was not imprisoned |
-| **Q43** | **(C) Chittu Pandey** | Led Ballia (UP) parallel government, August 1942 |
-| **Q44** | **(B) British could not rely on Indian armed forces** | RIN Mutiny was decisive signal for British to leave |
-| **Q45** | **(D) More than one** | Nehru, Bhulabhai Desai, AND Sapru all defended INA officers |
-| **Q46** | **(B) August 18, 1945 in Taipei, Taiwan** | Plane crash over Taiwan (Japan) |
-| **Q47** | **(D) More than one** | All three (A), (B), (C) are TRUE |
-| **Q48** | **(C) May 6, 1944** | Released due to failing health (malaria) |
-| **Q49** | **(C) "Jai Hind"** | INA's battle cry; Bose made it India's national salute |
-| **Q50** | **(D) More than one** | All three (A), (B), (C) are correct about QIM significance |
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (B) | try block encloses code that might throw |
+| 2 | (C) | `throw` keyword raises an exception |
+| 3 | (B) | catch(...) catches ALL exception types |
+| 4 | (B) | Specific (derived) first, general (base) last |
+| 5 | (B) | catch(...) must always be the LAST catch block |
+| 6 | (B) | terminate() is called — program crashes |
+| 7 | (B) | Rethrow = catch an exception and throw it again |
+| 8 | (B) | Bare `throw;` rethrows original exception |
+| 9 | (B) | `new` throws std::bad_alloc on failure |
+| 10 | (C) | Inline substitutes code at call site — eliminates overhead |
+| 11 | (B) | Recursive functions — compiler ignores inline for them |
+| 12 | (B) | Member functions defined inside class = automatically inline |
+| 13 | (B) | `inline returnType funcName(...)` — inline comes first |
+| 14 | (B) | Faster execution but LARGER code (code bloat) |
+| 15 | (B) | Compiler ignores inline for recursive functions |
+| 16 | (B) | Destroying local objects and exiting functions as exception propagates |
+| 17 | (D) | Any type can be thrown: int, string, user-defined objects |
+| 18 | (B) | Code bloat — body copied at each call site |
+| 19 | (D) | All three: loops, static variables, recursion → inline ignored |
+| 20 | (B) | throw 10 is int; int catch matches → "int" |
+| 21 | (B) | std::exception is base of all standard exceptions |
+| 22 | (B) | Reduced execution time — no function call overhead |
+| 23 | (B) | e.what() returns descriptive error message string |
+| 24 | (B) | Bare `throw;` rethrows currently handled exception |
+| 25 | (B) | Inline functions expanded at COMPILE TIME at call site |
 
 ---
 
-# ═══════════════════════════════════════════
-# 📝 NIGHT REVISION — 5 BULLET POINTS EACH
-## Write from Memory Before Sleeping
-# ═══════════════════════════════════════════
+### GS Answers (Q26–Q50):
 
-### CS — Exception Handling & Inline:
-1. **`try`** = guarded zone; **`throw`** = raises exception; **`catch`** = handles it; after `throw`, remaining `try` code is **SKIPPED**
-2. **`catch(...)`** (three dots) = catches ALL types; MUST be the **LAST** catch block
-3. **`throw;`** (no value) inside catch = **re-throws** same exception to outer catch block
-4. **Inline functions** = body substituted at call point; compiler **IGNORES** inline for loops, recursion, complex functions
-5. **Macro trap:** `#define SQUARE(x) x*x` → `SQUARE(2+3)` = 11 (not 25!); inline is safer due to **type checking**
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (D) | Both Aug 8 (resolution) and Aug 9 (actual launch + arrests) are valid |
+| 27 | (C) | "Do or Die" / "Karo ya Maro" — Gandhi's Quit India call |
+| 28 | (B) | Gowalia Tank Maidan, Bombay (now August Kranti Maidan) |
+| 29 | (C) | Aruna Asaf Ali hoisted the Congress flag |
+| 30 | (B) | Aga Khan Palace, Pune |
+| 31 | (B) | Dominion Status only after war, no immediate power transfer |
+| 32 | (B) | "Post-dated cheque on a crashing bank" — Gandhi's exact words |
+| 33 | (B) | Hazaribagh Central Jail |
+| 34 | (B) | November 9, 1942 |
+| 35 | (B) | Sitabdiara village, Saran district, Bihar |
+| 36 | (C) | Ram Manohar Lohia ran the underground Congress Radio |
+| 37 | (B) | February 22, 1944 — Aga Khan Palace, Pune |
+| 38 | (B) | Congress Working Committee at Wardha |
+| 39 | (B) | August Kranti Diwas (August Revolution Day) |
+| 40 | (B) | Nana Patil led Satara Parallel Government (Prati Sarkar) |
+| 41 | (B) | Lord Linlithgow was Viceroy in 1942 |
+| 42 | (B) | Last and most massive mass movement before independence |
+| 43 | (B) | Cripps fails → Resolution Aug 8 → Arrests Aug 9 → Aruna hoists flag Aug 9 |
+| 44 | (B) | JP led underground, escaped Hazaribagh jail |
+| 45 | (B) | Sucheta Kripalani — first female Chief Minister (UP, 1963) |
+| 46 | (B) | Sir Stafford Cripps was a British Labour Party leader |
+| 47 | (A) | Aruna-C, JP-A, Lohia-B, Nana Patil-D |
+| 48 | (B) | August Kranti Maidan — renamed after QIM |
+| 49 | (B) | July 14, 1942 — Wardha Resolution |
+| 50 | (B) | All major leaders arrested overnight before movement could organize |
 
-### GS — Quit India Movement:
-1. **August 8, 1942** = Quit India Resolution at **Gowalia Tank Maidan, Bombay**; Gandhi's **"Do or Die"** speech
-2. **August 9, 1942** = Gandhi arrested → **Aga Khan Palace, Pune** (not a jail!); **Aruna Asaf Ali** hoisted Congress flag
-3. **Cripps Mission** = "post-dated cheque on failing bank" (Gandhi); **Satara Prati Sarkar** (Nana Patil) = longest parallel govt
-4. **Azad Hind Govt** = Oct 21, 1943, **Singapore**; Bose: "Give me blood, I will give you freedom!"; INA women's wing = **Rani of Jhansi Regiment**
-5. **Bihar connection:** Rajendra Prasad + Jayaprakash Narayan (escaped Hazaribagh Jail) — Bihar's freedom fighters in QIM
+---
+---
+
+# 🔁 DAY 12 — CRISP REVISION NOTES
+
+## ⚡ RAPID FIRE — Exception Handling
+
+### Core Flow — One-Liners:
+1. **try** = watch this code | **throw** = signal error | **catch** = handle error
+2. **catch(...)** = catch ALL types — MUST be the LAST catch block
+3. **Specific catch before general** — derived class exceptions before base class
+4. **Bare `throw;`** = rethrow SAME exception (no copy) | **`throw e;`** = rethrow COPY
+5. **No matching catch** → `terminate()` called → program crashes
+6. **`new` fails** → throws `std::bad_alloc` | `malloc` fails → returns NULL (different!)
+7. **Stack unwinding** = local objects destroyed as exception propagates back up call stack
+8. **std::exception** = base class of ALL standard C++ exceptions
+9. **`e.what()`** = returns error message string from standard exception
+
+### Exception Order Rule:
+```
+try { ... }
+catch (MostSpecificType e) { }   ← derived class FIRST
+catch (MoreGeneralType e) { }    ← base class LATER
+catch (...) { }                  ← catch-all LAST (MANDATORY!)
+```
 
 ---
 
-# 📊 DAY 12 PERFORMANCE TRACKER
+## ⚡ RAPID FIRE — Inline Functions
 
-| Section | Questions | Target Score | My Score |
-|---------|-----------|-------------|----------|
-| CS — Exception + Inline | 25 | 22+ | _______ |
-| GS — Quit India Movement | 25 | 22+ | _______ |
-| **Total** | **50** | **44+** | _______ |
+### Must-Know Rules:
+1. **`inline`** = REQUEST to compiler — not guaranteed to be honored
+2. **Inline replaces function call** with actual code at call site (compile time)
+3. **Trade-off**: FASTER execution ↔ LARGER code size (code bloat)
+4. **Auto-inline**: Member functions defined INSIDE class body = automatically inline
+5. **Compiler IGNORES inline for**: recursion, loops, static vars, large body, virtual functions
 
-**If score < 38/50:** Re-read 🎯 flagged facts; redo wrong questions tomorrow morning.
-**If score 38–45/50:** Good performance — review mistakes, proceed to Day 13.
-**If score 46–50/50:** TOPPER LEVEL! 🏆 TOP RANK is yours!
+### Quick Check:
+```
+Short function (1-3 lines, no loops)?     → ✅ Good for inline
+Recursive function?                        → ❌ Inline IGNORED
+Contains loop (for/while)?                 → ❌ Inline IGNORED
+Defined inside class body?                 → ✅ Already inline (auto)
+Called 1000 times per second?              → ✅ Inline is beneficial
+Large function (50+ lines)?                → ❌ Code bloat outweighs benefit
+```
 
 ---
 
-> **⚡ PREVIEW — DAY 13:**
-> CS: Output Prediction Questions (bitwise operators, pre/post increment, struct vs class, scope resolution `::`),
-> GS: Bihar History — Rajendra Prasad (first President, Champaran hero, CDM + QIM leader)
-> **Today's D-option tally:** Q14, Q19, Q25, Q44, Q45, Q47, Q50 were all "More than one" — that's 7/25 in GS alone!
-> Always evaluate ALL options before marking (A), (B), or (C)!
+## ⚡ RAPID FIRE — Quit India Movement
+
+### Critical Facts:
+```
+Date of Resolution: August 8, 1942 — Gowalia Tank Maidan, Bombay
+Date of Arrests:    August 9, 1942 (= August Kranti Diwas)
+Gandhi's slogan:    "Do or Die" = "Karo ya Maro"
+Gandhi's prison:    Aga Khan Palace, Pune
+Cripps Mission quote: "Post-dated cheque on a crashing bank"
+Aruna Asaf Ali:     Hoisted flag at Gowalia Tank after arrests
+JP:                 Led underground; escaped Hazaribagh jail (Nov 9, 1942)
+JP birthplace:      Sitabdiara, Saran district, Bihar
+Ram Manohar Lohia: Ran "Congress Radio" underground
+Kasturba Gandhi:    Died in Aga Khan Palace, Feb 22, 1944
+Gowalia Tank:       Now called "August Kranti Maidan"
+Wardha Resolution:  July 14, 1942 (CWC decision to launch)
+Cripps Mission:     March-April 1942 (failed → triggered QIM)
+Viceroy:            Lord Linlithgow
+```
+
+### Bihar-Specific — Never Forget:
+```
+JP = Jayaprakash Narayan = from Sitabdiara, Saran, BIHAR
+JP = Escaped HAZARIBAGH CENTRAL JAIL = November 9, 1942
+Hazaribagh (now Jharkhand, was Bihar) = Site of JP's famous escape
+Bihar had MOST INTENSE participation in entire QIM
+```
+
+### Common Exam Traps:
+1. QIM **launched August 9** (arrests) — Resolution was August **8**
+2. Gowalia Tank = **August Kranti Maidan** — same place, two names
+3. JP escaped **Hazaribagh** jail (NOT Patna, NOT Naini)
+4. JP escaped **November 9** (NOT August 9)
+5. Kasturba died **February 22, 1944** (NOT 1942 or 1943)
+6. **Ram Manohar Lohia** ran Congress Radio (NOT JP, NOT Aruna)
+7. **Nana Patil** = Satara Parallel Government (NOT JP)
+8. Cripps = **Labour Party** (NOT Conservative), sent by Churchill (Conservative PM)
 
 ---
 
-*Day 12 Complete | Next → Day 13: Output Prediction + Bihar History (Rajendra Prasad)*
-*Phase 1, Week 2 | April 2026 | Target: 130+/150 | BPSC TRE 4.0 TOP RANK*
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. catch(...) must ALWAYS be the LAST catch block; specific types come before general ones
+2. `inline` is ignored by compiler for recursive functions, functions with loops, and large functions
+3. Inline function trade-off: FASTER execution but LARGER code size (code bloat)
+4. QIM launched August 9, 1942 — Gandhi arrested to Aga Khan Palace, Pune
+5. JP escaped Hazaribagh Central Jail on November 9, 1942 — Bihar's greatest QIM hero
+
+---
+
+*Next: Day 13 — C++ STL (Standard Template Library) Basics + Indian Constitution Overview*

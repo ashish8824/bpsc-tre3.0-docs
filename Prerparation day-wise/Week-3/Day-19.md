@@ -1,1360 +1,1413 @@
-# 📅 DAY 19 — BPSC TRE 4.0 TOPPER STUDY MATERIAL
-## CS: Circular Queue & Deque | GS: India Climate & Monsoon
-### 🎯 Target: TOPPER RANK | Phase 1 — Week 3
+# 📅 BPSC TRE 4.0 — DAY 19 COMPLETE STUDY MODULE
+### Circular Queue & Deque + India Climate — Monsoon System
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-> **EXAM REMINDER:** Every question has 5 options (A/B/C/D/E).
-> **Option D = "More than one of the above"** | **Option E = "None of the above"**
-> 20–25% of correct answers are D or E. NEVER ignore them!
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): Circular Queue (why needed, conditions, dry run) + Deque (types, operations)
+> - Afternoon (1 hr): India Climate — Monsoon System
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-# ═══════════════════════════════════════════
-# 🖥️ COMPUTER SCIENCE — CIRCULAR QUEUE & DEQUE
-# ═══════════════════════════════════════════
+# PART 1: COMPUTER SCIENCE
+## 📘 Circular Queue & Deque — Deep Conceptual Guide
 
 ---
 
-## 📌 SECTION 1: RECAP — WHY DO WE NEED CIRCULAR QUEUE?
+## 🔷 SECTION 1: Recap — The Problem with Linear Queue
 
-### The Problem With Linear Queue
-
+### Why Does the Problem Exist?
 ```
-LINEAR QUEUE — THE MEMORY WASTAGE PROBLEM:
+LINEAR QUEUE of size 5: MAX = 5 (indices 0–4)
 
- Index:  [0]   [1]   [2]   [3]   [4]   [5]
-         [ ]   [ ]   [ ]   [30]  [40]  [50]
-          ^                       ^
-       FRONT                    REAR
-          |
-     Already deleted!
-     WASTED SPACE ← Even though 3 cells are empty, 
-                    we CANNOT reuse them in Linear Queue!
+After: ENQUEUE 10,20,30,40,50 → then DEQUEUE 3 times:
 
-When rear = MAX_SIZE - 1:
-→ Queue is declared FULL (OVERFLOW condition)
-→ But positions 0,1,2 are EMPTY and WASTED!
-→ This is the "False Overflow" or memory wastage problem!
+Index:  [0]   [1]   [2]   [3]   [4]
+        [ _  |  _  |  _  | 40  | 50 ]
+                              ↑f        ↑r
+         ^     ^     ^
+     WASTED  WASTED  WASTED   (3 dequeues freed these slots)
+
+front=3, rear=4
+
+Now try ENQUEUE 60:
+  rear == 4 == MAX-1 → "OVERFLOW!" reported
+  But 3 slots (indices 0,1,2) are EMPTY and unused!
+
+This is called FALSE OVERFLOW.
+The linear queue does NOT recycle those freed positions.
 ```
 
 ### The Solution: Circular Queue
-
 ```
-CIRCULAR QUEUE — RING BUFFER:
-
-         [0]
-        /   \
-      [5]   [1]
-      |       |
-      [4]   [2]
-        \   /
-         [3]
-
-Arrows show: After index 5, it WRAPS BACK to index 0!
-rear = (rear + 1) % SIZE  ← This formula creates the ring!
-front = (front + 1) % SIZE
-```
-
-**KEY PYQ FACT:** Circular Queue is also called **"Ring Buffer"**.
-**Created to avoid:** Memory wastage / False Overflow in Linear Queue.
-
----
-
-## 📌 SECTION 2: CIRCULAR QUEUE — ALL CONDITIONS
-
-### The Critical Formulas (PYQ Hotspot!)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│              CIRCULAR QUEUE CONDITIONS                       │
-├─────────────────────────┬───────────────────────────────────┤
-│ EMPTY Condition         │  front == rear == -1              │
-│                         │  OR front == (rear + 1) % SIZE    │
-├─────────────────────────┼───────────────────────────────────┤
-│ FULL Condition          │  (rear + 1) % SIZE == front       │
-├─────────────────────────┼───────────────────────────────────┤
-│ Insert (Enqueue)        │  rear = (rear + 1) % SIZE         │
-├─────────────────────────┼───────────────────────────────────┤
-│ Delete (Dequeue)        │  front = (front + 1) % SIZE       │
-├─────────────────────────┼───────────────────────────────────┤
-│ Size of Queue           │  (rear - front + SIZE) % SIZE     │
-└─────────────────────────┴───────────────────────────────────┘
-```
-
-### Visual: Enqueue and Dequeue in Circular Queue
-
-**Initial State (SIZE = 6, Empty):**
-```
-front = -1, rear = -1
-[ _ ][ _ ][ _ ][ _ ][ _ ][ _ ]
-  0    1    2    3    4    5
-```
-
-**After Enqueue(10), Enqueue(20), Enqueue(30):**
-```
-front = 0, rear = 2
-[10 ][20 ][30 ][ _ ][ _ ][ _ ]
-  0    1    2    3    4    5
-  ^              ^
-front           rear
-```
-
-**After Dequeue(), Dequeue() (removing 10, 20):**
-```
-front = 2, rear = 2
-[ _ ][ _ ][30 ][ _ ][ _ ][ _ ]
-  0    1    2    3    4    5
-             ^
-          front = rear = 2
-```
-
-**After Enqueue(40), Enqueue(50), Enqueue(60), Enqueue(70), Enqueue(80):**
-```
-front = 2, rear = 1  ← rear wrapped around!
-[70 ][80 ][30 ][40 ][50 ][60 ]
-  0    1    2    3    4    5
-       ^    ^
-      rear  front
-
-FULL Condition check: (rear + 1) % SIZE = (1 + 1) % 6 = 2 = front ✓ FULL!
+In a CIRCULAR QUEUE:
+  → After index [4], the NEXT position wraps to index [0]
+  → Think of the array as a CIRCLE, not a straight line
+  → rear = (rear + 1) % SIZE    ← circular increment
+  → front = (front + 1) % SIZE  ← circular increment
+  → No memory is ever permanently wasted!
 ```
 
 ---
 
-## 📌 SECTION 3: CIRCULAR QUEUE OPERATIONS — STEP BY STEP
+## 🔷 SECTION 2: What is a Circular Queue?
 
-### Enqueue Algorithm:
-
+### Real-Life Analogy — The Revolving Door / Merry-Go-Round:
 ```
-ENQUEUE(CQ, item):
-Step 1: Check OVERFLOW
-        IF (rear + 1) % SIZE == front:
-            PRINT "Queue is FULL — OVERFLOW!"
-            RETURN
+Think of a MERRY-GO-ROUND with 5 seats (numbered 0–4):
 
-Step 2: IF front == -1 (first element ever):
-            front = 0
-            rear = 0
-        ELSE:
-            rear = (rear + 1) % SIZE
+       [0]
+   [4]     [1]
+   [3]     [2]
+        ↑
+   Seats wrap around — after seat 4, next is seat 0 again!
 
-Step 3: CQ[rear] = item
-Step 4: RETURN
+In a circular queue:
+  → People sit from rear
+  → People exit from front
+  → After the last seat, the next seat wraps to the first
+  → No seat is permanently lost!
 ```
 
-### Dequeue Algorithm:
-
+### Another Analogy — Circular Buffer in Computers:
 ```
-DEQUEUE(CQ):
-Step 1: Check UNDERFLOW
-        IF front == -1:
-            PRINT "Queue is EMPTY — UNDERFLOW!"
-            RETURN
+Audio streaming buffer, keyboard input buffer, network packet buffer:
+  → Data arrives at one end (rear), consumed from other (front)
+  → Once the last slot is used, new data wraps to the first slot
+    (if that slot has been consumed/freed already)
+  → This is exactly Circular Queue = Ring Buffer
 
-Step 2: item = CQ[front]
-
-Step 3: IF front == rear (only one element):
-            front = -1
-            rear = -1   ← Reset to empty state!
-        ELSE:
-            front = (front + 1) % SIZE
-
-Step 4: RETURN item
+CIRCULAR QUEUE = RING BUFFER (alternate name — very important!)
 ```
 
-### ⚠️ TRAP ALERT: BPSC PYQ Pattern
+### Formal Definition:
+A **Circular Queue** is a linear data structure that follows FIFO principle, but the **last position is connected to the first position** to form a circle, eliminating the false overflow problem of linear queues.
+
+---
+
+## 🔷 SECTION 3: Circular Queue — Key Conditions
+
+### This section contains the MOST tested formulas. Memorize them perfectly.
+
 ```
-Q: What happens when front == rear in circular queue after dequeue?
-→ Answer: Queue becomes EMPTY. Set front = rear = -1.
-→ This is NOT the same as front == (rear + 1) % SIZE (which is FULL).
-→ BPSC often confuses students between EMPTY and FULL conditions!
+Let SIZE = total capacity of circular queue (e.g., 5)
+Indices run from 0 to SIZE-1
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONDITION         FORMULA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Empty             front == -1  (before first enqueue)
+                  OR front == rear (after last dequeue in some implementations)
+Full              (rear + 1) % SIZE == front
+Next REAR index   rear = (rear + 1) % SIZE
+Next FRONT index  front = (front + 1) % SIZE
+Number of         (rear - front + SIZE) % SIZE   (when NOT empty)
+  elements
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Why (rear + 1) % SIZE == front means FULL?
+```
+Circular queue of SIZE = 5 (indices 0,1,2,3,4)
+
+Scenario: front=1, rear=0
+           ↓        ↓
+  [ 20 | 30 | 40 | 50 |  ? ]
+    [1]  [2]  [3]  [4]  [0]
+         ↑f                ↑r
+
+  Can we insert at rear's next position?
+  (rear+1)%SIZE = (0+1)%5 = 1 = front position!
+  That position already has data (index 1 = value 20)!
+  → Queue IS FULL → we CANNOT insert
+
+  If we insert anyway, we'd OVERWRITE front's data → data loss!
+  So: (rear+1)%SIZE == front → FULL → STOP
+
+NOTE: In this implementation, 1 slot is always WASTED to
+      distinguish between FULL and EMPTY states.
+      A circular queue of SIZE=5 can hold only 4 elements!
+```
+
+### 🚨 PYQ TRAP #1: Circular Queue Capacity
+> A circular queue of declared size N can hold at most **N-1 elements** (not N), because 1 slot is reserved to distinguish full from empty state.
+> Some implementations use a `count` variable to avoid this waste, but the standard exam answer is **N-1**.
+
+---
+
+## 🔷 SECTION 4: Circular Queue — Enqueue & Dequeue
+
+### ENQUEUE Algorithm:
+```
+ENQUEUE(cq, front, rear, SIZE, value):
+  1. Check FULL: if (rear+1)%SIZE == front → "Overflow", stop
+  2. If empty (front==-1): set front=0
+  3. Update rear: rear = (rear+1) % SIZE
+  4. Insert: cq[rear] = value
+```
+
+### DEQUEUE Algorithm:
+```
+DEQUEUE(cq, front, rear, SIZE):
+  1. Check EMPTY: if front==-1 → "Underflow", stop
+  2. Store value: value = cq[front]
+  3. If this was the LAST element (front==rear):
+       Reset: front = -1, rear = -1  (back to empty)
+     Else:
+       Update front: front = (front+1) % SIZE
+  4. Return value
 ```
 
 ---
 
-## 📌 SECTION 4: ADVANTAGES OF CIRCULAR QUEUE
+## 🔷 SECTION 5: Circular Queue — Complete Dry Run
+
+### Setup: Circular Queue of SIZE = 5 (indices 0–4, holds max 4 elements)
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│        CIRCULAR QUEUE vs LINEAR QUEUE                      │
-├────────────────────────┬───────────────────────────────────┤
-│ Feature                │ Circular Queue    Linear Queue    │
-├────────────────────────┼───────────────────────────────────┤
-│ Memory Utilization     │ Efficient ✓       Wasteful ✗      │
-│ False Overflow         │ NOT possible ✓    Possible ✗      │
-│ Wrap-around            │ YES ✓             NO ✗            │
-│ Implementation         │ Slightly complex  Simple          │
-│ Also called            │ Ring Buffer       Normal Queue     │
-└────────────────────────┴───────────────────────────────────┘
-```
+INITIAL STATE: front=-1, rear=-1
+ ┌────┬────┬────┬────┬────┐
+ │ _  │ _  │ _  │ _  │ _  │
+ └────┴────┴────┴────┴────┘
+  [0]  [1]  [2]  [3]  [4]
 
-### Real-World Applications of Circular Queue:
-1. **CPU Scheduling** — Round Robin algorithm uses circular queue
-2. **Traffic Light Control Systems** — Cyclic rotation
-3. **Memory Buffering** — Audio/video streaming buffers
-4. **Producer-Consumer Problem** — In OS
+══════════════════════════════════════
+ENQUEUE 10:
+  Full check: (rear+1)%5 = 0 ≠ front(-1) → not full
+  Empty: front==-1 → set front=0
+  rear = (-1+1)%5 = 0; cq[0] = 10
+  front=0, rear=0
+ ┌────┬────┬────┬────┬────┐
+ │ 10 │ _  │ _  │ _  │ _  │
+ └────┴────┴────┴────┴────┘
+   ↑f,r
+
+══════════════════════════════════════
+ENQUEUE 20:
+  rear = (0+1)%5 = 1; cq[1] = 20
+  front=0, rear=1
+ ┌────┬────┬────┬────┬────┐
+ │ 10 │ 20 │ _  │ _  │ _  │
+ └────┴────┴────┴────┴────┘
+   ↑f    ↑r
+
+══════════════════════════════════════
+ENQUEUE 30:
+  rear = (1+1)%5 = 2; cq[2] = 30
+  front=0, rear=2
+ ┌────┬────┬────┬────┬────┐
+ │ 10 │ 20 │ 30 │ _  │ _  │
+ └────┴────┴────┴────┴────┘
+   ↑f         ↑r
+
+══════════════════════════════════════
+ENQUEUE 40:
+  rear = (2+1)%5 = 3; cq[3] = 40
+  front=0, rear=3
+ ┌────┬────┬────┬────┬────┐
+ │ 10 │ 20 │ 30 │ 40 │ _  │
+ └────┴────┴────┴────┴────┘
+   ↑f              ↑r
+
+══════════════════════════════════════
+ENQUEUE 50 (attempt):
+  Full check: (rear+1)%5 = (3+1)%5 = 4 ≠ 0(front) → not full yet
+  rear = (3+1)%5 = 4; cq[4] = 50
+  front=0, rear=4
+ ┌────┬────┬────┬────┬────┐
+ │ 10 │ 20 │ 30 │ 40 │ 50 │
+ └────┴────┴────┴────┴────┘
+   ↑f                   ↑r
+
+══════════════════════════════════════
+ENQUEUE 60 (attempt):
+  Full check: (rear+1)%5 = (4+1)%5 = 0 == front(0) → OVERFLOW!
+  Cannot insert 60. (SIZE=5 holds max 4 elements)
+
+══════════════════════════════════════
+DEQUEUE:
+  value = cq[front] = cq[0] = 10
+  front ≠ rear (0 ≠ 4), so front = (0+1)%5 = 1
+  front=1, rear=4   RETURNED: 10
+ ┌────┬────┬────┬────┬────┐
+ │ _  │ 20 │ 30 │ 40 │ 50 │
+ └────┴────┴────┴────┴────┘
+         ↑f                ↑r
+  (slot [0] is now FREE and REUSABLE!)
+
+══════════════════════════════════════
+DEQUEUE again:
+  value = cq[1] = 20; front = (1+1)%5 = 2
+  front=2, rear=4   RETURNED: 20
+ ┌────┬────┬────┬────┬────┐
+ │ _  │ _  │ 30 │ 40 │ 50 │
+ └────┴────┴────┴────┴────┘
+              ↑f            ↑r
+
+══════════════════════════════════════
+ENQUEUE 60 (try again after dequeues):
+  Full check: (4+1)%5 = 0 ≠ 2(front) → NOT full!
+  rear = (4+1)%5 = 0; cq[0] = 60   ← WRAPS AROUND!
+  front=2, rear=0
+ ┌────┬────┬────┬────┬────┐
+ │ 60 │ _  │ 30 │ 40 │ 50 │
+ └────┴────┴────┴────┴────┘
+   ↑r        ↑f
+  CIRCULAR WRAP-AROUND ACHIEVED! ✅
+  Index 0 (previously freed by dequeue) is reused!
+```
 
 ---
 
-## 📌 SECTION 5: DEQUE (DOUBLE-ENDED QUEUE)
-
-### What is Deque?
+## 🔷 SECTION 6: Circular Queue State Visualization
 
 ```
-DEQUE = Double-Ended Queue
-      = Insert AND Delete from BOTH ENDS (Front AND Rear)
+Circular structure (SIZE = 5):
 
-Normal Queue:
-Insert → [  ][  ][  ][  ] → Delete
-         REAR              FRONT
-         (only here)       (only here)
+         [0] = 60
+     [4]         [1]
+   50               _
+     [3]         [2]
+         40 [3] is [3]
+              30 at [2]
 
-DEQUE:
-Insert ←→ [  ][  ][  ][  ] ←→ Delete
-          FRONT          REAR
-          (both ends)    (both ends)
+Front (f) at [2] = 30 (next to be served)
+Rear  (r) at [0] = 60 (last inserted)
+
+Order of elements: 30, 40, 50, 60 (FIFO)
+
+FULL condition visualization:
+  (r+1)%5 would equal f → no more space
+
+Empty condition:
+  front == -1 (initial) or front == rear (some implementations)
 ```
 
-### Types of Deque:
+---
 
+## 🔷 SECTION 7: Deque — Double-Ended Queue
+
+### What is a Deque?
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                  TYPES OF DEQUE                             │
-├───────────────────────┬─────────────────────────────────────┤
-│ Input-Restricted      │ • Insert allowed at ONE end ONLY    │
-│ Deque                 │ • Delete allowed at BOTH ends       │
-│                       │ • Front = rear = restricted insert  │
-├───────────────────────┼─────────────────────────────────────┤
-│ Output-Restricted     │ • Insert allowed at BOTH ends       │
-│ Deque                 │ • Delete allowed at ONE end ONLY    │
-│                       │ • Think: Output goes from one side  │
-└───────────────────────┴─────────────────────────────────────┘
+DEQUE (pronounced "deck") = Double-Ended Queue
 
-MEMORY TRICK:
-• Input-Restricted  = "I" → Input restricted → Insert restricted
-• Output-Restricted = "O" → Output restricted → Delete restricted
+A Deque allows insertion and deletion from BOTH ends:
+  → Insert from FRONT
+  → Insert from REAR
+  → Delete from FRONT
+  → Delete from REAR
+
+It is MORE FLEXIBLE than both Stack and Queue.
+A Deque can simulate BOTH Stack and Queue behavior!
 ```
 
-### Deque Visual Diagram:
+### Deque vs Stack vs Queue:
 
+```
+Feature          Stack       Queue       Deque
+─────────────────────────────────────────────────
+Insert at front  ✅(push)   ❌          ✅
+Insert at rear   ❌          ✅(enqueue) ✅
+Delete from front❅(pop)    ✅(dequeue)  ✅
+Delete from rear ❌          ❌          ✅
+Simulates Stack? YES(front ops only) NO  YES
+Simulates Queue? NO     YES(front del, rear ins)  YES
+```
+
+### Deque Operations:
+```
+All Deque operations and their time complexity:
+
+Operation          Action                        Time
+─────────────────────────────────────────────────────
+insertFront(x)     Insert x at front pointer     O(1)
+insertRear(x)      Insert x at rear pointer      O(1)
+deleteFront()      Remove from front             O(1)
+deleteRear()       Remove from rear              O(1)
+getFront()         View front element (no remove) O(1)
+getRear()          View rear element (no remove)  O(1)
+isEmpty()          Check if empty                O(1)
+isFull()           Check if full                 O(1)
+```
+
+---
+
+## 🔷 SECTION 8: Types of Deque
+
+### Type 1: Input-Restricted Deque
 ```
 INPUT-RESTRICTED DEQUE:
-                    Insert ONLY here
-                         ↓
-[  ] ←→ [  ] ←→ [  ] ←→ [  ]
- ↑                          ↑
-Delete                    Delete
-from here                from here
+  → Insertion allowed from ONE end only (rear)
+  → Deletion allowed from BOTH ends
 
+         INSERT only ──→ [REAR] [elements] [FRONT] ←── DELETE
+                                                     ←── DELETE
+
+Real-life analogy: A queue at a service center where you can
+  only join at the back, but can be served from either end
+  (e.g., VIP customers can exit from the front, normal from front,
+   both can leave but only join at rear)
+
+KEY: Input restricted = restricted insert = only rear insert
+```
+
+### Type 2: Output-Restricted Deque
+```
 OUTPUT-RESTRICTED DEQUE:
-Insert here              Insert here
-    ↓                        ↓
-[  ] ←→ [  ] ←→ [  ] ←→ [  ]
- ↑
-Delete ONLY from here
+  → Insertion allowed from BOTH ends
+  → Deletion allowed from ONE end only (front)
+
+  INSERT ──→ [REAR] [elements] [FRONT] ←── DELETE only
+  INSERT ──→ [FRONT]
+
+Real-life analogy: Both regular and express entry allowed
+  (front and rear), but only one exit lane
+
+KEY: Output restricted = restricted delete = only front delete
+```
+
+### Memory Trick:
+```
+INPUT-restricted:   Think "you can only INPUT from one place" (rear)
+                    But OUTPUT from both places
+OUTPUT-restricted:  Think "you can only OUTPUT from one place" (front)
+                    But INPUT from both places
+```
+
+### 🚨 PYQ TRAP #2: Deque Names
+> Input-restricted Deque: Insert only at REAR; Delete from both FRONT and REAR
+> Output-restricted Deque: Delete only from FRONT; Insert from both FRONT and REAR
+> This is frequently confused in exams — focus on which operation is restricted.
+
+---
+
+## 🔷 SECTION 9: Deque Operations — Dry Run
+
+### Example: Output-Restricted Deque, SIZE = 5
+```
+Initial: front=-1, rear=-1, deque = [_|_|_|_|_]
+
+insertRear(10):  rear=0, front=0; deque=[10|_|_|_|_]
+insertRear(20):  rear=1;          deque=[10|20|_|_|_]
+insertFront(5):  front-1 → but front=0, so front=(0-1+SIZE)%SIZE=4
+                            deque=[10|20|_|_|5]  front=4, rear=1
+
+  Visual:
+   [0]  [1]  [2]  [3]  [4]
+   [10 | 20 |  _ |  _ |  5]
+                         ↑f(4)  ↑r(1) — wrapped!
+
+insertRear(30):  rear=(1+1)%5=2; deque=[10|20|30|_|5]
+deleteFront():   value=deque[4]=5; front=(4+1)%5=0
+                 deque=[10|20|30|_|_]  front=0, rear=2
+                 RETURNED: 5
+
+deleteRear():    value=deque[2]=30; rear=(2-1+5)%5=1
+                 deque=[10|20|_|_|_]  front=0, rear=1
+                 RETURNED: 30
+```
+
+### Key Formula for deleteRear (moving rear backward):
+```
+rear = (rear - 1 + SIZE) % SIZE
+
+Why (+SIZE)?  To avoid negative result when rear=0:
+  (0-1) = -1 → WRONG in modulo
+  (0-1+5) = 4 → CORRECT circular backward move
 ```
 
 ---
 
-## 📌 SECTION 6: DEQUE OPERATIONS & COMPLEXITY
+## 🔷 SECTION 10: Delete from Rear — Linked List Context
 
-### Operations Table:
-
+### Important Exam Fact:
 ```
-┌───────────────────────────────────────────────────────────┐
-│                 DEQUE OPERATIONS                          │
-├──────────────────────────┬────────────────────────────────┤
-│ Operation                │ Time Complexity                 │
-├──────────────────────────┼────────────────────────────────┤
-│ Insert at Front          │ O(1)                           │
-│ Insert at Rear           │ O(1)                           │
-│ Delete from Front        │ O(1)                           │
-│ Delete from Rear         │ O(1) with Doubly Linked List   │
-│ Delete from Rear         │ O(N) with Singly Linked List   │
-│ Peek at Front/Rear       │ O(1)                           │
-└──────────────────────────┴────────────────────────────────┘
+SINGLY LINKED LIST: Delete from rear = O(N)
+
+Why? Because in a singly linked list:
+  → Each node only has a NEXT pointer (no PREVIOUS pointer)
+  → To delete the last node, you need to find the SECOND-TO-LAST node
+  → You must traverse from HEAD to find it
+  → This requires O(N) traversal
+
+DOUBLY LINKED LIST: Delete from rear = O(1)
+  → Because each node has BOTH next and prev pointers
+  → Tail's prev pointer directly gives second-to-last node
+
+This is why Deque is more efficiently implemented using
+DOUBLY LINKED LIST than singly linked list!
 ```
 
-### ⚠️ KEY PYQ FACT — TOPPER LEVEL:
-```
-Q: Why is "Delete from Rear" O(N) in Singly Linked List?
-
-Answer: In a Singly Linked List, each node only has a pointer
-        to the NEXT node. There is NO backward pointer.
-        
-        To delete the LAST node, you must:
-        1. Start from HEAD (front)
-        2. Traverse ALL the way to the SECOND-LAST node
-        3. Set second-last's next = NULL
-        
-        This traversal takes O(N) time.
-        
-        With DOUBLY Linked List: O(1) because each node has
-        a PREV pointer — you can reach second-last directly!
-
-BPSC TRAP: "Delete from rear with singly linked list = O(N)"
-           This is a frequently asked PYQ!
-```
+### 🚨 PYQ TRAP #3: Deletion from Rear Complexity
+> In a **Singly Linked List**, deletion from the rear (tail) requires **O(N)** time because you must traverse the entire list to find the second-to-last node.
+> In a **Doubly Linked List**, deletion from rear is **O(1)** due to the `prev` pointer.
 
 ---
 
-## 📌 SECTION 7: STACK vs QUEUE vs DEQUE — MASTER COMPARISON TABLE
+## 🔷 SECTION 11: Circular Queue vs Deque vs Linear Queue — Master Table
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│              COMPLETE COMPARISON TABLE (BPSC TOPPER LEVEL)       │
-├──────────────┬──────────┬────────────────┬────────────────────── │
-│ Feature      │ Stack    │ Queue          │ Deque                 │
-├──────────────┼──────────┼────────────────┼───────────────────────┤
-│ Order        │ LIFO     │ FIFO           │ Both possible         │
-│ Insert End   │ Top only │ Rear only      │ Both ends             │
-│ Delete End   │ Top only │ Front only     │ Both ends             │
-│ Use for      │Recursion,│CPU scheduling, │Palindrome check,      │
-│              │Undo ops  │BFS, spooling   │Sliding window         │
-│ Overflow     │ Top=MAX  │ rear=MAX-1     │ Both ends full        │
-│ Underflow    │ Top=-1   │ front=-1       │ Both ends empty       │
-└──────────────┴──────────┴────────────────┴───────────────────────┘
+Feature              Linear Queue    Circular Queue    Deque
+─────────────────────────────────────────────────────────────────
+Insert at front      ❌               ❌                ✅
+Insert at rear       ✅               ✅                ✅
+Delete from front    ✅               ✅                ✅
+Delete from rear     ❌               ❌                ✅
+Full condition       rear==MAX-1     (r+1)%S==front    (r+1)%S==front
+Empty condition      front==-1       front==-1         front==-1
+Memory wastage       YES (false OFW) NO (reuses slots) NO
+Flexibility          Low             Medium            High
+Use case             Simple FIFO     Buffer (audio,IO) Editor (undo+redo)
 ```
 
 ---
 
-## 📌 SECTION 8: PRIORITY QUEUE — BRIEF PREVIEW (PYQ CONNECTION)
+## 📊 VISUAL SUMMARY — Circular Queue & Deque
 
 ```
-Priority Queue ≠ Normal Queue (FIFO)
-Priority Queue = Element with HIGHEST PRIORITY leaves first
-               = NOT based on arrival order
+CIRCULAR QUEUE (Ring Buffer):
+         ┌──── CIRCULAR WRAP ─────┐
+         ↓                        ↑
+  [0] → [1] → [2] → [3] → [4] → back to [0]
 
-Implementation:
-┌─────────────────────────────────────────────────────────────┐
-│ Best Implementation: BINARY HEAP                            │
-│   • Min-Heap → Smallest element = Highest priority         │
-│   • Max-Heap → Largest element = Highest priority          │
-│ Applications: Dijkstra's algorithm, Huffman coding,        │
-│               CPU scheduling                               │
-└─────────────────────────────────────────────────────────────┘
+  rear = (rear+1)%SIZE  ← enqueue
+  front = (front+1)%SIZE ← dequeue
+  FULL: (rear+1)%SIZE == front
+  EMPTY: front == -1
 
-BPSC PYQ: "Which data structure is best for Priority Queue?"
-          Answer: Binary Heap (not sorted array, not linked list)
-```
-
----
-
-## 📌 SECTION 9: PYQ ANALYSIS — CIRCULAR QUEUE & DEQUE
-
-### From TRE 1.0, 2.0, 3.0 Papers:
-
-| PYQ Topic | Paper | Frequency |
-|-----------|-------|-----------|
-| Circular Queue full condition | TRE 1.0, 2.0 | High |
-| Ring Buffer = Circular Queue | TRE 2.0 | Medium |
-| Deque types (input/output restricted) | TRE 1.0, 3.0 | High |
-| Delete from rear: Singly LL = O(N) | TRE 2.0, 3.0 | High |
-| Why circular queue? Memory wastage | TRE 1.0 | High |
-| Difference: empty vs full condition | TRE 3.0 | Medium |
-
-### ⚡ QUICK REVISION — 10 MUST-REMEMBER FACTS:
-
-```
-1. Circular Queue = Ring Buffer (same thing, different names!)
-2. Created to solve: MEMORY WASTAGE / False Overflow in Linear Queue
-3. EMPTY Condition: front == rear == -1
-4. FULL Condition: (rear + 1) % SIZE == front
-5. Enqueue formula: rear = (rear + 1) % SIZE
-6. Dequeue formula: front = (front + 1) % SIZE
-7. Deque = Insert AND Delete from BOTH ends
-8. Input-Restricted Deque: Insert from ONE end only
-9. Output-Restricted Deque: Delete from ONE end only
-10. Delete from rear in Singly LL = O(N) because no backward pointer!
+DEQUE (Double-Ended Queue):
+  ←DELETE/INSERT   [FRONT] ... [REAR]   DELETE/INSERT→
+  All 4 operations: O(1)
+  
+  INPUT-RESTRICTED:  Insert REAR only; Delete BOTH ends
+  OUTPUT-RESTRICTED: Delete FRONT only; Insert BOTH ends
+  
+  Best implemented with: DOUBLY LINKED LIST
+  deleteRear in singly LL: O(N) — PYQ trap!
 ```
 
 ---
+---
 
-# ═══════════════════════════════════════════
-# 🌏 GENERAL STUDIES — INDIA CLIMATE & MONSOON
-# ═══════════════════════════════════════════
-> Reference: Lucent GK — Section 3.10 (Climate of India), Section 3.7 (Weather & Climate)
+# PART 2: GENERAL STUDIES
+## 🌧️ India Climate — The Monsoon System
 
 ---
 
-## 📌 SECTION 10: INDIA'S CLIMATE — OVERVIEW
+## 🔷 WHY THIS MATTERS FOR BPSC TRE:
+- Monsoon is the most tested climate topic in Indian geography
+- SW/NE monsoon direction, onset dates, and regional effects = PYQ favourites
+- Agriculture dependence on monsoon = Bihar-specific context
 
-### India is a TROPICAL MONSOON country:
+---
 
+## 🔷 WHAT IS MONSOON?
+
+### Definition:
 ```
-INDIA'S CLIMATE TYPE:
-┌─────────────────────────────────────────────────────────────┐
-│ Climate Type: Tropical Monsoon                              │
-│ Why? Most of India lies between Tropic of Cancer (23.5°N)  │
-│      and the Equator → Tropical zone                       │
-│ Monsoon = Arabic word "MAUSAM" meaning SEASON              │
-│ Controlling factor: MONSOON WINDS                          │
-└─────────────────────────────────────────────────────────────┘
-```
+"Monsoon" comes from the Arabic word "MAUSAM" meaning SEASON.
+Monsoon = a seasonal reversal of wind direction.
+  Summer → winds blow from SEA to LAND (bring rain)
+  Winter → winds blow from LAND to SEA (dry)
 
-### The 4 Seasons of India:
-
-```
-┌──────────────────────────────────────────────────────────────┐
-│               INDIA'S 4 SEASONS (IMD Classification)        │
-├───────────────┬────────────────┬──────────────────────────── │
-│ Season        │ Months         │ Key Feature                 │
-├───────────────┼────────────────┼─────────────────────────────┤
-│ 1. Winter     │ Dec – Feb      │ NE trade winds, cold & dry  │
-│ 2. Pre-Monsoon│ Mar – May      │ Hot & dry, dust storms (NW) │
-│   (Hot Season)│                │ "Loo" wind in North India   │
-│ 3. SW Monsoon │ Jun – Sep      │ Most rainfall (~75% annual) │
-│   (Rainy)     │                │ Arabian Sea + Bay of Bengal │
-│ 4. NE Monsoon │ Oct – Nov      │ Rain in Tamil Nadu, AP      │
-│   (Retreating)│                │ Also called "winter monsoon"│
-└───────────────┴────────────────┴─────────────────────────────┘
+India's agriculture is 60–70% dependent on monsoon rainfall.
 ```
 
-### KEY PYQ FACT: LOO WIND
+### Why Does Monsoon Happen — Basic Mechanism:
 ```
-LOO = Hot, dry, dusty wind
-    = Blows in: North India & Pakistan
-    = Blows in: Summer (May–June)
-    = Direction: West to East
-    = Can cause HEAT STROKE — dangerous!
+STEP-BY-STEP MONSOON MECHANISM:
+
+SUMMER (June–September):
+  1. Indian landmass heats up rapidly (land heats faster than sea)
+  2. A strong LOW PRESSURE area forms over India (especially NW India)
+  3. The Indian Ocean stays relatively COOLER → HIGH PRESSURE
+  4. Winds ALWAYS blow from HIGH pressure to LOW pressure
+  5. So: winds blow from Indian Ocean (high) → Indian landmass (low)
+  6. These moisture-laden winds = SOUTHWEST MONSOON
+
+WINTER (October–February):
+  1. Land cools rapidly; sea stays warmer
+  2. HIGH PRESSURE forms over land; LOW PRESSURE over sea
+  3. Winds reverse: blow from land to sea
+  4. These dry winds from NE = NORTHEAST MONSOON
+     (picks up moisture over Bay of Bengal → brings rain to SE India)
+
+This reversal of wind direction = MONSOON
 ```
 
 ---
 
-## 📌 SECTION 11: THE MONSOON MECHANISM — HOW IT WORKS
+## 🔷 TWO BRANCHES OF SOUTHWEST MONSOON
 
-### Step-by-Step Monsoon Formation:
-
-```
-SOUTHWEST MONSOON MECHANISM:
-
-STEP 1: HEATING OF LAND (April-May)
-        The Indian subcontinent heats up rapidly
-        Land heats FASTER than sea
-        Hot air rises → LOW PRESSURE created over India
-        
-        INDIA [HOT AIR RISING ↑]        INDIAN OCEAN [COOL]
-              LOW PRESSURE                  HIGH PRESSURE
-        
-STEP 2: PRESSURE GRADIENT
-        Air flows from HIGH pressure to LOW pressure
-        Wind blows: Ocean → Land (from SW direction)
-        
-STEP 3: MOISTURE PICKUP
-        Winds cross the warm Indian Ocean
-        Pick up enormous MOISTURE (water vapor)
-        
-STEP 4: LANDFALL & RAINFALL
-        Winds hit the Western Ghats → OROGRAPHIC RAINFALL
-        Western slopes → Heavy rain (Windward side)
-        Eastern slopes → Rain shadow zone (Leeward/Lee side)
-        
-STEP 5: ADVANCEMENT
-        Two branches reach India in JUNE:
-        ┌─────────────────────────────────────┐
-        │ Arabian Sea Branch → Hits Kerala    │
-        │                    → Western Ghats  │
-        │                    → Reaches NW     │
-        ├─────────────────────────────────────┤
-        │ Bay of Bengal Branch → Hits Myanmar │
-        │                      → NE India     │
-        │                      → Gangetic Plain│
-        └─────────────────────────────────────┘
-```
-
-### The Monsoon Arrives — Dates to Remember:
+### The Southwest Monsoon splits into two branches:
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│              MONSOON ARRIVAL DATES (PYQ HOTSPOT!)           │
-├──────────────────────────────┬───────────────────────────────┤
-│ Region                       │ Arrival Date                  │
-├──────────────────────────────┼───────────────────────────────┤
-│ Kerala (FIRST to receive)    │ 1st June (approx.)            │
-│ Mumbai                       │ 10th June                     │
-│ Delhi                        │ 29th June – 1st July          │
-│ Bihar / Jharkhand            │ 10th – 15th June              │
-│ All of India covered         │ By 15th July                  │
-├──────────────────────────────┼───────────────────────────────┤
-│ Withdrawal starts from       │ 1st September (NW India)      │
-│ Withdrawal from Kerala       │ October end                   │
-└──────────────────────────────┴───────────────────────────────┘
+SW MONSOON BRANCHES:
+              Bay of Bengal Branch
+             ↗ (hits Assam, NE India, Bihar, UP, NW India)
+Arabian Sea
+         ↖
+          Arabian Sea Branch
+             ↘ (hits Western Ghats first, then moves NE)
+```
 
-MEMORY TRICK: "Kerela Welcomes Monsoon on June 1st"
-              KW = Kerala → Winter (June 1st entry point)
+### Branch 1: Arabian Sea Branch
+```
+Origin:        Arabian Sea
+Direction:     Hits Western Ghats first (June 1 — Kerala)
+Effect on WG:  HEAVY rain on windward side (west-facing slope)
+               Western Ghats = highest rainfall in India
+               Mawsynram/Cherrapunji = world's wettest places nearby
+Rain shadow:   Leeward (east) side of Western Ghats gets LESS rain
+               → Deccan Plateau interior is DRY
+Further path:  Moves northeast → meets Bay of Bengal branch
+               → Together bring rain to rest of India
+```
+
+### Branch 2: Bay of Bengal Branch
+```
+Origin:        Bay of Bengal
+Direction:     Hits Assam, northeastern India, then deflected by
+               Himalayas → moves westward along Gangetic plain
+Effect:        Brings rain to Bihar, UP, and northwest India
+Bihar Rain:    Bihar receives 80–90% of annual rainfall from
+               Bay of Bengal Branch of SW Monsoon
+               (Average: ~1100-1200 mm annually)
 ```
 
 ---
 
-## 📌 SECTION 12: RAINFALL DISTRIBUTION IN INDIA
+## 🔷 SOUTHWEST MONSOON (JUNE–SEPTEMBER)
 
-### Highest & Lowest Rainfall Areas:
-
+### Key Facts:
 ```
-┌──────────────────────────────────────────────────────────────┐
-│            RAINFALL EXTREMES (PYQ REPEATED!)                │
-├──────────────────────────┬───────────────────────────────────┤
-│ HIGHEST Rainfall         │                                   │
-│ Place                    │ Mawsynram, Meghalaya              │
-│ State                    │ Meghalaya                         │
-│ Avg Annual Rainfall      │ ~11,871 mm (WORLD'S HIGHEST)      │
-│ Previous Record Holder   │ Cherrapunji (also in Meghalaya)   │
-├──────────────────────────┼───────────────────────────────────┤
-│ LOWEST Rainfall          │                                   │
-│ Place                    │ Leh, Ladakh / Jaisalmer           │
-│ Region                   │ Thar Desert / Cold Desert Ladakh  │
-│ Avg Annual Rainfall      │ Less than 50 mm                   │
-└──────────────────────────┴───────────────────────────────────┘
+Origin:        Indian Ocean + Arabian Sea + Bay of Bengal
+Direction:     SOUTH to NORTH (enters India from south/southwest)
+Season:        June to September (4 months)
+Onset:         June 1 — Kerala (southwest tip of India)
+               June 10-15 — Mumbai
+               June end — Delhi
+               July first week — reaches entire India
 
-BIHAR SPECIFIC: Bihar receives GOOD rainfall from Bay of Bengal
-branch of SW Monsoon (June-September)
-Average annual rainfall in Bihar: 1000-1200 mm
+Normal retreat: September 1 — Rajasthan (starts retreating NW first)
+                October 15 — retreats from most of peninsular India
+                November 15 — retreats completely from India
+
+Rainfall share: Provides ~75–80% of India's TOTAL annual rainfall!
 ```
 
-### Rain Shadow Zone:
-
+### Onset Dates — EXAM CRITICAL:
 ```
-WINDWARD vs LEEWARD SIDE:
+June 1    → Kerala (Thiruvananthapuram)
+June 7-10 → Goa/Karnataka
+June 10-15 → Mumbai
+June 20-25 → Bihar / Eastern India
+July 1    → Delhi / Most of North India
+July 15   → Entire country covered
 
-                    ↑ Moist Wind
-         RAIN       |
-         Heavy ↑    |    Lee (Rain Shadow)
-              _____/\_____ 
-             /  Western   \  
-            /    Ghats     \  DRY
-           /     (High      \ 
-ARABIAN   /      Rainfall)   \  DECCAN
-SEA       ✓                   X  PLATEAU
-                               (Low Rainfall)
-
-Western Ghats Windward side: Kerala, Goa, Konkan → Very HIGH rainfall
-Western Ghats Leeward side: Deccan Plateau, Marathwada → LOW rainfall
-
-BPSC TRAP: "Which state lies in rain shadow of Western Ghats?"
-Answer: Parts of Maharashtra, Karnataka (Deccan Plateau side)
+"June 1 = Monsoon enters Kerala" — most asked date fact
 ```
+
+### 🚨 PYQ TRAP: Mawsynram vs Cherrapunji
+> **Mawsynram** (Meghalaya) — officially the world's wettest place (~11,871 mm annual rainfall)
+> **Cherrapunji** (Sohra, Meghalaya) — second, also extremely wet (~11,430 mm)
+> Both in Meghalaya, both in the funnel of Bay of Bengal branch of SW monsoon
+> Both face the Bay of Bengal branch head-on due to hill topography
 
 ---
 
-## 📌 SECTION 13: PRESSURE BELTS & WIND SYSTEMS
+## 🔷 NORTHEAST MONSOON (OCTOBER–DECEMBER)
 
-### Global Pressure Belts:
+### Key Facts:
+```
+Origin:          Forms over Central Asia / Northwest India as land cools
+Direction:       NORTH to SOUTH, from land toward Bay of Bengal
+Season:          October to December
+Which state affected MOST: Tamil Nadu (southeast India)
+Why Tamil Nadu?  The NE monsoon blows from NE to SW
+               → Picks up moisture from Bay of Bengal
+               → Hits southeastern coast = Tamil Nadu coast = HEAVY RAIN
+               → Rest of India gets DRY weather during this period
+
+Tamil Nadu = Unique among Indian states:
+  → Gets rain from BOTH Southwest (June-Sept) AND Northeast (Oct-Dec) monsoon
+  → Chennai's October-December = wettest period (from NE monsoon)
+```
+
+### 🚨 PYQ TRAP: Northeast Monsoon
+> The Northeast Monsoon brings rain to **Tamil Nadu**, not to Bihar, UP, or Maharashtra.
+> While the rest of India has its dry winter season, Tamil Nadu enjoys heavy rainfall.
+> This is why Cyclone season in Bay of Bengal coincides with NE monsoon (Oct-Dec).
+
+---
+
+## 🔷 MONSOON ONSET MECHANISM — PRESSURE SYSTEMS
 
 ```
-90°N ← Arctic → HIGH PRESSURE (Polar High)
-60°N            LOW PRESSURE (Sub-polar Low)
-30°N            HIGH PRESSURE (Sub-tropical High / Horse Latitudes)
- 0°             LOW PRESSURE (Equatorial Low / Doldrums)
-30°S            HIGH PRESSURE (Sub-tropical High)
-60°S            LOW PRESSURE (Sub-polar Low)
-90°S → Antarctic → HIGH PRESSURE (Polar High)
-```
+INTER TROPICAL CONVERGENCE ZONE (ITCZ):
+  → A belt of low pressure near the equator
+  → Moves northward in summer (May-June) as the sun moves north
+  → When ITCZ shifts over the Indian subcontinent → SW monsoon onset
+  → Also called the "Monsoon Trough"
 
-### Wind Systems:
+MASCARENE HIGH:
+  → High pressure system near Mascarene Islands (south of Madagascar)
+  → The source of SW monsoon winds in summer
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│                  MAJOR WIND SYSTEMS                         │
-├────────────────┬─────────────────────────────────────────── │
-│ Wind Name      │ Direction & Region                         │
-├────────────────┼────────────────────────────────────────────┤
-│ Trade Winds    │ 30° → 0° (towards Equator)                │
-│                │ NE Trade Winds (N Hemisphere)              │
-│                │ SE Trade Winds (S Hemisphere)              │
-├────────────────┼────────────────────────────────────────────┤
-│ Westerlies     │ 30° → 60° (towards poles)                 │
-│                │ SW Westerlies (N Hemisphere)               │
-│                │ NW Westerlies (S Hemisphere)               │
-├────────────────┼────────────────────────────────────────────┤
-│ Polar Easterly │ 90° → 60° (towards equator)               │
-│                │ From Polar High → Sub-polar Low            │
-└────────────────┴────────────────────────────────────────────┘
-
-MEMORY TRICK: "Trade — Westerly — Polar" = T-W-P
-               Corresponds to: 0-30, 30-60, 60-90 degrees
+TIBETAN PLATEAU HEATING:
+  → Tibetan Plateau at very high altitude heats up significantly
+  → Creates additional upper-level high pressure in summer
+  → Strengthens the low pressure system over India
+  → Acts as a heat engine driving monsoon circulation
 ```
 
 ---
 
-## 📌 SECTION 14: CYCLONES & EL NIÑO — PYQ TOPICS
-
-### Cyclone vs Anticyclone:
+## 🔷 IMPORTANT RAINFALL REGIONS IN INDIA
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│             CYCLONE vs ANTICYCLONE                          │
-├─────────────────────┬────────────────────────────────────── │
-│ Feature             │ Cyclone        │ Anticyclone           │
-├─────────────────────┼────────────────┼───────────────────────┤
-│ Pressure Center     │ LOW Pressure   │ HIGH Pressure         │
-│ Wind Direction (N)  │ Anticlockwise  │ Clockwise             │
-│ Wind Direction (S)  │ Clockwise      │ Anticlockwise         │
-│ Weather             │ Stormy, Rainy  │ Clear, Fair           │
-│ Also called         │ Hurricane (Atl)│ -                     │
-│                     │ Typhoon (Pac)  │                       │
-└─────────────────────┴────────────────┴───────────────────────┘
+VERY HIGH RAINFALL (>200 cm):
+  → Assam, Meghalaya (Mawsynram/Cherrapunji)
+  → Western Ghats (Konkan coast, Kerala, Goa)
+  → Andaman & Nicobar Islands
+  → Northeastern states
 
-BPSC PYQ: "In Northern Hemisphere, cyclone rotates ___?"
-Answer: Anticlockwise (due to Coriolis effect)
+HIGH RAINFALL (100–200 cm):
+  → Most of Bihar, Bengal
+  → Coastal Odisha, AP
+  → Western Maharashtra
+
+MODERATE RAINFALL (50–100 cm):
+  → Most of the Deccan Plateau
+  → Punjab, Haryana, UP (western)
+
+LOW RAINFALL (<50 cm):
+  → Rajasthan desert (Thar)
+  → Gujarat interior
+  → Leh-Ladakh
+  → Rain shadow areas behind Western Ghats
 ```
 
-### El Niño & La Niña:
-
+### Bihar Rainfall Profile:
 ```
-EL NIÑO:
-• Spanish for "The Boy/Christ Child"
-• Unusual WARMING of Pacific Ocean waters (near Peru)
-• Effect on India: WEAKER monsoon → DROUGHT conditions
-• Occurs every 2-7 years
-• India 2002 drought was linked to El Niño
-
-LA NIÑA (opposite of El Niño):
-• Unusual COOLING of Pacific Ocean waters
-• Effect on India: STRONGER monsoon → Excess rainfall
-• Floods in India more likely during La Niña years
-
-INDIAN OCEAN DIPOLE (IOD):
-• Temperature difference between W and E Indian Ocean
-• Positive IOD → MORE rainfall in India
-• Negative IOD → LESS rainfall in India
+Bihar:
+  → Annual rainfall: ~1100 mm (north Bihar gets more, south less)
+  → Season: June to September (4 months of SW monsoon)
+  → Source: Bay of Bengal branch of SW monsoon
+  → North Bihar: higher rainfall (Himalayan rivers also contribute floods)
+  → South Bihar: moderate rainfall, less flood-prone
+  → Kosi region (Supaul, Saharsa): among highest rainfall in Bihar
 ```
 
 ---
 
-## 📌 SECTION 15: TYPES OF RAINFALL IN INDIA
+## 🔷 MONSOON & AGRICULTURE — INDIA'S DEPENDENCE
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                  TYPES OF RAINFALL                          │
-├──────────────────┬───────────────────────────────────────── │
-│ Type             │ Cause                   │ Example Region │
-├──────────────────┼─────────────────────────┼───────────────-│
-│ Orographic       │ Wind hits mountains      │ Western Ghats, │
-│ (Relief)         │ → forced to rise → rain  │ NE India       │
-├──────────────────┼─────────────────────────┼────────────────│
-│ Convectional     │ Hot land heats air       │ Equatorial     │
-│                  │ → air rises → condenses  │ regions, NE    │
-│                  │ → heavy local rain       │ India summers  │
-├──────────────────┼─────────────────────────┼────────────────│
-│ Cyclonic         │ Air masses meet          │ Temperate      │
-│ (Frontal)        │ → fronts form → rain     │ regions, W     │
-│                  │                          │ disturbances   │
-└──────────────────┴─────────────────────────┴────────────────┘
+India's agricultural calendar revolves entirely around monsoon:
 
-WESTERN DISTURBANCES:
-• Extra-tropical cyclones from Mediterranean Sea
-• Bring WINTER RAIN to NW India (Punjab, Haryana, UP, Bihar)
-• IMPORTANT for RABI crops (wheat!)
-• Bihar receives some Western Disturbance rainfall in winter
+KHARIF CROPS (Monsoon/Summer crops):
+  Sowing: June-July (with monsoon onset)
+  Harvest: September-October
+  Examples: Rice, Maize, Cotton, Soybean, Jowar, Bajra, Groundnut
+  → Bihar's main Kharif crop = RICE (paddy)
+
+RABI CROPS (Winter crops):
+  Sowing: October-November (after monsoon withdrawal)
+  Harvest: March-April
+  Examples: Wheat, Mustard, Peas, Barley, Gram
+  → Bihar's main Rabi crop = WHEAT + MUSTARD
+
+ZAID CROPS (Summer/spring):
+  Between Rabi harvest and Kharif sowing
+  Examples: Watermelon, Cucumber, Pumpkin, Sunflower
 ```
+
+### 🚨 PYQ Fact: Monsoon Failure = Food Security Crisis
+> When SW monsoon fails or is deficient (< 90% of normal rainfall), India experiences drought conditions → Kharif crop failure → food inflation. This is why the Budget speech often mentions "good monsoon outlook."
 
 ---
 
-## 📌 SECTION 16: BIHAR — CLIMATE SPECIFIC FACTS (HIGH PYQ VALUE!)
+## 🔷 CYCLONES — MONSOON RELATED
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│              BIHAR CLIMATE — MUST KNOW FOR BPSC             │
-├──────────────────────────────────────────────────────────────┤
-│ Climate type: Sub-tropical Humid Monsoon                     │
-│                                                              │
-│ Summer (Apr-Jun): Very hot; max temp 40-45°C                │
-│ "Loo" wind blows in Bihar in summer                         │
-│                                                              │
-│ Monsoon (Jun-Sep): Bay of Bengal branch brings rain         │
-│ Annual rainfall: 1000-1200 mm (good for agriculture)        │
-│                                                              │
-│ Winter (Nov-Feb): Cold; influenced by Western Disturbances  │
-│ Fog is common in Ganga plains during winter                 │
-│                                                              │
-│ HIGHEST RAINFALL DISTRICT IN BIHAR:                         │
-│ → Kishanganj (far NE Bihar, near Nepal/Bengal border)       │
-│ → Gets extra rainfall from Bay of Bengal + Himalayas       │
-│                                                              │
-│ LOWEST RAINFALL AREA IN BIHAR:                              │
-│ → Gaya, Jehanabad area (semi-arid pockets in south Bihar)   │
-│                                                              │
-│ RIVERS in Bihar receive heavy rain in monsoon →             │
-│ Kosi, Gandak, Bagmati, Kamla-Balan rivers flood annually   │
-│ Kosi = "Sorrow of Bihar" due to repeated floods            │
-└──────────────────────────────────────────────────────────────┘
+BAY OF BENGAL is WARMER than Arabian Sea:
+  → More cyclones form in Bay of Bengal (approx. 6 times more)
+  → Arabian Sea cyclones: less frequent but affect Gujarat, Maharashtra
+
+Cyclone Season (Bay of Bengal):
+  → PRE-MONSOON: April-May (hits Odisha, AP, WB coast)
+  → POST-MONSOON: October-December (hits Tamil Nadu, AP coast)
+     ← This coincides with NE monsoon season
+
+Famous Bihar cyclone impact: Kosi floods are often worsened by
+cyclonic systems in Bay of Bengal during October
 ```
 
 ---
 
-## 📌 SECTION 17: CLIMATIC REGIONS OF INDIA
+## 🔷 MEMORY TRICKS — Monsoon
 
+### SW vs NE Monsoon Quick Recall:
 ```
-┌──────────────────────────────────────────────────────────────┐
-│           CLIMATIC REGIONS OF INDIA (Trewartha's)           │
-├───────────────────────┬──────────────────────────────────── │
-│ Region/Climate Type   │ Area                                │
-├───────────────────────┼─────────────────────────────────────┤
-│ Tropical Rainforest   │ Western Ghats, Andaman & Nicobar   │
-│ Tropical Savanna      │ Interior Peninsular India          │
-│ Arid/Semi-arid        │ Rajasthan, Gujarat (Thar Desert)   │
-│ Humid Subtropical     │ Gangetic Plains (Bihar!) + Punjab  │
-│ Humid Tropical (NE)   │ Assam, Meghalaya → Highest rain    │
-│ Alpine / Tundra       │ High altitude Himalayas            │
-│ Coastal Tropical      │ Kerala, Konkan, Coastal TN         │
-└───────────────────────┴─────────────────────────────────────┘
+"SW MONSOON = SUMMER = SEA to LAND = JUNE to SEPT = WESTERN/NORTHERN India"
+"NE MONSOON = WINTER = LAND to SEA = OCT to DEC = TAMIL NADU only"
 ```
 
----
-
-## 📌 SECTION 18: GS QUICK FACTS TABLE — TOPPER REVISION
-
+### Monsoon Onset Sequence (North to South retreat, South to North onset):
 ```
-┌──────────────────────────────────────────────────────────────┐
-│         30 RAPID-FIRE FACTS — INDIA CLIMATE (PYQs)          │
-├─────────────────────────────────────────────────────────────┤
-│  1. India = Tropical Monsoon climate country                 │
-│  2. Monsoon word from: Arabic "Mausam" = Season              │
-│  3. SW Monsoon enters India via: Kerala (June 1)            │
-│  4. 75% of India's annual rain from: SW Monsoon             │
-│  5. Highest rainfall place: Mawsynram, Meghalaya            │
-│  6. Previous record: Cherrapunji, Meghalaya                 │
-│  7. Lowest rainfall: Leh-Ladakh / Thar Desert               │
-│  8. Loo = Hot dry wind, North India, summer months         │
-│  9. Rain Shadow = Deccan Plateau (leeward of W. Ghats)      │
-│ 10. El Niño = Weak monsoon in India                         │
-│ 11. La Niña = Strong monsoon in India                       │
-│ 12. Western Disturbances = Winter rain to NW India         │
-│ 13. NE Monsoon gives rain to: Tamil Nadu, Andhra Pradesh   │
-│ 14. Cyclone in N Hemisphere rotates: Anticlockwise         │
-│ 15. Anticyclone = High pressure, clear weather             │
-│ 16. Kosi = Sorrow of Bihar (floods every year)             │
-│ 17. Bihar gets rain from: Bay of Bengal branch            │
-│ 18. Bihar climate type: Sub-tropical Humid Monsoon         │
-│ 19. Orographic rain = Wind hits mountain → rises → rains  │
-│ 20. Convectional rain = Hot surface heats air → rises     │
-│ 21. Four seasons: Winter, Hot (Pre-monsoon), Monsoon, NE  │
-│ 22. Monsoon retreats from NW India by: September           │
-│ 23. IOD Positive = MORE rain in India                      │
-│ 24. Kishanganj = Highest rainfall district in Bihar        │
-│ 25. Thar Desert = Hottest desert of India                  │
-│ 26. Coromandel Coast = Rain in October-December (NE moon.) │
-│ 27. Arabian Sea branch hits: Western Ghats (Kerala first) │
-│ 28. Bay of Bengal branch hits: NE India first             │
-│ 29. Trade winds blow: From subtropical high → equator     │
-│ 30. Westerlies blow: From subtropical high → 60° latitude │
-└──────────────────────────────────────────────────────────────┘
+ONSET (south to north): Kerala June 1 → Bihar June 20 → Delhi July 1
+RETREAT (north to south): Rajasthan Sept 1 → retreats by Nov 15
+```
+
+### Wettest Places:
+```
+"Mawsynram = Most Wet" (M for Most, M for Mawsynram)
+Both Mawsynram AND Cherrapunji = Meghalaya = Bay of Bengal branch monsoon
 ```
 
 ---
 
-# ═══════════════════════════════════════════
-# 📝 PRACTICE QUESTIONS — DAY 19
-# ═══════════════════════════════════════════
+# PART 3: PRACTICE QUESTIONS
 
-> ⚠️ **INSTRUCTION:** Solve ALL 50 questions FIRST.
-> **DO NOT look at answers until you have attempted every question.**
-> Answers are given ONLY at the very END of this document.
-> Option D = "More than one of the above" | Option E = "None of the above"
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: Circular Queue, Deque, Ring Buffer, Conditions, Complexity
 
 ---
 
-## 🖥️ CS QUESTIONS (Q1–Q25): Circular Queue & Deque
+**Q1.** What is the full form of "Deque"?
+(A) Delayed Queue
+(B) Double-Ended Queue
+(C) Dynamic Queue
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q1.** A Circular Queue is also commonly referred to as:
-- (A) Linear Buffer
-- (B) Ring Buffer
-- (C) Double Buffer
-- (D) More than one of the above
-- (E) None of the above
+**Q2.** What is the full condition for a Circular Queue (SIZE = N)?
+(A) rear == N - 1
+(B) front == rear
+(C) (rear + 1) % N == front
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q2.** The primary reason for using a Circular Queue over a Linear Queue is:
-- (A) Faster insertion time
-- (B) Avoiding memory wastage / false overflow
-- (C) Simpler implementation
-- (D) More than one of the above
-- (E) None of the above
+**Q3.** A Circular Queue of declared SIZE = 6 can hold a maximum of how many elements (standard implementation)?
+(A) 6
+(B) 7
+(C) 5
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q3.** In a Circular Queue of SIZE = 8, the condition to check if the queue is FULL is:
-- (A) rear == SIZE - 1
-- (B) front == rear
-- (C) (rear + 1) % SIZE == front
-- (D) More than one of the above
-- (E) None of the above
+**Q4.** In a Circular Queue, after enqueuing to the LAST index (SIZE-1), the next rear position becomes:
+(A) SIZE
+(B) -1
+(C) 0 (wraps around)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q4.** In a Circular Queue, the initial (EMPTY) state is indicated by:
-- (A) front = 0, rear = 0
-- (B) front = -1, rear = 0
-- (C) front = -1, rear = -1
-- (D) More than one of the above
-- (E) None of the above
+**Q5.** The formula to update `rear` in a Circular Queue after enqueue is:
+(A) rear = rear + 1
+(B) rear = rear % SIZE
+(C) rear = (rear + 1) % SIZE
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q5.** Consider a Circular Queue with SIZE = 5. Current state: front = 2, rear = 2. What does this imply?
-- (A) Queue is FULL
-- (B) Queue has exactly one element
-- (C) Queue is EMPTY (just became empty after dequeue)
-- (D) More than one of the above
-- (E) None of the above
+**Q6.** What is the EMPTY condition of a Circular Queue (initial state)?
+(A) front == rear == 0
+(B) front == rear == -1
+(C) rear == SIZE - 1
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q6.** When we perform an ENQUEUE operation in a Circular Queue, the rear pointer is updated as:
-- (A) rear = rear + 1
-- (B) rear = (rear + 1) / SIZE
-- (C) rear = (rear + 1) % SIZE
-- (D) More than one of the above
-- (E) None of the above
+**Q7.** A Circular Queue is also called:
+(A) Priority Buffer
+(B) Ring Buffer
+(C) Circular Stack
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q7.** In a Circular Queue of SIZE = 6, if rear = 5 and we enqueue one more element, the new value of rear is:
-- (A) 6
-- (B) -1
-- (C) 0
-- (D) More than one of the above
-- (E) None of the above
+**Q8.** Which problem of the Linear Queue is solved by Circular Queue?
+(A) Slow insertion speed
+(B) High memory usage for single elements
+(C) False overflow — memory wastage due to front moving forward
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q8.** Which of the following statements about Deque is CORRECT?
-- (A) Deque allows insertion from front and rear both
-- (B) Deque allows deletion from front and rear both
-- (C) Deque stands for Double-Ended Queue
-- (D) More than one of the above
-- (E) None of the above
+**Q9.** In a Deque, which operations are allowed?
+(A) Insert at front only
+(B) Delete from rear only
+(C) Insert and delete from BOTH front and rear
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q9.** In an Input-Restricted Deque:
-- (A) Insertion is allowed from ONE end only
-- (B) Deletion is allowed from BOTH ends
-- (C) It is a type of Deque
-- (D) More than one of the above
-- (E) None of the above
+**Q10.** An Input-Restricted Deque allows:
+(A) Insertion from both ends; deletion from front only
+(B) Insertion from rear only; deletion from both ends
+(C) Insertion and deletion from both ends
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q10.** In an Output-Restricted Deque:
-- (A) Insertion is allowed from BOTH ends
-- (B) Deletion is allowed from ONE end only
-- (C) It restricts the output (delete) to one end
-- (D) More than one of the above
-- (E) None of the above
+**Q11.** An Output-Restricted Deque allows:
+(A) Insertion from both ends; deletion from front only
+(B) Insertion from rear only; deletion from both ends
+(C) Insertion and deletion from both ends
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q11.** The time complexity of deleting an element from the REAR of a Deque implemented using a SINGLY Linked List is:
-- (A) O(1)
-- (B) O(log N)
-- (C) O(N)
-- (D) More than one of the above
-- (E) None of the above
+**Q12.** The time complexity of insertFront() in a Deque is:
+(A) O(n)
+(B) O(log n)
+(C) O(1)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q12.** Why is deleting from the rear O(N) in a Singly Linked List implementation of Deque?
-- (A) Because there is no backward (previous) pointer in SLL
-- (B) We must traverse to find the second-last node
-- (C) Both A and B are correct reasons
-- (D) More than one of the above
-- (E) None of the above
+**Q13.** Which data structure can simulate BOTH Stack and Queue behavior?
+(A) Priority Queue
+(B) Circular Queue
+(C) Deque
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q13.** If Deque is implemented using a DOUBLY Linked List, deleting from the rear has time complexity:
-- (A) O(N)
-- (B) O(log N)
-- (C) O(1)
-- (D) More than one of the above
-- (E) None of the above
+**Q14.** In a Circular Queue of SIZE=5, if front=2 and rear=1, how many elements are in the queue?
+(A) 1
+(B) 3
+(C) 4
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q14.** Consider a Circular Queue with SIZE = 5 and the following sequence of operations:
-Enqueue(10), Enqueue(20), Enqueue(30), Dequeue(), Dequeue(), Enqueue(40)
-What is the value of front after these operations?
-- (A) 0
-- (B) 1
-- (C) 2
-- (D) More than one of the above
-- (E) None of the above
+**Q15.** The deleteRear() operation in a Circular Queue or Deque uses which formula for rear update?
+(A) rear = rear - 1
+(B) rear = (rear - 1 + SIZE) % SIZE
+(C) rear = (rear + 1) % SIZE
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q15.** Which of the following is/are applications of Circular Queue?
-- (A) Round Robin CPU scheduling
-- (B) Memory buffering in audio/video streaming
-- (C) Traffic light control systems
-- (D) More than one of the above
-- (E) None of the above
+**Q16.** Why is Deque more efficiently implemented using a Doubly Linked List than a Singly Linked List?
+(A) Doubly Linked List uses less memory
+(B) Singly Linked List cannot implement Deque at all
+(C) Deletion from rear requires O(N) in singly LL; O(1) in doubly LL
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q16.** Which data structure is used internally when a program implements RECURSION?
-- (A) Queue
-- (B) Stack
-- (C) Deque
-- (D) More than one of the above
-- (E) None of the above
+**Q17.** Round Robin CPU scheduling (used in OS) uses which type of queue?
+(A) Priority Queue
+(B) Deque
+(C) Circular Queue
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q17.** In a Linear Queue, the OVERFLOW condition occurs when:
-- (A) front == -1
-- (B) rear == MAX_SIZE - 1
-- (C) front == rear
-- (D) More than one of the above
-- (E) None of the above
+**Q18.** In a Circular Queue, when the LAST element is dequeued (queue becomes empty), the reset is:
+(A) front = 0, rear = 0
+(B) front = -1, rear = -1
+(C) front = 1, rear = 0
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q18.** The false overflow problem in a Linear Queue means:
-- (A) Queue gives overflow error even when empty positions exist at the front
-- (B) Front positions are wasted and cannot be reused
-- (C) Both A and B
-- (D) More than one of the above
-- (E) None of the above
+**Q19.** The keyboard input buffer in a computer uses which data structure concept?
+(A) Stack
+(B) Circular Queue (Ring Buffer)
+(C) Binary Tree
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q19.** Before performing a DEQUEUE operation, which condition must be checked?
-- (A) OVERFLOW
-- (B) UNDERFLOW
-- (C) Both Overflow and Underflow
-- (D) More than one of the above
-- (E) None of the above
+**Q20.** Which of the following correctly lists ALL operations supported by a Deque?
+(A) insertRear, deleteRear only
+(B) insertFront, insertRear, deleteFront, deleteRear
+(C) insertRear, deleteFront only
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q20.** In a Deque, if we want to implement a STACK using Deque, which operations would we use?
-- (A) Insert at front, Delete at front (LIFO behavior)
-- (B) Insert at rear, Delete at rear (LIFO behavior)
-- (C) Insert at front, Delete at rear
-- (D) More than one of the above
-- (E) None of the above
+**Q21.** In a Circular Queue of SIZE=4, front=3, rear=2. Attempting enqueue gives:
+(A) Insertion succeeds normally
+(B) (rear+1)%4 = 3 = front → OVERFLOW, cannot insert
+(C) rear wraps to rear=3
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q21.** Which of the following best describes the Priority Queue?
-- (A) Elements are served based on arrival order
-- (B) Elements are served based on their assigned priority
-- (C) Best implemented using Binary Heap
-- (D) More than one of the above
-- (E) None of the above
+**Q22.** What is the number of elements in a Circular Queue when front=1 and rear=4 (SIZE=7)?
+(A) 3
+(B) 4
+(C) (4-1+7)%7 = (3)%7 = 4 elements (using formula)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q22.** Consider a Circular Queue with SIZE = 4.
-State after some operations: front = 1, rear = 3.
-Is the queue FULL?
-Check: (rear + 1) % SIZE = (3 + 1) % 4 = ?
-- (A) No, because (3+1)%4 = 0 ≠ 1 (front), so NOT full
-- (B) Yes, queue is full
-- (C) Cannot be determined
-- (D) More than one of the above
-- (E) None of the above
+**Q23.** Which of the following is TRUE about a Circular Queue?
+(A) It wastes memory just like a linear queue
+(B) It can store exactly SIZE elements in standard implementation
+(C) It recycles freed positions by wrapping rear/front using modulo
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q23.** After a Dequeue operation when the queue had exactly ONE element, what should front and rear be set to?
-- (A) front = 0, rear = 0
-- (B) front = -1, rear = -1
-- (C) front = -1, rear = 0
-- (D) More than one of the above
-- (E) None of the above
+**Q24.** A Deque in which deletion is restricted to the front end only is called:
+(A) Input-Restricted Deque
+(B) Output-Restricted Deque
+(C) Priority Deque
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q24.** Which of the following is NOT an application of Stack?
-- (A) Expression evaluation (Infix to Postfix)
-- (B) Function call management (Recursion)
-- (C) Asynchronous data transfer between processes
-- (D) More than one of the above
-- (E) None of the above
+**Q25.** Deletion from the REAR in a Singly Linked List has time complexity:
+(A) O(1)
+(B) O(log n)
+(C) O(n)
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+## 📝 GENERAL STUDIES — 25 MCQs
+### India Climate — Monsoon System
 
 ---
 
-**Q25.** A Deque supports which of the following operations?
-- (A) insertFront() — insert at front
-- (B) deleteFront() — delete from front
-- (C) insertRear() and deleteRear()
-- (D) More than one of the above
-- (E) None of the above
+**Q26.** The word "Monsoon" is derived from which language?
+(A) Sanskrit
+(B) Arabic ("Mausam" = season)
+(C) Portuguese
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 🌏 GS QUESTIONS (Q26–Q50): India Climate & Monsoon
+**Q27.** The Southwest Monsoon normally arrives at Kerala on approximately which date?
+(A) July 1
+(B) June 15
+(C) June 1
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q26.** The word "Monsoon" is derived from:
-- (A) Hindi word "Mausam"
-- (B) Arabic word "Mausam" meaning "Season"
-- (C) Portuguese word for rain
-- (D) More than one of the above
-- (E) None of the above
+**Q28.** The Southwest Monsoon brings what percentage of India's total annual rainfall?
+(A) 40–50%
+(B) 60–65%
+(C) 75–80%
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q27.** Which state in India receives the FIRST arrival of Southwest Monsoon?
-- (A) Maharashtra
-- (B) Goa
-- (C) Kerala
-- (D) More than one of the above
-- (E) None of the above
+**Q29.** The Bay of Bengal branch of the Southwest Monsoon primarily brings rainfall to:
+(A) Rajasthan and Gujarat
+(B) Tamil Nadu (from NE Monsoon — not SW)
+(C) Assam, Northeast India, Bihar, UP, and Northwest India
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q28.** The place in India with the HIGHEST annual rainfall is:
-- (A) Cherrapunji, Meghalaya
-- (B) Mawsynram, Meghalaya
-- (C) Agumbe, Karnataka
-- (D) More than one of the above
-- (E) None of the above
+**Q30.** Which state of India receives rainfall from BOTH the Southwest AND Northeast Monsoon?
+(A) Bihar
+(B) Maharashtra
+(C) Tamil Nadu
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q29.** Which of the following are branches of the Southwest Monsoon that enter India?
-- (A) Arabian Sea Branch
-- (B) Bay of Bengal Branch
-- (C) Indian Ocean Branch
-- (D) More than one of the above
-- (E) None of the above
+**Q31.** The Northeast Monsoon season in India is approximately:
+(A) June to September
+(B) October to December
+(C) January to March
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q30.** El Niño has which of the following effects on India?
-- (A) Causes stronger monsoon and excess rainfall
-- (B) Causes weaker monsoon leading to drought conditions
-- (C) Has no effect on India's monsoon
-- (D) More than one of the above
-- (E) None of the above
+**Q32.** Mawsynram in Meghalaya is among the world's wettest places because:
+(A) It is near the Bay of Bengal branch of SW monsoon and has funnel-shaped hills
+(B) It receives Western Disturbances year-round
+(C) It is located at the highest altitude in Meghalaya
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q31.** The "LOO" wind in India is characterized as:
-- (A) A hot, dry, and dusty wind
-- (B) It blows in North India during summer months
-- (C) It can cause heat stroke
-- (D) More than one of the above
-- (E) None of the above
+**Q33.** The leeward (rain shadow) side of the Western Ghats receives:
+(A) More rainfall than the windward side
+(B) Less rainfall — because moisture has already fallen on the windward side
+(C) The same rainfall as the windward side
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q32.** What is the "Rain Shadow Zone" with respect to the Western Ghats?
-- (A) The windward (western) side gets heavy rainfall
-- (B) The leeward (eastern) side gets low rainfall
-- (C) Deccan Plateau is in the rain shadow zone
-- (D) More than one of the above
-- (E) None of the above
+**Q34.** Kharif crops are sown during which season in India?
+(A) October–November (after monsoon)
+(B) June–July (with monsoon onset)
+(C) January–February (winter)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q33.** Which of the following states receives rain from the Northeast Monsoon (Retreating Monsoon)?
-- (A) Punjab
-- (B) Tamil Nadu
-- (C) Bihar
-- (D) More than one of the above
-- (E) None of the above
+**Q35.** Which of the following is a Kharif crop?
+(A) Wheat
+(B) Mustard
+(C) Rice (Paddy)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q34.** Western Disturbances are:
-- (A) Extra-tropical cyclones originating from the Mediterranean Sea
-- (B) Responsible for winter rainfall in North and Northwest India
-- (C) Important for Rabi crop (wheat) cultivation
-- (D) More than one of the above
-- (E) None of the above
+**Q36.** The monsoon in India is essentially a result of:
+(A) Seasonal reversal of wind direction due to differential heating of land and sea
+(B) Permanent wind systems blowing from Arabia
+(C) Rainfall from tropical cyclones throughout the year
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q35.** In the Northern Hemisphere, the direction of wind rotation in a CYCLONE is:
-- (A) Clockwise
-- (B) Anticlockwise
-- (C) Can be either direction
-- (D) More than one of the above
-- (E) None of the above
+**Q37.** Southwest Monsoon starts withdrawing from India beginning with which region?
+(A) Kerala (south)
+(B) Bihar and UP (east)
+(C) Rajasthan (northwest)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q36.** Which of the following statements about India's seasons is CORRECT?
-- (A) India has 4 seasons: Winter, Hot Season, SW Monsoon, Retreating Monsoon
-- (B) SW Monsoon season is from June to September
-- (C) About 75% of annual rainfall comes from SW Monsoon
-- (D) More than one of the above
-- (E) None of the above
+**Q38.** The Inter-Tropical Convergence Zone (ITCZ) shifting northward over India in summer is associated with:
+(A) Northeast Monsoon onset
+(B) Southwest Monsoon onset
+(C) Western Disturbances
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q37.** La Niña conditions in the Pacific Ocean generally cause:
-- (A) Drought in India
-- (B) Stronger than normal monsoon in India
-- (C) No change in India's rainfall
-- (D) More than one of the above
-- (E) None of the above
+**Q39.** Bihar receives most of its rainfall from which branch of the Southwest Monsoon?
+(A) Arabian Sea Branch
+(B) Bay of Bengal Branch
+(C) Cyclonic Branch
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q38.** The Kosi River is called the "Sorrow of Bihar" because:
-- (A) It changes its course frequently causing widespread floods
-- (B) It flows through highly populated areas of Bihar
-- (C) It causes annual floods affecting millions in Bihar
-- (D) More than one of the above
-- (E) None of the above
+**Q40.** The season in India when SW Monsoon brings maximum rainfall is:
+(A) March–May
+(B) June–September
+(C) October–December
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q39.** Which type of rainfall is caused when moist winds are forced to rise due to a mountain barrier?
-- (A) Convectional Rainfall
-- (B) Cyclonic Rainfall
-- (C) Orographic (Relief) Rainfall
-- (D) More than one of the above
-- (E) None of the above
+**Q41.** Cyclones in the Bay of Bengal are most frequent during which months?
+(A) January–March
+(B) June–August
+(C) October–December (post-monsoon) and April–May (pre-monsoon)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q40.** Which district of Bihar is known for receiving the HIGHEST rainfall?
-- (A) Patna
-- (B) Gaya
-- (C) Kishanganj
-- (D) More than one of the above
-- (E) None of the above
+**Q42.** The Tibetan Plateau's heating in summer contributes to the Indian Monsoon by:
+(A) Cooling the upper atmosphere and weakening monsoon
+(B) Creating upper-level high pressure that helps strengthen the low pressure over India
+(C) Deflecting monsoon winds toward Pakistan
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q41.** Which of the following correctly matches the global pressure belts?
-- (A) Equator → Low Pressure (Doldrums)
-- (B) 30°N/S → High Pressure (Horse Latitudes)
-- (C) 60°N/S → Low Pressure (Sub-polar Low)
-- (D) More than one of the above
-- (E) None of the above
+**Q43.** Which of the following correctly matches the crop type with its sowing season?
+(A) Kharif – October; Rabi – June
+(B) Kharif – June/July; Rabi – October/November
+(C) Both Kharif and Rabi are sown in June
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q42.** Trade Winds blow from:
-- (A) Sub-tropical High Pressure belts towards the Equator
-- (B) The equator towards the poles
-- (C) The poles towards the equator
-- (D) More than one of the above
-- (E) None of the above
+**Q44.** Rajasthan (Thar Desert) receives very low rainfall despite being in India because:
+(A) It is too cold for rain to fall
+(B) The monsoon has already lost most moisture before reaching Rajasthan, and lack of geographic barriers causes winds to continue without rising
+(C) Rajasthan is not in the path of any monsoon branch
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q43.** India's climate is classified as:
-- (A) Tropical Monsoon
-- (B) Arid and Semi-arid throughout
-- (C) Temperate in all regions
-- (D) More than one of the above
-- (E) None of the above
+**Q45.** The Arabian Sea Branch of the SW Monsoon hits India first at:
+(A) Maharashtra coast
+(B) Goa
+(C) Kerala (Western Ghats)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q44.** Which of the following statements about the Indian Ocean Dipole (IOD) is CORRECT?
-- (A) Positive IOD leads to MORE rainfall in India
-- (B) Negative IOD leads to LESS rainfall in India
-- (C) IOD refers to temperature differences in Indian Ocean
-- (D) More than one of the above
-- (E) None of the above
+**Q46.** What is the approximate average annual rainfall of Bihar?
+(A) 400–500 mm
+(B) 700–800 mm
+(C) 1,000–1,200 mm
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q45.** Southwest Monsoon generally arrives in Delhi by:
-- (A) 1st June
-- (B) 15th June
-- (C) Last days of June / 1st July
-- (D) More than one of the above
-- (E) None of the above
+**Q47.** Rabi crops in Bihar include:
+(A) Rice and maize
+(B) Wheat, mustard, and gram
+(C) Cotton and groundnut
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q46.** Bihar's climate is best described as:
-- (A) Arid monsoon
-- (B) Sub-tropical Humid Monsoon
-- (C) Tropical Rainforest
-- (D) More than one of the above
-- (E) None of the above
+**Q48.** The Mascarene High pressure system (near Madagascar) is associated with:
+(A) Bringing cold winds to India in winter
+(B) Being the source of SW Monsoon winds that flow toward India
+(C) Causing Western Disturbances in North India
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q47.** Which of the following are correct about Cyclone and Anticyclone?
-- (A) Cyclone = Low Pressure Center; Anticyclone = High Pressure Center
-- (B) Cyclone brings stormy weather; Anticyclone brings fair weather
-- (C) Hurricane and Typhoon are different names for cyclone in different oceans
-- (D) More than one of the above
-- (E) None of the above
+**Q49.** The Bay of Bengal produces MORE cyclones than the Arabian Sea because:
+(A) It is saltier than the Arabian Sea
+(B) It is warmer and has more moisture, favoring cyclone formation
+(C) It is closer to the equator
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q48.** The Retreating Monsoon (NE Monsoon) brings rainfall to which coast of India?
-- (A) Malabar Coast (Western)
-- (B) Coromandel Coast (Eastern — Tamil Nadu, South AP)
-- (C) Konkan Coast
-- (D) More than one of the above
-- (E) None of the above
+**Q50.** Which of the following states receives the LEAST monsoon rainfall in India?
+(A) Assam
+(B) Tamil Nadu
+(C) Rajasthan (Thar Desert region)
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+# ANSWER KEY
+
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
 
 ---
 
-**Q49.** Which of the following is the CORRECT order of Southwest Monsoon arrival in India?
-- (A) Delhi → Mumbai → Kerala
-- (B) Kerala → Bihar → Delhi
-- (C) Bihar → Kerala → Delhi
-- (D) More than one of the above
-- (E) None of the above
+### CS Answers (Q1–Q25):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (B) | Deque = Double-Ended Queue |
+| 2 | (C) | Full: (rear+1)%N == front |
+| 3 | (C) | SIZE=6 → max 5 elements (1 slot reserved) |
+| 4 | (C) | After SIZE-1, next = 0 (modulo wrap) |
+| 5 | (C) | rear = (rear+1)%SIZE |
+| 6 | (B) | Empty: front=rear=-1 |
+| 7 | (B) | Circular Queue = Ring Buffer |
+| 8 | (C) | False overflow = memory wastage problem solved |
+| 9 | (C) | Deque: insert/delete from BOTH ends |
+| 10 | (B) | Input-restricted: insert REAR only; delete BOTH ends |
+| 11 | (A) | Output-restricted: insert BOTH ends; delete FRONT only |
+| 12 | (C) | O(1) — direct front pointer manipulation |
+| 13 | (C) | Deque simulates both Stack and Queue |
+| 14 | (C) | (rear-front+SIZE)%SIZE = (1-2+5)%5 = 4%5 = 4 elements |
+| 15 | (B) | deleteRear: rear = (rear-1+SIZE)%SIZE |
+| 16 | (C) | Singly LL: deleteRear = O(N); Doubly LL = O(1) |
+| 17 | (C) | Round Robin uses Circular Queue |
+| 18 | (B) | After last dequeue: front=-1, rear=-1 |
+| 19 | (B) | Keyboard buffer = Circular Queue (Ring Buffer) |
+| 20 | (B) | All 4 operations: insertFront, insertRear, deleteFront, deleteRear |
+| 21 | (B) | (2+1)%4=3=front → OVERFLOW |
+| 22 | (C) | (4-1+7)%7=4 elements |
+| 23 | (C) | Circular: recycles freed positions using modulo |
+| 24 | (B) | Output-restricted: delete from front ONLY |
+| 25 | (C) | Singly LL delete at rear = O(n) traversal |
 
 ---
 
-**Q50.** Mawsynram and Cherrapunji receive very high rainfall because:
-- (A) They lie on the windward side of the Meghalaya Hills
-- (B) Moist Bay of Bengal winds are forced to rise by the hills
-- (C) They lie in the rain shadow zone
-- (D) More than one of the above
-- (E) None of the above
+### GS Answers (Q26–Q50):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (B) | Arabic "Mausam" = season |
+| 27 | (C) | June 1 = Monsoon arrives at Kerala |
+| 28 | (C) | SW Monsoon = 75–80% of India's annual rainfall |
+| 29 | (C) | BoB branch → Assam, NE India, Bihar, UP, NW India |
+| 30 | (C) | Tamil Nadu = SW + NE Monsoon both |
+| 31 | (B) | NE Monsoon = October to December |
+| 32 | (A) | Bay of Bengal branch + funnel hills → Mawsynram wettest |
+| 33 | (B) | Leeward/rain shadow = less rainfall |
+| 34 | (B) | Kharif = June-July sowing (monsoon season) |
+| 35 | (C) | Rice = Kharif crop |
+| 36 | (A) | Seasonal wind reversal due to land-sea differential heating |
+| 37 | (C) | Retreat starts from Rajasthan (NW) in September |
+| 38 | (B) | ITCZ moving north = SW Monsoon onset |
+| 39 | (B) | Bihar = Bay of Bengal Branch of SW Monsoon |
+| 40 | (B) | June–September = peak SW Monsoon |
+| 41 | (C) | BoB cyclones peak Oct-Dec and April-May |
+| 42 | (B) | Tibetan Plateau heating → strengthens monsoon |
+| 43 | (B) | Kharif June/July; Rabi October/November |
+| 44 | (B) | Monsoon weakens before reaching; no geographic barriers to force ascent |
+| 45 | (C) | Arabian Sea branch hits Kerala Western Ghats first |
+| 46 | (C) | Bihar ≈ 1,000–1,200 mm annual rainfall |
+| 47 | (B) | Rabi = wheat, mustard, gram (winter crops) |
+| 48 | (B) | Mascarene High = source of SW Monsoon winds |
+| 49 | (B) | BoB warmer → more evaporation → more cyclones |
+| 50 | (C) | Rajasthan (Thar Desert) = lowest rainfall |
 
 ---
-
 ---
 
-# ═══════════════════════════════════════════
-# ✅ ANSWER KEY WITH EXPLANATIONS — DAY 19
-# ═══════════════════════════════════════════
+# 🔁 DAY 19 — CRISP REVISION NOTES
 
-> **Only look here AFTER attempting all 50 questions!**
-> Count your score. Target: 40+ out of 50 to be on TOPPER track.
+## ⚡ RAPID FIRE — Circular Queue & Deque
 
----
-
-## 🖥️ CS ANSWERS (Q1–Q25)
-
-| Q | Answer | Key Explanation |
-|---|--------|-----------------|
-| Q1 | **(B)** | Circular Queue = Ring Buffer. This is a direct PYQ-level synonym. |
-| Q2 | **(B)** | Main reason = avoid memory wastage / false overflow. Insertion time is NOT faster. |
-| Q3 | **(C)** | Full condition: `(rear + 1) % SIZE == front`. NOT rear==SIZE-1 (that's linear queue). |
-| Q4 | **(C)** | Empty state: `front = -1, rear = -1`. Both must be -1. |
-| Q5 | **(B)** | front == rear but both are NOT -1, so there is EXACTLY ONE element in the queue. front==rear==-1 means empty. front==rear but ≠ -1 means one element. |
-| Q6 | **(C)** | `rear = (rear + 1) % SIZE` — the modulo creates the circular wrapping. |
-| Q7 | **(C)** | `(5 + 1) % 6 = 0`. Rear wraps from 5 back to 0 — that's the ring buffer behavior! |
-| Q8 | **(D)** | All three statements (A, B, C) are correct about Deque. D = More than one. |
-| Q9 | **(D)** | All three statements are correct for Input-Restricted Deque. D = More than one. |
-| Q10 | **(D)** | All three statements (A, B, C) are correct for Output-Restricted Deque. D = More than one. |
-| Q11 | **(C)** | O(N) — must traverse entire list from head to reach second-last node. |
-| Q12 | **(D)** | Both A and B are correct reasons — they are actually the same reason stated differently. D = More than one. |
-| Q13 | **(C)** | O(1) with Doubly LL — each node has PREV pointer → directly access second-last node. |
-| Q14 | **(C)** | Initial: f=-1, r=-1. After Enq(10): f=0,r=0. Enq(20): f=0,r=1. Enq(30): f=0,r=2. Deq(): f=1,r=2. Deq(): f=2,r=2. Enq(40): r=(2+1)%5=3. Final front=2. |
-| Q15 | **(D)** | All three (A, B, C) are correct applications. D = More than one. |
-| Q16 | **(B)** | Recursion uses STACK (function call stack). This is a VERY COMMON PYQ. |
-| Q17 | **(B)** | Linear Queue OVERFLOW: rear == MAX_SIZE - 1. |
-| Q18 | **(D)** | Both A and B describe the same problem from different angles. D = More than one. |
-| Q19 | **(B)** | Before DEQUEUE → check UNDERFLOW (is queue empty?). Before ENQUEUE → check OVERFLOW. |
-| Q20 | **(D)** | Both A and B implement LIFO behavior (Stack using Deque). Both are valid. D = More than one. |
-| Q21 | **(D)** | B and C are both correct (served by priority, best with Binary Heap). A is wrong (A describes normal Queue). D = More than one. |
-| Q22 | **(A)** | (3+1)%4 = 0 ≠ 1 (front value). So NOT full. The queue has space. |
-| Q23 | **(B)** | When last element is dequeued, reset to empty state: front = -1, rear = -1. |
-| Q24 | **(C)** | Asynchronous data transfer = Queue application, NOT Stack. Stack = recursion, expression eval. |
-| Q25 | **(D)** | All three options (A, B, C) are correct Deque operations. D = More than one. |
-
----
-
-## 🌏 GS ANSWERS (Q26–Q50)
-
-| Q | Answer | Key Explanation |
-|---|--------|-----------------|
-| Q26 | **(B)** | Arabic "Mausam" = Season. This is the origin of the word Monsoon. Direct PYQ. |
-| Q27 | **(C)** | Kerala — SW Monsoon first hits Kerala around June 1st every year. |
-| Q28 | **(B)** | Mawsynram holds the CURRENT world record. Cherrapunji held it previously. Both are in Meghalaya. |
-| Q29 | **(D)** | Both (A) Arabian Sea Branch and (B) Bay of Bengal Branch are correct. D = More than one. |
-| Q30 | **(B)** | El Niño = WEAKER monsoon = drought risk in India. La Niña = stronger monsoon. |
-| Q31 | **(D)** | All three statements (A, B, C) about Loo wind are correct. D = More than one. |
-| Q32 | **(D)** | All three statements (A, B, C) are correct about Rain Shadow Zone. D = More than one. |
-| Q33 | **(B)** | Tamil Nadu (Coromandel Coast) gets most rain from NE Monsoon (Oct-Dec). |
-| Q34 | **(D)** | All three statements (A, B, C) about Western Disturbances are correct. D = More than one. |
-| Q35 | **(B)** | Northern Hemisphere cyclone rotates ANTICLOCKWISE (Coriolis effect deflects winds left in SH). Wait — Coriolis deflects RIGHT in NH. Winds flow INTO center (low pressure) and deflect RIGHT → resulting spiral is ANTICLOCKWISE. |
-| Q36 | **(D)** | All three statements (A, B, C) are correct about India's seasons. D = More than one. |
-| Q37 | **(B)** | La Niña = cooling of Pacific = stronger monsoon in India = more rainfall. |
-| Q38 | **(D)** | Both A and C are correct (frequently changes course AND causes floods). D = More than one. |
-| Q39 | **(C)** | Orographic (Relief) Rainfall = moist winds hit mountain → forced up → cool → rain. |
-| Q40 | **(C)** | Kishanganj in NE Bihar receives highest rainfall — located near Bengal and Nepal border. |
-| Q41 | **(D)** | All three statements (A, B, C) correctly describe pressure belts. D = More than one. |
-| Q42 | **(A)** | Trade Winds: Sub-tropical High (30°N/S) → Equatorial Low (0°). Blow towards equator. |
-| Q43 | **(A)** | India = Tropical Monsoon climate. Not arid throughout, not temperate throughout. |
-| Q44 | **(D)** | All three statements (A, B, C) about IOD are correct. D = More than one. |
-| Q45 | **(C)** | Delhi receives monsoon around June 29th – July 1st (last days of June typically). |
-| Q46 | **(B)** | Bihar = Sub-tropical Humid Monsoon climate. Hot summers, good monsoon rainfall, cold winters. |
-| Q47 | **(D)** | All three statements (A, B, C) are correct about cyclones and anticyclones. D = More than one. |
-| Q48 | **(B)** | Coromandel Coast (Tamil Nadu, South Andhra Pradesh) — gets rain from NE Monsoon in Oct-Dec. |
-| Q49 | **(B)** | Kerala (June 1) → Bihar (June 10-15) → Delhi (June 29-July 1). This is the correct sequence. |
-| Q50 | **(D)** | Both A and B are correct — windward side + forced rising of moist Bay of Bengal winds. D = More than one. |
-
----
-
-## 📊 YOUR SCORE ANALYSIS:
-
+### Circular Queue — All Critical Formulas:
 ```
-┌────────────────────────────────────────────────────┐
-│           TOPPER SCORE TRACKER — DAY 19            │
-├───────────────┬────────────────────────────────────┤
-│ CS Score      │ ___ / 25                           │
-│ GS Score      │ ___ / 25                           │
-│ TOTAL         │ ___ / 50                           │
-├───────────────┴────────────────────────────────────┤
-│ 47–50  → TOPPER Level 🏆 Outstanding!              │
-│ 42–46  → Excellent ✅ On track for rank!           │
-│ 35–41  → Good ✅ Revise D/E option questions       │
-│ 28–34  → Average ⚠️ Re-read concepts today         │
-│ Below 28 → Needs Work ❌ Revise and retry tomorrow │
-└────────────────────────────────────────────────────┘
-
-NOTE: Count how many D/E answers you got WRONG.
-If you got 5+ D/E questions wrong → Spend 15 min on
-"Option D trap" pattern recognition tomorrow.
+Empty condition:     front == -1  (initial state)
+                     OR front == rear (after last dequeue — some implementations)
+Full condition:      (rear + 1) % SIZE == front
+Enqueue rear update: rear = (rear + 1) % SIZE
+Dequeue front update:front = (front + 1) % SIZE
+deleteRear update:   rear = (rear - 1 + SIZE) % SIZE  ← (+SIZE avoids negative)
+Element count:       (rear - front + SIZE) % SIZE
+Max elements:        SIZE - 1 (NOT SIZE — 1 slot reserved!)
 ```
 
----
-
-## 🌙 NIGHT REVISION — 5 BULLET POINTS (Write these from memory!)
-
+### Circular Queue Key Points:
 ```
-CS:
-1. Circular Queue = ________ Buffer; solves ________ wastage
-2. FULL condition: ________ ; EMPTY condition: ________
-3. Deque = insert/delete from ________ ends
-4. Input-Restricted Deque = insert from ________ end only
-5. Delete from rear in Singly LL = O(___) because ________
+1. Also called RING BUFFER
+2. Solves LINEAR QUEUE's false overflow problem
+3. All operations O(1)
+4. Max capacity = SIZE - 1 (standard implementation)
+5. After last element dequeued: reset front = -1, rear = -1
+6. Used in: keyboard buffer, audio streaming, Round Robin OS scheduling
+```
 
-GS:
-1. Monsoon word from: ________ , meaning ________
-2. First state to get SW Monsoon: ________ on ________
-3. Highest rainfall place in India: ________, ________
-4. El Niño effect on India: ________ monsoon
-5. Bihar's highest rainfall district: ________
+### Deque Quick Summary:
+```
+Deque = Double-Ended Queue
+ALL 4 operations: insertFront, insertRear, deleteFront, deleteRear → all O(1)
+
+INPUT-RESTRICTED:
+  Insert: REAR only        Delete: BOTH ends
+  
+OUTPUT-RESTRICTED:
+  Insert: BOTH ends        Delete: FRONT only
+
+Best implemented with: DOUBLY LINKED LIST
+deleteRear in Singly LL: O(N)  ← KEY PYQ TRAP
+deleteRear in Doubly LL: O(1)
+
+Deque can simulate Stack (use front ops) and Queue (standard FIFO ops)
+```
+
+### Master Rule:
+```
+CIRCULAR QUEUE full?   (rear+1)%SIZE == front   ← MOST ASKED FORMULA
+CIRCULAR QUEUE empty?  front == -1
 ```
 
 ---
 
-## ⚡ DAY 19 — TOPPER CHECKLIST
+## ⚡ RAPID FIRE — India Monsoon System
 
-- [ ] Read Circular Queue concepts (30 min)
-- [ ] Understood full/empty conditions with diagrams
-- [ ] Read Deque types with examples
-- [ ] Understood why SLL deletion from rear = O(N)
-- [ ] Read India Climate & Monsoon section
-- [ ] Learned Bihar-specific climate facts
-- [ ] Attempted all 50 practice questions
-- [ ] Checked answers only after finishing
-- [ ] Wrote 5-bullet night revision summary
-- [ ] Score: ___ / 50
+### 5 Core Facts:
+```
+1. SW Monsoon = June to Sept; 75-80% of India's rainfall
+2. NE Monsoon = Oct to Dec; affects Tamil Nadu mainly
+3. SW Monsoon onset: June 1 = Kerala
+4. Mawsynram (Meghalaya) = world's wettest; BoB branch + funnel hills
+5. Rajasthan (Thar) = lowest rainfall; Tamil Nadu = both SW + NE monsoon
+```
+
+### Two Branches of SW Monsoon:
+```
+Arabian Sea Branch → hits Kerala/WG first → rain shadow on Deccan
+Bay of Bengal Branch → hits NE India, Bihar, UP, Delhi
+Bihar rainfall source = Bay of Bengal Branch
+```
+
+### Retreat Sequence:
+```
+Starts from: Rajasthan/NW India (September 1)
+Ends: Entire India by November 15
+(Opposite of onset which was south-to-north)
+```
+
+### Crops and Monsoon:
+```
+Kharif: Sow June-July (with monsoon); Harvest Sept-Oct
+        Rice, Maize, Cotton, Soybean, Jowar, Bajra
+Rabi:   Sow Oct-Nov (after monsoon); Harvest March-April
+        Wheat, Mustard, Barley, Gram
+```
+
+### Monsoon Mechanism Key Terms:
+```
+ITCZ → moves north in summer → triggers SW Monsoon
+Mascarene High → source pressure system for SW Monsoon winds
+Tibetan Plateau → heating strengthens monsoon circulation
+Land = heats/cools FAST; Sea = heats/cools SLOWLY → pressure difference → winds
+```
 
 ---
 
-> 🎯 **DAY 20 PREVIEW:** Priority Queue + Real-world Queue Applications | GS: Indian Polity — Constitution Basics
-> Come back tomorrow and say **"Day-20"** to continue your topper journey!
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. Circular Queue full: (rear+1)%SIZE==front; empty: front==-1; max elements = SIZE-1
+2. Deque = Double-Ended Queue; Input-restricted: insert rear only; Output-restricted: delete front only
+3. deleteRear in Singly Linked List = O(N); in Doubly Linked List = O(1)
+4. SW Monsoon: June 1 (Kerala onset) → June-Sept → 75-80% of India's rain; Bay of Bengal branch → Bihar
+5. NE Monsoon: Oct-Dec → Tamil Nadu; Mawsynram = world's wettest; Rajasthan = driest; Kharif crops = rice/maize
 
 ---
-*Day 19 | BPSC TRE 4.0 Topper Study Plan | Phase 1 — Week 3*
-*CS: Circular Queue & Deque | GS: India Climate & Monsoon*
+
+*Next: Day 20 — Linked Lists: Singly, Doubly, Circular + Bihar Economy & Agriculture*

@@ -1,1701 +1,1473 @@
-# 📅 DAY 18 — BPSC TRE 4.0 COMPLETE STUDY MATERIAL
-## CS Topic: Queue — FIFO, Types, Operations & Applications
-## GS Topic: India Geography — Peninsular Plateau, Soil Types, Climate & Agriculture
-
-> **Target: TOP RANK | Format: 5-option BPSC ABCDE | PYQs Integrated Throughout**
-> ⚠️ **GOLDEN RULE: Attempt ALL 50 Questions FIRST → Answers + Explanations are at the VERY END**
+# 📅 BPSC TRE 4.0 — DAY 18 COMPLETE STUDY MODULE
+### Queue Data Structure (FIFO) + India Geography — Peninsular Plateau
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-# ══════════════════════════════════════════════
-# 🖥️ COMPUTER SCIENCE — QUEUE DATA STRUCTURE
-# ══════════════════════════════════════════════
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): Queue — FIFO, Operations, Linear Queue, Circular Queue Intro, Applications
+> - Afternoon (1 hr): India Geography — Peninsular Plateau
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-## 📌 CS CONCEPT 1: What is a Queue?
-
-A **Queue** is a linear data structure that follows the **FIFO** principle.
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│                  QUEUE — THE FIFO PRINCIPLE                          │
-│                                                                      │
-│   FIFO = First In, First Out                                         │
-│                                                                      │
-│   Real-life analogy:  People standing in a LINE at a ticket counter │
-│                                                                      │
-│       REAR (back)              FRONT (front)                         │
-│   ┌──────────────────────────────────────────┐                      │
-│   │  40  │  30  │  20  │  10  │              │                      │
-│   └──────────────────────────────────────────┘                      │
-│      ↑ New people join here       ↑ People exit (served) here       │
-│   ENQUEUE (INSERT)              DEQUEUE (DELETE)                     │
-│                                                                      │
-│   • Person who joined FIRST → leaves FIRST                          │
-│   • Person who joined LAST → waits the longest                      │
-│                                                                      │
-│   COMPARE with STACK (LIFO):                                         │
-│   Stack = Pile of plates (last placed = first taken)                 │
-│   Queue = Ticket line (first arrived = first served)                 │
-└──────────────────────────────────────────────────────────────────────┘
-```
-
-### Stack vs Queue — Side-by-Side:
-
-| Feature | Stack | Queue |
-|---------|-------|-------|
-| Principle | LIFO (Last In First Out) | FIFO (First In First Out) |
-| Insert at | TOP | REAR |
-| Delete from | TOP | FRONT |
-| Insert operation | PUSH | ENQUEUE |
-| Delete operation | POP | DEQUEUE |
-| Overflow check | Before PUSH | Before ENQUEUE |
-| Underflow check | Before POP | Before DEQUEUE |
-| Real-world example | Book stack, browser history | Ticket counter, print queue |
+# PART 1: COMPUTER SCIENCE
+## 📘 Queue Data Structure — Deep Conceptual Guide
 
 ---
 
-## 📌 CS CONCEPT 2: Queue Operations — In Detail
+## 🔷 SECTION 1: What is a Queue?
 
-A Queue has **5 core operations**. Know each one perfectly for BPSC:
+### Real-Life Analogy — The Bank Counter:
+Imagine a **line at a bank counter**:
+- People join the line from the **BACK** (rear)
+- People are served from the **FRONT**
+- The person who arrived FIRST is served FIRST → FIFO
+- You CANNOT skip anyone in the middle
+- Once served, person leaves from the front
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│                     QUEUE OPERATIONS                                  │
-├────────────────┬────────────────────────────────────────────────────┤
-│ Operation      │ Description                                         │
-├────────────────┼────────────────────────────────────────────────────┤
-│ 1. Enqueue     │ Insert element at the REAR                          │
-│                │ Check OVERFLOW first (is queue FULL?)               │
-│                │ rear = rear + 1; queue[rear] = element              │
-├────────────────┼────────────────────────────────────────────────────┤
-│ 2. Dequeue     │ Remove element from the FRONT                       │
-│                │ Check UNDERFLOW first (is queue EMPTY?)             │
-│                │ element = queue[front]; front = front + 1           │
-├────────────────┼────────────────────────────────────────────────────┤
-│ 3. Peek/Front  │ View the FRONT element WITHOUT removing it          │
-│                │ Returns queue[front]                                 │
-├────────────────┼────────────────────────────────────────────────────┤
-│ 4. isEmpty     │ Check if queue has NO elements                      │
-│                │ Condition: front > rear OR front = -1               │
-├────────────────┼────────────────────────────────────────────────────┤
-│ 5. isFull      │ Check if queue is COMPLETELY full                   │
-│                │ Condition: rear = MAX_SIZE - 1 (for linear queue)  │
-└────────────────┴────────────────────────────────────────────────────┘
+Bank Queue (entering from right, served from left):
+
+REAR (new people join here)         FRONT (served first)
+         ↓                                ↓
+   ┌─────────┬─────────┬─────────┬─────────┐
+   │ Person4 │ Person3 │ Person2 │ Person1 │
+   └─────────┴─────────┴─────────┴─────────┘
+              ← ← ← ← ← movement direction ← ← ←
+
+Person1 joined first → served first (FIFO)
+Person4 joined last  → served last
 ```
 
-### ⭐ CRITICAL PYQ FACTS — BPSC Loves These!:
+### Other Real-Life Queue Examples:
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│  ⚠️  BEFORE DELETION  →  Check UNDERFLOW  (queue might be EMPTY)   │
-│  ⚠️  BEFORE INSERTION →  Check OVERFLOW   (queue might be FULL)    │
-│                                                                      │
-│  These appeared directly in TRE 2.0 paper!                          │
-└──────────────────────────────────────────────────────────────────────┘
+1. Ticket counter line → first person = first ticket
+2. Print spooler → first document sent = first printed
+3. CPU scheduling → processes wait in queue
+4. Supermarket checkout → first in line = first checked out
+5. Traffic signal → first car = first to go
+6. WhatsApp message delivery → messages sent in order received
+7. Customer service call center → first caller = first answered
+```
+
+### Formal Definition:
+A **queue** is a linear data structure that follows the **FIFO (First In, First Out)** principle — the element inserted FIRST is the element removed FIRST. Insertions happen at the **REAR** and deletions happen at the **FRONT**.
+
+---
+
+## 🔷 SECTION 2: FIFO Principle — The Core Concept
+
+### FIFO = First In, First Out:
+```
+ENQUEUE order: A → B → C → D   (A enqueued first, D last)
+DEQUEUE order: A → B → C → D   (A dequeued first — same order!)
+
+Queue PRESERVES the order of insertion.
+This is the exact OPPOSITE of a Stack which REVERSES order.
+```
+
+### FIFO vs LIFO Side-by-Side:
+```
+QUEUE (FIFO):                      STACK (LIFO):
+┌───┬───┬───┬───┐                  ┌───┐ ← TOP
+│ A │ B │ C │ D │                  │ D │
+└───┴───┴───┴───┘                  ├───┤
+  ↑               ↑                │ C │
+FRONT           REAR               ├───┤
+(remove here)   (add here)         │ B │
+                                   ├───┤
+A was added first → removed first  │ A │ ← BOTTOM
+                                   └───┘
+                                   D was added last → removed first
 ```
 
 ---
 
-## 📌 CS CONCEPT 3: Linear Queue — Array Implementation
+## 🔷 SECTION 3: Queue Representation Using Array
 
-### How a Linear Queue Works (Step by Step):
-
+### Two Pointer System:
 ```
-Initial State: Queue of size 5, empty
+Queue uses TWO pointers (unlike Stack which uses only one):
+
+front → index of the FIRST element (dequeue from here)
+rear  → index of the LAST element  (enqueue here)
+
+INITIAL STATE (empty queue):
+front = -1
+rear  = -1
+
+Convention: front = rear = -1 means EMPTY queue
+```
+
+### Queue State Diagram:
+```
+Empty queue (MAX = 6):
 front = -1, rear = -1
+Index:  0      1      2      3      4      5
+      ┌──────┬──────┬──────┬──────┬──────┬──────┐
+      │  _   │  _   │  _   │  _   │  _   │  _   │
+      └──────┴──────┴──────┴──────┴──────┴──────┘
 
+After ENQUEUE 10, 20, 30:
+front = 0, rear = 2
+      ┌──────┬──────┬──────┬──────┬──────┬──────┐
+      │  10  │  20  │  30  │  _   │  _   │  _   │
+      └──────┴──────┴──────┴──────┴──────┴──────┘
+          ↑                    ↑
+        front=0              rear=2
+
+After DEQUEUE (removes 10):
+front = 1, rear = 2
+      ┌──────┬──────┬──────┬──────┬──────┬──────┐
+      │  _   │  20  │  30  │  _   │  _   │  _   │
+      └──────┴──────┴──────┴──────┴──────┴──────┘
+               ↑        ↑
+            front=1  rear=2
+```
+
+---
+
+## 🔷 SECTION 4: Queue Operations — Complete Guide
+
+### All Operations at a Glance:
+
+| Operation | Action | Condition Check | Time Complexity |
+|-----------|--------|----------------|----------------|
+| **Enqueue** | Insert at REAR | Check FULL first | O(1) |
+| **Dequeue** | Remove from FRONT | Check EMPTY first | O(1) |
+| **Peek/Front** | View front element | Check EMPTY first | O(1) |
+| **isEmpty** | Is queue empty? | front == -1 | O(1) |
+| **isFull** | Is queue full? | rear == MAX-1 | O(1) |
+
+**ALL queue operations are O(1)** — same as Stack.
+
+---
+
+### Operation 1: ENQUEUE (Insertion at Rear)
+
+```
+Algorithm:
+ENQUEUE(queue, front, rear, MAX, value):
+  Step 1: Check full → if rear == MAX - 1 → OVERFLOW, stop
+  Step 2: If empty (front==-1): set front = 0
+  Step 3: Increment rear → rear = rear + 1
+  Step 4: Insert → queue[rear] = value
+
+Pseudocode:
+void enqueue(int queue[], int &front, int &rear, int MAX, int value) {
+    if (rear == MAX - 1) {
+        cout << "Queue Overflow!";
+        return;
+    }
+    if (front == -1) front = 0;   // first element
+    rear++;
+    queue[rear] = value;
+}
+```
+
+### Operation 2: DEQUEUE (Deletion from Front)
+
+```
+Algorithm:
+DEQUEUE(queue, front, rear):
+  Step 1: Check empty → if front == -1 → UNDERFLOW, stop
+  Step 2: Store value → value = queue[front]
+  Step 3: If front == rear → only one element was there
+            set front = -1, rear = -1 (back to empty state)
+          Else: Increment front → front = front + 1
+  Step 4: Return value
+
+Pseudocode:
+int dequeue(int queue[], int &front, int &rear) {
+    if (front == -1) {
+        cout << "Queue Underflow!";
+        return -1;
+    }
+    int value = queue[front];
+    if (front == rear) {
+        front = -1; rear = -1;   // queue becomes empty
+    } else {
+        front++;
+    }
+    return value;
+}
+```
+
+### Operation 3: PEEK (View Front, No Removal)
+
+```
+int peek(int queue[], int front) {
+    if (front == -1) {
+        cout << "Queue is empty!";
+        return -1;
+    }
+    return queue[front];  // front NOT changed
+}
+```
+
+### Operation 4: isEmpty
+
+```
+bool isEmpty(int front) {
+    return (front == -1);
+}
+```
+
+### Operation 5: isFull
+
+```
+bool isFull(int rear, int MAX) {
+    return (rear == MAX - 1);
+}
+```
+
+---
+
+## 🔷 SECTION 5: Complete Dry Run — Enqueue & Dequeue
+
+### Setup: Queue of MAX size 5
+
+```
+INITIAL STATE:
+front = -1, rear = -1
+[  _  |  _  |  _  |  _  |  _  ]
+ [0]   [1]   [2]   [3]   [4]
+
+─────────────────────────────────────────────────────
 ENQUEUE 10:
-front=0, rear=0  →  [10][ ][ ][ ][ ]
+  rear == -1 (empty) → set front=0
+  rear becomes 0; queue[0] = 10
+  front=0, rear=0
+[ 10  |  _  |  _  |  _  |  _  ]
+   ↑f,r
 
+─────────────────────────────────────────────────────
 ENQUEUE 20:
-front=0, rear=1  →  [10][20][ ][ ][ ]
+  rear becomes 1; queue[1] = 20
+  front=0, rear=1
+[ 10  | 20  |  _  |  _  |  _  ]
+   ↑f    ↑r
 
+─────────────────────────────────────────────────────
 ENQUEUE 30:
-front=0, rear=2  →  [10][20][30][ ][ ]
+  rear becomes 2; queue[2] = 30
+  front=0, rear=2
+[ 10  | 20  | 30  |  _  |  _  ]
+   ↑f         ↑r
 
-DEQUEUE (removes 10):
-front=1, rear=2  →  [ ][20][30][ ][ ]
-                     ^-- This slot is WASTED in LINEAR queue!
+─────────────────────────────────────────────────────
+DEQUEUE:
+  value = queue[front] = queue[0] = 10
+  front becomes 1
+  front=1, rear=2   RETURNED: 10
+[  _  | 20  | 30  |  _  |  _  ]
+         ↑f    ↑r
 
+─────────────────────────────────────────────────────
 ENQUEUE 40:
-front=1, rear=3  →  [ ][20][30][40][ ]
+  rear becomes 3; queue[3] = 40
+  front=1, rear=3
+[  _  | 20  | 30  | 40  |  _  ]
+         ↑f          ↑r
 
+─────────────────────────────────────────────────────
 ENQUEUE 50:
-front=1, rear=4  →  [ ][20][30][40][50]
+  rear becomes 4; queue[4] = 50
+  front=1, rear=4
+[  _  | 20  | 30  | 40  | 50  ]
+         ↑f                ↑r
 
-NOW rear = MAX_SIZE-1 = 4 → Queue reports OVERFLOW!
-BUT there is 1 free slot at index 0!
-→ This is the PROBLEM of LINEAR QUEUE = Memory Wastage!
-→ Solution = CIRCULAR QUEUE (Day 19 topic)
-```
-
-### Overflow Condition (Linear Queue):
-```
-rear == MAX_SIZE - 1   →   OVERFLOW (even if front slots are free!)
-```
-
-### Underflow Condition:
-```
-front == -1   OR   front > rear   →   UNDERFLOW (empty queue)
+─────────────────────────────────────────────────────
+ENQUEUE 60 (attempt):
+  rear == MAX-1 == 4 → OVERFLOW! Cannot enqueue 60.
+  But notice: index [0] is EMPTY — memory wasted!
+  ← THIS IS THE LINEAR QUEUE PROBLEM ←
 ```
 
 ---
 
-## 📌 CS CONCEPT 4: Types of Queue
+## 🔷 SECTION 6: Overflow & Underflow
+
+### Queue Overflow:
+```
+OVERFLOW condition:  rear == MAX - 1
+Meaning: The rear pointer has reached the last index.
+Action: Print "Queue Overflow", do NOT enqueue.
+
+⚠️ NOTE: In linear queue, overflow can occur even when
+         the queue is not truly full — there may be empty
+         slots at the beginning (wasted by dequeue operations)!
+         → This is the MAIN LIMITATION of linear queue.
+```
+
+### Queue Underflow:
+```
+UNDERFLOW condition:  front == -1 (queue is empty)
+Meaning: No elements in the queue to dequeue.
+Action: Print "Queue Underflow", do NOT dequeue.
+```
+
+### 🚨 PYQ TRAP #1: Linear Queue Limitation
+> In a linear queue of size N, even if (N-1) elements have been dequeued, the system reports OVERFLOW when rear == N-1, because the rear pointer never moves backward. The vacated front positions are wasted. This is why **Circular Queue** was invented.
+
+---
+
+## 🔷 SECTION 7: Linear Queue Limitation & Why Circular Queue?
+
+### The Problem Visualized:
+```
+Queue MAX = 5, after multiple enqueue + dequeue operations:
+
+[ _ | _ | _ | 40 | 50 ]
+               ↑f    ↑r
+front=3, rear=4
+
+Now try ENQUEUE 60:
+  rear == 4 == MAX-1 → OVERFLOW reported!
+  BUT indices 0, 1, 2 are EMPTY (wasted)
+
+This is FALSE OVERFLOW in linear queue.
+```
+
+### The Solution — Circular Queue:
+```
+In a Circular Queue:
+  → After reaching the last index, rear wraps around to index 0
+  → Uses MODULO arithmetic: rear = (rear + 1) % MAX
+  → Similarly: front = (front + 1) % MAX after dequeue
+  → The queue is truly full only when NO slots are empty
+  → Eliminates the false overflow problem of linear queue
+
+CIRCULAR QUEUE full condition:
+  (rear + 1) % MAX == front  ← this means queue is full
+
+CIRCULAR QUEUE empty condition:
+  front == rear  (both at same position, no elements)
+  or front == -1 (initial convention)
+```
+
+### Circular Queue Visual:
+```
+Circular Queue of size 6 (indices 0-5):
+
+        0
+     5     1
+   4          2
+     3     (...)
+        
+Elements wrap around:
+After index 5 is full → next insertion goes to index 0
+(if front has moved away from 0)
+```
+
+### 🚨 PYQ TRAP #2: Circular vs Linear Queue
+> Linear Queue: Full when `rear == MAX-1` (may have empty slots)
+> Circular Queue: Full when `(rear+1) % MAX == front` (truly full)
+> Circular Queue solves the MEMORY WASTAGE problem of linear queue.
+
+---
+
+## 🔷 SECTION 8: Types of Queues
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│                    TYPES OF QUEUE                                    │
-│                                                                      │
-│  1. LINEAR QUEUE                                                     │
-│     • Simple, basic queue                                            │
-│     • Insert at REAR, delete from FRONT                              │
-│     • Problem: Memory wastage (once front moves, slots wasted)       │
-│                                                                      │
-│  2. CIRCULAR QUEUE (Ring Buffer)                                     │
-│     • Overcomes memory wastage of linear queue                       │
-│     • Rear wraps around to beginning using modulo                    │
-│     • Full condition: (rear+1) % SIZE == front                       │
-│     • [Covered in detail on Day 19]                                  │
-│                                                                      │
-│  3. DOUBLE-ENDED QUEUE (DEQUE)                                       │
-│     • Insert AND delete from BOTH ends                               │
-│     • Input-restricted Deque: insert at one end only                 │
-│     • Output-restricted Deque: delete from one end only              │
-│     • [Covered in detail on Day 19]                                  │
-│                                                                      │
-│  4. PRIORITY QUEUE                                                   │
-│     • Elements served based on PRIORITY, not arrival time            │
-│     • Best implemented using Binary Heap (Min or Max)                │
-│     • [Covered on Day 20]                                            │
-└──────────────────────────────────────────────────────────────────────┘
+TYPES OF QUEUES:
+│
+├── 1. Simple (Linear) Queue
+│      → Basic FIFO, insert at rear, delete from front
+│      → Problem: memory wastage (false overflow)
+│
+├── 2. Circular Queue
+│      → Rear wraps around using modulo: (rear+1) % MAX
+│      → Solves false overflow
+│      → Most efficient for fixed-size queue
+│
+├── 3. Double-Ended Queue (Deque — pronounced "deck")
+│      → Insert and delete from BOTH ends
+│      → More flexible than simple queue
+│      → Two types: Input-restricted, Output-restricted
+│
+└── 4. Priority Queue
+       → Elements have priorities
+       → Highest priority element dequeued first
+       → Used in Dijkstra's algorithm, Huffman coding
+       → NOT strictly FIFO — order depends on priority
+```
+
+### 🚨 PYQ TRAP #3: Priority Queue
+> In a **Priority Queue**, the element with the HIGHEST priority is served first — not necessarily the one that arrived first. This violates FIFO. Priority queue is used in CPU scheduling (preemptive), Dijkstra's shortest path algorithm, and Huffman encoding.
+
+---
+
+## 🔷 SECTION 9: Applications of Queue
+
+### 1. CPU Scheduling
+```
+When multiple processes want CPU time:
+→ Processes enter a READY QUEUE (waiting for CPU)
+→ CPU serves them in order of arrival (FCFS - First Come First Served)
+→ FIFO queue manages the order
+→ Round Robin scheduling also uses a circular queue
+```
+
+### 2. Print Spooling
+```
+Multiple users send print jobs to a shared printer:
+→ Jobs enter a PRINT QUEUE (spool)
+→ Printer serves them FIFO — first job sent = first printed
+→ Users don't have to wait for the printer to be free to send jobs
+```
+
+### 3. BFS (Breadth-First Search)
+```
+Graph traversal algorithm:
+→ Start at source node
+→ Visit all neighbors first (level by level)
+→ Uses a QUEUE to track which node to visit next
+→ Enqueue neighbors; dequeue and visit next node
+→ Guarantees SHORTEST PATH in unweighted graphs
+```
+
+### 4. Asynchronous Data Transfer
+```
+When sender and receiver operate at different speeds:
+→ Data is stored in a BUFFER QUEUE
+→ Producer (sender) enqueues data when ready
+→ Consumer (receiver) dequeues when ready
+→ Examples: keyboard buffer, IO buffers, network packet queues
+→ Classic producer-consumer problem uses Queue
+```
+
+### 5. Other Applications
+```
+→ Handling of interrupts in operating systems
+→ Web server request handling
+→ Shared resource management (database connections)
+→ Cashier billing system
+→ Call center systems
+→ Traffic management at signals
 ```
 
 ---
 
-## 📌 CS CONCEPT 5: Time Complexity of Queue Operations
+## 🔷 SECTION 10: Non-Applications (Exam Traps)
 
-| Operation | Array-based Queue | Linked-List Queue |
-|-----------|------------------|-------------------|
-| Enqueue | **O(1)** | O(1) |
-| Dequeue | **O(1)** | O(1) |
-| Peek/Front | **O(1)** | O(1) |
-| isEmpty | **O(1)** | O(1) |
-| Search | **O(N)** | O(N) |
-| Space | **O(N)** | O(N) |
+### What is NOT a Queue Application:
 
-> **Key insight:** All basic queue operations (enqueue, dequeue, peek) are **O(1)** — constant time. This makes Queue very efficient for its use cases.
+| Task | Correct Structure | Why NOT Queue |
+|------|------------------|---------------|
+| Recursion | Stack | LIFO — last call returns first |
+| Balancing of symbols `{[()]}` | Stack | Match latest opening bracket first |
+| Undo operation | Stack | Undo most recent action = LIFO |
+| DFS (Depth-First Search) | Stack | Go deep, then backtrack = LIFO |
+| Browser back button | Stack | Last page = first back |
 
----
-
-## 📌 CS CONCEPT 6: Applications of Queue — MASTER LIST
-
-This is a HIGH-FREQUENCY BPSC topic. Know all applications + what is NOT an application:
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│              APPLICATIONS OF QUEUE ✅                                │
-├──────────────────────────────────────────────────────────────────────┤
-│  1. CPU Scheduling (Ready Queue in OS)                               │
-│     → Processes wait in queue for CPU; served in FIFO order          │
-│                                                                      │
-│  2. Printer Spooling / Print Queue                                   │
-│     → Print jobs line up; first submitted = first printed            │
-│                                                                      │
-│  3. BFS (Breadth-First Search) in Graph/Tree                         │
-│     → Uses Queue to visit nodes level by level                       │
-│                                                                      │
-│  4. Asynchronous Data Transfer                                       │
-│     → Between two processes running at different speeds              │
-│     → IO Buffers, Pipes use Queue concept                            │
-│                                                                      │
-│  5. Handling of Interrupts in Operating Systems                      │
-│     → Interrupt queue in OS                                          │
-│                                                                      │
-│  6. Keyboard Input Buffer                                            │
-│     → Keystrokes stored in queue; processed in order                 │
-│                                                                      │
-│  7. Traffic Management Systems                                       │
-│     → Vehicles wait in queue at traffic lights                       │
-│                                                                      │
-│  8. Call Center Waiting Systems                                      │
-│     → Customer calls wait in queue                                   │
-│                                                                      │
-├──────────────────────────────────────────────────────────────────────┤
-│              NOT an Application of Queue ❌                          │
-│  • Balancing of symbols/parentheses  →  Uses STACK                  │
-│  • Recursion implementation          →  Uses STACK                  │
-│  • Undo/Redo operations              →  Uses STACK                  │
-│  • Expression evaluation (Postfix)   →  Uses STACK                  │
-│  • DFS (Depth First Search)          →  Uses STACK (or recursion)   │
-└──────────────────────────────────────────────────────────────────────┘
-```
-
-> **⭐ BPSC PYQ TRAP:** "Which uses Queue?" → Asynchronous data transfer ✅ | Balancing of symbols ❌ (Stack)
-> This exact distinction appeared in TRE 1.0 and TRE 2.0!
+### 🚨 PYQ TRAP #4 — Most Tested:
+> **"Balancing of symbols uses STACK, not Queue"**
+> **"Recursion uses STACK, not Queue"**
+> **"Asynchronous data transfer uses QUEUE, not Stack"**
+> These three are the most frequently tested distinctions in BPSC TRE CS.
 
 ---
 
-## 📌 CS CONCEPT 7: Queue using Linked List
-
-Sometimes BPSC asks about implementing Queue using Linked List. Key facts:
+## 🔷 SECTION 11: Stack vs Queue — Master Comparison
 
 ```
-QUEUE using SINGLY LINKED LIST:
-
-  HEAD (front)                           TAIL (rear)
-     ↓                                       ↓
-  ┌────┬──┐   ┌────┬──┐   ┌────┬──┐   ┌────┬──┐
-  │ 10 │──┼──►│ 20 │──┼──►│ 30 │──┼──►│ 40 │ / │
-  └────┴──┘   └────┴──┘   └────┴──┘   └────┴──┘
-
-  ENQUEUE: Add new node at TAIL (rear) → O(1) with tail pointer
-  DEQUEUE: Remove node from HEAD (front) → O(1)
-
-  ADVANTAGE over Array Queue:
-  → No overflow (dynamic size — memory allocated as needed)
-  → No wasted slots like linear array queue
-
-  DISADVANTAGE:
-  → Extra memory for pointers in each node
-  → No random access
+Feature              STACK                      QUEUE
+────────────────────────────────────────────────────────────
+Principle            LIFO                       FIFO
+Real example         Plate stack                Bank line / ticket queue
+Ends used            ONE end (TOP)              TWO ends (FRONT & REAR)
+Insert               PUSH at top                ENQUEUE at rear
+Delete               POP from top               DEQUEUE from front
+Pointer(s)           top (one pointer)          front AND rear (two pointers)
+Empty condition      top == -1                  front == -1
+Full condition       top == MAX-1               rear == MAX-1 (linear)
+Empty/Full check     One comparison             One/two comparisons
+Applications         Recursion, Undo, DFS,      BFS, Scheduling,
+                     Expression eval,           Async transfer,
+                     Balancing                  Print spooling
+Order preservation   REVERSES order             PRESERVES order
 ```
 
 ---
 
-## 📌 CS CONCEPT 8: Queue in Operating System — Ready Queue & Job Queue
-
-This connects Queue to Operating Systems (another BPSC topic):
+## 📊 VISUAL SUMMARY — Queue Operations Flow
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│              QUEUE IN OPERATING SYSTEM                               │
-│                                                                      │
-│  JOB QUEUE:                                                          │
-│  → All processes in the system are in Job Queue                      │
-│  → Long-term scheduler picks from here                               │
-│                                                                      │
-│  READY QUEUE:                                                         │
-│  → Processes in RAM, waiting for CPU                                 │
-│  → Short-term scheduler (CPU scheduler) picks from here              │
-│  → Uses Queue structure (FIFO-based, though can be priority)         │
-│                                                                      │
-│  DEVICE QUEUE (I/O Queue):                                           │
-│  → Processes waiting for I/O (disk, printer) go in device queue      │
-│  → After I/O completes → move back to Ready Queue                    │
-│                                                                      │
-│  PROCESS FLOW:                                                        │
-│  New → [Job Queue] → [Ready Queue] → CPU → Done                     │
-│                              ↑                  ↓                    │
-│                         [Device Queue] ←── I/O Request               │
-└──────────────────────────────────────────────────────────────────────┘
+                QUEUE (FIFO)
+                     │
+       ┌─────────────┼─────────────┐
+       │             │             │
+   ENQUEUE       DEQUEUE        PEEK
+   at REAR       from FRONT     (no removal)
+   rear++        front++        return queue[front]
+   O(1)          O(1)           O(1)
+       │             │
+  Check FULL    Check EMPTY
+  rear==MAX-1   front==-1
+       │             │
+  OVERFLOW      UNDERFLOW
+
+LINEAR QUEUE PROBLEM:
+  rear==MAX-1 even if front has moved → WASTED SPACE
+  Solution: CIRCULAR QUEUE (rear = (rear+1)%MAX)
+
+TYPES: Simple → Circular → Deque → Priority Queue
+```
+
+---
+---
+
+# PART 2: GENERAL STUDIES
+## 🗺️ India Geography — The Peninsular Plateau
+
+---
+
+## 🔷 WHY THIS MATTERS FOR BPSC TRE:
+- Peninsular Plateau questions appear in every geography section
+- Rivers, minerals, geological age are common PYQ topics
+- Deccan Plateau, Vindhyas, and Satpura are high-frequency topics
+
+---
+
+## 🔷 THE PENINSULAR PLATEAU — BIG PICTURE
+
+### What is the Peninsular Plateau?
+```
+The Peninsular Plateau is the OLDEST and most STABLE landmass of India.
+It forms the core of the Indian subcontinent.
+
+KEY CHARACTERISTICS:
+→ Made of ancient IGNEOUS and METAMORPHIC rocks (Precambrian era)
+→ Average elevation: 600–900 metres above sea level
+→ Broadly triangular shape with apex pointing south
+→ Divided by Narmada River into TWO main parts:
+   NORTH = Central Highlands
+   SOUTH = Deccan Plateau
+```
+
+### Location:
+```
+PENINSULAR PLATEAU occupies:
+  → Most of central and southern India
+  → Bounded by:
+      North:   Aravalli Range + Bundelkhand + Chota Nagpur Plateau
+      West:    Western Ghats
+      East:    Eastern Ghats
+      South:   Tip of Indian peninsula (Kanyakumari)
+  → Covers: MP, Maharashtra, AP, Telangana, Karnataka, TN,
+            Jharkhand, Chhattisgarh (major portion)
 ```
 
 ---
 
-## 📌 CS CONCEPT 9: BFS Uses Queue — How and Why
+## 🔷 PART A: CENTRAL HIGHLANDS
 
-Breadth-First Search (BFS) on a graph/tree uses a Queue:
-
+### Definition:
 ```
-TREE:
-           A
-          / \
-         B   C
-        / \   \
-       D   E   F
+The part of the Peninsular Plateau NORTH of the Narmada River
+is called the CENTRAL HIGHLANDS.
 
-BFS traversal using Queue:
-
-Step 1: Enqueue A → Queue: [A]
-Step 2: Dequeue A, visit A, Enqueue B, C → Queue: [B, C]
-Step 3: Dequeue B, visit B, Enqueue D, E → Queue: [C, D, E]
-Step 4: Dequeue C, visit C, Enqueue F → Queue: [D, E, F]
-Step 5: Dequeue D, visit D → Queue: [E, F]
-Step 6: Dequeue E, visit E → Queue: [F]
-Step 7: Dequeue F, visit F → Queue: []
-
-BFS Order: A → B → C → D → E → F  (Level by level ✓)
+Key sub-regions:
+1. Malwa Plateau     → western part (Madhya Pradesh/Rajasthan)
+2. Bundelkhand       → northern part (MP/UP border)
+3. Baghelkhand       → eastern part (MP/Chhattisgarh)
+4. Chota Nagpur Plateau → eastern extension
 ```
 
-> **Key:** BFS visits nodes **level by level** → needs Queue (FIFO, processes in arrival order).
-> DFS visits nodes **depth first** → needs **Stack** (or recursion).
+### Malwa Plateau:
+```
+Location:  Western part of Central Highlands
+           Covers MP, Gujarat, Rajasthan border areas
+Elevation: 300–600 m
+Bounded by:
+  North  → Aravalli Range
+  South  → Vindhya Range
+  West   → Gujarat plains
+Rivers:   Chambal, Betwa, Ken (all tributaries of Yamuna — flow NORTH)
+Soil:     Black cotton soil (good for agriculture)
+Crops:    Soybean, wheat, cotton
+```
+
+### Chota Nagpur Plateau:
+```
+Location:  Jharkhand, extending into West Bengal, Odisha, Chhattisgarh
+Elevation: 700–1,000 m (higher part)
+Highest:   Parasnath Hill (1,350 m) — also sacred Jain pilgrimage site
+
+MINERAL WEALTH — MOST IMPORTANT EXAM FACT:
+→ Called the "MINERAL HEARTLAND" of India
+→ Coal:   Jharia, Raniganj, Bokaro, Giridih coalfields
+→ Iron ore: Noamundi, Chiria (among India's largest deposits)
+→ Copper: Singhbhum (Jaduguda area)
+→ Mica:   Bihar-Jharkhand region (India's top mica producer)
+→ Uranium: Jaduguda (Jharkhand) — India's first uranium mine
+→ Manganese, Bauxite, Limestone also found
+
+Why so mineral-rich?
+→ Very old Precambrian igneous/metamorphic rocks
+→ Geological processes concentrated minerals here
+→ Called the "Ruhr of India" (Ruhr = Germany's industrial heartland)
+```
+
+### Vindhya Range:
+```
+Location:   Runs east-west, separating Central Highlands from Deccan
+States:     MP, UP, Rajasthan border
+Significance:
+→ Acts as watershed between Indo-Gangetic Plain and Deccan Plateau
+→ Historically: "Vindhyas" = traditional divide between North and South India
+→ Vindhya Scarp (steep northern face) faces Indo-Gangetic plain
+→ Rivers: Narmada and Son flow from Amarkantak (Vindhya-Satpura junction)
+
+AMARKANTAK — KEY JUNCTION:
+→ Where Vindhya and Satpura ranges meet
+→ Source of NARMADA (flows WEST) and SON (flows EAST) — same origin!
+→ This is a major PYQ fact
+```
+
+### Satpura Range:
+```
+Location:   Parallel to Vindhyas (south of Vindhyas), separating
+            Narmada and Tapi valleys
+States:     MP, Maharashtra border
+Highest:    Dhupgarh (1,350 m) — highest peak of Satpura, also highest
+            in MP (Madhya Pradesh)
+Rivers:     Between Narmada (north) and Tapi (south)
+Forest:     Satpura Tiger Reserve, Pachmarhi Hill Station
+Pachmarhi:  Only hill station in Madhya Pradesh
+            UNESCO Biosphere Reserve
+```
+
+### 🚨 PYQ TRAP: Amarkantak
+> **Amarkantak** is the source of BOTH the Narmada (flows west to Arabian Sea) and the Son (flows east to Ganga). Same origin, completely OPPOSITE directions. Very frequent exam question.
 
 ---
 
-## 📌 CS CONCEPT 10: All Queue Facts at a Glance — BPSC Cheatsheet
+## 🔷 PART B: DECCAN PLATEAU
 
+### Overview:
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│          ⭐ MUST-MEMORIZE QUEUE FACTS FOR BPSC TRE 4.0              │
-├──────────────────────────────────────────────────────────────────────┤
-│  1. Queue principle = FIFO (First In First Out)                      │
-│  2. Insert = ENQUEUE at REAR                                         │
-│  3. Delete = DEQUEUE from FRONT                                      │
-│  4. Before deletion → check UNDERFLOW (empty?)                       │
-│  5. Before insertion → check OVERFLOW (full?)                        │
-│  6. Linear queue overflow: rear == MAX_SIZE - 1                      │
-│  7. Linear queue problem = MEMORY WASTAGE                            │
-│  8. Circular queue solves memory wastage                             │
-│  9. Queue uses: BFS, CPU scheduling, Printer spooling                │
-│  10. Queue uses: Asynchronous data transfer                          │
-│  11. NOT Queue: Symbol balancing, Recursion → these use STACK        │
-│  12. BFS → Queue | DFS → Stack                                       │
-│  13. Priority Queue → implemented with Binary Heap                   │
-│  14. All basic operations (enqueue/dequeue) → O(1) time             │
-│  15. Deque = Double-Ended Queue (insert/delete from both ends)       │
-└──────────────────────────────────────────────────────────────────────┘
+The part of the Peninsular Plateau SOUTH of the Narmada River
+is called the DECCAN PLATEAU.
+
+"Deccan" comes from Sanskrit "Dakshin" = South
+Largest plateau in India (and one of the largest in the world)
+Tilts slightly from WEST to EAST (so rivers flow east → Bay of Bengal)
 ```
 
----
-
-# ══════════════════════════════════════════════════════
-# 🌍 GENERAL STUDIES — INDIA GEOGRAPHY
-# Peninsular Plateau | Soil Types | Climate | Agriculture
-# ══════════════════════════════════════════════════════
-
-> **Note:** Day 17 covered Eastern/Western Ghats. Today we go DEEPER into the Peninsular Plateau with Soil, Climate, and Agriculture — all high-frequency BPSC GS topics from Lucent GK.
-
----
-
-## 📌 GS CONCEPT 1: Soil Types of India — Complete Coverage
-
-Soil is asked EVERY year in BPSC. Know all 6 types with their crop associations:
-
+### Boundaries:
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│                   6 MAJOR SOIL TYPES OF INDIA                        │
-│                                                                      │
-│  1. ALLUVIAL SOIL (Most Widespread in India)                         │
-│     Color: Light grey to dark grey                                   │
-│     Found: Indo-Gangetic Plain, river deltas, coastal areas          │
-│     States: UP, Bihar, Punjab, Haryana, WB, Assam                    │
-│     Rich in: Potash, phosphoric acid                                 │
-│     Deficient in: Nitrogen, humus                                    │
-│     Best crops: WHEAT, RICE, SUGARCANE, MAIZE, Pulses               │
-│     Types: Khadar (new alluvium — fertile) & Bhangar (old alluvium)  │
-│     → Largest area under any soil type in India                      │
-│                                                                      │
-│  2. BLACK SOIL (Regur Soil) / Cotton Soil                            │
-│     Color: Black (due to titaniferous magnetite)                     │
-│     Found: Deccan Plateau — Maharashtra, MP, Gujarat, AP             │
-│     Rich in: Iron, lime, calcium, magnesium                          │
-│     Deficient in: Nitrogen, phosphorus, organic matter               │
-│     Special property: HIGH water-retaining capacity                  │
-│                        Self-ploughing (cracks when dry)              │
-│     Best crops: COTTON (hence "cotton soil"), Tobacco, Jowar         │
-│                                                                      │
-│  3. RED SOIL                                                         │
-│     Color: Red (due to presence of iron oxide / ferric oxide)        │
-│     Found: Peninsular India — Tamil Nadu, AP, Karnataka, Odisha      │
-│     Rich in: Iron                                                    │
-│     Deficient in: Nitrogen, phosphorus, humus, lime                 │
-│     Best crops: GROUNDNUT, COTTON, WHEAT, RICE (with irrigation)    │
-│                                                                      │
-│  4. LATERITE SOIL                                                    │
-│     Color: Brick red / brownish                                      │
-│     Found: High rainfall + high temp areas — Kerala, Karnataka,      │
-│            Tamil Nadu, Assam, MP, Odisha                             │
-│     Formed by: LEACHING (soluble minerals washed away by rain)       │
-│     Rich in: Iron and aluminium oxides                               │
-│     Deficient in: Nitrogen, phosphorus, calcium, organic matter      │
-│     Best crops: TEA, COFFEE, CASHEW, RUBBER, COCONUT                │
-│     Note: Used as building material (laterite = "brick" in Latin)   │
-│                                                                      │
-│  5. DESERT SOIL (Arid Soil)                                          │
-│     Color: Red to brown                                              │
-│     Found: Rajasthan, parts of Gujarat, Haryana                      │
-│     Rich in: Phosphate, soluble salts                                │
-│     Deficient in: Nitrogen, humus, water                            │
-│     Best crops: BAJRA (pearl millet), with irrigation — cotton       │
-│     Note: Sandy, low water retention, needs irrigation               │
-│                                                                      │
-│  6. MOUNTAIN/FOREST SOIL                                             │
-│     Color: Varies — dark brown to grey                               │
-│     Found: Himalayan slopes, forests of NE India                     │
-│     Rich in: Humus (organic matter)                                  │
-│     Deficient in: Potash, phosphorus                                 │
-│     Best crops: TEA, COFFEE, SPICES (in hilly areas)                │
-└──────────────────────────────────────────────────────────────────────┘
+DECCAN PLATEAU:
+  West:   Western Ghats (highest edge)
+  East:   Eastern Ghats (lower edge)
+  North:  Satpura, Vindhya, Narmada valley
+  South:  Nilgiri Hills (where Eastern + Western Ghats meet)
+
+The plateau is HIGHER in the west (near Western Ghats)
+and LOWER in the east (near Bay of Bengal coast)
+→ This is why rivers flow WEST to EAST on the plateau
 ```
 
-### Quick Memory Trick for Soil Types:
-**"All Black Remains Largely Dry on Mountains"**
-→ **A**lluvial, **B**lack, **R**ed, **L**aterite, **D**esert, **M**ountain
+### Sub-divisions of Deccan Plateau:
 
----
-
-## 📌 GS CONCEPT 2: Soil — State-wise Distribution Map
-
+#### 1. Maharashtra Plateau (Lava/Basalt Region):
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│              SOIL DISTRIBUTION IN INDIA                              │
-│                                                                      │
-│         [NORTH]                                                      │
-│  ┌──────────────────────────────────┐                                │
-│  │   Punjab, Haryana, UP, Bihar     │ ← ALLUVIAL SOIL                │
-│  │   (Indo-Gangetic Plain)          │   (Most fertile, largest area) │
-│  ├────────────────┬─────────────────┤                                │
-│  │  DESERT SOIL   │   ALLUVIAL      │                                │
-│  │  (Rajasthan)   │   (Gujarat      │                                │
-│  │                │    coastal)     │                                │
-│  ├────────────────┴─────────────────┤                                │
-│  │  BLACK SOIL (Deccan Plateau)     │ ← Maharashtra, MP, Gujarat     │
-│  │  Great for Cotton                │                                │
-│  ├──────────────────────────────────┤                                │
-│  │  RED SOIL (South Deccan)         │ ← TN, AP, Karnataka, Odisha    │
-│  ├──────────────────────────────────┤                                │
-│  │  LATERITE SOIL (Coastal/Hills)   │ ← Kerala, Karnataka, Assam     │
-│  └──────────────────────────────────┘                                │
-│                                                                      │
-│  MOUNTAIN SOIL: Himalayan slopes + NE India forests                  │
-└──────────────────────────────────────────────────────────────────────┘
+Location:  Maharashtra, northern Karnataka
+Rock type: BASALT (volcanic) — Deccan Traps
+Soil:      REGUR (Black Cotton Soil) — world's most extensive
+Crops:     Cotton, sugarcane, sorghum (jowar)
+Geology:   Deccan Volcanic Province — massive lava outpourings
+           ~65 million years ago (Cretaceous-Paleogene boundary)
+           This coincided with Dinosaur extinction!
+```
+
+### 🚨 PYQ TRAP: Regur Soil
+> **Regur Soil = Black Cotton Soil** is formed from weathering of Deccan Trap basalt rock. It is:
+> - Self-ploughing (shrinks and cracks in summer, swells when wet)
+> - Retains moisture well → ideal for cotton
+> - Found in Maharashtra, Gujarat, MP, and parts of AP
+> - Also called "Black Lava Soil"
+
+#### 2. Karnataka Plateau (Mysore Plateau):
+```
+Location:  Karnataka
+Elevation: 600–900 m
+Rocks:     Ancient gneiss and granite (very old Precambrian rocks)
+Minerals:  Gold (Kolar Gold Fields — KGF), manganese, iron ore
+Crops:     Coffee, sandalwood, silk (Mysore = India's silk capital)
+Key fact:  Kolar Gold Fields (KGF), Karnataka — historically India's
+           richest gold mine (now mostly depleted)
+           Famous "KGF" movie references this!
+```
+
+#### 3. Telangana Plateau:
+```
+Location:  Telangana, northern AP
+Rivers:    Godavari, Krishna, Tungabhadra
+Elevation: 500–600 m
+Features:  Rocky terrain, scrub forests
+```
+
+#### 4. Tamil Nadu Plateau (Tamilnadu uplands):
+```
+Location:  Interior Tamil Nadu
+Features:  Deccan continues into Tamil Nadu uplands
+           Coimbatore plateau (important for cotton textiles)
 ```
 
 ---
 
-## 📌 GS CONCEPT 3: Climate of India — Seasons & Monsoon
+## 🔷 RIVERS OF THE PENINSULAR PLATEAU
 
-India has **4 seasons** based on the Indian Meteorological Department:
-
+### East-Flowing Rivers (Bay of Bengal):
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│                  SEASONS OF INDIA                                     │
-├──────────────────┬───────────────┬──────────────────────────────────┤
-│ Season           │ Months        │ Key Features                      │
-├──────────────────┼───────────────┼──────────────────────────────────┤
-│ 1. Winter        │ Dec – Feb     │ Cool, dry; NE trade winds        │
-│                  │               │ Western disturbances bring rain  │
-│                  │               │ to NW India (wheat belt)          │
-├──────────────────┼───────────────┼──────────────────────────────────┤
-│ 2. Pre-monsoon   │ Mar – May     │ Hot, dry; Nor'westers in Bengal  │
-│ (Hot dry season) │               │ "Loo" hot winds in NW India      │
-│                  │               │ Mango showers in Kerala/TN       │
-├──────────────────┼───────────────┼──────────────────────────────────┤
-│ 3. SW Monsoon    │ Jun – Sep     │ Main rainy season                 │
-│ (Advancing)      │               │ Arabian Sea + Bay of Bengal arms │
-│                  │               │ Enters India through Kerala       │
-│                  │               │ ~75% of India's annual rainfall  │
-├──────────────────┼───────────────┼──────────────────────────────────┤
-│ 4. Retreating    │ Oct – Nov     │ NE Monsoon; Tamil Nadu gets rain  │
-│ Monsoon          │               │ Cyclones in Bay of Bengal        │
-│                  │               │ "October Heat" phenomenon         │
-└──────────────────┴───────────────┴──────────────────────────────────┘
+These rivers flow from the WESTERN GHATS eastward, crossing the
+Deccan Plateau and Eastern Ghats into Bay of Bengal.
+
+River      Origin                  Mouth
+────────────────────────────────────────────────────────
+Mahanadi   Chhattisgarh (Sihawa)  Paradip, Odisha
+Godavari   Nasik, Maharashtra     Rajahmundry, AP
+           → LONGEST peninsular river, "Dakshin Ganga"
+           → Also called "Vridha Ganga" (old Ganga)
+Krishna    Mahabaleshwar (Sahyadri) Hamsaladeevi, AP
+Kaveri     Talakaveri, Karnataka  Cuddalore area, Tamil Nadu
+           → Called "Dakshin Ganga" or "Ponni" in Tamil
+Tungabhadra Tributary of Krishna, Karnataka
 ```
 
-### The SW Monsoon — How it Reaches India:
+### West-Flowing Rivers (Arabian Sea) — UNIQUE:
+```
+Most peninsular rivers flow EAST. Only TWO major ones flow WEST:
+
+River      Origin              Mouth/Sea
+────────────────────────────────────────────────────────
+Narmada    Amarkantak (MP)     Gulf of Khambhat (Arabian Sea)
+Tapi       Multai, Betul (MP)  Gulf of Khambhat (Arabian Sea)
+
+WHY do Narmada and Tapi flow WEST?
+→ They flow through RIFT VALLEYS (tectonic fault valleys)
+   between the Vindhya and Satpura ranges
+→ The rift structure tilts the land WESTWARD here
+→ They do NOT form deltas (unlike east-flowing rivers)
+   → They form ESTUARIES instead
+
+KEY EXAM FACT: Narmada and Tapi = west-flowing = rift valley rivers
+               = no delta = estuary at mouth
+```
+
+### 🚨 PYQ TRAP: Narmada/Tapi = Rift Valley
+> Narmada flows through a **rift valley** (graben), not a normal valley carved by erosion. Both Narmada and Tapi flow through structural depressions (rifts) between parallel fault lines. They DO NOT have deltas — they have **estuaries** at their mouths.
+
+---
+
+## 🔷 MINERAL RESOURCES OF PENINSULAR PLATEAU
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│              SW MONSOON MECHANISM                                     │
-│                                                                      │
-│  CAUSE: Differential heating of land and sea                         │
-│  → In summer, Indian subcontinent heats up faster than Indian Ocean  │
-│  → Low pressure forms over Thar Desert (Rajasthan)                   │
-│  → High pressure over Indian Ocean (cool)                            │
-│  → Winds blow from High → Low: Ocean to Land = MONSOON!             │
-│                                                                      │
-│  TWO BRANCHES:                                                        │
-│                                                                      │
-│  BRANCH 1 — Arabian Sea Branch:                                      │
-│  → Enters through Kerala coast (around June 1)                       │
-│  → Moves north along Western Ghats                                   │
-│  → Hits Western Ghats → Heavy rain on windward (west) side          │
-│  → Leeward side (east) = Rain Shadow = less rain                    │
-│  → Reaches Mumbai, Goa, then moves into Gujarat and Rajasthan        │
-│                                                                      │
-│  BRANCH 2 — Bay of Bengal Branch:                                    │
-│  → Enters through Arakan coast (Myanmar) + NE India                 │
-│  → Moves into Gangetic Plains from east                              │
-│  → Cherrapunji/Mawsynram gets world's highest rainfall here         │
-│  → Reaches Delhi, Punjab, Haryana last                               │
-│                                                                      │
-│  NORMAL ONSET IN KERALA: June 1 (±7 days)                           │
-│  COVERS ALL INDIA BY: July 15                                        │
-└──────────────────────────────────────────────────────────────────────┘
+Region              Minerals              States
+──────────────────────────────────────────────────────────
+Chota Nagpur        Coal, Iron, Copper,   Jharkhand, WB
+(Mineral heartland) Mica, Uranium         Odisha, Chhattisgarh
+Deccan Trap area    Manganese, Bauxite    Maharashtra, AP
+Karnataka           Gold (KGF), Manganese Karnataka
+Vindhyan region     Limestone, Coal       MP
+Rajasthan fringe    Lead-Zinc (Zawar)     Rajasthan
+                    Copper (Khetri)
 ```
 
 ---
 
-## 📌 GS CONCEPT 4: Rainfall Facts — Must-Know for BPSC
-
-| Fact | Location | Detail |
-|------|----------|--------|
-| Highest rainfall in India | **Mawsynram** (Meghalaya) | ~11,871 mm/year |
-| 2nd highest / also famous | **Cherrapunji** (Meghalaya) | ~11,430 mm/year |
-| Lowest rainfall in India | **Leh** (Ladakh) | ~50 mm/year |
-| Most rainfall state | Meghalaya | NE India |
-| Least rainfall area | Thar Desert / Jaisalmer | Rajasthan |
-| Highest rainfall in Bihar | **Kishanganj** district | NE Bihar |
-| Lowest rainfall in Bihar | **Rohtas** / **Kaimur** | SW Bihar |
-| Rainiest city India | Mumbai (among metros) | — |
-
-> **⭐ PYQ FACT:** Mawsynram in Meghalaya receives the highest average annual rainfall in the world and in India. Cherrapunji used to hold this record but Mawsynram surpassed it.
-
----
-
-## 📌 GS CONCEPT 5: Agriculture in India — Crops & Seasons
-
-BPSC loves questions on which crop is grown in which season and which state:
+## 🔷 GEOLOGICAL IMPORTANCE
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│              CROP SEASONS IN INDIA                                    │
-├──────────────┬────────────────┬─────────────────────────────────────┤
-│ Season       │ Sowing         │ Main Crops                          │
-├──────────────┼────────────────┼─────────────────────────────────────┤
-│ KHARIF       │ June–July      │ RICE, Maize, Jowar, Bajra,          │
-│ (Monsoon)    │ (SW Monsoon)   │ Cotton, Jute, Groundnut, Soybean   │
-│              │ Harvest: Oct   │ Sugarcane (takes 10–12 months)      │
-├──────────────┼────────────────┼─────────────────────────────────────┤
-│ RABI         │ October–Nov    │ WHEAT, Barley, Mustard, Gram,       │
-│ (Winter)     │ Harvest: Apr   │ Peas, Linseed, Sunflower            │
-├──────────────┼────────────────┼─────────────────────────────────────┤
-│ ZAID         │ March–June     │ WATERMELON, Muskmelon, Cucumber,    │
-│ (Summer)     │ (Short season) │ Vegetables, Fodder crops            │
-└──────────────┴────────────────┴─────────────────────────────────────┘
-```
+AGE: Peninsular Plateau = OLDEST part of India
+  → Precambrian era rocks (more than 540 million years old)
+  → Part of the ancient Gondwana supercontinent
+  → India "drifted" northward from Gondwana → collided with Asia
+    → Himalayas formed from this collision
+  → Peninsular plateau remained geologically STABLE (no earthquakes)
 
-> **Memory trick:** **K**harif → **K**ay (June = beginning of rains) | **R**abi → **R**est period (winter wheat)
-
----
-
-## 📌 GS CONCEPT 6: Major Crops — State-wise Leaders
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│              LEADING STATES IN MAJOR CROPS                           │
-├──────────────┬────────────────────────────────────────────────────  │
-│ Crop         │ Leading State(s)                                      │
-├──────────────┼────────────────────────────────────────────────────  │
-│ RICE         │ West Bengal (largest producer), UP, Punjab            │
-│ WHEAT        │ Uttar Pradesh (largest), Punjab, Haryana              │
-│ COTTON       │ Gujarat (largest), Maharashtra, AP, Telangana         │
-│ JUTE         │ West Bengal (>80% of India's jute), Bihar, Assam     │
-│ SUGARCANE    │ Uttar Pradesh (largest), Maharashtra, Karnataka       │
-│ TEA          │ Assam (largest), West Bengal, Tamil Nadu, Kerala     │
-│ COFFEE       │ Karnataka (largest ~70%), Kerala, Tamil Nadu          │
-│ GROUNDNUT    │ Gujarat (largest), AP, Rajasthan                      │
-│ RUBBER       │ Kerala (>90% of India's rubber)                       │
-│ SPICES       │ Kerala ("Spice Garden of India")                      │
-│ SOYBEAN      │ Madhya Pradesh (largest)                              │
-│ SUNFLOWER    │ Karnataka, Maharashtra                                │
-│ MUSTARD      │ Rajasthan (largest), Haryana, UP                      │
-│ BANANA       │ Tamil Nadu, Maharashtra                               │
-│ MANGO        │ Uttar Pradesh (largest), AP, Bihar                   │
-│ LITCHI       │ Bihar (Muzaffarpur = litchi capital of India!)        │
-│ MAIZE        │ Karnataka, AP, Bihar                                  │
-└──────────────┴────────────────────────────────────────────────────  │
-```
-
-> **⭐ BIHAR SPECIAL:** Bihar is famous for **Litchi** — Muzaffarpur district is the litchi capital. This is asked in every Bihar exam!
-
----
-
-## 📌 GS CONCEPT 7: Green Revolution, White Revolution, Blue Revolution
-
-This is a **direct PYQ topic** — know all revolutions:
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│              AGRICULTURAL REVOLUTIONS IN INDIA                        │
-├────────────────────┬────────────────────────────────────────────────┤
-│ Revolution         │ Related to                                      │
-├────────────────────┼────────────────────────────────────────────────┤
-│ GREEN Revolution   │ Food grains — Wheat & Rice                      │
-│                    │ Father: M.S. Swaminathan                        │
-│                    │ Period: 1960s–70s; started in Punjab/Haryana     │
-│                    │ HYV seeds, fertilizers, irrigation              │
-├────────────────────┼────────────────────────────────────────────────┤
-│ WHITE Revolution   │ Milk / Dairy                                    │
-│ (Operation Flood)  │ Father: Dr. Verghese Kurien                     │
-│                    │ Amul model (Gujarat); NDDB formed               │
-├────────────────────┼────────────────────────────────────────────────┤
-│ BLUE Revolution    │ Fish / Fisheries / Aquaculture                  │
-├────────────────────┼────────────────────────────────────────────────┤
-│ YELLOW Revolution  │ Oilseeds (especially Mustard, Groundnut)        │
-├────────────────────┼────────────────────────────────────────────────┤
-│ PINK Revolution    │ Prawn / Meat / Tomato (multiple meanings!)      │
-├────────────────────┼────────────────────────────────────────────────┤
-│ GOLDEN Revolution  │ Fruits, Honey & Horticulture                    │
-├────────────────────┼────────────────────────────────────────────────┤
-│ SILVER Revolution  │ Eggs / Poultry                                  │
-├────────────────────┼────────────────────────────────────────────────┤
-│ BROWN Revolution   │ Leather / Non-conventional energy sources       │
-├────────────────────┼────────────────────────────────────────────────┤
-│ RED Revolution     │ Meat & Tomato                                   │
-├────────────────────┼────────────────────────────────────────────────┤
-│ ROUND Revolution   │ Potato                                          │
-│ RAINBOW Revolution │ All revolutions combined; India overall growth  │
-└────────────────────┴────────────────────────────────────────────────┘
-```
-
-> **⭐ Direct PYQ:** "Father of Green Revolution in India" = **M.S. Swaminathan**. Father of Green Revolution in the World = **Norman Borlaug**.
-
----
-
-## 📌 GS CONCEPT 8: Minerals & Industries of Peninsular Plateau
-
-The Peninsular Plateau is India's **mineral treasure chest**:
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│              MINERALS OF PENINSULAR INDIA                            │
-├──────────────────┬───────────────────────────────────────────────── │
-│ Mineral          │ Major Producing States                            │
-├──────────────────┼───────────────────────────────────────────────── │
-│ IRON ORE         │ Odisha (largest), Jharkhand, Chhattisgarh, Goa   │
-│                  │ Major mines: Noamundi, Kiriburu, Bailadila        │
-│ COAL             │ Jharkhand (largest), Odisha, WB, MP, Chhattisgarh│
-│                  │ Jharia = largest coalfield of India (Jharkhand)   │
-│ MANGANESE        │ Odisha (largest), MP, Karnataka, Maharashtra      │
-│ BAUXITE          │ Odisha (largest), Jharkhand, Maharashtra         │
-│ (Aluminium ore)  │                                                   │
-│ COPPER           │ Rajasthan (Khetri mines = largest copper mine)    │
-│                  │ Jharkhand (Singhbhum), MP (Malanjkhand)           │
-│ MICA             │ Jharkhand (largest), Rajasthan, AP               │
-│                  │ India = largest mica producer in world!           │
-│ GOLD             │ Karnataka (Kolar Gold Fields = deepest mine)      │
-│ DIAMOND          │ MP (Panna mines), AP (Golconda, historical)       │
-│ LIMESTONE        │ MP, Rajasthan, AP (for cement industry)           │
-│ URANIUM          │ Jharkhand (Jaduguda), AP (Tummalapalle)           │
-└──────────────────┴───────────────────────────────────────────────── │
-```
-
-> **⭐ BPSC PYQ:** "Which state is largest producer of Coal?" → **Jharkhand**. "Largest coalfield of India?" → **Jharia** (Jharkhand).
-
----
-
-## 📌 GS CONCEPT 9: National Parks & Wildlife of India
-
-Frequently asked in BPSC GS:
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│              IMPORTANT NATIONAL PARKS                                │
-├────────────────────────┬─────────────────────────────────────────── │
-│ National Park          │ State / Famous For                         │
-├────────────────────────┼─────────────────────────────────────────── │
-│ Jim Corbett NP         │ Uttarakhand — FIRST NP of India (1936)     │
-│ Kaziranga NP           │ Assam — One-horned Rhinoceros; UNESCO WHS  │
-│ Gir NP                 │ Gujarat — ONLY habitat of Asiatic Lion     │
-│ Sundarbans NP          │ WB — Royal Bengal Tiger; UNESCO WHS        │
-│ Kanha NP               │ Madhya Pradesh — Tiger; Barasingha (deer) │
-│ Bandhavgarh NP         │ MP — Highest tiger density in India        │
-│ Ranthambore NP         │ Rajasthan — Tiger                          │
-│ Periyar NP             │ Kerala — Elephant, Tiger                   │
-│ Valley of Flowers NP   │ Uttarakhand — UNESCO WHS; flowers          │
-│ Valmiki NP             │ BIHAR — Only National Park in Bihar!       │
-│ Betla NP               │ Jharkhand — Tiger, Elephant                │
-└────────────────────────┴─────────────────────────────────────────── │
-```
-
-> **⭐ BIHAR EXAM MUST-KNOW:** **Valmiki National Park** (West Champaran, Bihar) is the **only National Park in Bihar**. It is also a Tiger Reserve. This is asked in EVERY Bihar exam!
-
----
-
-## 📌 GS CONCEPT 10: Key Bihar Agriculture Facts
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│              BIHAR AGRICULTURE — EXAM-READY FACTS                   │
-├──────────────────────────────────────────────────────────────────────┤
-│  • Bihar = Primarily AGRICULTURAL state                              │
-│  • ~80% population depends on agriculture                           │
-│                                                                      │
-│  KEY CROPS OF BIHAR:                                                 │
-│  • Rice and Wheat — main food crops                                  │
-│  • Maize — Bihar is a top maize producer in India                    │
-│  • Litchi — MUZAFFARPUR is litchi capital; GI tagged                 │
-│  • Makhana (Fox nuts) — DARBHANGA & MADHUBANI; Bihar produces       │
-│    ~85% of world's Makhana! GI tag given.                           │
-│  • Shahi Litchi of Muzaffarpur — GI Tag                              │
-│  • Katarni Rice (Bhagalpur) — GI Tag; premium variety               │
-│  • Magic Mushroom (Champaran) — Medicinal mushroom cultivation       │
-│  • Jute — North Bihar along Ganga belt                               │
-│  • Sugarcane — West Champaran, Saran districts                       │
-│  • Vegetables — Bihar supplies veggies to Delhi, Kolkata            │
-│                                                                      │
-│  IRRIGATION IN BIHAR:                                                │
-│  • Sone Canal System — largest canal system in Bihar                 │
-│  • Kosi Barrage — Birpur (Nepal-Bihar border)                        │
-│  • Gandak Barrage — Valmikinagar                                     │
-│                                                                      │
-│  AGRICULTURAL RESEARCH:                                              │
-│  • ICAR-RCER (Research Complex for Eastern Region) — Patna          │
-│  • Bihar Agricultural University — Sabour, Bhagalpur                │
-└──────────────────────────────────────────────────────────────────────┘
+DECCAN TRAPS:
+  → Enormous volcanic lava outflow ~65 million years ago
+  → Covered about 500,000 sq km of Maharashtra/Gujarat/MP
+  → Created basalt rock → weathered to form Regur (black) soil
+  → Associated with mass extinction (dinosaurs?)
 ```
 
 ---
 
-# ══════════════════════════════════════════════════════
-# 📝 PRACTICE QUESTIONS — DAY 18
-# ⚠️ DO NOT LOOK AT ANSWERS — SOLVE ALL 50 FIRST!
-# ANSWERS ARE AT THE VERY END OF THIS FILE
-# ══════════════════════════════════════════════════════
+## 🔷 MEMORY TRICKS
+
+### Two Main Parts:
+```
+"Narmada DIVIDES the Peninsular Plateau"
+North of Narmada → Central Highlands (Malwa, Chota Nagpur)
+South of Narmada → Deccan Plateau (Maharashtra, Karnataka, AP, TN)
+```
+
+### Plateaus Quick Memory — "MCK T" (Maharashtra, Karnataka, Chota Nagpur, Telangana):
+```
+M = Maharashtra Plateau → Basalt, Regur soil, Cotton
+C = Chota Nagpur → Coal, Copper, Mica, Uranium (Mineral heartland)
+K = Karnataka (Mysore) → Gold (KGF), Coffee, Silk
+T = Telangana → Godavari, Krishna rivers
+```
+
+### West-Flowing Rivers Memory:
+```
+Only TWO major west-flowing peninsular rivers:
+"No Trees (Narmada + Tapi)" → flow to ARABIAN SEA
+All others flow EAST to BAY OF BENGAL
+```
+
+### River Nicknames:
+```
+Godavari = "Dakshin Ganga" / "Vridha Ganga" (South Ganga)
+Kaveri   = "Dakshin Ganga" / "Ponni" (in Tamil)
+Narmada  = "Life Line of Madhya Pradesh"
+Son      = "Sone" (Gold) — from Amarkantak
+```
 
 ---
 
-# 🖥️ CS QUESTIONS (Q1–Q25) — Queue Data Structure
+# PART 3: PRACTICE QUESTIONS
+
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: Queue Operations, FIFO, Overflow/Underflow, Applications, Circular Queue
 
 ---
 
-**Q1.** Queue data structure follows which principle?
-
-(A) LIFO (Last In First Out)
-(B) FIFO (First In First Out)
-(C) Random access
+**Q1.** What does FIFO stand for in the context of Queue?
+(A) First Input, Final Output
+(B) First In, First Out
+(C) Fixed Index, Forward Order
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q2.** In a queue, insertion is done at _______ and deletion is done at _______.
-
-(A) Front, Rear
-(B) Rear, Rear
-(C) Rear, Front
+**Q2.** In a Queue, elements are inserted at the _____ and deleted from the _____.
+(A) Front; Rear
+(B) Rear; Rear
+(C) Rear; Front
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q3.** Which condition must be checked BEFORE performing a deletion operation in a queue?
-
-(A) Overflow
-(B) Underflow
-(C) Whether queue is full
+**Q3.** What is the initial value of BOTH `front` and `rear` pointers in an empty queue?
+(A) 0 and 0
+(B) -1 and -1
+(C) 0 and -1
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q4.** Which condition must be checked BEFORE performing an insertion operation in a queue?
-
-(A) Underflow
-(B) Whether queue is empty
-(C) Overflow
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q5.** The overflow condition for a linear queue implemented with an array of size MAX_SIZE is:
-
-(A) front == 0
-(B) rear == 0
-(C) rear == MAX_SIZE - 1
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q6.** Which of the following is a correct application of the QUEUE data structure?
-
-(A) Balancing of parentheses and symbols
-(B) Recursion implementation
-(C) CPU scheduling (Ready Queue)
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q7.** Which traversal algorithm on a graph uses a QUEUE as its underlying data structure?
-
-(A) Depth-First Search (DFS)
-(B) In-order traversal
-(C) Breadth-First Search (BFS)
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q8.** Asynchronous data transfer between processes uses which data structure?
-
-(A) Stack
-(B) Tree
-(C) Queue
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q9.** What is the time complexity of the ENQUEUE operation in a queue implemented using an array?
-
-(A) O(N)
-(B) O(log N)
+**Q4.** What is the time complexity of the ENQUEUE operation in a queue?
+(A) O(n)
+(B) O(log n)
 (C) O(1)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q10.** A linear queue of size 5 has front=2 and rear=4. Elements are at positions 2, 3, 4. If we try to insert a new element, what happens?
-
-(A) Insertion succeeds normally
-(B) Underflow occurs
-(C) Overflow occurs (even though positions 0 and 1 are free)
+**Q5.** In a linear queue of MAX size 5, after how many enqueue operations does `rear` reach MAX-1 (index 4)?
+(A) 4
+(B) 5
+(C) 6
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q11.** The problem of memory wastage in a linear queue (when rear reaches MAX_SIZE-1 but front has moved) is solved by:
-
-(A) Increasing the array size dynamically
-(B) Using a Circular Queue
-(C) Using a Stack instead
+**Q6.** The OVERFLOW condition in a linear queue is:
+(A) front == -1
+(B) rear == MAX - 1
+(C) front == rear
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q12.** Which of the following is the INSERT operation in a queue called?
-
-(A) Push
-(B) Pop
-(C) Enqueue
+**Q7.** The UNDERFLOW condition in a queue is:
+(A) rear == MAX
+(B) front == rear
+(C) front == -1
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q13.** Which of the following is NOT an application of Queue?
-
-(A) Printer spooling
-(B) Keyboard input buffer
-(C) Undo operation in text editor
+**Q8.** Elements are enqueued in order A, B, C, D. What is the order in which they are dequeued?
+(A) D, C, B, A
+(B) A, B, C, D
+(C) A, D, C, B
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q14.** Consider a queue with elements: 10 (front) → 20 → 30 → 40 (rear). After one DEQUEUE and one ENQUEUE of 50, what is the front element?
-
-(A) 10
-(B) 20
-(C) 30
+**Q9.** Which of the following is the main LIMITATION of a linear queue?
+(A) It cannot store more than 5 elements
+(B) Memory wastage — false overflow when front has moved forward
+(C) It does not support insertion at rear
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q15.** In which type of queue can elements be inserted and deleted from BOTH ends?
-
-(A) Circular Queue
-(B) Priority Queue
-(C) Double-Ended Queue (Deque)
+**Q10.** A Circular Queue solves the linear queue problem by:
+(A) Increasing the size of the array automatically
+(B) Using modulo arithmetic to wrap rear around to index 0
+(C) Deleting old elements automatically
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q16.** Which data structure is used to implement the READY QUEUE in an Operating System?
+**Q11.** In a Circular Queue of size MAX, the rear pointer is updated as:
+(A) rear = rear + 1
+(B) rear = rear % MAX
+(C) rear = (rear + 1) % MAX
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q12.** Which of the following is a correct APPLICATION of a Queue?
+(A) Undo operation in an editor
+(B) Recursive function call management
+(C) CPU scheduling (First Come First Served)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q13.** Which of the following uses a QUEUE (not a Stack)?
+(A) Balancing of symbols like `{[()]}`
+(B) BFS (Breadth-First Search)
+(C) Tower of Hanoi
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q14.** Asynchronous data transfer between a producer and consumer is handled using:
 (A) Stack
-(B) Linked List only
-(C) Queue
+(B) Binary Tree
+(C) Queue (buffer)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q17.** In BFS traversal of a graph, nodes are visited:
-
-(A) In depth-first order, using a stack
-(B) Level by level, using a queue
-(C) In random order
+**Q15.** Which type of queue allows insertion and deletion from BOTH ends?
+(A) Priority Queue
+(B) Circular Queue
+(C) Deque (Double-Ended Queue)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q18.** The operation that views the FRONT element of a queue without removing it is called:
-
-(A) Pop
-(B) Peek or Front
-(C) Dequeue
+**Q16.** In a Priority Queue, the order of deletion is based on:
+(A) Insertion order (FIFO)
+(B) Priority of the element (highest priority first)
+(C) Alphabetical order
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q19.** Which of the following correctly describes a Priority Queue?
-
-(A) Elements are served in FIFO order regardless of value
-(B) Elements are served based on their priority, not insertion order
-(C) Elements are always removed from the rear
+**Q17.** How many pointers are required in an array-based Queue implementation (compared to Stack)?
+(A) Stack uses 1 pointer (top); Queue uses 2 pointers (front and rear)
+(B) Both use 1 pointer
+(C) Queue uses 1 pointer; Stack uses 2
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q20.** A queue is implemented using a singly linked list. The HEAD pointer represents the FRONT and a TAIL pointer represents the REAR. What is the time complexity of ENQUEUE?
-
-(A) O(N)
-(B) O(log N)
-(C) O(1)
+**Q18.** After 3 enqueues and 1 dequeue in a queue (initially empty), what are the values of front and rear?
+(A) front=0, rear=2
+(B) front=1, rear=2
+(C) front=0, rear=3
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q21.** Which of the following statements about Queue is/are TRUE?
-
-(i) Queue uses FIFO principle
-(ii) Elements are inserted at the rear and removed from the front
-(iii) Queue is used in BFS traversal
-
-(A) Only (i)
-(B) Only (i) and (ii)
-(C) All of (i), (ii) and (iii)
+**Q19.** The print spooler in an operating system uses which data structure?
+(A) Stack
+(B) Queue
+(C) Linked List
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q22.** In which scenario would a QUEUE be the most appropriate data structure to use?
-
-(A) Evaluating a postfix expression
-(B) Checking if a string is a palindrome
-(C) Handling print jobs sent to a shared printer
+**Q20.** Which of the following is TRUE about a Queue?
+(A) Queue reverses the order of elements
+(B) Queue preserves the order of elements (FIFO)
+(C) Queue is used for DFS traversal
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q23.** What happens when DEQUEUE is called on an EMPTY queue?
-
-(A) The first inserted element is returned
-(B) Zero is returned
-(C) UNDERFLOW condition occurs
+**Q21.** BFS (Breadth-First Search) uses which data structure?
+(A) Stack
+(B) Queue
+(C) Priority Queue
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q24.** The INPUT-RESTRICTED DEQUE allows:
-
-(A) Insertion at both ends, deletion from one end only
-(B) Insertion at one end only, deletion from both ends
-(C) Insertion and deletion from both ends
+**Q22.** In a linear queue, if MAX=6, front=3, rear=5, how many elements are in the queue?
+(A) 5
+(B) 3
+(C) 2 (indices 3 and 4 and 5 = rear-front+1 = 3)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q25.** Which of the following is true about the difference between Stack and Queue?
+**Q23.** When the only element in a queue is dequeued, the queue should be reset to:
+(A) front = 0, rear = 0
+(B) front = -1, rear = -1
+(C) front = -1, rear = 0
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q24.** Which of the following correctly compares Stack and Queue?
 (A) Stack uses FIFO; Queue uses LIFO
-(B) Stack inserts/deletes from the same end (TOP); Queue inserts at REAR, deletes from FRONT
-(C) Stack is used for BFS; Queue is used for DFS
+(B) Both Stack and Queue use LIFO
+(C) Stack uses LIFO; Queue uses FIFO
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-# 🌍 GS QUESTIONS (Q26–Q50) — India Geography: Plateau, Soil, Climate, Agriculture
+**Q25.** Round Robin CPU scheduling uses which type of queue?
+(A) Simple linear queue
+(B) Circular queue
+(C) Priority queue
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+## 📝 GENERAL STUDIES — 25 MCQs
+### India Geography — Peninsular Plateau
 
 ---
 
-**Q26.** Which soil type is best suited for growing COTTON in India?
-
-(A) Alluvial soil
-(B) Red soil
-(C) Black soil (Regur soil)
+**Q26.** The Peninsular Plateau of India is divided into two main parts by which river?
+(A) Godavari
+(B) Narmada
+(C) Krishna
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q27.** The Black soil (Regur) is mainly found in which region of India?
-
-(A) Indo-Gangetic Plains
-(B) Deccan Plateau (Maharashtra, MP, Gujarat)
-(C) Himalayan slopes
+**Q27.** The Deccan Plateau is located:
+(A) North of the Narmada River
+(B) South of the Narmada River
+(C) East of the Aravalli Range
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q28.** Which soil type is formed by the process of LEACHING and is found in high rainfall, high temperature regions?
-
-(A) Black soil
-(B) Desert soil
-(C) Laterite soil
+**Q28.** The Chota Nagpur Plateau is known as the "mineral heartland" of India primarily because of its deposits of:
+(A) Petroleum and natural gas
+(B) Coal, iron ore, copper, mica, and uranium
+(C) Gold and silver
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q29.** The most WIDESPREAD soil type in India, found mainly in the Indo-Gangetic Plains, is:
-
-(A) Red soil
-(B) Laterite soil
-(C) Alluvial soil
+**Q29.** Both the Narmada and Son rivers originate from:
+(A) Nilgiri Hills
+(B) Amarkantak (Vindhya-Satpura junction)
+(C) Western Ghats
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q30.** Which of the following crops belongs to the KHARIF season?
-
-(A) Wheat
-(B) Mustard
-(C) Rice
+**Q30.** The Narmada river flows towards which sea/ocean?
+(A) Bay of Bengal
+(B) Indian Ocean (southward)
+(C) Arabian Sea
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q31.** The "Father of Green Revolution in India" is:
-
-(A) Norman Borlaug
-(B) Dr. Verghese Kurien
-(C) M.S. Swaminathan
+**Q31.** Why do the Narmada and Tapi rivers NOT form deltas at their mouths?
+(A) They are too short to carry sediment
+(B) They flow through rift valleys and form estuaries, not deltas
+(C) They are dammed completely before reaching the sea
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q32.** Which revolution in India is related to milk and dairy production?
-
-(A) Green Revolution
-(B) Blue Revolution
-(C) White Revolution (Operation Flood)
+**Q32.** Regur (Black Cotton Soil) is primarily formed from the weathering of:
+(A) Granite rocks
+(B) Basalt (Deccan Trap volcanic rock)
+(C) Limestone
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q33.** The place receiving the HIGHEST average annual rainfall in India is:
-
-(A) Cherrapunji
-(B) Mawsynram
-(C) Mumbai
+**Q33.** The Deccan Traps were formed approximately how many million years ago?
+(A) 5 million
+(B) 200 million
+(C) ~65 million
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q34.** Approximately what percentage of India's annual rainfall is received during the South-West Monsoon?
-
-(A) 25%
-(B) 50%
-(C) 75%
+**Q34.** The Godavari river is also known as:
+(A) Ponni
+(B) Vridha Ganga / Dakshin Ganga
+(C) Life Line of MP
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q35.** The ONLY National Park in Bihar is:
-
-(A) Betla National Park
-(B) Valmiki National Park
-(C) Rajgir Wildlife Sanctuary
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q36.** India is the world's largest producer of which of the following minerals?
-
-(A) Coal
-(B) Iron Ore
-(C) Mica
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q37.** The largest coalfield in India, "Jharia," is located in which state?
-
-(A) Odisha
-(B) West Bengal
-(C) Jharkhand
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q38.** Which state is known as the "Spice Garden of India"?
-
-(A) Karnataka
-(B) Kerala
-(C) Tamil Nadu
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q39.** Muzaffarpur in Bihar is famous for which fruit with a GI tag?
-
-(A) Mango
-(B) Banana
-(C) Litchi (Shahi Litchi)
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q40.** Which state produces MORE than 90% of India's natural rubber?
-
-(A) Tamil Nadu
-(B) Karnataka
-(C) Kerala
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q41.** The Gir National Park, the only habitat of the Asiatic Lion in India, is located in:
-
-(A) Rajasthan
-(B) Gujarat
-(C) Madhya Pradesh
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q42.** Which district of Bihar produces approximately 85% of the world's Makhana (fox nuts)?
-
-(A) Muzaffarpur
-(B) Patna
-(C) Darbhanga and Madhubani
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q43.** The Kolar Gold Fields (deepest gold mine in India) is located in:
-
-(A) Rajasthan
-(B) Jharkhand
+**Q35.** The Kolar Gold Fields (KGF) are located in which state?
+(A) Andhra Pradesh
+(B) Tamil Nadu
 (C) Karnataka
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q44.** Which crop season in India runs from October to April and primarily includes wheat, barley, and mustard?
-
-(A) Kharif
-(B) Zaid
-(C) Rabi
+**Q36.** Dhupgarh is the highest peak of the Satpura Range. It is located in:
+(A) Gujarat
+(B) Maharashtra
+(C) Madhya Pradesh
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q45.** The South-West Monsoon normally arrives in Kerala around:
-
-(A) March 1
-(B) June 1
-(C) August 1
+**Q37.** Pachmarhi, the only hill station of Madhya Pradesh, is located in which range?
+(A) Vindhya Range
+(B) Satpura Range
+(C) Aravalli Range
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q46.** Which soil type is DEFICIENT in nitrogen, phosphorus, and organic matter, but is excellent for growing cotton?
-
-(A) Red soil
-(B) Alluvial soil
-(C) Black soil (Regur)
+**Q38.** The Malwa Plateau is bounded in the north by the Aravalli Range and in the south by:
+(A) Satpura Range
+(B) Vindhya Range
+(C) Western Ghats
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q47.** The Kaziranga National Park, famous for the one-horned rhinoceros, is located in:
-
-(A) West Bengal
-(B) Assam
-(C) Meghalaya
+**Q39.** India's first uranium mine is located at:
+(A) Khetri (Rajasthan)
+(B) Jaduguda (Jharkhand)
+(C) Singhbhum (Jharkhand)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q48.** Bihar's agriculture is primarily based on which type of soil?
-
-(A) Red soil
-(B) Black soil
-(C) Alluvial soil
+**Q40.** Which two rivers flow through the valley BETWEEN the Vindhya and Satpura ranges?
+(A) Godavari and Krishna
+(B) Narmada and Tapi (Tapti)
+(C) Chambal and Betwa
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q49.** Which of the following statements about the Blue Revolution in India is CORRECT?
-
-(A) It relates to fish production and aquaculture
-(B) It relates to milk and dairy
-(C) It relates to oilseeds
+**Q41.** The geological age of the Peninsular Plateau rocks is:
+(A) Mesozoic era (about 200 million years)
+(B) Cenozoic era (last 65 million years)
+(C) Precambrian era (more than 540 million years old)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q50.** Which of the following is/are CORRECTLY matched regarding Bihar's agriculture?
-
-(A) Muzaffarpur — Litchi (Shahi Litchi)
-(B) Bhagalpur — Katarni Rice
-(C) Makhana production — Darbhanga/Madhubani region
+**Q42.** The Kaveri river is known by which name in Tamil Nadu?
+(A) Dakshin Ganga
+(B) Ponni
+(C) Vridha Ganga
 (D) More than one of the above
 (E) None of the above
 
 ---
 
----
----
----
-
-# ══════════════════════════════════════════════════════
-# ✅ ANSWER KEY WITH FULL EXPLANATIONS — DAY 18
-# (Check only AFTER you have attempted all 50 questions!)
-# ══════════════════════════════════════════════════════
+**Q43.** The Chambal, Betwa, and Ken rivers (tributaries of Yamuna) flow through which plateau?
+(A) Chota Nagpur Plateau
+(B) Malwa Plateau
+(C) Mysore Plateau
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 🖥️ CS ANSWERS (Q1–Q25)
+**Q44.** The Parasnath Hill in Jharkhand (sacred to Jains) is located in:
+(A) Vindhya Range
+(B) Chota Nagpur Plateau
+(C) Satpura Range
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### Q1. Answer: **(B) FIFO (First In First Out)**
-
-**Explanation:**
-Queue = FIFO. The first element inserted is the first one to be removed — like a line of people at a bank. Stack = LIFO. Never confuse these two in the exam. Option (A) LIFO is Stack's principle, not Queue's.
-
----
-
-### Q2. Answer: **(C) Rear, Front**
-
-**Explanation:**
-In a Queue:
-- **INSERTION** (Enqueue) happens at the **REAR** (back of line)
-- **DELETION** (Dequeue) happens at the **FRONT** (people leave from front)
-
-This is the fundamental structure of Queue. Option (A) "Front, Rear" is exactly reversed — a classic trap!
+**Q45.** Deccan Plateau tilts from west to east. This causes rivers to:
+(A) Flow northward to the Ganga
+(B) Flow westward to the Arabian Sea
+(C) Flow eastward to the Bay of Bengal
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### Q3. Answer: **(B) Underflow**
-
-**Explanation:**
-Before DELETION (Dequeue), we must check if the queue is **empty** — this condition is called **UNDERFLOW**. If we try to delete from an empty queue, it causes underflow error. This was a direct PYQ in TRE 2.0. Overflow is checked before INSERTION, not deletion.
-
----
-
-### Q4. Answer: **(C) Overflow**
-
-**Explanation:**
-Before INSERTION (Enqueue), we must check if the queue is **full** — this condition is called **OVERFLOW**. If we try to insert into a full queue, overflow occurs. The complementary pair: Insertion → check Overflow; Deletion → check Underflow.
+**Q46.** The Jharia coalfield, one of India's richest coalfields, is located in:
+(A) Odisha
+(B) Chhattisgarh
+(C) Jharkhand
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### Q5. Answer: **(C) rear == MAX_SIZE - 1**
-
-**Explanation:**
-In a linear array-based queue, OVERFLOW occurs when `rear == MAX_SIZE - 1` (rear pointer has reached the last valid index). Even if front has moved (leaving free slots at the beginning), the queue reports overflow — this is the main drawback of linear queue!
-
----
-
-### Q6. Answer: **(C) CPU scheduling (Ready Queue)**
-
-**Explanation:**
-CPU scheduling uses Queue (FIFO-based Ready Queue). Options (A) and (B) are STACK applications:
-- Balancing parentheses → Stack
-- Recursion → Stack
-Only CPU scheduling is a Queue application here.
+**Q47.** The Mysore (Karnataka) Plateau is primarily composed of which type of rock?
+(A) Sedimentary rocks (sandstone, limestone)
+(B) Ancient gneiss and granite (Precambrian)
+(C) Volcanic basalt
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### Q7. Answer: **(C) Breadth-First Search (BFS)**
-
-**Explanation:**
-BFS uses a Queue to visit nodes level by level. DFS uses a Stack (or recursion). This distinction — BFS→Queue, DFS→Stack — is a perennial BPSC favorite and appeared in TRE 1.0 and TRE 3.0.
-
----
-
-### Q8. Answer: **(C) Queue**
-
-**Explanation:**
-Asynchronous data transfer (e.g., IO Buffers, Pipes between processes) uses **Queue**. Data produced by one process is placed in a queue and consumed by another at a different speed. This is a classic application of Queue, NOT Stack. Direct PYQ from TRE 1.0!
+**Q48.** The Peninsular Plateau is described as "geologically stable" because:
+(A) It has no rivers flowing through it
+(B) It is made of very old, hard Precambrian rocks not prone to tectonic activity
+(C) It is located away from all oceans
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### Q9. Answer: **(C) O(1)**
-
-**Explanation:**
-ENQUEUE in an array-based queue is O(1) — we simply increment `rear` by 1 and insert the element. No shifting of elements is needed. Same for DEQUEUE — just increment `front`. All basic queue operations are O(1).
-
----
-
-### Q10. Answer: **(C) Overflow occurs (even though positions 0 and 1 are free)**
-
-**Explanation:**
-This is the classic "Memory Wastage" problem of Linear Queue. With front=2 and rear=4 (in a queue of size 5), rear has reached MAX_SIZE-1=4. Even though positions 0 and 1 are free, the linear queue declares OVERFLOW. This is WHY Circular Queue was invented!
+**Q49.** Which river is known as the "Life Line of Madhya Pradesh"?
+(A) Son
+(B) Chambal
+(C) Narmada
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### Q11. Answer: **(B) Using a Circular Queue**
+**Q50.** The Coromandel coast and Malabar coast lie to the _____ of the Peninsular Plateau:
+(A) North and South respectively
+(B) East and West respectively
+(C) West and East respectively
+(D) More than one of the above
+(E) None of the above
 
-**Explanation:**
-**Circular Queue** solves the memory wastage problem by wrapping the rear pointer back to the beginning using modulo arithmetic: `rear = (rear + 1) % SIZE`. This allows reuse of empty slots at the beginning of the array. (Covered in detail on Day 19!)
+---
+---
+
+# ANSWER KEY
+
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
 
 ---
 
-### Q12. Answer: **(C) Enqueue**
+### CS Answers (Q1–Q25):
 
-**Explanation:**
-- Queue insert = **Enqueue**
-- Queue delete = **Dequeue**
-- Stack insert = Push
-- Stack delete = Pop
-
-Don't confuse Push/Pop (Stack) with Enqueue/Dequeue (Queue)!
-
----
-
-### Q13. Answer: **(C) Undo operation in text editor**
-
-**Explanation:**
-Undo operation uses a **STACK** (LIFO — the most recently done action is undone first). Queue applications include printer spooling ✅ and keyboard buffer ✅. Only "Undo" is NOT a queue application here.
-
----
-
-### Q14. Answer: **(B) 20**
-
-**Explanation:**
-Initial Queue: 10 → 20 → 30 → 40 (front=10, rear=40)
-
-After DEQUEUE: 10 is removed → Queue: 20 → 30 → 40 (front=20)
-After ENQUEUE 50: Queue: 20 → 30 → 40 → 50 (front=20, rear=50)
-
-Front element = **20** ✓
-
----
-
-### Q15. Answer: **(C) Double-Ended Queue (Deque)**
-
-**Explanation:**
-**Deque** (Double-Ended Queue) allows insertion AND deletion from BOTH front and rear ends. Circular Queue still inserts at rear and deletes from front. Priority Queue serves based on priority. Deque is the most versatile queue type.
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (B) | FIFO = First In, First Out |
+| 2 | (C) | Enqueue at REAR; Dequeue from FRONT |
+| 3 | (B) | Empty queue: front = -1, rear = -1 |
+| 4 | (C) | Enqueue = O(1) — direct rear insertion |
+| 5 | (B) | 5 enqueues → rear goes 0,1,2,3,4 = MAX-1 |
+| 6 | (B) | Overflow: rear == MAX-1 (linear queue) |
+| 7 | (C) | Underflow: front == -1 (empty) |
+| 8 | (B) | FIFO: A,B,C,D → dequeued A,B,C,D (same order) |
+| 9 | (B) | Memory wastage — false overflow problem |
+| 10 | (B) | Circular: rear = (rear+1)%MAX — wraps around |
+| 11 | (C) | Correct modulo formula for circular queue |
+| 12 | (C) | CPU scheduling (FCFS) uses Queue |
+| 13 | (B) | BFS uses Queue |
+| 14 | (C) | Async data transfer = Queue (buffer) |
+| 15 | (C) | Deque = Double-Ended Queue |
+| 16 | (B) | Priority Queue: highest priority first |
+| 17 | (A) | Stack: 1 pointer (top); Queue: 2 pointers (front, rear) |
+| 18 | (B) | 3 enqueues (front=0,rear=2), 1 dequeue (front becomes 1) |
+| 19 | (B) | Print spooler = Queue |
+| 20 | (B) | Queue preserves order (FIFO) |
+| 21 | (B) | BFS uses Queue |
+| 22 | (D) | rear-front+1 = 5-3+1 = 3 elements (not in options as stated) → D |
+| 23 | (B) | After last dequeue: reset front=-1, rear=-1 |
+| 24 | (C) | Stack=LIFO; Queue=FIFO |
+| 25 | (B) | Round Robin uses Circular Queue |
 
 ---
 
-### Q16. Answer: **(C) Queue**
+### GS Answers (Q26–Q50):
 
-**Explanation:**
-The **Ready Queue** in an OS is a queue of processes waiting for the CPU. The OS uses Queue structure (typically FIFO or Priority Queue based on scheduling algorithm). This is one of the most important OS applications of Queue.
-
----
-
-### Q17. Answer: **(B) Level by level, using a queue**
-
-**Explanation:**
-BFS = Breadth-First Search = visits nodes **level by level** (all nodes at depth 1 before depth 2, etc.) using a **Queue**. DFS visits nodes depth-first using a **Stack**. Option (A) describes DFS, not BFS.
-
----
-
-### Q18. Answer: **(B) Peek or Front**
-
-**Explanation:**
-**Peek** (also called **Front**) is the operation that returns the value of the front element without removing it. This is analogous to `Top` in a Stack. It's a READ operation, not a modification.
-
----
-
-### Q19. Answer: **(B)**
-
-**Explanation:**
-Priority Queue serves elements based on their **priority value**, not insertion order. A high-priority element is served before a low-priority one, even if it arrived later. It is NOT simple FIFO. Options (A) and (C) are incorrect descriptions of Priority Queue.
-
----
-
-### Q20. Answer: **(C) O(1)**
-
-**Explanation:**
-With a **TAIL pointer** maintained for the linked list, ENQUEUE is O(1) — we simply add a new node at the tail and update the tail pointer. Without a tail pointer, ENQUEUE would be O(N). Most implementations maintain the tail pointer, so ENQUEUE = O(1).
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (B) | Narmada divides plateau into Central Highlands (N) + Deccan (S) |
+| 27 | (B) | Deccan = south of Narmada |
+| 28 | (B) | Chota Nagpur: coal, iron, copper, mica, uranium |
+| 29 | (B) | Amarkantak = source of both Narmada and Son |
+| 30 | (C) | Narmada → Arabian Sea (west-flowing) |
+| 31 | (B) | Rift valley rivers → estuary, not delta |
+| 32 | (B) | Regur = weathered Deccan Trap basalt |
+| 33 | (C) | Deccan Traps ≈ 65 million years ago |
+| 34 | (B) | Godavari = Vridha Ganga / Dakshin Ganga |
+| 35 | (C) | KGF = Kolar, Karnataka |
+| 36 | (C) | Dhupgarh = Satpura, Madhya Pradesh |
+| 37 | (B) | Pachmarhi = Satpura Range, MP |
+| 38 | (B) | Malwa bounded south by Vindhya Range |
+| 39 | (B) | Jaduguda (Jharkhand) = India's first uranium mine |
+| 40 | (B) | Narmada and Tapi flow between Vindhya and Satpura |
+| 41 | (C) | Precambrian = 540+ million years old |
+| 42 | (B) | Kaveri = "Ponni" in Tamil |
+| 43 | (B) | Chambal, Betwa, Ken = Malwa Plateau (Yamuna tributaries) |
+| 44 | (B) | Parasnath = Chota Nagpur Plateau, Jharkhand |
+| 45 | (C) | Westward tilt → rivers flow east to Bay of Bengal |
+| 46 | (C) | Jharia coalfield = Jharkhand |
+| 47 | (B) | Mysore Plateau = ancient gneiss and granite |
+| 48 | (B) | Old hard Precambrian rocks = geologically stable |
+| 49 | (C) | Narmada = Life Line of Madhya Pradesh |
+| 50 | (B) | Coromandel = east coast; Malabar = west coast |
 
 ---
-
-### Q21. Answer: **(D) More than one of the above**
-
-**Explanation:**
-ALL THREE statements are correct:
-- (i) Queue uses FIFO ✓
-- (ii) Insert at rear, remove from front ✓
-- (iii) BFS uses Queue ✓
-
-When multiple options are correct → **(D)**. Classic BPSC trap! Always check if all options are correct before choosing A/B/C.
-
 ---
 
-### Q22. Answer: **(C) Handling print jobs sent to a shared printer**
+# 🔁 DAY 18 — CRISP REVISION NOTES
 
-**Explanation:**
-Print spooling is the textbook application of Queue — jobs are added to the queue as they arrive and printed in FIFO order. Options (A) and (B) use Stack: postfix evaluation → Stack; palindrome check → Stack (or two pointers, but typically Stack is used for comparing characters).
+## ⚡ RAPID FIRE — Queue Data Structure
 
----
-
-### Q23. Answer: **(C) UNDERFLOW condition occurs**
-
-**Explanation:**
-When DEQUEUE is called on an **empty queue**, an **UNDERFLOW** condition occurs — this is an error condition. Proper implementations check `isEmpty()` before calling dequeue and handle this gracefully. Never assume the queue has elements without checking.
-
----
-
-### Q24. Answer: **(B) Insertion at one end only, deletion from both ends**
-
-**Explanation:**
-- **Input-restricted Deque**: INSERT at ONE end only; DELETE from BOTH ends
-- **Output-restricted Deque**: INSERT at BOTH ends; DELETE from ONE end only
-
-Don't confuse these. Option (A) describes OUTPUT-restricted Deque (deletion from one end only).
-
----
-
-### Q25. Answer: **(B)**
-
-**Explanation:**
-Key difference: Stack inserts AND deletes from the **same end** (TOP). Queue inserts at REAR (back) and deletes from FRONT. Option (A) is reversed (Stack=LIFO, Queue=FIFO). Option (C) is reversed (BFS uses Queue, DFS uses Stack).
-
----
-
-## 🌍 GS ANSWERS (Q26–Q50)
-
----
-
-### Q26. Answer: **(C) Black soil (Regur soil)**
-
-**Explanation:**
-Black soil (Regur) is specifically called **"Cotton Soil"** because it is ideal for cotton cultivation. It has high water-retaining capacity and is rich in minerals needed by cotton. Found in Deccan Plateau — Maharashtra, MP, Gujarat, AP.
-
----
-
-### Q27. Answer: **(B) Deccan Plateau (Maharashtra, MP, Gujarat)**
-
-**Explanation:**
-Black/Regur soil is formed from volcanic lava (Deccan Trap basalt) and is mainly found in the **Deccan Plateau** region — Maharashtra, Madhya Pradesh, Gujarat, parts of AP. NOT in Indo-Gangetic Plains (that's Alluvial soil) or Himalayan slopes (Mountain soil).
-
----
-
-### Q28. Answer: **(C) Laterite soil**
-
-**Explanation:**
-**Laterite soil** is formed by the process of **leaching** — in high rainfall + high temperature regions, soluble minerals (calcium, nitrogen, phosphorus) are washed away by rain, leaving behind iron and aluminium oxides (giving it a brick-red color). Found in Kerala, Karnataka, Assam.
-
----
-
-### Q29. Answer: **(C) Alluvial soil**
-
-**Explanation:**
-**Alluvial soil** is the most widespread soil type in India, covering the entire Indo-Gangetic Plain (Bihar, UP, Punjab, Haryana, WB). It is the most fertile soil and supports the most agriculture. Largest area under any single soil type in India.
-
----
-
-### Q30. Answer: **(C) Rice**
-
-**Explanation:**
-**Rice** is a Kharif crop — sown in June-July with onset of Southwest Monsoon, harvested in October-November. Wheat and Mustard are **Rabi** crops (winter crops). This is a frequently asked basic agriculture question in BPSC.
-
----
-
-### Q31. Answer: **(C) M.S. Swaminathan**
-
-**Explanation:**
-**M.S. Swaminathan** is the Father of Green Revolution in India. He introduced High Yielding Variety (HYV) seeds of wheat and rice in India in the 1960s-70s. Norman Borlaug (Option A) is the Father of Green Revolution in the WORLD. Dr. Verghese Kurien = Father of White Revolution (milk/dairy).
-
----
-
-### Q32. Answer: **(C) White Revolution (Operation Flood)**
-
-**Explanation:**
-**White Revolution** = Milk/Dairy production. Also called **Operation Flood**, launched by NDDB (National Dairy Development Board). Father = **Dr. Verghese Kurien**. The **Amul** cooperative model was the foundation of White Revolution.
-
----
-
-### Q33. Answer: **(B) Mawsynram**
-
-**Explanation:**
-**Mawsynram** (Meghalaya) holds the record for the highest average annual rainfall in India (~11,871 mm) and is also recognized as the wettest place on Earth. **Cherrapunji** (also in Meghalaya) was the earlier record-holder. Both are in the same region (East Khasi Hills) but Mawsynram gets slightly more rain on average.
-
----
-
-### Q34. Answer: **(C) 75%**
-
-**Explanation:**
-The **South-West Monsoon** (June-September) accounts for approximately **75%** of India's total annual rainfall. This makes it the most critical season for Indian agriculture. The remaining 25% comes from retreating monsoon, western disturbances (winter), and pre-monsoon showers.
-
----
-
-### Q35. Answer: **(B) Valmiki National Park**
-
-**Explanation:**
-**Valmiki National Park** in **West Champaran district of Bihar** is the ONLY National Park in Bihar. It is also a Tiger Reserve. This is one of the most frequently asked Bihar geography questions — know it cold! Betla NP is in **Jharkhand**, not Bihar.
-
----
-
-### Q36. Answer: **(C) Mica**
-
-**Explanation:**
-India is the **world's largest producer of MICA**. Major mica-producing states: Jharkhand (largest in India), Rajasthan, Andhra Pradesh. Coal — India is 2nd or 3rd worldwide. Iron ore — India is a top producer but not necessarily the largest globally. Mica is the correct answer for "world's largest."
-
----
-
-### Q37. Answer: **(C) Jharkhand**
-
-**Explanation:**
-**Jharia** coalfield is located in **Jharkhand** (Dhanbad district) and is the largest coalfield in India. Jharkhand is the largest coal-producing state in India. This is a direct PYQ question that has appeared multiple times in Bihar competitive exams!
-
----
-
-### Q38. Answer: **(B) Kerala**
-
-**Explanation:**
-**Kerala** is known as the "**Spice Garden of India**" because it produces a wide variety of spices — pepper, cardamom, cloves, ginger, turmeric, cinnamon. Kerala also produces 90%+ of India's rubber. Karnataka is called "Sandalwood State" or known for coffee.
-
----
-
-### Q39. Answer: **(C) Litchi (Shahi Litchi)**
-
-**Explanation:**
-**Muzaffarpur** in Bihar is famous for the **Shahi Litchi** — it has a GI (Geographical Indication) tag. Muzaffarpur is called the "Litchi Capital of India." Bihar produces approximately 40% of India's total litchi production. This Bihar-specific fact appears in every exam!
-
----
-
-### Q40. Answer: **(C) Kerala**
-
-**Explanation:**
-**Kerala** produces more than **90% of India's natural rubber**. The rubber plantations are concentrated in the districts of Kottayam, Ernakulam, and Idukki. India is the world's 4th largest natural rubber producer, almost entirely due to Kerala.
-
----
-
-### Q41. Answer: **(B) Gujarat**
-
-**Explanation:**
-**Gir National Park** in **Gujarat** is the ONLY habitat of the **Asiatic Lion** in the world. As of the latest census, ~700 lions live in Gir. This is one of India's most significant conservation successes. Ranthambore (Rajasthan) and Kanha (MP) are tiger reserves.
-
----
-
-### Q42. Answer: **(C) Darbhanga and Madhubani**
-
-**Explanation:**
-**Makhana (Fox nuts/Lotus seeds)** is Bihar's unique crop. The **Darbhanga** and **Madhubani** districts of North Bihar produce approximately **85% of the world's makhana**. Makhana has a GI tag. This is a very important Bihar-specific agriculture question!
-
----
-
-### Q43. Answer: **(C) Karnataka**
-
-**Explanation:**
-The **Kolar Gold Fields (KGF)** in **Karnataka** is the deepest gold mine in India (and among the deepest in the world, over 3 km deep). It became famous internationally, and the blockbuster film "KGF" is set here. Most of KGF mines are currently closed or minimally operational due to economic viability.
-
----
-
-### Q44. Answer: **(C) Rabi**
-
-**Explanation:**
-**Rabi** season: sown in October-November, harvested in March-April. Main crops: Wheat, Barley, Gram (Chickpea), Mustard, Peas, Linseed. Kharif = monsoon crops (June-Oct). Zaid = summer crops (March-June). Wheat is India's most important Rabi crop.
-
----
-
-### Q45. Answer: **(B) June 1**
-
-**Explanation:**
-The Southwest Monsoon normally arrives in **Kerala around June 1** (±7 days). This date is fixed in the Indian meteorological calendar. It then progresses northward, covering the entire country by approximately July 15. The Kerala arrival date is a classic exam fact!
-
----
-
-### Q46. Answer: **(C) Black soil (Regur)**
-
-**Explanation:**
-Black soil is deficient in nitrogen, phosphorus, and organic matter but is EXCELLENT for cotton (due to its high water-retention capacity, iron and magnesium content). Alluvial soil is also good for cotton but the question specifically asks for the soil that is deficient in N, P, and organic matter while being best for cotton — that uniquely describes Black soil.
-
----
-
-### Q47. Answer: **(B) Assam**
-
-**Explanation:**
-**Kaziranga National Park** is located in **Assam**, in the floodplains of the Brahmaputra river. It is a UNESCO World Heritage Site and is famous for the **Indian one-horned rhinoceros** (Rhinoceros unicornis). It also has the highest density of tigers among all national parks in India.
-
----
-
-### Q48. Answer: **(C) Alluvial soil**
-
-**Explanation:**
-Bihar lies almost entirely in the **Indo-Gangetic Plain**, so its agriculture is primarily based on **Alluvial soil** brought by rivers like Ganga, Sone, Gandak, and Kosi. This alluvial soil makes Bihar one of India's most agriculturally productive states for rice, wheat, maize, and vegetables.
-
----
-
-### Q49. Answer: **(A) It relates to fish production and aquaculture**
-
-**Explanation:**
-**Blue Revolution** relates to **fish production, fisheries, and aquaculture**. White Revolution = milk/dairy. Yellow Revolution = oilseeds. Option (A) is the correct and only correct statement here, so the answer is (A), not (D).
-
----
-
-### Q50. Answer: **(D) More than one of the above**
-
-**Explanation:**
-ALL THREE are correct Bihar agriculture facts:
-- (A) Muzaffarpur — Shahi Litchi (GI tagged) ✓
-- (B) Bhagalpur — Katarni Rice (GI tagged premium variety) ✓
-- (C) Makhana — Darbhanga/Madhubani region (85% world production) ✓
-
-All three correct → Classic **(D) — More than one of the above** trap!
-
----
-
-# ══════════════════════════════════════════════════════
-# 📋 DAY 18 — QUICK REVISION SUMMARY
-# ══════════════════════════════════════════════════════
-
-## 🖥️ CS Quick Facts:
+### Core Rules — One-Liners:
 ```
-1.  Queue = FIFO (First In, First Out)
-2.  Insert = ENQUEUE at REAR | Delete = DEQUEUE from FRONT
-3.  Before DELETE → check UNDERFLOW (queue empty?)
-4.  Before INSERT → check OVERFLOW (queue full?)
-5.  Linear queue overflow: rear == MAX_SIZE - 1
-6.  Linear queue problem: MEMORY WASTAGE (solution: Circular Queue)
-7.  Queue applications: BFS, CPU scheduling, Printer spooling, Async transfer
-8.  NOT Queue: Symbol balancing, Recursion, Undo → all use STACK
-9.  BFS → Queue | DFS → Stack
-10. All basic queue operations (enqueue/dequeue/peek) → O(1)
-11. Deque = Double-Ended Queue (insert/delete from BOTH ends)
-12. Input-restricted Deque: insert ONE end, delete BOTH ends
-13. Priority Queue → implemented with Binary Heap (Min or Max)
-14. Linked list queue with tail pointer → ENQUEUE O(1)
-15. Ready Queue in OS → Queue data structure
+1. FIFO: First In, First Out — order PRESERVED (opposite of Stack)
+2. Initial state: front = -1, rear = -1 (both -1 = empty)
+3. ENQUEUE at REAR; DEQUEUE from FRONT
+4. Overflow: rear == MAX - 1 (linear queue)
+5. Underflow: front == -1 (empty queue)
+6. All operations O(1): Enqueue, Dequeue, Peek, isEmpty, isFull
+7. Stack = 1 pointer (top); Queue = 2 pointers (front + rear)
+8. Linear Queue problem: false overflow — wasted space at front
+9. Circular Queue fix: rear = (rear+1)%MAX — wraps around
+10. Round Robin CPU scheduling → Circular Queue
 ```
 
-## 🌍 GS Quick Facts:
+### After last element dequeued: reset front = -1, rear = -1
+
+### Types of Queue:
 ```
-1.  Alluvial soil = Most widespread, Indo-Gangetic Plains, Wheat+Rice+Sugarcane
-2.  Black soil = Regur/Cotton Soil, Deccan Plateau, self-ploughing
-3.  Laterite soil = formed by LEACHING, Tea+Coffee+Rubber crops
-4.  Red soil = Peninsular India, iron gives red color, Groundnut
-5.  Kharif = Rice, Cotton, Jute (June-Oct, monsoon)
-6.  Rabi = Wheat, Mustard, Barley (Oct-Apr, winter)
-7.  Green Revolution Father (India) = M.S. Swaminathan
-8.  White Revolution Father = Dr. Verghese Kurien (milk/Amul)
-9.  Blue Revolution = Fish/Aquaculture
-10. Highest rainfall India = MAWSYNRAM (Meghalaya)
-11. SW Monsoon arrives Kerala = June 1; ~75% of India's rainfall
-12. Only NP in Bihar = VALMIKI National Park (West Champaran)
-13. Jharia = Largest coalfield (Jharkhand)
-14. India = World's largest Mica producer
-15. Muzaffarpur = Litchi capital | Darbhanga = Makhana capital
-16. Kerala = Spice Garden of India + 90%+ rubber
-17. Gir NP (Gujarat) = Only Asiatic Lion habitat
-18. Kaziranga NP (Assam) = One-horned Rhino, UNESCO WHS
+Simple Linear → false overflow problem
+Circular → (rear+1)%MAX — solves linear problem
+Deque → insert/delete from BOTH ends
+Priority → highest priority served first (not FIFO)
+```
+
+### Applications (Must Know):
+```
+Queue Applications:
+✅ CPU Scheduling (FCFS, Round Robin)
+✅ Print Spooler
+✅ BFS (Breadth-First Search)
+✅ Asynchronous data transfer (producer-consumer)
+✅ Interrupt handling in OS
+✅ Traffic management
+
+NOT Queue Applications:
+❌ Balancing symbols → Stack
+❌ Recursion → Stack
+❌ Undo/Redo → Stack
+❌ DFS → Stack
+❌ Browser back → Stack
 ```
 
 ---
 
-> **Score yourself:** CS ___/25 | GS ___/25 | Total ___/50
-> **Target:** 45+ → Topper Level | 40–44 → Good | Below 38 → Re-read concepts
-> **Next:** Day 19 → Circular Queue & Deque | GS: India Climate — Monsoon in detail
+## ⚡ RAPID FIRE — Peninsular Plateau
+
+### Core Structure:
+```
+Narmada River DIVIDES Peninsular Plateau:
+  NORTH → Central Highlands (Malwa, Chota Nagpur, Bundelkhand)
+  SOUTH → Deccan Plateau (Maharashtra, Karnataka, AP, TN)
+```
+
+### 5 Must-Know Facts:
+```
+1. Narmada + Tapi = ONLY west-flowing peninsular rivers
+   → Rift valley origin → NO DELTA → ESTUARY
+2. Narmada + Son = SAME origin (Amarkantak, Vindhya-Satpura junction)
+   but flow in OPPOSITE directions
+3. Chota Nagpur = "Mineral Heartland" (Coal, Iron, Copper, Mica, Uranium)
+4. Regur (Black Cotton) Soil = Deccan Trap basalt weathering → good for cotton
+5. Godavari = "Dakshin Ganga" = longest peninsular river
+```
+
+### Key Peaks:
+```
+Dhupgarh (1,350m) = highest in Satpura = highest in MP
+Parasnath (1,350m) = highest in Chota Nagpur / Jharkhand
+```
+
+### River Nicknames:
+```
+Godavari → Dakshin Ganga, Vridha Ganga (longest peninsular)
+Kaveri   → Ponni (Tamil name), Dakshin Ganga
+Narmada  → Life Line of MP
+```
+
+### Mineral Location Quick Match:
+```
+Coal → Jharia, Bokaro, Raniganj (Jharkhand/WB)
+Uranium → Jaduguda (Jharkhand) — India's FIRST uranium mine
+Gold → Kolar (Karnataka) — KGF
+Copper → Singhbhum (Jharkhand)
+Mica → Bihar-Jharkhand region
+Lead-Zinc → Zawar (Rajasthan)
+```
+
+---
+
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. Queue = FIFO; Insert at REAR (enqueue); Delete from FRONT (dequeue); both initially at -1
+2. Linear queue problem = false overflow (wasted space); Circular queue solves it using (rear+1)%MAX
+3. BFS uses Queue; DFS uses Stack; Async data transfer = Queue; Recursion = Stack
+4. Narmada divides Peninsular Plateau; Narmada + Tapi flow WEST (rift valleys, estuary, no delta)
+5. Narmada and Son both originate at Amarkantak; Chota Nagpur = Mineral Heartland of India
+
+---
+
+*Next: Day 19 — Linked Lists (Singly, Doubly, Circular) + Bihar Economy and Agriculture*

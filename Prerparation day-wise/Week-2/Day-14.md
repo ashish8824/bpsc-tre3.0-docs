@@ -1,1761 +1,1346 @@
-# 📅 BPSC TRE 4.0 — DAY 14 COMPLETE STUDY MATERIAL
-## CS Topic: REVISION WEEK — C++ Complete (Days 8–13) + PYQ Masterclass
-## GS Topic: Maths Revision (Profit & Loss, Ratio, Averages) + Modern India Quick Recap
-
-> **Day 14 is your POWER DAY.**
-> This is not "new learning" — this is CONSOLIDATION.
-> Every topper knows: revision beats new reading 3:1 in exam performance.
-> Today you will see ALL C++ Week topics together, spot the connections, and solve
-> a full set of PYQ-pattern questions to lock in your score advantage.
+# 📅 BPSC TRE 4.0 — DAY 14: COMPLETE REVISION + PYQ PRACTICE
+### Week 2 Master Revision — Day 8 to Day 13 (CS + GS)
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-# ═══════════════════════════════════════════════════════════════════
-# 🖥️ PART A — COMPUTER SCIENCE REVISION
-# Complete C++ Week (Days 8–13) — All Topics in One Place
-# ═══════════════════════════════════════════════════════════════════
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): CS Revision — all 6 topics, crisp format
+> - Afternoon (1 hr): GS Revision — all 5 history topics, timeline-based
+> - Evening (1.5 hrs): Solve all 50 Mixed PYQ MCQs
+> - Night (30 min): Read the "Last 1-Hour Before Exam" revision sheet
 
 ---
 
-## 📌 MASTER REVISION MAP — C++ WEEK AT A GLANCE
-
-```
-╔═══════════════════════════════════════════════════════════════════════╗
-║               C++ WEEK TOPICS — DAYS 8 to 13                        ║
-╠══════════════╦════════════════════════════════════════════════════════╣
-║  Day 8       ║  Variables, Data Types, Naming Rules, sizeof()        ║
-║  Day 9       ║  Pointers, new/delete, Dangling pointer, nullptr      ║
-║  Day 10      ║  Arrays, String as char array, is_array(), rank()     ║
-║  Day 11      ║  File Handling: ios::in/out/trunc/app/binary          ║
-║  Day 12      ║  Exception Handling (try/catch/throw), Inline funcs   ║
-║  Day 13      ║  Output Prediction, Bitwise ops, struct vs class, ::  ║
-╚══════════════╩════════════════════════════════════════════════════════╝
-```
+# PART 1: CS RAPID REVISION
+## 📘 Day 8–13 Complete — All Topics, One Place
 
 ---
 
-## 📌 SECTION 1: DAY 8 RECAP — VARIABLES, DATA TYPES, NAMING RULES
+## 🔷 TOPIC 1: C++ Variables, Data Types & sizeof()
+*(Day 8)*
 
-### Variable Naming Rules — The 4 Laws:
-
+### Variable Naming Rules — Master Checklist:
 ```
-LAW 1: CANNOT start with a digit
-       ✗ 123abc    ✗ 9variable    ✗ 1st_name
-       ✓ abc123    ✓ variable9    ✓ first_name
-
-LAW 2: CANNOT have spaces
-       ✗ my variable    ✗ first name
-       ✓ my_variable    ✓ firstName
-
-LAW 3: Only letters, digits, and underscore (_) allowed
-       ✗ my-var    ✗ my@var    ✗ my#var    ✗ my.var
-       ✓ my_var    ✓ myVar     ✓ _private
-
-LAW 4: CANNOT be a C++ keyword
-       ✗ int    ✗ class    ✗ return    ✗ void    ✗ for
-       ✓ myInt  ✓ myClass  ✓ returnVal
+✅ Can start with: letter (a-z, A-Z) or underscore (_)
+❌ Cannot start with: digit (0-9)
+✅ Can contain: letters, digits, underscore
+❌ Cannot contain: spaces, special chars (-, @, #, ...)
+✅ Case-sensitive: score ≠ Score ≠ SCORE
+❌ Cannot use: reserved keywords (int, float, class, ...)
+✅ _123 → VALID    ❌ 123_ → INVALID
+✅ myVar → VALID   ❌ my-var → INVALID
 ```
 
-### Invalid Variable Names — PYQ Favorites:
-
+### Data Types Size Cheat Sheet:
 ```
-Variable Name        Valid/Invalid?    Reason
-─────────────────────────────────────────────────────────
-123Variable          INVALID          Starts with digit
-my variable          INVALID          Contains space
-int                  INVALID          Reserved keyword
-_value               VALID            _ is allowed as first char
-value_1              VALID            _ and digit allowed
-My$Name              INVALID          $ not allowed in C++
-__hidden             VALID            Multiple underscores OK
-2ndTry               INVALID          Starts with digit
-```
-
-### Data Types + sizeof() Sizes:
-
-```
-Type          Size (typical)    Range
-──────────────────────────────────────────────────────
-char          1 byte            -128 to 127
-unsigned char 1 byte            0 to 255
-short         2 bytes           -32768 to 32767
-int           4 bytes           -2,147,483,648 to 2,147,483,647
-long          4 or 8 bytes      depends on platform
-long long     8 bytes           very large range
-float         4 bytes           ~6-7 decimal digits precision
-double        8 bytes           ~15-16 decimal digits precision
-bool          1 byte            0 (false) or 1 (true)
-pointer       4 (32-bit) or     stores memory address
-              8 bytes (64-bit)
+TYPE        SIZE    NOTES
+─────────────────────────────────────────────
+char        1 byte  stores ASCII value
+bool        1 byte  NOT 1 bit! ← PYQ TRAP
+short       2 bytes
+int         4 bytes
+float       4 bytes 6-7 digits precision
+double      8 bytes 15-16 digits precision
+long long   8 bytes very large integers
+void        0 bytes cannot declare void variable!
+any pointer 4 bytes (32-bit) / 8 bytes (64-bit)
 ```
 
-### sizeof() — The "Does NOT Evaluate" Rule:
-
-```cpp
-int x = 5;
-sizeof(x++);     // x is STILL 5 after this! sizeof does not execute x++
-cout << x;       // Output: 5 (NOT 6)
-
-// sizeof returns SIZE of TYPE, not value:
-sizeof(int)      → 4
-sizeof(double)   → 8
-sizeof(char)     → 1
-sizeof(int[10])  → 40  (10 elements × 4 bytes each)
+### sizeof() — The #1 PYQ Trap:
+```
+sizeof() = compile-time OPERATOR (NOT a function!)
+sizeof(x++) → returns 4 (int size), x is NOT incremented
+sizeof(int arr[5]) = 20 bytes (5×4)
+sizeof(arr)/sizeof(int) = 5 (number of elements)
+Inside function: sizeof(arr param) = pointer size (4/8) ← TRAP!
 ```
 
-### Header Files:
-
+### PYQ Traps Summary:
 ```
-User-defined header files  → use .h extension   → #include "myheader.h"
-Standard library headers   → no extension in C++ → #include <iostream>
-Old C-style headers        → .h extension       → #include <stdio.h>
+TRAP 1: bool = 1 BYTE, not 1 bit
+TRAP 2: void x = 5; → COMPILE ERROR (but void* ptr → VALID)
+TRAP 3: sizeof(x++) does NOT change x
+TRAP 4: sizeof(arr) inside function = pointer size, NOT array size
+TRAP 5: User-defined headers: "myfile.h" | Standard: <iostream>
+TRAP 6: Ctrl + F9 = Compile AND Run (Turbo C++)
 ```
 
 ---
 
-## 📌 SECTION 2: DAY 9 RECAP — POINTERS COMPLETE MASTERY
+## 🔷 TOPIC 2: C++ Pointers
+*(Day 9)*
 
-### Pointer Basics:
-
-```cpp
-int value = 42;
-int* ptr = &value;    // ptr stores the ADDRESS of value
-
-// & = "address of" operator
-// * = "dereference" operator (go to the address)
-
-cout << value;   // 42        (the actual value)
-cout << &value;  // 0x7ffd... (the memory address)
-cout << ptr;     // 0x7ffd... (same address, stored in ptr)
-cout << *ptr;    // 42        (value AT the address ptr points to)
+### Core Facts — One-Liners:
+```
+Pointer    = variable storing the MEMORY ADDRESS of another variable
+&x         = address-of x (gives the address)
+*p         = value at address stored in p (dereference)
+int* p, q  = p is pointer, q is plain int ← TRAP!
+int *p, *q = both are pointers ← CORRECT way for two pointers
 ```
 
-### Pointer Types — Visual Memory Diagram:
-
+### NULL vs nullptr:
 ```
-MEMORY LAYOUT:
-─────────────────────────────────────────────────────────
-
-Address:   1000    1004    1008    1012
-           ┌───┐   ┌───┐   ┌───┐   ┌───┐
-Value:     │42 │   │1000│  │ ? │   │ ? │
-           └───┘   └───┘   └───┘   └───┘
-Variable:  value   ptr    (other)  (other)
-
-ptr = 1000 (stores address of 'value')
-*ptr = 42  (value stored AT address 1000)
+NULL     = integer constant 0 (C-style, old)
+nullptr  = type-safe null pointer (C++11, modern)
+delete NULL  → SAFE, no crash, no error ← #1 PYQ TRAP
+delete ptr; p=nullptr; → correct cleanup pattern
 ```
 
-### NULL Pointer — Critical PYQ Rule:
-
-```cpp
-int* ptr = NULL;      // C style (NULL = 0)
-int* ptr2 = nullptr;  // C++11 style (preferred)
-
-// KEY EXAM FACT:
-delete ptr;    // WHERE ptr = NULL → SAFE! NO CRASH. Does nothing.
-               // This compiles AND executes successfully.
-
-// WHY? Because the C++ standard guarantees:
-// "delete applied to null pointer has no effect"
+### new vs malloc:
+```
+FEATURE        new              malloc()
+─────────────────────────────────────────────
+Constructor?   YES (calls it)   NO (raw memory only)
+Returns        typed pointer    void* (needs cast)
+On failure     throws bad_alloc returns NULL
+Header         none (keyword)   <cstdlib>
+Pair with      delete           free()
+─────────────────────────────────────────────
+NEVER mix: new + free() or malloc + delete → UNDEFINED BEHAVIOR
 ```
 
-### delete vs delete[] — Must Distinguish:
-
+### Pointer Types:
 ```
-┌──────────────────┬──────────────────────────────────────┐
-│    delete        │    delete[]                          │
-├──────────────────┼──────────────────────────────────────┤
-│ For single object│ For arrays allocated with new[]      │
-│ new T            │ new T[n]                             │
-│ Calls destructor │ Calls destructor for EACH element    │
-│ once             │                                      │
-└──────────────────┴──────────────────────────────────────┘
+Dangling pointer = points to FREED or out-of-scope memory
+Wild pointer     = UNINITIALIZED pointer (declared, never assigned)
+void* pointer    = generic pointer, cannot dereference without cast
+double pointer** = pointer to pointer
 
-CORRECT USAGE:
-int* single = new int;        → delete single;    ✓
-int* arr = new int[10];       → delete[] arr;     ✓
-
-WRONG USAGE (Undefined Behavior):
-int* arr = new int[10];       → delete arr;       ✗ WRONG
-int* single = new int;        → delete[] single;  ✗ WRONG
-```
-
-### new vs malloc — Key Differences:
-
-```
-╔═══════════════════╦══════════════════════════════════════╗
-║   new (C++)       ║   malloc (C)                        ║
-╠═══════════════════╬══════════════════════════════════════╣
-║ Operator          ║ Function                            ║
-║ Calls constructor ║ Does NOT call constructor           ║
-║ Returns correct   ║ Returns void* (needs casting)       ║
-║ typed pointer     ║                                     ║
-║ Throws exception  ║ Returns NULL on failure             ║
-║ on failure        ║                                     ║
-╚═══════════════════╩══════════════════════════════════════╝
-```
-
-### Dangling Pointer:
-
-```cpp
-int* ptr = new int(5);
-delete ptr;            // Memory is freed
-// ptr still holds the old address — it is now a DANGLING POINTER
-cout << *ptr;          // UNDEFINED BEHAVIOR — accessing freed memory!
-
-// FIX: Set to nullptr after delete
-delete ptr;
-ptr = nullptr;         // Now it's a safe null pointer
+Fix dangling pointer: delete p; p = nullptr;  ← always do this!
 ```
 
 ### Pointer Arithmetic:
-
-```cpp
-int arr[] = {10, 20, 30, 40, 50};
-int* p = arr;       // Points to arr[0] = 10
-
-p++;                // Now points to arr[1] = 20 (moved 4 bytes forward)
-cout << *p;         // Output: 20
-
-p + 2;              // Points to arr[3] = 40 (2 elements forward from arr[1])
-cout << *(p + 2);   // Output: 40
+```
+p + 1 → moves by sizeof(type) bytes (NOT 1 byte!)
+p1 + p2 → INVALID (cannot add two pointers)
+p1 - p2 → valid (number of elements between)
+sizeof(any pointer) = same (4 or 8 bytes, not type-dependent)
 ```
 
 ---
 
-## 📌 SECTION 3: DAY 10 RECAP — ARRAYS IN C++
+## 🔷 TOPIC 3: C++ Arrays
+*(Day 10)*
 
-### Array Declaration and Access:
-
-```cpp
-int array[5];              // Declares array of 5 ints (index 0 to 4)
-int array[5] = {1,2,3,4,5}; // With initialization
-int array[] = {1,2,3,4,5};  // Size inferred = 5
-
-// CORRECT: int array[10];  ← This exact syntax appeared in PYQ!
-// Index:   0   1   2  ... n-1  (NOT 1 to n)
-// Last element: array[n-1]  NOT array[n]
+### Array Fundamentals:
+```
+Correct syntax: int arr[10];  ← NOT int arr(10) or int[10] arr
+Index range:    0 to n-1      ← arr[n] is OUT OF BOUNDS
+Last index:     n-1           ← ALWAYS n-1, never n
+arr == &arr[0] = base address  ← array name IS base address
+arr[i] == *(arr+i)             ← completely equivalent
+arr cannot be incremented (arr++) ← constant pointer!
 ```
 
-### Array Size Functions:
-
+### sizeof() with Arrays:
 ```
-is_array<T>()    →  Checks if T is an array type (returns true/false)
-rank<T>::value   →  Returns number of dimensions of array T
-                    1D array → rank = 1
-                    2D array → rank = 2
+int arr[5]:
+  sizeof(arr)              = 20 bytes (5×4)
+  sizeof(arr)/sizeof(int)  = 5 (element count)
+  sizeof(arr)/sizeof(arr[0])= 5 (same, more robust)
 
-Example:
-  int arr[3][4];
-  rank<decltype(arr)>::value = 2   (it is 2-dimensional)
-```
-
-### String as char Array — PYQ TRAP:
-
-```cpp
-char s1[] = "Hello";
-char s2[] = "World";
-
-// Can you do this?
-char s3[] = s1 + s2;    // ✗ COMPILE ERROR — cannot use + with char arrays!
-string result = s1 + s2; // ✗ Still error — s1 is char[], not std::string
-
-// CORRECT ways to concatenate char arrays:
-strcat(s1, s2);          // ✓ Using strcat function (modifies s1)
-
-// If you use std::string:
-string str1 = "Hello";
-string str2 = "World";
-string str3 = str1 + str2;  // ✓ Works fine for std::string objects
+Inside function:
+  sizeof(arr param)        = 4 or 8 (pointer size!) ← TRAP
+  Array DECAYS to pointer when passed to function
+  Modifications to array inside function AFFECT original
 ```
 
 ### 2D Arrays:
+```
+int mat[3][4]:
+  First bracket = ROWS, Second = COLUMNS
+  Total elements = 3 × 4 = 12
+  Storage: ROW-MAJOR ORDER (row by row in memory)
+  Address of mat[i][j] = base + (i×cols + j) × sizeof(type)
+```
 
-```cpp
-int matrix[3][4];    // 3 rows, 4 columns
-// Access: matrix[row][col]
-// matrix[0][0] = first element
-// matrix[2][3] = last element
+### String as Char Array:
+```
+char str[] = "BPSC":  5 bytes (4 chars + '\0' null terminator)
+'\0' ASCII = 0        marks end of C-style string
+char s1[] + char s2[] → COMPILE ERROR (pointer + pointer = invalid!)
+Use strcat(s1, s2) for concatenation
+strcmp(s1, s2): 0=equal, <0 if s1<s2, >0 if s1>s2
+```
 
-// Memory: stored ROW by ROW (row-major order in C++)
+### is_array() and rank():
+```
+Header: <type_traits>
+is_array<int[5]>::value  = 1 (true)
+is_array<int*>::value    = 0 (pointer ≠ array)
+rank<int[3][4]>::value   = 2 (2D array)
+rank<int>::value         = 0 (not an array)
 ```
 
 ---
 
-## 📌 SECTION 4: DAY 11 RECAP — FILE HANDLING COMPLETE
+## 🔷 TOPIC 4: File Handling
+*(Day 11)*
 
-### File Stream Classes:
-
+### Stream Classes:
 ```
-ifstream   → Input file stream  (reading from file)
-ofstream   → Output file stream (writing to file)
-fstream    → Both input AND output
-```
-
-### File Modes — THE COMPLETE TABLE (Memorize!):
-
-```
-╔══════════════╦══════════════════════════════════════════════════════╗
-║ Mode         ║ Meaning / Effect                                    ║
-╠══════════════╬══════════════════════════════════════════════════════╣
-║ ios::in      ║ Open for READING                                    ║
-║ ios::out     ║ Open for WRITING (creates file if not exists)       ║
-║ ios::trunc   ║ TRUNCATE file to zero length when opened ⭐         ║
-║ ios::app     ║ APPEND — write at END of file only                  ║
-║ ios::binary  ║ Open in BINARY mode (not text mode)                 ║
-║ ios::ate     ║ Move to END of file on opening                      ║
-╚══════════════╩══════════════════════════════════════════════════════╝
-
-⭐ ios::trunc = "truncate" = file becomes EMPTY (zero length) on opening
+ifstream  = INPUT from file (READ)     default: ios::in
+ofstream  = OUTPUT to file (WRITE)     default: ios::out | ios::trunc
+fstream   = BOTH read and write        must specify mode
+Header: #include <fstream>
 ```
 
-### Combining File Modes:
+### File Modes — THE Exam Topic:
+```
+MODE         MEANING                    REMEMBER AS
+────────────────────────────────────────────────────────
+ios::in      open for reading           IN = input
+ios::out     open for writing           OUT = output
+ios::app     APPEND (preserve old)      APP = add at end ← SAFE
+ios::trunc   TRUNCATE (DELETE old!)     TRUNC = tear/erase ← DANGER
+ios::binary  binary mode (raw bytes)    BINARY = not text
+ios::ate     open, go to end            ATE = at end
 
-```cpp
-// Modes can be combined with | (bitwise OR):
-fstream f;
-f.open("data.txt", ios::in | ios::out);        // Read AND write
-f.open("data.txt", ios::out | ios::trunc);     // Write + truncate
-f.open("data.txt", ios::out | ios::app);       // Write + append
-f.open("data.bin", ios::in | ios::binary);     // Binary reading
+KEY TRAP: ofstream default = ios::out | ios::trunc
+          = AUTOMATICALLY DELETES old content when opened!
+          To PRESERVE: use ios::app explicitly
+```
+
+### ios::trunc vs ios::app:
+```
+ios::trunc → DELETES ALL existing content → starts fresh
+ios::app   → PRESERVES existing content  → adds at end
 ```
 
 ### File Operations:
-
-```cpp
-ofstream outFile;
-outFile.open("test.txt");         // Open file
-outFile << "Hello World";          // Write to file
-outFile.close();                   // Close file
-
-ifstream inFile("test.txt");       // Open for reading
-string line;
-getline(inFile, line);             // Read a line
-while(!inFile.eof()) { ... }      // Loop until End of File
-inFile.close();
+```
+open()      → opens the file
+close()     → flushes buffer + releases OS resource
+>>          → reads word/value
+<<          → writes value
+getline()   → reads entire line (including spaces)
+eof()       → true AFTER failed read (use while(fin>>x) instead)
+read()      → reads binary data
+write()     → writes binary data: fout.write((char*)&n, sizeof(n))
 ```
 
-### Turbo C++ Shortcut (PYQ Fact):
-
+### Text vs Binary:
 ```
-Ctrl + F9  =  Compile AND Run in Turbo C++
-This exact shortcut has appeared in BPSC TRE PYQs!
-```
-
----
-
-## 📌 SECTION 5: DAY 12 RECAP — EXCEPTION HANDLING + INLINE FUNCTIONS
-
-### Exception Handling Flow:
-
-```
-NORMAL FLOW:                    EXCEPTION FLOW:
-                                
-try {                           try {
-    code...          ──────►        code...
-    risky code                      risky code  ──► THROWS exception
-    more code                       (skipped)
-}                               }
-catch(type e) {                 catch(type e) {
-    (skipped)                       CAUGHT here! ◄──
-}                               }
-continue...                     continue after catch...
+Text:   ASCII chars | human readable | int 65 = "65" (2 bytes)
+Binary: raw bytes   | not readable   | int 65 = 0x41 (1 byte)
+Binary mode flag: ios::binary
 ```
 
-### Syntax — Complete:
-
-```cpp
-try {
-    int a = 10, b = 0;
-    if(b == 0) throw "Division by zero!";  // throw statement
-    cout << a/b;
-}
-catch(const char* msg) {         // catch specific type
-    cout << "Error: " << msg;    // handles char* exceptions
-}
-catch(int e) {                   // catch int exceptions
-    cout << "Int error: " << e;
-}
-catch(...) {                     // catch ALL exceptions (catch-all)
-    cout << "Unknown error";
-}
+### Turbo C++ Shortcuts:
 ```
-
-### Multiple Catch — Order Matters:
-
-```
-⚠️ RULE: More specific catches FIRST, general catch (...) LAST
-         If catch(...) is first, it catches everything — other catches unreachable!
-
-CORRECT ORDER:
-try { ... }
-catch(int e) { ... }        // specific first
-catch(string e) { ... }     // specific second
-catch(...) { ... }          // general LAST ✓
-
-WRONG ORDER:
-try { ... }
-catch(...) { ... }          // catches EVERYTHING — below catches never reached!
-catch(int e) { ... }        // DEAD CODE ✗
-```
-
-### Inline Functions:
-
-```
-WHAT:  Function expanded at the call point (no function call overhead)
-HOW:   Compiler replaces function call with function body
-USE:   ONLY for SMALL, SIMPLE functions
-
-╔══════════════════════════╦═══════════════════════════════════╗
-║ USE inline when:         ║ DO NOT use inline when:           ║
-╠══════════════════════════╬═══════════════════════════════════╣
-║ Function is 1-3 lines    ║ Function is large/complex         ║
-║ Called very frequently   ║ Contains loops                    ║
-║ No loops or complex code ║ Contains recursion                ║
-║ Access cost matters      ║ Contains static variables         ║
-╚══════════════════════════╩═══════════════════════════════════╝
-```
-
-```cpp
-inline int square(int x) {   // inline keyword
-    return x * x;             // Simple, small function
-}
-
-// When called: square(5)
-// Compiler replaces it with: 5 * 5  (directly substituted)
-// No function call overhead!
-```
-
-### Inline vs Normal Function:
-
-```
-NORMAL FUNCTION:              INLINE FUNCTION:
-main() calls square()         main() has 5*5 directly
-  → jump to square            No jumping needed
-  → compute                   Computed right there
-  → return to main            Faster execution
-  → continue                  But code size increases
+Ctrl + F9 = Compile AND Run  ← most tested!
+Alt  + F9 = Compile ONLY
 ```
 
 ---
 
-## 📌 SECTION 6: DAY 13 RECAP — OUTPUT PREDICTION MASTER SUMMARY
+## 🔷 TOPIC 5: Exception Handling & Inline Functions
+*(Day 12)*
 
-### Pre/Post Increment Quick Reference:
+### Exception Handling — Core:
+```
+try    = "watch this code — it might throw"
+throw  = "signal/raise an exception"
+catch  = "handle the thrown exception"
+
+Flow: try { ... throw X ... } → catch(TypeX e) { handle }
+      → No match → terminate() called → crash!
+```
+
+### catch Block Ordering Rules:
+```
+RULE 1: Most SPECIFIC (derived) catch block FIRST
+RULE 2: Most GENERAL (base class) catch block LATER
+RULE 3: catch(...) [catch-all] MUST be LAST — ALWAYS
+RULE 4: catch(...) catches ALL types
+
+WRONG: catch(exception) first → catch(runtime_error) after → never reached!
+RIGHT: catch(runtime_error) first → catch(exception) later
+```
+
+### Rethrowing:
+```
+throw;   = rethrow SAME exception (no copy) ← CORRECT for rethrow
+throw e; = rethrow COPY of e (may cause slicing in polymorphism)
+```
+
+### Standard Exceptions:
+```
+std::exception     = base of ALL standard exceptions
+std::bad_alloc     = thrown by new on memory failure ← PYQ TRAP
+std::runtime_error = runtime problems
+std::logic_error   = logic problems
+e.what()           = returns error message string
+```
+
+### Inline Functions — Key Facts:
+```
+inline = REQUEST to compiler (not guaranteed)
+Effect = code substituted at call site (no function call overhead)
+Trade-off: FASTER execution ↔ LARGER code size (code bloat)
+
+Compiler HONORS inline for: short, simple, non-recursive functions
+Compiler IGNORES inline for:
+  ❌ Recursive functions ← KEY PYQ TRAP
+  ❌ Functions with loops (for/while/do-while)
+  ❌ Functions with static variables
+  ❌ Large functions (many lines)
+
+AUTO-INLINE: Member functions defined INSIDE class body
+             = automatically inline (no keyword needed!)
+```
+
+---
+
+## 🔷 TOPIC 6: Output Prediction, Bitwise, struct/class
+*(Day 13)*
+
+### Pre/Post Increment Rules:
+```
+i=5: cout<<i++  → prints 5, THEN i=6  (post: use THEN increment)
+i=5: cout<<++i  → i=6, prints 6       (pre: increment THEN use)
+b = a++         → b gets old a, then a increments
+c = ++a         → a increments first, c gets new a
+while(i++ < 3): checks old value (0,1,2), prints new (1,2,3)
+```
+
+### Bitwise Complete Reference:
+```
+Operator  a=5(0101) b=3(0011)  Result  Decimal
+─────────────────────────────────────────────────
+a & b     0101 & 0011 = 0001    AND       1
+a | b     0101 | 0011 = 0111    OR        7
+a ^ b     0101 ^ 0011 = 0110    XOR       6
+~a        flip all bits          NOT      -6   ← ~n = -(n+1)
+a << 1    0101 → 1010            ×2       10
+a >> 1    0101 → 0010            ÷2        2
+
+KEY FORMULAS:
+  ~n    = -(n+1)     →  ~5=-6,  ~0=-1,  ~(-5)=4
+  n & 1 = odd/even   →  1=odd,  0=even
+  n ^ n = 0          →  any number XOR itself = 0
+  n<<k  = n × 2^k    →  5<<2 = 20
+  n>>k  = n ÷ 2^k    →  20>>2 = 5
+```
+
+### struct vs class:
+```
+THE ONLY DIFFERENCE: Default access specifier
+  struct → PUBLIC by default
+  class  → PRIVATE by default
+Both support: methods, constructors, inheritance, all access specifiers
+Inheritance default: struct → public | class → private
+```
+
+### Friend Function Quick Rules:
+```
+→ NOT a member function (called like regular function)
+→ Can access PRIVATE and PROTECTED members
+→ Declared INSIDE class with 'friend' keyword
+→ Defined OUTSIDE class (no ClassName:: prefix needed)
+→ Friendship NOT inherited (derived class doesn't get it)
+→ Friendship NOT symmetric (A friend of B ≠ B friend of A)
+```
+
+### Scope Resolution `::` Uses:
+```
+::x                → access GLOBAL x (when local x shadows it)
+ClassName::method  → define method outside class
+ClassName::static  → access static member
+Namespace::item    → access namespace member
+```
+
+---
+
+## 📊 CS MASTER COMPARISON TABLE
 
 ```
-++x  →  increment FIRST, use later  →  value used = (x+1)
-x++  →  use FIRST, increment later  →  value used = x (original)
-
-int a = 5;
-cout << ++a;  → Output: 6  (a is now 6)
-cout << a++;  → Output: 6  (prints 6, then a becomes 7)
-cout << a;    → Output: 7
+TOPIC              KEY FACT                           COMMON TRAP
+───────────────────────────────────────────────────────────────────
+bool size          1 byte (NOT 1 bit)                bool ≠ 1 bit
+sizeof(x++)        returns type size, x unchanged     doesn't evaluate
+delete NULL        safe no-op, no crash               students think it crashes
+new vs malloc      new=constructor; malloc=no constr  never mix new+free
+char "Hello"       6 bytes (5 + '\0')                forgetting null terminator
+s1 + s2 (char[])   COMPILE ERROR                      use strcat() instead
+ofstream default   ios::out | ios::trunc = DELETES    use ios::app to preserve
+catch(...)         MUST be LAST catch block            placing it first = rest unreachable
+inline + recursion compiler IGNORES inline            recursive inline = regular func
+class default      PRIVATE                            struct = PUBLIC
+~5                 -6 (not 5 or -5)                  ~n = -(n+1) formula
+friend function    NOT a member, NOT inherited        called like: func(obj) not obj.func()
 ```
 
-### Bitwise Quick Reference Table:
+---
+---
+
+# PART 2: GS RAPID REVISION
+## 🏛️ Day 8–13: Modern Indian History — Complete Timeline
+
+---
+
+## 🔷 MASTER TIMELINE — FREEDOM STRUGGLE (1498–1947)
 
 ```
-OPERATION    SYMBOL    RULE                        EXAMPLE (5 op 3)
+COMPLETE FREEDOM STRUGGLE TIMELINE
+════════════════════════════════════════════════════════════════
+
+1498    Vasco da Gama reaches India (Calicut) ← Portuguese FIRST
+1600    British East India Company formed
+1612    First British factory at Surat
+1757    Battle of Plassey (Clive vs Siraj; Mir Jafar betrays)
+        → Foundation of British rule in Bengal
+1764    Battle of Buxar (Hector Munro vs 3 rulers)
+        → CONFIRMED British supremacy
+1773    Regulating Act → first parliamentary oversight
+1784    Pitt's India Act → dual control (Company + Parliament)
+1857    Revolt of 1857 (Sepoy Mutiny / First War of Independence)
+        → Bihar: KUNWAR SINGH (Jagdishpur, Bhojpur)
+        → Delhi: Bahadur Shah Zafar; Jhansi: Rani Laxmibai
+1858    Company rule ended → Crown took over
+        → Governor-General becomes VICEROY
+        → First Viceroy: Lord Canning
+1885    INC founded by A.O. HUME (British!) at Bombay
+        → First president: W.C. BANERJEE
+1905    Partition of Bengal by Lord CURZON
+        → Swadeshi Movement begins
+        → Annulled 1911
+1906    Muslim League founded (Dhaka)
+1909    Morley-Minto Reforms → communal electorate begins
+1915    Gandhi returns to India
+1916    Lucknow Congress: Gandhi meets Rajendra Prasad
+        Lucknow Pact: INC + Muslim League together
+        Home Rule: Tilak (April) + Annie Besant (September)
+1917    CHAMPARAN SATYAGRAHA ← BIHAR ← BPSC HIGH PROBABILITY
+        → Gandhi arrives Motihari April 15, 1917
+        → Raj Kumar Shukla brought Gandhi
+        → Tinkathia system (3/20 land = forced indigo)
+        → Gandhi's FIRST SATYAGRAHA IN INDIA
+        → Rajendra Prasad received Gandhi in Patna
+1918    Champaran Agrarian Act → Tinkathia ABOLISHED, 25% refund
+        Kheda Satyagraha (Gujarat farmers, crop failure)
+        Ahmedabad Mill Strike (Gandhi's first hunger strike)
+1919    Rowlatt Act ("No Daleel No Vakeel No Appeal" = Black Act)
+        April 13: JALLIANWALA BAGH MASSACRE
+        → General Dyer ordered firing; 379+ killed
+        → Tagore returned KNIGHTHOOD
+        → Udham Singh killed O'Dwyer in London, 1940
+1920    Sept: Calcutta Special Session (Lala Lajpat Rai presides)
+        → NCM proposed
+        Dec: Nagpur Session → NCM FORMALLY ADOPTED
+        Khilafat + NCM merged (Ali Brothers + Gandhi)
+1921    Bihar Vidyapeeth founded by RAJENDRA PRASAD ← BIHAR
+1922    Feb 5: CHAURI CHAURA → 22 policemen burned (UP, Gorakhpur)
+        → Gandhi SUSPENDS NCM
+        March: Gandhi arrested, 6 years
+1923    Swaraj Party: C.R. DAS + MOTILAL NEHRU
+1927    Simon Commission (7 all-British members, "Simon Go Back")
+1928    Oct: Lala Lajpat Rai beaten at Lahore (Simon protests)
+        Nov 17: Lala dies → "Punjab Kesari"
+        Bhagat Singh kills Saunders (to avenge Lala)
+        Nehru Report by MOTILAL NEHRU (demands DOMINION STATUS)
+1929    Dec 31: LAHORE SESSION (Jawaharlal Nehru presides)
+        → PURNA SWARAJ declared at midnight
+        → Jan 26, 1930 = first Independence Day celebration
+1930    Mar 2: Gandhi writes to Lord Irwin (11 demands, advance warning)
+        Mar 12: DANDI MARCH BEGINS (Sabarmati Ashram, 78 volunteers)
+        Apr 6: GANDHI MAKES SALT → CDM OFFICIALLY LAUNCHED
+        May: Gandhi arrested; Sarojini Naidu leads Dharasana raid
+        Dec: RTC 1 (Gandhi ABSENT — in jail)
+1931    Mar 5: GANDHI-IRWIN PACT (Delhi Pact) → CDM SUSPENDED
+        Mar 23: Bhagat Singh, Rajguru, Sukhdev HANGED
+        Sept: RTC 2 (Gandhi PRESENT) → fails
+1932    Jan: CDM RE-LAUNCHED; Gandhi arrested again
+        Poona Pact (Gandhi + Ambedkar)
+1934    CDM formally WITHDRAWN
+1942    Mar–Apr: CRIPPS MISSION FAILS
+        → Gandhi: "post-dated cheque on a crashing bank"
+        Jul 14: WARDHA RESOLUTION (Congress Working Committee)
+        Aug 8: AICC at GOWALIA TANK MAIDAN, BOMBAY
+        → QUIT INDIA RESOLUTION + Gandhi's "DO OR DIE" speech
+        Aug 9: Gandhi arrested (Aga Khan Palace, Pune)
+        → = "AUGUST KRANTI DIWAS"
+        → Aruna Asaf Ali hoists flag at Gowalia Tank
+        Nov 9: JP escapes HAZARIBAGH JAIL ← BIHAR ← HIGH PROBABILITY
+1944    Feb 22: Kasturba Gandhi dies (Aga Khan Palace, Pune)
+        May 6: Gandhi released
+1946    Dec 9: CONSTITUENT ASSEMBLY first meets
+        → Rajendra Prasad elected PRESIDENT of CA
+1947    Aug 15: INDIA INDEPENDENT
+        First PM: Nehru | First President: Rajendra Prasad
+        First GG: Lord Mountbatten
+        First Indian GG: C. Rajagopalachari
+
+════════════════════════════════════════════════════════════════
+```
+
+---
+
+## 🔷 BIHAR-SPECIFIC FACTS — HIGH BPSC PROBABILITY
+
+```
+BIHAR FACTS — NEVER FORGET THESE
+══════════════════════════════════════════════════
+
+1857 Revolt:
+→ KUNWAR SINGH led Bihar's revolt (Jagdishpur, BHOJPUR district)
+→ He was 80 years old — folk hero of Bihar
+
+Champaran Satyagraha (1917):
+→ MOTIHARI = East Champaran = where Gandhi was summoned to court
+→ RAJ KUMAR SHUKLA = Champaran indigo farmer who brought Gandhi
+→ Gandhi arrived: April 15, 1917
+→ RAJENDRA PRASAD received Gandhi in Patna
+→ Champaran Agrarian Act 1918 = Tinkathia abolished + 25% refund
+
+Rajendra Prasad:
+→ Born: December 3, 1884 at ZERADEI, SIWAN, BIHAR
+→ Founded BIHAR VIDYAPEETH, 1921 (during NCM)
+→ Imprisoned at BANKIPUR JAIL, PATNA (Quit India 1942)
+→ Elected President of Constituent Assembly: December 9, 1946
+→ FIRST PRESIDENT OF INDIA: January 26, 1950
+→ LONGEST SERVING: 2 terms, 12 years (1950–1962)
+→ BHARAT RATNA: 1962 (while still President!)
+→ Died: February 28, 1963, SADAQAT ASHRAM, PATNA
+→ Book: India Divided (1946) — against partition
+
+NCM Bihar:
+→ BIHAR VIDYAPEETH (1921) = alternative national university
+→ Rajendra Prasad organized NCM in Bihar
+
+Quit India Movement:
+→ JP (Jayaprakash Narayan) = FROM SITABDIARA, SARAN, BIHAR
+→ JP led underground movement
+→ JP ESCAPED HAZARIBAGH CENTRAL JAIL — November 9, 1942
+→ Hazaribagh now in Jharkhand (was Bihar during independence)
+→ Bihar had MOST INTENSE QIM participation of all provinces
+
+══════════════════════════════════════════════════
+```
+
+---
+
+## 🔷 MOVEMENT COMPARISON TABLE — MASTER
+
+```
+FEATURE         NCM (1920-22)    CDM (1930-34)    QUIT INDIA (1942)
+──────────────────────────────────────────────────────────────────────
+Launch site     Calcutta/Nagpur  Sabarmati/Dandi  Gowalia Tank, Bombay
+Launched by     Gandhi           Gandhi           Gandhi
+Method          Boycott          Break laws(salt) "Do or Die" rebellion
+Key slogan      —                Salt = freedom   "Karo ya Maro"
+Ended by        Chauri Chaura    Gandhi-Irwin Pact WWII end + 1947
+Gandhi arrested 1922 (March)     1930 (May)       1942 (Aug 9)
+Gandhi prison   —                Yerwada(Pune)    Aga Khan Palace(Pune)
+Bihar event     Bihar Vidyapeeth Rajendra Prasad  JP jail escape
+                founded (1921)   arrested         (Hazaribagh, Nov 9)
+Key institution Bihar Vidyapeeth —                Parallel govts.
+Underground     None (early end) Aruna(partial)   JP + Aruna + Lohia
+Khilafat link   YES (1919-1924)  No               No
+Women's role    Limited          Large (Sarojini) Very large (Aruna)
+Result          Swaraj Party(23) CDM relaunch(32) Independence path
+──────────────────────────────────────────────────────────────────────
+```
+
+---
+
+## 🔷 PEOPLE & THEIR SINGLE MOST IMPORTANT FACT
+
+```
+PERSON                    MOST IMPORTANT FACT FOR EXAM
 ──────────────────────────────────────────────────────────────────
-AND            &       Both 1 → 1                  0101 & 0011 = 0001 = 1
-OR             |       At least one 1 → 1           0101 | 0011 = 0111 = 7
-XOR            ^       Exactly one 1 → 1            0101 ^ 0011 = 0110 = 6
-NOT            ~       Flip all bits                ~5 = -6  (formula: ~n = -(n+1))
-Left Shift     <<      n << k = n × 2^k             5 << 2 = 20
-Right Shift    >>      n >> k = n ÷ 2^k             20 >> 2 = 5
-```
-
-### struct vs class — THE ONE RULE:
-
-```
-╔════════════════════════════════════════════════════════╗
-║  struct → DEFAULT ACCESS = PUBLIC                      ║
-║  class  → DEFAULT ACCESS = PRIVATE                     ║
-║  THIS IS THE ONLY DIFFERENCE IN C++                    ║
-╚════════════════════════════════════════════════════════╝
+A.O. Hume                 Founded INC 1885 (was BRITISH!)
+W.C. Banerjee             First President of INC
+Bal Gangadhar Tilak       "Swaraj is my birthright" | Lal-Bal-Pal
+Lala Lajpat Rai           Died after Simon Commission lathi charge
+                          "Punjab Kesari"
+Kunwar Singh              Led 1857 revolt in Bihar (Jagdishpur, Bhojpur)
+Raj Kumar Shukla          Brought Gandhi to Champaran (indigo farmer)
+Rajendra Prasad           Bihar's son; First President; Bihar Vidyapeeth
+                          Zeradei, Siwan; 12 years as President
+Ali Brothers              Khilafat Movement (Muhammad Ali + Shaukat Ali)
+C.R. Das                  Co-founded Swaraj Party (with Motilal Nehru)
+Motilal Nehru             Authored Nehru Report 1928; Swaraj Party
+Sarojini Naidu            Led Dharasana raid; "Nightingale of India" (poet)
+Aruna Asaf Ali            Hoisted flag at Gowalia Tank on Aug 9, 1942
+JP (Jayaprakash)          Led QIM underground; Hazaribagh escape; FROM SARAN, BIHAR
+Ram Manohar Lohia         Ran "Congress Radio" during QIM underground
+Nana Patil                Led Satara Parallel Government (Prati Sarkar)
+Bhagat Singh              Killed Saunders (avenging Lala); hanged Mar 23, 1931
+Udham Singh               Killed Michael O'Dwyer (avenging JWB) in London, 1940
+Rabindranath Tagore       Returned KNIGHTHOOD after Jallianwala Bagh
+General Dyer              Ordered JWB firing
+Lord Curzon               Partitioned Bengal 1905
+Lord Irwin                Signed Gandhi-Irwin Pact (March 5, 1931)
+Stafford Cripps           Led Cripps Mission 1942 (Labour Party leader)
+Sucheta Kripalani         QIM underground; first female CM (UP, 1963)
+──────────────────────────────────────────────────────────────────
 ```
 
 ---
 
-## 📌 SECTION 7: COMPLETE PYQ-PATTERN OUTPUT PREDICTION PROBLEMS
+## 🔷 KEY DATES FLASH CARDS
 
-### Problem Set 1 — Variable Names:
-
-Which of the following are VALID C++ variable names?
 ```
-a) 2value     → INVALID (starts with digit)
-b) value_2    → VALID ✓
-c) _myVar     → VALID ✓
-d) my-value   → INVALID (hyphen not allowed)
-e) float      → INVALID (reserved keyword)
-f) Float      → VALID ✓ (C++ is case-sensitive; Float ≠ float)
+DATE              EVENT
+────────────────────────────────────────────────
+1498              Vasco da Gama arrives (Calicut)
+1757              Battle of Plassey
+1764              Battle of Buxar
+1857 (May 10)     Revolt begins at Meerut
+1885              INC founded (Bombay, A.O. Hume)
+1905              Partition of Bengal (Lord Curzon)
+1906              Muslim League founded (Dhaka)
+1915              Gandhi returns to India
+1916              Lucknow Congress + Lucknow Pact
+1917 (Apr 15)     Gandhi arrives Motihari, Champaran
+1918              Champaran Agrarian Act
+1919 (Apr 13)     Jallianwala Bagh Massacre
+1919 (Sept–Dec)   Non-Cooperation proposed + adopted
+1921              Bihar Vidyapeeth founded (Rajendra Prasad)
+1922 (Feb 5)      Chauri Chaura → NCM suspended
+1923              Swaraj Party (C.R. Das + Motilal Nehru)
+1927              Simon Commission formed
+1928 (Nov 17)     Lala Lajpat Rai dies
+1929 (Dec 31)     Lahore Session — Purna Swaraj
+1930 (Mar 12)     Dandi March begins
+1930 (Apr 6)      Gandhi makes salt → CDM launched
+1931 (Mar 5)      Gandhi-Irwin Pact → CDM suspended
+1931 (Mar 23)     Bhagat Singh hanged
+1934              CDM formally withdrawn
+1942 (Apr)        Cripps Mission fails
+1942 (Aug 8)      QIM Resolution — Gowalia Tank, Bombay
+1942 (Aug 9)      Gandhi arrested → August Kranti Diwas
+1942 (Nov 9)      JP escapes Hazaribagh jail
+1944 (Feb 22)     Kasturba Gandhi dies (Aga Khan Palace)
+1946 (Dec 9)      Constituent Assembly first meets
+1947 (Aug 15)     India Independence
+1949 (Nov 26)     Constitution signed (Constitution Day)
+1950 (Jan 26)     India becomes Republic; Rajendra Prasad 1st President
+1962              Rajendra Prasad gets Bharat Ratna
+1963 (Feb 28)     Rajendra Prasad dies (Sadaqat Ashram, Patna)
+────────────────────────────────────────────────
 ```
 
-### Problem Set 2 — Pointer Operations:
+---
+---
 
+# PART 3: PRACTICE QUESTIONS
+## 📝 MIXED PYQ + CONCEPT MCQs — Day 8–13 All Topics
+
+---
+
+### COMPUTER SCIENCE — 25 MIXED MCQs
+
+---
+
+**Q1.** What is the output of:
 ```cpp
-// Q: What is the output?
-int a = 10;
-int* p = &a;
-*p = 20;
-cout << a;
-// Answer: 20
-// Why: *p = 20 changes the value AT the address p points to (which is a)
+int a = 5;
+int b = a++;
+int c = ++a;
+cout << a << " " << b << " " << c;
 ```
+(A) 7 5 7
+(B) 6 5 6
+(C) 7 6 7
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q2.** What is `12 & 10` in C++?
+(A) 14
+(B) 10
+(C) 8
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q3.** What is `~7` in C++?
+(A) -7
+(B) -8
+(C) 7
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q4.** Which of the following is TRUE about the default mode of `ofstream`?
+(A) It opens the file in append mode — old content is preserved
+(B) It opens with ios::out | ios::trunc — old content is DELETED
+(C) It opens in read-only mode
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q5.** What will happen if you execute `delete ptr;` where `ptr = NULL`?
+(A) Runtime error
+(B) Segmentation fault
+(C) Safe no-operation — nothing happens
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q6.** What is the size of `bool` in C++?
+(A) 1 bit
+(B) 1 byte
+(C) 4 bytes
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q7.** What does `rank<int[2][3][4]>::value` return?
+(A) 24
+(B) 2
+(C) 3
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q8.** A friend function in C++ is:
+(A) A member function with special privileges
+(B) A non-member function that can access private and protected members
+(C) A function that must be defined inside the class
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q9.** Which catch block MUST always be placed LAST?
+(A) `catch(int e)`
+(B) `catch(std::exception& e)`
+(C) `catch(...)`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q10.** Which of the following causes the compiler to IGNORE the inline keyword?
+(A) A function with a single return statement
+(B) A recursive function
+(C) A function defined inside a class body
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q11.** What is the output of:
 ```cpp
-// Q: What happens here?
-int* ptr = NULL;
-delete ptr;
-cout << "Done";
-// Answer: Output is "Done" — no crash!
-// Why: delete on NULL pointer is safe; does nothing; program continues
+int i = 0;
+while (i++ < 3) cout << i << " ";
 ```
+(A) 0 1 2
+(B) 1 2 3
+(C) 0 1 2 3
+(D) More than one of the above
+(E) None of the above
 
-### Problem Set 3 — File Modes:
-
-```
-Q: Which file mode TRUNCATES the file to zero when opened?
-A: ios::trunc
-
-Q: Which mode adds content at the END of the file?
-A: ios::app
-
-Q: Can modes be combined? How?
-A: Yes, using | operator: ios::in | ios::out | ios::binary
-```
-
-### Problem Set 4 — Exception Handling:
-
-```cpp
-// Q: What is the output?
-try {
-    throw 42;
-}
-catch(string s) {
-    cout << "String: " << s;
-}
-catch(int e) {
-    cout << "Int: " << e;
-}
-// Answer: Int: 42
-// Why: throw 42 throws an int; first catch expects string (no match); second catches int ✓
-```
-
-### Problem Set 5 — Inline Functions:
-
-```
-Q: Which of the following functions is SUITABLE for inlining?
-A) A function with a for loop running 1000 times     → NOT suitable
-B) A function that returns x*x (one line)            → SUITABLE ✓
-C) A recursive function                              → NOT suitable
-D) A function with 50 lines of code                 → NOT suitable
-```
-
----
-
-## 📌 SECTION 8: COMMON MISTAKES TABLE — BPSC TOPPER WARNING
-
-```
-╔══════════════════════════════════════════╦════════════════════════════════════════════╗
-║  WRONG BELIEF (Trap)                     ║  CORRECT FACT                              ║
-╠══════════════════════════════════════════╬════════════════════════════════════════════╣
-║ delete NULL crashes                      ║ delete NULL = SAFE, does nothing           ║
-║ delete arr and delete[] arr are same     ║ Must use delete[] for array                ║
-║ ios::trunc adds to end                   ║ ios::app adds to end; trunc = truncate     ║
-║ sizeof() evaluates expression            ║ sizeof() does NOT execute/evaluate         ║
-║ struct and class are completely same     ║ ONLY difference = default access specifier ║
-║ Inline functions for large functions     ║ Inline for SMALL, SIMPLE functions ONLY    ║
-║ catch(...) can come first                ║ catch(...) must come LAST                  ║
-║ 123variable is valid                     ║ INVALID — starts with digit                ║
-║ new and malloc both call constructors    ║ ONLY new calls constructor; malloc does NOT ║
-║ Dangling pointer = NULL pointer          ║ Dangling = points to freed memory; NOT null ║
-╚══════════════════════════════════════════╩════════════════════════════════════════════╝
-```
-
----
-
-# ═══════════════════════════════════════════════════════════════════
-# 🏛️ PART B — GENERAL STUDIES REVISION
-# Maths (Profit/Loss, Ratio, Averages) + Modern India Recap
-# ═══════════════════════════════════════════════════════════════════
-
----
-
-## 📌 SECTION 9: MATHS REVISION — PROFIT & LOSS (High BPSC Frequency)
-
-### Core Terminology:
-
-```
-CP  = Cost Price    (what you paid to buy)
-SP  = Selling Price (what you sold for)
-MP  = Marked Price  (price on label/tag)
-
-Profit = SP - CP     (when SP > CP)
-Loss   = CP - SP     (when CP > SP)
-
-Profit% = (Profit / CP) × 100
-Loss%   = (Loss / CP) × 100   ← ALWAYS calculated on CP, not SP!
-```
-
-### Formulas in One Place:
-
-```
-SP = CP × (100 + Profit%) / 100       [when profit]
-SP = CP × (100 - Loss%) / 100         [when loss]
-
-CP = SP × 100 / (100 + Profit%)       [find CP from SP with profit]
-CP = SP × 100 / (100 - Loss%)         [find CP from SP with loss]
-
-Discount  = MP - SP
-Discount% = (Discount / MP) × 100     ← Discount always on MP!
-
-SP = MP × (100 - Discount%) / 100
-```
-
-### Solved Examples (PYQ Level):
-
-**Example 1:**
-An article bought for ₹800 is sold at 25% profit. Find SP.
-```
-SP = 800 × (100 + 25) / 100
-   = 800 × 125 / 100
-   = 800 × 1.25
-   = ₹1000
-```
-
-**Example 2:**
-An article sold for ₹900 with 10% loss. Find CP.
-```
-SP = CP × (100 - Loss%) / 100
-900 = CP × 90 / 100
-CP = 900 × 100 / 90
-CP = ₹1000
-```
-
-**Example 3 (Tricky — PYQ Pattern):**
-A shopkeeper marks an article 40% above CP and gives 20% discount. Profit or loss?
-```
-Let CP = 100
-MP = 100 + 40% of 100 = 140
-SP = MP - 20% of MP = 140 - 28 = 112
-
-Profit = 112 - 100 = 12
-Profit% = 12%
-
-TRICK FORMULA:  Net % = m - d - (m×d)/100
-where m = markup%, d = discount%
-= 40 - 20 - (40×20)/100 = 20 - 8 = 12%  ✓
-```
-
-**Example 4 (Two articles sold at same price):**
-Two articles sold at ₹1200 each. One at 20% profit, other at 20% loss. Overall?
-```
-When SP is SAME and profit% = loss%, ALWAYS a net loss!
-Net Loss% = (common %)² / 100 = (20)² / 100 = 4%
-
-CP of first  = 1200 × 100/120 = ₹1000
-CP of second = 1200 × 100/80  = ₹1500
-Total CP = 2500; Total SP = 2400; Loss = ₹100; Loss% = 4% ✓
-```
-
 ---
-
-## 📌 SECTION 10: MATHS REVISION — RATIO & PROPORTION
-
-### Key Concepts:
-
-```
-Ratio a:b means "for every a parts, there are b parts"
-a:b = a/b (fractions)
-
-Proportion: a:b = c:d  means  a/b = c/d  means  a×d = b×c
-(Cross multiplication rule)
-```
-
-### Types of Proportion:
-
-```
-DIRECT PROPORTION:    If A ↑ then B ↑ (more workers → more work done)
-INVERSE PROPORTION:   If A ↑ then B ↓ (more workers → less days needed)
-```
-
-### Dividing in a Ratio:
-
-```
-Amount X divided in ratio a:b:c
-
-Share of a = X × a/(a+b+c)
-Share of b = X × b/(a+b+c)
-Share of c = X × c/(a+b+c)
-```
-
-### Solved Example:
-
-**Example:** ₹1500 is divided among A, B, C in ratio 2:3:5. Find each share.
-```
-Total parts = 2+3+5 = 10
 
-A's share = 1500 × 2/10 = ₹300
-B's share = 1500 × 3/10 = ₹450
-C's share = 1500 × 5/10 = ₹750
+**Q12.** For `char str[] = "India"`, what is `sizeof(str)`?
+(A) 5
+(B) 6
+(C) 4
+(D) More than one of the above
+(E) None of the above
 
-Check: 300 + 450 + 750 = 1500 ✓
-```
-
 ---
-
-## 📌 SECTION 11: MATHS REVISION — AVERAGES
-
-### Formulas:
-
-```
-Average = Sum of all items / Number of items
-
-Sum = Average × Number of items    ← Most useful rearrangement!
-
-If average of n items = A, and one item x is added:
-New average = (n×A + x) / (n+1)
-
-If average of n items = A, and one item x is removed:
-New average = (n×A - x) / (n-1)
-```
-
-### Solved Examples:
-
-**Example 1:**
-Average of 5 numbers is 40. If one number 60 is removed, new average?
-```
-Sum of 5 numbers = 5 × 40 = 200
-Sum after removing 60 = 200 - 60 = 140
-New average = 140 / 4 = 35
-```
 
-**Example 2 (PYQ Pattern):**
-Average age of class of 30 students is 14 years. If teacher's age 44 is included, new average?
-```
-Sum of students' ages = 30 × 14 = 420
-New sum = 420 + 44 = 464
-New count = 31
-New average = 464/31 = 14.97 ≈ 15 years (approximately)
-```
+**Q13.** What is the key difference between `new` and `malloc()`?
+(A) `new` calls the constructor; `malloc` does not
+(B) `new` returns `void*`; `malloc` returns a typed pointer
+(C) `malloc` is available in C++ only; `new` in C only
+(D) More than one of the above
+(E) None of the above
 
 ---
-
-## 📌 SECTION 12: MATHS REVISION — PERCENTAGES
-
-### Key Formulas:
-
-```
-X% of Y = (X/100) × Y = XY/100
-
-% increase = (New - Old)/Old × 100
-% decrease = (Old - New)/Old × 100
-
-If a value increases by X%, new value = Old × (1 + X/100)
-If a value decreases by X%, new value = Old × (1 - X/100)
-```
-
-### Important Fraction-Percentage Equivalents (Memorize!):
-
-```
-1/2  = 50%       1/3  = 33.33%    1/4  = 25%
-1/5  = 20%       1/6  = 16.67%    1/7  = 14.28%
-1/8  = 12.5%     1/9  = 11.11%    1/10 = 10%
-1/11 = 9.09%     1/12 = 8.33%     3/4  = 75%
-2/3  = 66.67%    3/5  = 60%       4/5  = 80%
-```
 
-### Successive Percentage Change:
-
-```
-Two successive changes: first by a%, then by b%
-Net change = a + b + (a×b)/100  %
-
-Example: 20% increase then 10% decrease
-= 20 + (-10) + (20 × (-10))/100
-= 20 - 10 - 2 = 8% net increase
-```
+**Q14.** Which of the following is the Compile AND Run shortcut in Turbo C++?
+(A) Alt + F9
+(B) Ctrl + F5
+(C) Ctrl + F9
+(D) More than one of the above
+(E) None of the above
 
 ---
-
-## 📌 SECTION 13: MODERN INDIA — QUICK RECAP TABLE (All Key Events)
-
-### Freedom Struggle Events — Rapid Revision:
 
-```
-YEAR    EVENT                               KEY PERSON / PLACE
-──────────────────────────────────────────────────────────────────────
-1857    Revolt of 1857 / 1st War Indep.     Mangal Pandey (Barrackpore)
-                                            Rani Lakshmibai (Jhansi)
-                                            Nana Sahib (Kanpur)
-1885    INC Founded                         A.O. Hume, W.C. Banerjee (1st Pres)
-1905    Partition of Bengal                 Lord Curzon (Viceroy)
-1906    Muslim League Founded               Dhaka
-1907    Surat Split                         Moderates vs Extremists
-1916    Lucknow Pact                        Congress + Muslim League unite
-1917    Champaran Satyagraha               Gandhi + Rajendra Prasad ⭐ BIHAR
-1919    Rowlatt Act + Jallianwala Bagh      Gen. Dyer, 379+ killed
-1920    Khilafat + Non-Cooperation          Gandhi; withdrew 1922 (Chauri Chaura)
-1929    Lahore Session "Purna Swaraj"       Nehru as Congress President
-1930    Dandi March / Salt Satyagraha       March 12 – April 6; 241 miles
-1931    Gandhi-Irwin Pact                   Suspended Civil Disobedience
-1942    Quit India Movement                 "Do or Die"; Aug 8; Gowalia Tank
-1947    Independence                        August 15; Nehru 1st PM
-1950    Constitution enacted                January 26; Rajendra Prasad 1st Pres
-```
+**Q15.** What is `6 ^ 6` in C++?
+(A) 12
+(B) 36
+(C) 0
+(D) More than one of the above
+(E) None of the above
 
 ---
-
-## 📌 SECTION 14: REVOLT OF 1857 — COMPLETE DETAIL (GS High Weight)
-
-### Causes:
-
-```
-IMMEDIATE CAUSE:
-  Enfield rifle cartridges greased with cow and pig fat
-  Soldiers had to BITE the cartridge → both Hindus and Muslims outraged
-
-MILITARY CAUSES:
-  • General Service Enlistment Act — cross seas (taboo for Hindus)
-  • Discrimination in promotion and pay
-  • British officers' disrespect for Indian soldiers
-
-POLITICAL CAUSES:
-  • Doctrine of Lapse (Dalhousie) — annexed states (Jhansi, Satara, Nagpur)
-  • Removal of Nawab of Awadh (Wajid Ali Shah) on pretext of misgovernment
-  • Mughal Emperor Bahadur Shah Zafar's position threatened
-
-ECONOMIC CAUSES:
-  • Drain of Wealth theory (Dadabhai Naoroji)
-  • Indian artisans destroyed by cheap British goods
-  • Heavy taxation of peasants
-
-SOCIAL CAUSES:
-  • Fear of Christianization — missionary activities
-  • Introduction of railways, telegraph seen as threat to tradition
-  • Abolition of practices like sati — seen as interference
-```
 
-### Key Centers and Leaders:
+**Q16.** What is the default access specifier in a C++ `struct`?
+(A) private
+(B) protected
+(C) public
+(D) More than one of the above
+(E) None of the above
 
-```
-CENTER              LEADER
-──────────────────────────────────────────────────────────
-Barrackpore         Mangal Pandey (FIRST spark — March 29, 1857)
-Delhi               Bahadur Shah Zafar II (nominal leader; Mughal Emperor)
-Jhansi              Rani Lakshmibai ("Best man among the mutineers" — Hugh Rose)
-Kanpur (Cawnpore)   Nana Sahib, Tantia Tope
-Lucknow             Begum Hazrat Mahal (Nawab's wife)
-Bihar (Jagdishpur)  Kunwar Singh (old but fierce warrior)
-Bareilly            Khan Bahadur Khan
-Faizabad            Maulvi Ahmadullah
-```
-
-### Kunwar Singh — Bihar's Hero of 1857:
-
-```
-• Zamindar of Jagdishpur, Bhojpur district, Bihar
-• 80 years old when he joined the revolt — still fought bravely!
-• Led uprising in Arrah (Bihar) and Azamgarh (UP)
-• Defeated British forces multiple times
-• Died fighting in April 1858
-• Bihar's most prominent freedom fighter of 1857
-• His birthday: 13 November — celebrated in Bihar
-```
-
-### Nature and Outcome of Revolt:
-
-```
-CALLED BY:           TERM USED:
-British historians → "Sepoy Mutiny" (limited rebellion by soldiers)
-V.D. Savarkar      → "First War of Independence" (1909, in his book)
-Indian historians  → Also called India's First Independence War
-
-OUTCOME:
-  • Revolt suppressed by September 1858
-  • Bahadur Shah Zafar exiled to Rangoon (Burma) — died 1862
-  • Rani Lakshmibai died fighting (June 17, 1858, Gwalior)
-  • British Crown took over from East India Company
-  • East India Company dissolved; Queen Victoria became Empress of India
-  • Governor General became Viceroy (first: Lord Canning)
-```
-
 ---
-
-## 📌 SECTION 15: SOCIO-RELIGIOUS REFORM MOVEMENTS (High GS Frequency)
-
-### Reform Movements Table:
 
-```
-MOVEMENT / ORGANISATION    FOUNDER              YEAR    KEY WORK
-──────────────────────────────────────────────────────────────────────────────
-Brahmo Samaj               Raja Ram Mohan Roy   1828    Against sati, child marriage
-                                                        Got Sati abolished (1829)
-Arya Samaj                 Dayananda Saraswati  1875    "Back to Vedas"; opposed idol worship
-Ramakrishna Mission        Vivekananda          1897    Service to humanity = service to God
-Prarthana Samaj            Atmaram Pandurang    1867    Maharashtra; social reform
-Theosophical Society       H.P. Blavatsky       1875    Annie Besant later president
-                           H.S. Olcott                  HQ: Adyar, Chennai
-Satyashodhak Samaj         Jyotiba Phule        1873    Against caste discrimination
-Aligarh Movement           Sir Syed Ahmad Khan  1875    Muslim education; MAO College
-Young Bengal Movement      Henry Vivian Derozio 1820s   Rationalism; free thinking
-Singh Sabha Movement        —                   1873    Sikh reform movement
-```
-
-### Raja Ram Mohan Roy — Father of Modern India:
-
-```
-Born: 1772 in Radhanagar, Bengal
-Died: 1833 in Bristol, England
-
-KEY ACHIEVEMENTS:
-1. Founded Brahmo Samaj (1828) — first modern reform society
-2. Campaigned against SATI → Led to Bengal Sati Regulation, 1829
-   (Lord Bentinck was Governor General when sati was abolished)
-3. Supported widow remarriage
-4. Fought against child marriage, polygamy
-5. Promoted English education and Western science
-6. Founded "Sambad Kaumudi" (newspaper in Bengali)
-7. Title: "Father of Indian Renaissance" / "Father of Modern India"
-```
+**Q17.** Consider: `int arr[5] = {1, 2};` — what is `arr[4]`?
+(A) Garbage value
+(B) 2
+(C) 0
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📌 SECTION 16: IMPORTANT ACTS OF BRITISH INDIA (Exam Staple)
+**Q18.** What does `ios::trunc` do when opening a file?
+(A) Opens the file at the end (go to last position)
+(B) Appends new data after existing content
+(C) Deletes all existing content in the file
+(D) More than one of the above
+(E) None of the above
 
-```
-ACT                         YEAR    KEY PROVISIONS
-──────────────────────────────────────────────────────────────────────────
-Regulating Act              1773    First Act to regulate East India Company
-                                    Created position of Governor General (Warren Hastings first)
-Pitt's India Act            1784    Board of Control established; dual control
-Charter Act                 1813    Company's monopoly over trade ended (except China tea)
-Charter Act                 1833    Company became purely administrative; law codification
-Govt of India Act           1858    Crown Rule; Company dissolved; Viceroy created
-Indian Councils Act         1861    Legislative councils with Indian members
-Indian Councils Act         1892    More Indian members; budget discussion allowed
-Morley-Minto Reforms        1909    Separate electorates for Muslims (communal virus planted)
-Montagu-Chelmsford          1919    Dyarchy introduced; provincial autonomy partial
-Govt of India Act           1935    Provincial autonomy full; Federal structure proposed;
-                                    All-India Federation (never implemented)
-Independence Act            1947    India + Pakistan as two dominions from Aug 15, 1947
-```
-
 ---
-
-## 📌 SECTION 17: BHARAT RATNA — COMPLETE LIST (Exam Favorites)
-
-### First Bharat Ratna Recipients:
-
-```
-Year    Recipient                   Field
-────────────────────────────────────────────────────────
-1954    C. Rajagopalachari          Statesman (First Governor General of India)
-1954    S. Radhakrishnan            Philosopher, President (Teacher's Day = Sep 5)
-1954    C.V. Raman                  Physicist (Raman Effect; Nobel 1930)
-1955    Bhagwan Das                 Philosopher
-1955    M. Visvesvaraya             Engineer (Karnataka — Engineer's Day Sep 15)
-1955    Jawaharlal Nehru            Prime Minister
-1957    Govind Ballabh Pant         Statesman (UP); India's Home Minister
-1958    D.H. Lawrence               ...
-1961    Purushottam Das Tandon      Freedom Fighter
-1962    Dr. Rajendra Prasad         1st President of India ⭐ BIHAR
-1963    Dr. Zakir Husain            Educationist, President of India
-1963    P.V. Kane                   Sanskrit Scholar
-```
 
-### Bihar / Bihar-Connected Bharat Ratna:
-
-```
-Name                Year    Connection
-────────────────────────────────────────────────────────────
-Dr. Rajendra Prasad 1962    Born Siwan, Bihar; 1st President ⭐
-Jayaprakash Narayan 1999    Born Saran, Bihar; Loknayak ⭐
-Bismillah Khan      2001    Born Dumraon (Buxar), Bihar ⭐
-```
+**Q19.** What happens when `throw` is executed outside a `try` block with no matching catch?
+(A) Exception is silently ignored
+(B) Program resumes from next line
+(C) `terminate()` is called — program crashes
+(D) More than one of the above
+(E) None of the above
 
 ---
-
-## 📌 SECTION 18: GEOGRAPHY — BIHAR COMPLETE FACTS
-
-### Bihar — Physical Geography:
-
-```
-Location:     Eastern India; 24°20'N – 27°31'N, 83°19'E – 88°17'E
-Area:         94,163 sq km (13th largest state)
-Districts:    38 districts (as of 2024)
-Divisions:    9 divisions
-Capital:      Patna (on south bank of Ganga)
-Bihar Day:    22 March (formed 1912 when separated from Bengal)
-```
-
-### Bihar Rivers:
-
-```
-River          Source                 Flows into     Special Note
-───────────────────────────────────────────────────────────────────────
-Ganga          Gangotri Glacier       Bay of Bengal  Divides Bihar N-S
-Sone           Amarkantak Plateau     Ganga          Major south-bank river
-Gandak         Nepal Himalayas        Ganga           
-Kosi           Nepal (Himalayas)      Ganga           "Sorrow of Bihar" ⭐
-Bagmati        Nepal (Shivpuri)       Ganga           
-Mahananda      Darjeeling Hills       Ganga           
-Punpun         Palamu Hills           Ganga          Sacred river (Pitrapaksha)
-Falgu          Hazaribagh             Ganga          Near Gaya (pilgrim site)
-```
 
-### Important Bihar Facts for BPSC:
+**Q20.** What is `5 << 3` in C++?
+(A) 15
+(B) 40
+(C) 20
+(D) More than one of the above
+(E) None of the above
 
-```
-FACT                                          ANSWER
-──────────────────────────────────────────────────────────────────────
-Bihar's population % of India                 8.58%
-Most populous district                        Patna
-Highest paddy production district             Rohtas ⭐
-Highest silk textile district                 Bhagalpur ⭐
-"Silk City" of Bihar                          Bhagalpur
-"Lichchi City" of Bihar                       Muzaffarpur
-First state to have caste-based survey        Bihar (2023 caste survey)
-Bihar's state tree                            Peepal (Ashoka officially)
-Bihar's state bird                            House Sparrow (Gauriya)
-Bihar's state animal                          Gaur (Indian Bison)
-Bihar's state flower                          Kachnar (Bauhinia)
-Bihar's state fish                            Mango Fish (Mangur)
-"Sorrow of Bihar" river                       Kosi ⭐
-India's first President                       Dr. Rajendra Prasad (Bihar) ⭐
-Bihar's first Chief Minister                  Srikrishna Sinha (1946)
-Highest point in Bihar                        Somasur (880m) in Kaimur range
-```
-
 ---
-
-## 📌 SECTION 19: SCIENCE QUICK REVISION (Physics + Biology PYQ Facts)
-
-### Physics PYQ Facts:
-
-```
-FACT                                           ANSWER
-──────────────────────────────────────────────────────────────────────
-Bernoulli's principle application              Spray bottle, airplane wing
-Speed of electron in 1st orbit of H           c/137 (c = speed of light)
-Stefan-Boltzmann law                           Energy ∝ T⁴
-Convex lens placed in water                    Still convex; focal length INCREASES
-Frequency when light changes medium            Frequency UNCHANGED; wavelength changes
-Electrical power formula                       P = I²R = V²/R = VI
-Resistance in parallel: two equal R           Half of one R (R/2)
-Sound cannot travel through                    Vacuum
-Loudest sound unit                             Decibel (dB)
-ISS orbiting altitude (approx)                 400 km above Earth
-```
-
-### Biology PYQ Facts:
 
-```
-FACT                                           ANSWER
-──────────────────────────────────────────────────────────────────────
-Photoperiodism discovered by                   Garner and Allard
-Ginger is what type of modified stem           Underground stem (rhizome) — has nodes
-Asexual reproduction by budding                Yeast (fungus)
-Anther contains                                Pollen grains (male gametes)
-Diaphragm during normal inhalation             Flattens (contracts)
-Most important for immunity                    Lymphocytes (white blood cells)
-Antacid used for                               Indigestion / acidity
-Vas deferens is                                Male organ (carries sperm)
-Silent Valley is in                            Kerala (rare biodiversity spot)
-Blood groups discovered by                     Karl Landsteiner (Nobel 1930)
-```
+**Q21.** Which of the following is FALSE about inline functions?
+(A) They eliminate function call overhead
+(B) They always reduce code size
+(C) Member functions defined inside a class are automatically inline
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-# ═══════════════════════════════════════════════════════════════════
-# ✏️ PRACTICE QUESTIONS — DAY 14
-# ═══════════════════════════════════════════════════════════════════
+**Q22.** What is a dangling pointer?
+(A) A pointer that is not initialized (never assigned)
+(B) A pointer that points to memory that has already been freed
+(C) A pointer with value NULL
+(D) More than one of the above
+(E) None of the above
 
-> ⚠️ **INSTRUCTIONS:**
-> Attempt ALL 50 questions FIRST.
-> ANSWERS are at the VERY END. Do not scroll down before attempting.
-> Time yourself: Target 40 minutes for 50 questions (48 seconds each).
-
 ---
-
-# 💻 SECTION A — COMPUTER SCIENCE (25 Questions)
 
-### CS-Q1.
-Which of the following is a VALID C++ variable name?
-(A) 2myVar  
-(B) my-Var  
-(C) _myVar  
-(D) More than one of the above  
-(E) None of the above  
+**Q23.** Which of the following correctly reads an entire line including spaces from a file?
+(A) `fin >> line;`
+(B) `getline(fin, line);`
+(C) `fin.read(line);`
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q2.
-What is the output of the following code?
-```cpp
-int x = 5;
-int y = sizeof(x++);
-cout << x;
-```
-(A) 6  
-(B) 4  
-(C) 5  
-(D) More than one of the above  
-(E) None of the above  
+**Q24.** What is `~0` in C++?
+(A) 0
+(B) 1
+(C) -1
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q3.
-`delete ptr` where `ptr = NULL` in C++ will:
-(A) Cause runtime crash  
-(B) Cause compile error  
-(C) Execute successfully without any error  
-(D) More than one of the above  
-(E) None of the above  
+**Q25.** Which of the following is TRUE about passing an array to a function in C++?
+(A) A complete copy of the array is made
+(B) The array decays to a pointer — modifications affect the original
+(C) `sizeof(arr)` inside the function gives original array size
+(D) More than one of the above
+(E) None of the above
 
 ---
-
-### CS-Q4.
-`new` operator in C++ differs from `malloc()` in that:
-(A) `new` is a function; `malloc` is an operator  
-(B) `new` calls the constructor; `malloc` does not  
-(C) `new` returns void*; `malloc` returns typed pointer  
-(D) More than one of the above  
-(E) None of the above  
-
 ---
 
-### CS-Q5.
-For an array declared as `int arr[5]`, what is the index of the LAST element?
-(A) 5  
-(B) 4  
-(C) 0  
-(D) More than one of the above  
-(E) None of the above  
+### GENERAL STUDIES — 25 MIXED MCQs
+### Modern Indian History — Day 8–13 All Topics
 
 ---
 
-### CS-Q6.
-Which file mode in C++ TRUNCATES the file to zero length when opened?
-(A) `ios::app`  
-(B) `ios::ate`  
-(C) `ios::trunc`  
-(D) More than one of the above  
-(E) None of the above  
+**Q26.** The Champaran Satyagraha of 1917 was Gandhi's:
+(A) First Satyagraha in South Africa
+(B) First Satyagraha in India
+(C) First hunger strike
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q7.
-What happens when you execute: `char s1[]="Hello"; char s2[]="World"; cout << s1+s2;`?
-(A) Output: HelloWorld  
-(B) Output: Hello World  
-(C) Compile error  
-(D) More than one of the above  
-(E) None of the above  
+**Q27.** The Chauri Chaura incident (1922) is located in which state?
+(A) Bihar
+(B) Punjab
+(C) Uttar Pradesh (Gorakhpur district)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q8.
-Which of the following is the correct order for multiple catch blocks?
-(A) General `catch(...)` first, then specific types  
-(B) Specific types first, then general `catch(...)` last  
-(C) Order does not matter for catch blocks  
-(D) More than one of the above  
-(E) None of the above  
+**Q28.** Which of the following CORRECTLY pairs the leader with their role?
+(A) Raj Kumar Shukla — led 1857 revolt in Bihar
+(B) Kunwar Singh — brought Gandhi to Champaran
+(C) Rajendra Prasad — received Gandhi in Patna for Champaran
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q9.
-Inline functions in C++ are BEST used for:
-(A) Large, complex functions to improve speed  
-(B) Functions containing loops and recursion  
-(C) Small, simple functions called frequently  
-(D) More than one of the above  
-(E) None of the above  
+**Q29.** The Dandi March started from which location on March 12, 1930?
+(A) Wardha Ashram, Maharashtra
+(B) Sabarmati Ashram, Ahmedabad, Gujarat
+(C) Sevagram Ashram
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q10.
-Which of the following statements about a DANGLING pointer is CORRECT?
-(A) It is a pointer initialized to NULL  
-(B) It is a pointer that points to freed/deallocated memory  
-(C) It is a pointer that has never been initialized  
-(D) More than one of the above  
-(E) None of the above  
+**Q30.** JP (Jayaprakash Narayan) escaped from jail during the Quit India Movement. From which jail?
+(A) Bankipur Jail, Patna
+(B) Hazaribagh Central Jail
+(C) Yerwada Prison, Pune
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q11.
-The shortcut key `Ctrl+F9` in Turbo C++ is used for:
-(A) Save file  
-(B) Open file  
-(C) Compile and Run  
-(D) More than one of the above  
-(E) None of the above  
+**Q31.** Who was the first President of the Indian National Congress (1885)?
+(A) A.O. Hume
+(B) Dadabhai Naoroji
+(C) W.C. Banerjee
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q12.
-User-defined header files in C++ use which extension?
-(A) `.cpp`  
-(B) `.cc`  
-(C) `.h`  
-(D) More than one of the above  
-(E) None of the above  
+**Q32.** The Tinkathia system in Champaran required farmers to grow indigo on what portion of their land?
+(A) 1/4 of land
+(B) 3/20 of land (3 katha per bigha)
+(C) 1/2 of land
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q13.
-When is `delete[]` used instead of `delete` in C++?
-(A) When deleting a single object  
-(B) When deleting an array allocated with `new[]`  
-(C) When deleting a NULL pointer  
-(D) More than one of the above  
-(E) None of the above  
+**Q33.** Arrange in CORRECT CHRONOLOGICAL ORDER:
+1. Quit India Movement
+2. Champaran Satyagraha
+3. Civil Disobedience Movement
+4. Non-Cooperation Movement
 
----
-
-### CS-Q14.
-What is the output?
-```cpp
-int a = 4, b = 6;
-int c = a++ + ++b;
-cout << c << " " << a << " " << b;
-```
-(A) 10 5 7  
-(B) 11 5 7  
-(C) 10 4 7  
-(D) More than one of the above  
-(E) None of the above  
+(A) 2 → 4 → 3 → 1
+(B) 4 → 2 → 3 → 1
+(C) 2 → 3 → 4 → 1
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q15.
-Which of the following variable names is INVALID in C++?
-(A) `_value`  
-(B) `Float` (capital F)  
-(C) `for`  
-(D) More than one of the above  
-(E) None of the above  
+**Q34.** The Gandhi-Irwin Pact (March 5, 1931) resulted in:
+(A) Permanent end of the Civil Disobedience Movement
+(B) Suspension of CDM; Gandhi to attend RTC 2
+(C) India getting Dominion Status
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q16.
-What is the value of `~0` (bitwise NOT of 0) in C++?
-(A) 0  
-(B) 1  
-(C) -1  
-(D) More than one of the above  
-(E) None of the above  
+**Q35.** Rajendra Prasad founded Bihar Vidyapeeth in which year and during which movement?
+(A) 1917, Champaran Satyagraha
+(B) 1921, Non-Cooperation Movement
+(C) 1930, Civil Disobedience Movement
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q17.
-The `ios::app` file mode:
-(A) Truncates the file to zero  
-(B) Opens file and writes at the end only  
-(C) Opens file in binary mode  
-(D) More than one of the above  
-(E) None of the above  
+**Q36.** Who described the Cripps Mission offer as "a post-dated cheque on a crashing bank"?
+(A) Jawaharlal Nehru
+(B) Subhas Chandra Bose
+(C) Mahatma Gandhi
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q18.
-`is_array()` function in C++ is used to:
-(A) Return the number of elements in an array  
-(B) Check whether a variable is of array type  
-(C) Sort the array elements  
-(D) More than one of the above  
-(E) None of the above  
+**Q37.** The Lahore Session of INC (December 1929) declared:
+(A) Dominion Status as the goal
+(B) Purna Swaraj (Complete Independence)
+(C) Quit India as the immediate demand
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q19.
-Which of the following is the purpose of `catch(...)` in C++?
-(A) Catch only integer exceptions  
-(B) Catch only string exceptions  
-(C) Catch ALL types of exceptions  
-(D) More than one of the above  
-(E) None of the above  
+**Q38.** Who hoisted the Congress flag at Gowalia Tank Maidan after leaders were arrested on August 9, 1942?
+(A) Kasturba Gandhi
+(B) Sarojini Naidu
+(C) Aruna Asaf Ali
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q20.
-What does the `rank()` template in C++ return for a 2D array?
-(A) Total number of elements  
-(B) Number of dimensions (2 for 2D array)  
-(C) Number of rows  
-(D) More than one of the above  
-(E) None of the above  
+**Q39.** Rajendra Prasad was born in which district of Bihar?
+(A) Patna
+(B) Siwan
+(C) Champaran
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q21.
-In C++, `&` when used with a variable name (e.g., `&x`) means:
-(A) Bitwise AND  
-(B) Address-of operator (returns memory address)  
-(C) Reference to variable  
-(D) More than one of the above  
-(E) None of the above  
+**Q40.** The Non-Cooperation Movement was FORMALLY ADOPTED (not just proposed) at which Congress session?
+(A) Calcutta Special Session, September 1920
+(B) Nagpur Session, December 1920
+(C) Lahore Session, December 1929
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q22.
-A pointer `p` points to integer `x`. After `delete p`, what should you do to avoid dangling pointer?
-(A) `p = 0;`  
-(B) `p = NULL;`  
-(C) `p = nullptr;`  
-(D) More than one of the above  
-(E) None of the above  
+**Q41.** Rajendra Prasad served as President of India for how many years — making him the longest serving?
+(A) 7 years
+(B) 10 years
+(C) 12 years (1950–1962)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### CS-Q23.
-What is the output of the following code?
-```cpp
-int* p = nullptr;
-delete p;
-cout << "OK";
+**Q42.** MATCH THE FOLLOWING — Movements and their key events:
 ```
-(A) Compile error  
-(B) Runtime crash  
-(C) OK  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-### CS-Q24.
-Which of the following C++ file stream classes is used for BOTH reading AND writing?
-(A) `ifstream`  
-(B) `ofstream`  
-(C) `fstream`  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-### CS-Q25.
-When `throw` is used without an expression inside a catch block, it:
-(A) Throws a new default exception  
-(B) Re-throws the currently caught exception  
-(C) Terminates the program  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-# 🏛️ SECTION B — GENERAL STUDIES (25 Questions)
-
-### GS-Q1.
-An article bought for ₹500 is sold at 20% profit. What is the Selling Price?
-(A) ₹520  
-(B) ₹600  
-(C) ₹580  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-### GS-Q2.
-An article is sold for ₹720 at a loss of 10%. Find the Cost Price.
-(A) ₹792  
-(B) ₹648  
-(C) ₹800  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-### GS-Q3.
-₹2400 is divided among A, B, C in ratio 1:2:3. What is C's share?
-(A) ₹400  
-(B) ₹800  
-(C) ₹1200  
-(D) More than one of the above  
-(E) None of the above  
+Movement              Key Event
+1. NCM (1920–22)      A. Gandhi makes salt at Dandi coast
+2. CDM (1930)         B. 22 policemen burned — movement suspended
+3. Quit India (1942)  C. JP escapes Hazaribagh jail
+```
+(A) 1-B, 2-A, 3-C
+(B) 1-A, 2-B, 3-C
+(C) 1-C, 2-A, 3-B
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### GS-Q4.
-Average of 6 numbers is 50. If one number 80 is removed, what is the new average?
-(A) 44  
-(B) 46  
-(C) 48  
-(D) More than one of the above  
-(E) None of the above  
+**Q43.** The Nehru Report (1928) was authored by which leader and demanded what?
+(A) Jawaharlal Nehru; demanded Purna Swaraj
+(B) Motilal Nehru; demanded Dominion Status
+(C) Gandhi; demanded withdrawal of all British acts
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### GS-Q5.
-A shopkeeper marks price 50% above cost and gives 20% discount. What is profit/loss %?
-(A) 20% profit  
-(B) 30% profit  
-(C) 20% loss  
-(D) More than one of the above  
-(E) None of the above  
+**Q44.** Which of the following statements about the Battle of Buxar (1764) is CORRECT?
+(A) It was fought between Clive and Siraj-ud-Daula
+(B) It was more significant than Plassey — confirmed British supremacy
+(C) It was led by Robert Clive on the British side
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### GS-Q6.
-The IMMEDIATE cause of the Revolt of 1857 was:
-(A) Doctrine of Lapse  
-(B) Greased cartridges of the Enfield rifle  
-(C) Abolition of sati  
-(D) More than one of the above  
-(E) None of the above  
+**Q45.** Rabindranath Tagore returned his Knighthood to protest:
+(A) Partition of Bengal
+(B) Simon Commission
+(C) Jallianwala Bagh Massacre
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### GS-Q7.
-Who was the leader of the 1857 Revolt in Bihar (Jagdishpur)?
-(A) Mangal Pandey  
-(B) Nana Sahib  
-(C) Kunwar Singh  
-(D) More than one of the above  
-(E) None of the above  
+**Q46.** Dr. Rajendra Prasad signed the Constitution of India on which date (now celebrated as Constitution Day)?
+(A) January 26, 1950
+(B) August 15, 1949
+(C) November 26, 1949
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### GS-Q8.
-The first spark of the 1857 Revolt was fired at:
-(A) Meerut  
-(B) Barrackpore  
-(C) Delhi  
-(D) More than one of the above  
-(E) None of the above  
+**Q47.** What was the role of Ram Manohar Lohia during the Quit India Movement?
+(A) He led the Dharasana Salt Works raid
+(B) He hoisted the Congress flag at Gowalia Tank
+(C) He ran "Congress Radio" underground in Bombay
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### GS-Q9.
-V.D. Savarkar described the Revolt of 1857 as:
-(A) Sepoy Mutiny  
-(B) First War of Indian Independence  
-(C) A Civil Rebellion  
-(D) More than one of the above  
-(E) None of the above  
+**Q48.** August 9, 1942, is celebrated as:
+(A) Republic Day
+(B) Independence Day
+(C) August Kranti Diwas (August Revolution Day)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### GS-Q10.
-The Brahmo Samaj was founded by:
-(A) Dayananda Saraswati  
-(B) Swami Vivekananda  
-(C) Raja Ram Mohan Roy  
-(D) More than one of the above  
-(E) None of the above  
+**Q49.** Which of the following CORRECTLY describes JP (Jayaprakash Narayan)?
+(A) He was from Sitabdiara village, Saran district, Bihar
+(B) He escaped from Hazaribagh Central Jail on November 9, 1942
+(C) He led the underground Quit India movement
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-### GS-Q11.
-The abolition of Sati (1829) took place under which Governor General?
-(A) Lord Dalhousie  
-(B) Lord Curzon  
-(C) Lord William Bentinck  
-(D) More than one of the above  
-(E) None of the above  
+**Q50.** MATCH THE FOLLOWING — Person and their most important contribution:
+```
+Person              Contribution
+1. Kunwar Singh     A. Led underground QIM; Hazaribagh escape
+2. Rajendra Prasad  B. Led 1857 revolt in Bihar (Jagdishpur, Bhojpur)
+3. JP               C. Founded Bihar Vidyapeeth; First President of India
+4. Raj Kumar Shukla D. Brought Gandhi to Champaran Satyagraha
+```
+(A) 1-B, 2-C, 3-A, 4-D
+(B) 1-A, 2-B, 3-D, 4-C
+(C) 1-C, 2-D, 3-A, 4-B
+(D) More than one of the above
+(E) None of the above
 
 ---
-
-### GS-Q12.
-The Arya Samaj was founded by:
-(A) Swami Vivekananda  
-(B) Dayananda Saraswati  
-(C) Raja Ram Mohan Roy  
-(D) More than one of the above  
-(E) None of the above  
-
 ---
 
-### GS-Q13.
-The Ramakrishna Mission was founded by:
-(A) Ramakrishna Paramahamsa  
-(B) Swami Vivekananda  
-(C) Raja Ram Mohan Roy  
-(D) More than one of the above  
-(E) None of the above  
-
----
+# ANSWER KEY
 
-### GS-Q14.
-Which river is known as the "Sorrow of Bihar"?
-(A) Gandak  
-(B) Ganga  
-(C) Kosi  
-(D) More than one of the above  
-(E) None of the above  
+## ⚠️ MANDATORY: Attempt all 50 questions BEFORE checking!
 
 ---
 
-### GS-Q15.
-Which district of Bihar is known for the HIGHEST production of silk textile?
-(A) Rohtas  
-(B) Patna  
-(C) Bhagalpur  
-(D) More than one of the above  
-(E) None of the above  
+### CS Answers (Q1–Q25):
 
----
+| Q | Answer | Reason (one-line) |
+|---|--------|------------------|
+| 1 | (A) | b=a++(b=5,a→6); c=++a(a→7,c=7); a=7,b=5,c=7 |
+| 2 | (C) | 12=1100, 10=1010, AND=1000=8 |
+| 3 | (B) | ~n=-(n+1); ~7=-8 |
+| 4 | (B) | ofstream default = ios::out\|ios::trunc = DELETES content |
+| 5 | (C) | delete NULL = safe no-op in C++ |
+| 6 | (B) | bool = 1 byte (not 1 bit!) |
+| 7 | (C) | 3D array → rank = 3 |
+| 8 | (B) | Non-member function with access to private/protected |
+| 9 | (C) | catch(...) = catch-all = MUST be last |
+| 10 | (B) | Recursive function → compiler ignores inline |
+| 11 | (B) | while(i++ < 3) checks 0,1,2 < 3 (true); prints i=1,2,3 |
+| 12 | (B) | "India" = 5 chars + '\0' = 6 bytes |
+| 13 | (A) | new calls constructor; malloc does not |
+| 14 | (C) | Ctrl+F9 = Compile AND Run in Turbo C++ |
+| 15 | (C) | n^n = 0 always; 6^6=0 |
+| 16 | (C) | struct default = public |
+| 17 | (C) | Partial init: rest = 0 (not garbage!) |
+| 18 | (C) | ios::trunc = deletes all existing content |
+| 19 | (C) | No matching catch → terminate() called → crash |
+| 20 | (B) | 5<<3 = 5×2³ = 5×8 = 40 |
+| 21 | (B) | FALSE: inline INCREASES code size (code bloat) |
+| 22 | (B) | Dangling = points to freed/destroyed memory |
+| 23 | (B) | getline(fin, line) reads full line with spaces |
+| 24 | (C) | ~0 = -(0+1) = -1 |
+| 25 | (B) | Array decays to pointer; modifications affect original |
 
-### GS-Q16.
-Bihar was formally separated from Bengal Presidency on:
-(A) 1 April 1912  
-(B) 22 March 1912  
-(C) 15 August 1947  
-(D) More than one of the above  
-(E) None of the above  
-
 ---
-
-### GS-Q17.
-The state bird of Bihar is:
-(A) Peacock  
-(B) House Sparrow (Gauriya)  
-(C) Crane  
-(D) More than one of the above  
-(E) None of the above  
 
----
+### GS Answers (Q26–Q50):
 
-### GS-Q18.
-Which district of Bihar is known for maximum paddy (rice) production?
-(A) Muzaffarpur  
-(B) Bhagalpur  
-(C) Rohtas  
-(D) More than one of the above  
-(E) None of the above  
+| Q | Answer | Reason (one-line) |
+|---|--------|------------------|
+| 26 | (B) | First Satyagraha IN India (had done in South Africa earlier) |
+| 27 | (C) | Chauri Chaura = Gorakhpur district, UP |
+| 28 | (C) | Rajendra Prasad received Gandhi in Patna (correct pairing) |
+| 29 | (B) | Sabarmati Ashram, Ahmedabad, Gujarat |
+| 30 | (B) | Hazaribagh Central Jail, November 9, 1942 |
+| 31 | (C) | W.C. Banerjee = first INC President (Hume = founder) |
+| 32 | (B) | 3 katha per bigha = 3/20 of land |
+| 33 | (A) | 1917 Champaran → 1920 NCM → 1930 CDM → 1942 QIM |
+| 34 | (B) | Pact suspended CDM; Gandhi attended RTC 2 |
+| 35 | (B) | 1921, during Non-Cooperation Movement |
+| 36 | (C) | Gandhi's famous quote about Cripps Mission |
+| 37 | (B) | Purna Swaraj = Complete Independence (not Dominion Status) |
+| 38 | (C) | Aruna Asaf Ali hoisted flag after arrests |
+| 39 | (B) | Siwan district (Zeradei village) |
+| 40 | (B) | Nagpur Session Dec 1920 = FORMAL adoption (Calcutta = proposed) |
+| 41 | (C) | 12 years (1950–1962) = longest serving President |
+| 42 | (A) | NCM=Chauri Chaura, CDM=Dandi salt, QIM=JP escape |
+| 43 | (B) | Motilal Nehru authored it; demanded Dominion Status |
+| 44 | (B) | Buxar more significant; confirmed British supremacy |
+| 45 | (C) | Tagore returned Knighthood after Jallianwala Bagh |
+| 46 | (C) | November 26, 1949 = Constitution Day |
+| 47 | (C) | Lohia ran Congress Radio underground in Bombay |
+| 48 | (C) | August Kranti Diwas = August Revolution Day |
+| 49 | (D) | ALL three facts about JP are correct |
+| 50 | (A) | Kunwar Singh-B, Rajendra Prasad-C, JP-A, Shukla-D |
 
 ---
-
-### GS-Q19.
-The first Governor General of India after the Crown took control in 1858 was:
-(A) Lord Dalhousie  
-(B) Lord Canning  
-(C) Lord Curzon  
-(D) More than one of the above  
-(E) None of the above  
-
 ---
 
-### GS-Q20.
-The Regulating Act (1773) was significant because it:
-(A) Dissolved the East India Company  
-(B) Created the position of Governor General of India  
-(C) Introduced dyarchy in provinces  
-(D) More than one of the above  
-(E) None of the above  
+# 🔁 FINAL REVISION NOTES
+## 📌 "Last 1-Hour Before Exam" — Ultra-Crisp Format
 
 ---
 
-### GS-Q21.
-What is 25% of 640?
-(A) 150  
-(B) 160  
-(C) 170  
-(D) More than one of the above  
-(E) None of the above  
+### ⚡ CS — 30 MUST-KNOW FACTS
 
----
-
-### GS-Q22.
-The Theosophical Society's headquarters in India is located at:
-(A) Varanasi  
-(B) Adyar, Chennai  
-(C) Kolkata  
-(D) More than one of the above  
-(E) None of the above  
+```
+VARIABLES & DATA TYPES:
+1.  bool = 1 BYTE (not 1 bit)
+2.  void x; → compile error | void* ptr → valid
+3.  sizeof(x++) → does NOT increment x (compile-time operator)
+4.  User-defined header: "file.h" | Standard: <iostream>
+5.  Ctrl+F9 = Compile + Run | Alt+F9 = Compile only
 
----
+POINTERS:
+6.  &x = address of x | *p = value at address in p
+7.  int* p, q → p=pointer, q=int (TRAP!) | int *p, *q → both pointers
+8.  delete NULL → SAFE, no crash, no error
+9.  new → calls constructor | malloc → does NOT
+10. new pair: delete | new[] pair: delete[] | NEVER mix!
+11. Dangling = freed memory still pointed to | Wild = never initialized
+12. ~n = -(n+1) → ~5=-6 | sizeof(pointer) = 4/8 (NOT type-dependent)
 
-### GS-Q23.
-Which of the following is correct regarding photoperiodism?
-(A) It was discovered by Darwin  
-(B) It was discovered by Garner and Allard  
-(C) It refers to response of plants to temperature  
-(D) More than one of the above  
-(E) None of the above  
+ARRAYS:
+13. arr[i] == *(arr+i) — always equivalent
+14. arr++ → INVALID (array name = constant pointer)
+15. char "Bihar" = 6 bytes (5 + '\0')
+16. char s1[] + s2[] → COMPILE ERROR; use strcat()
+17. Partial init: int arr[5]={1,2} → arr[2..4] = 0 (not garbage!)
+18. is_array<int[5]>::value=1 | rank<int[3][4]>::value=2
 
----
+FILE HANDLING:
+19. ios::trunc = DELETES content | ios::app = PRESERVES + adds at end
+20. ofstream default = ios::out | ios::trunc → DESTROYS old content!
+21. close() = flushes buffer to disk (data loss if skipped)
+22. Binary write: fout.write((char*)&n, sizeof(n))
 
-### GS-Q24.
-Ginger is botanically classified as:
-(A) Root  
-(B) Fruit  
-(C) Underground stem (rhizome)  
-(D) More than one of the above  
-(E) None of the above  
+EXCEPTION HANDLING:
+23. catch(...) = catch-all → MUST be LAST block always!
+24. Specific catch BEFORE general catch (derived before base)
+25. throw; = rethrow original | throw e; = rethrow copy
+26. new fails → std::bad_alloc thrown (not NULL like malloc)
 
----
+INLINE FUNCTIONS:
+27. inline = request (not guaranteed) | code substituted at call site
+28. Trade-off: FASTER execution but LARGER code size
+29. Inline IGNORED for: recursion, loops, static vars, large body
+30. Member functions INSIDE class = automatically inline (no keyword!)
 
-### GS-Q25.
-Which of the following persons from Bihar received the Bharat Ratna?
-(A) Dr. Rajendra Prasad  
-(B) Jayaprakash Narayan  
-(C) Bismillah Khan  
-(D) More than one of the above  
-(E) None of the above  
+OUTPUT PREDICTION:
+31. i=5: i++ prints 5 then i=6 | ++i makes i=6 then prints 6
+32. while(i++ < 3) → checks 0,1,2 (old) → prints 1,2,3 (new)
+33. 5&3=1 | 5|3=7 | 5^3=6 | ~5=-6 | 5<<1=10 | 20>>2=5
+34. n^n = 0 (always!) | n&1: 1=odd, 0=even
+35. struct = PUBLIC default | class = PRIVATE default
+36. Friend: NOT member, can access private, NOT inherited
+37. :: = scope resolution (::x for global, ClassName::method for outside def)
+```
 
 ---
 
-# ═══════════════════════════════════════════════════════════════════
-# 📝 ANSWER KEY — DAY 14
-# ═══════════════════════════════════════════════════════════════════
+### ⚡ GS — 30 MUST-KNOW FACTS
 
-> ✅ Check only after attempting ALL 50. Be honest with yourself!
+```
+TIMELINE ANCHORS:
+1.  1757 = Plassey (Mir Jafar betrays) | 1764 = Buxar (Hector Munro)
+2.  1885 = INC founded by A.O. HUME | First president = W.C. Banerjee
+3.  1905 = Partition of Bengal (Lord Curzon) → Swadeshi Movement
+4.  1906 = Muslim League founded (Dhaka)
 
----
+CHAMPARAN 1917 (BIHAR HIGH PRIORITY):
+5.  Raj Kumar Shukla brought Gandhi | Gandhi arrived April 15, 1917 (Motihari)
+6.  Tinkathia = 3/20 land for forced indigo cultivation
+7.  FIRST Satyagraha in India | Rajendra Prasad received Gandhi in Patna
+8.  1918 = Champaran Agrarian Act; Tinkathia abolished; 25% refund
 
-## 💻 CS ANSWERS
+JALLIANWALA BAGH 1919:
+9.  April 13, 1919 (Baisakhi Day) | General Dyer ordered firing
+10. Tagore returned KNIGHTHOOD (not Nobel Prize!)
+11. Udham Singh killed O'Dwyer in London, 1940 (avenge JWB)
 
-| Q# | Answer | Detailed Explanation |
-|----|--------|---------------------|
-| CS-Q1 | (C) _myVar | `_myVar` starts with underscore — VALID. `2myVar` starts with digit — INVALID. `my-Var` has hyphen — INVALID. |
-| CS-Q2 | (C) 5 | `sizeof(x++)` does NOT evaluate x++. x remains 5. y = sizeof(int) = 4, but x is still 5. |
-| CS-Q3 | (C) | `delete NULL` is safe — C++ standard guarantees no crash. Does nothing. |
-| CS-Q4 | (B) | `new` calls constructor; `malloc` does not. `new` is an operator; `malloc` is a function. `new` returns typed pointer; `malloc` returns void*. |
-| CS-Q5 | (B) 4 | Array indices 0 to n-1. For size 5: indices 0,1,2,3,4. Last = arr[4]. |
-| CS-Q6 | (C) ios::trunc | `ios::trunc` truncates (empties) the file. `ios::app` appends at end. `ios::ate` moves to end. |
-| CS-Q7 | (C) Compile error | `char[]` arrays cannot be concatenated with `+`. This gives a compile error. |
-| CS-Q8 | (B) | Specific types first, `catch(...)` last. Otherwise `catch(...)` eats all exceptions. |
-| CS-Q9 | (C) | Inline functions: small, simple, frequently-called. NOT for loops/recursion/large functions. |
-| CS-Q10 | (B) | Dangling pointer = points to memory that has been freed (deleted). NOT a null pointer. |
-| CS-Q11 | (C) | Ctrl+F9 = Compile and Run in Turbo C++. Classic PYQ fact. |
-| CS-Q12 | (C) .h | User-defined headers use `.h`. Standard headers use no extension in C++. |
-| CS-Q13 | (B) | `delete[]` is for arrays allocated with `new[]`. Mixing them = undefined behavior. |
-| CS-Q14 | (B) 11 5 7 | `a++ `uses 4 then a=5; `++b` makes b=7 then uses 7; c = 4+7 = 11. a=5, b=7. |
-| CS-Q15 | (C) for | `for` is a reserved keyword — INVALID. `_value` and `Float` (capital F) are valid. |
-| CS-Q16 | (C) -1 | ~0 = -(0+1) = -1. Using formula ~n = -(n+1). |
-| CS-Q17 | (B) | `ios::app` opens file and moves write position to end, appending data. |
-| CS-Q18 | (B) | `is_array()` checks whether a variable/type is of array type. Returns true/false. |
-| CS-Q19 | (C) | `catch(...)` is the catch-all handler — catches ANY type of exception. |
-| CS-Q20 | (B) | `rank` returns number of dimensions. 2D array → rank = 2. |
-| CS-Q21 | (D) More than one | When used with variable, `&` can be address-of operator OR reference depending on context. Both B and C are valid uses! |
-| CS-Q22 | (D) More than one | `p = 0`, `p = NULL`, `p = nullptr` — all set pointer to null and prevent dangling. All are valid. |
-| CS-Q23 | (C) OK | `delete nullptr` is completely safe; prints "OK". No crash. |
-| CS-Q24 | (C) fstream | `ifstream` = read only. `ofstream` = write only. `fstream` = both read and write. |
-| CS-Q25 | (B) | `throw;` (without expression) inside a catch block re-throws the current exception. |
+NON-COOPERATION MOVEMENT:
+12. Proposed: Calcutta Sept 1920 (Lala Lajpat Rai presides)
+13. Formally adopted: Nagpur Dec 1920
+14. Feb 5, 1922 = Chauri Chaura (UP, Gorakhpur) = 22 policemen killed
+15. Bihar Vidyapeeth founded 1921 by RAJENDRA PRASAD (during NCM)
+16. Swaraj Party 1923 = C.R. Das + Motilal Nehru (opposed suspension)
 
----
+CIVIL DISOBEDIENCE MOVEMENT:
+17. Nehru Report 1928 = MOTILAL Nehru = demanded DOMINION STATUS (not Purna Swaraj)
+18. Lahore 1929 (J. Nehru presides) = PURNA SWARAJ declared (midnight, Dec 31)
+19. Dandi March: March 12 → April 6, 1930 | 241 miles | 78 volunteers
+20. Gandhi makes salt = April 6, 1930 = CDM launched
+21. Gandhi-Irwin PACT = March 5, 1931 = CDM SUSPENDED (not ended)
+22. Bhagat Singh hanged = March 23, 1931
 
-## 🏛️ GS ANSWERS
+QUIT INDIA MOVEMENT:
+23. Cripps = "post-dated cheque on crashing bank" = fails April 1942
+24. Aug 8 = QIM Resolution (Gowalia Tank, Bombay) | Aug 9 = arrests = August Kranti Diwas
+25. Gandhi to Aga Khan Palace, Pune | Aruna Asaf Ali hoists flag
+26. JP = Sitabdiara, Saran, BIHAR | escaped HAZARIBAGH jail = November 9, 1942
+27. Ram Manohar Lohia = Congress Radio underground
+28. Kasturba dies = February 22, 1944 (Aga Khan Palace, Pune)
 
-| Q# | Answer | Detailed Explanation |
-|----|--------|---------------------|
-| GS-Q1 | (B) ₹600 | SP = CP × (100+P%)/100 = 500 × 120/100 = ₹600. |
-| GS-Q2 | (C) ₹800 | CP = SP × 100/(100-L%) = 720 × 100/90 = ₹800. |
-| GS-Q3 | (C) ₹1200 | Total parts = 1+2+3=6. C's share = 2400 × 3/6 = ₹1200. |
-| GS-Q4 | (A) 44 | Sum = 6×50=300. After removing 80: 300-80=220. New avg = 220/5 = 44. |
-| GS-Q5 | (A) 20% profit | Let CP=100. MP=150. SP=150×80/100=120. Profit=20%. Net formula: 50-20-(50×20/100) = 30-10 = 20%. |
-| GS-Q6 | (B) | Immediate cause = greased Enfield cartridges (cow + pig fat). Doctrine of Lapse was political cause. |
-| GS-Q7 | (C) Kunwar Singh | Zamindar of Jagdishpur, Bhojpur dist. Bihar's hero of 1857. 80 years old! |
-| GS-Q8 | (B) Barrackpore | Mangal Pandey fired the first shot at Barrackpore (March 29, 1857). Meerut uprising was May 10. |
-| GS-Q9 | (B) | V.D. Savarkar's book (1909): "The Indian War of Independence 1857" — called it First War of Independence. |
-| GS-Q10 | (C) | Brahmo Samaj = Raja Ram Mohan Roy (1828). Arya Samaj = Dayananda Saraswati. Ramakrishna Mission = Vivekananda. |
-| GS-Q11 | (C) | Lord William Bentinck abolished Sati in 1829. Dalhousie = Doctrine of Lapse. Curzon = Partition of Bengal 1905. |
-| GS-Q12 | (B) | Arya Samaj founded by Dayananda Saraswati (1875). "Back to the Vedas" was his slogan. |
-| GS-Q13 | (B) | Ramakrishna Mission founded by Swami Vivekananda (1897) in memory of his guru Ramakrishna. |
-| GS-Q14 | (C) Kosi | Kosi River = "Sorrow of Bihar" — causes massive floods every year. |
-| GS-Q15 | (C) Bhagalpur | Bhagalpur = "Silk City" — highest silk textile production in Bihar. |
-| GS-Q16 | (B) 22 March 1912 | Bihar separated from Bengal on 22 March 1912. Bihar Day is celebrated on 22 March. |
-| GS-Q17 | (B) House Sparrow | Bihar's state bird = House Sparrow (Gauriya). NOT Peacock (that's India's national bird). |
-| GS-Q18 | (C) Rohtas | Rohtas district = highest paddy/rice production in Bihar. Key BPSC Bihar GK fact. |
-| GS-Q19 | (B) Lord Canning | First Viceroy of India (1858). Before 1858, he was last Governor General; after = first Viceroy. |
-| GS-Q20 | (B) | Regulating Act 1773 = first Act to regulate EIC + created position of Governor General. Warren Hastings was first. |
-| GS-Q21 | (B) 160 | 25% of 640 = (25/100) × 640 = 0.25 × 640 = 160. |
-| GS-Q22 | (B) Adyar, Chennai | Theosophical Society HQ = Adyar, Chennai (Madras). Founded 1875; Annie Besant was president. |
-| GS-Q23 | (B) | Photoperiodism = plant response to day length. Discovered by Garner and Allard. NOT Darwin. NOT temperature (that's vernalization). |
-| GS-Q24 | (C) | Ginger = underground stem (rhizome). Has nodes and internodes — proves it's a stem, not root. |
-| GS-Q25 | (D) More than one | ALL THREE — Rajendra Prasad (1962), JP Narayan (1999), Bismillah Khan (2001) — are from Bihar and received Bharat Ratna! |
+RAJENDRA PRASAD (BIHAR SPECIAL):
+29. Born Dec 3, 1884 | Zeradei, Siwan, Bihar
+30. Bihar Vidyapeeth 1921 | CA President Dec 9, 1946
+    Constitution signed Nov 26, 1949 | 1st President Jan 26, 1950
+    Two terms | 12 years | Bharat Ratna 1962 | Died Feb 28, 1963
+```
 
 ---
 
-# ═══════════════════════════════════════════════════════════════════
-# 🌙 NIGHT REVISION — 5+5 BULLET POINTS (Day 14)
-# ═══════════════════════════════════════════════════════════════════
+### ⚡ LAST-MINUTE COMPARISON TABLES
 
-## CS — 5 Must-Remember Points:
 ```
-1. VARIABLE RULES: Cannot start with digit; no spaces; only letters/digits/_; no keywords
-   Invalid: 123var, my-var, int, for, while, return
-
-2. NULL POINTER DELETE: delete NULL = SAFE (compiles + runs without crash)
-   new calls CONSTRUCTOR; malloc does NOT
-
-3. delete vs delete[]: Single object → delete; Array from new[] → delete[]
-   Wrong usage = UNDEFINED BEHAVIOR
+MOVEMENT    LAUNCHED          ENDED             GANDHI ARRESTED
+NCM         Sept/Dec 1920     Feb 1922 (CC)     March 1922
+CDM         April 6, 1930     March 5, 1931*    May 1930
+QIM         August 9, 1942    1945+             August 9, 1942
+*CDM relaunched 1932, withdrawn 1934
 
-4. FILE MODES: ios::trunc = EMPTY the file; ios::app = add at END
-   Combine modes with | operator: ios::in | ios::out
+BATTLE      YEAR   BRITISH COMMANDER   OPPONENT         SIGNIFICANCE
+Plassey     1757   Robert Clive        Siraj-ud-Daula   Foundation of British rule
+Buxar       1764   Hector Munro        Mir Qasim+2      CONFIRMATION of supremacy
 
-5. INLINE FUNCTIONS: SMALL and SIMPLE only; NOT for loops/recursion/large code
-   catch(...) must be LAST; specific types catch FIRST
+RTC         YEAR   GANDHI
+RTC 1       1930   ABSENT (in jail)
+RTC 2       1931   PRESENT (after pact)
+RTC 3       1932   ABSENT (in jail again)
 ```
 
-## GS — 5 Must-Remember Points:
-```
-1. PROFIT/LOSS: Always calculated on CP. SP = CP×(100±%)÷100
-   Same SP, same profit%=loss% → Always net LOSS. Net Loss% = (%²)/100
-
-2. REVOLT 1857: Immediate cause = Enfield cartridge (greased)
-   Kunwar Singh = Bihar hero (Jagdishpur, Bhojpur)
-   Mangal Pandey = Barrackpore (FIRST spark)
-   After 1857: Crown rule; Viceroy created; Lord Canning = first Viceroy
-
-3. REFORM MOVEMENTS: Brahmo Samaj = Ram Mohan Roy (1828)
-   Arya Samaj = Dayananda (1875), Ramakrishna Mission = Vivekananda (1897)
-   Sati abolished 1829 by Lord Bentinck
-
-4. BIHAR FACTS: Kosi = Sorrow of Bihar; Bhagalpur = Silk City; Rohtas = Paddy
-   State bird = House Sparrow; Bihar Day = 22 March; Districts = 38
-
-5. BHARAT RATNA FROM BIHAR: Rajendra Prasad (1962), JP Narayan (1999), Bismillah Khan (2001)
-   All three from Bihar — HIGH BPSC probability question!
-```
-
 ---
 
-# ═══════════════════════════════════════════════════════════════════
-# ⚡ TOPPER TIPS — DAY 14
-# ═══════════════════════════════════════════════════════════════════
+## 🎯 WEEK 2 COMPLETE — WHAT YOU'VE MASTERED
 
 ```
-CS TIP 1: "delete NULL" and "sizeof(x++)" are the TWO most common
-          output prediction traps in BPSC TRE. Both have appeared
-          multiple times. Get them 100% right every time.
-
-CS TIP 2: For file modes — remember the EXTREMES:
-          trunc = ZERO (completely empty)
-          app   = ADDS at end
-          in    = READ only
-          out   = WRITE only
-          Combine with |
-
-CS TIP 3: The D option "More than one of the above" will come for questions
-          like "which of these is a valid way to set a dangling pointer to null"
-          — because p=0, p=NULL, p=nullptr are ALL valid.
-
-GS TIP 1: BPSC ALWAYS asks Bihar-specific facts. Memorize:
-          Rohtas → Paddy
-          Bhagalpur → Silk
-          Muzaffarpur → Litchi
-          Kosi → Sorrow of Bihar
-          These 4 appear almost every paper!
-
-GS TIP 2: For profit-loss questions — NEVER calculate on SP.
-          The % is always on CP. This single rule solves 80% of questions.
-
-GS TIP 3: In 1857 — differentiate:
-          Mangal Pandey → Barrackpore (first spark, March 29)
-          Sepoy Revolt → Meerut (May 10, main revolt started)
-          Leader Bihar → Kunwar Singh (Jagdishpur, Bhojpur)
-          BPSC mixes these up to trick you!
+Day 8:  C++ Variables, Data Types, sizeof() + Modern Indian History
+Day 9:  C++ Pointers (new/delete, NULL, dangling) + Champaran 1917
+Day 10: C++ Arrays (1D, 2D, strings, is_array/rank) + NCM 1920-22
+Day 11: C++ File Handling (modes, streams, trunc/app) + CDM 1930
+Day 12: Exception Handling (try/catch/throw) + Inline + Quit India 1942
+Day 13: Output Prediction (bitwise, increment) + Rajendra Prasad
+Day 14: COMPLETE REVISION + 50 Mixed PYQ Practice Questions ← TODAY
+
+NEXT: Day 15 begins Week 3 → DBMS Basics + Indian Constitution
 ```
 
 ---
 
-*Day 14 Complete — C++ Week Revision Mastery | BPSC TRE 4.0*
-*Next up: Day 15 — Arrays as Data Structure + Bihar Geography*
-*You are now 14 days in. You are building a winning foundation. Keep going! 🎯*
+*Tomorrow: Day 15 — Introduction to DBMS + Indian Constitution (Preamble & Fundamental Rights)*

@@ -1,1482 +1,1258 @@
-# 📅 DAY 21 — BPSC TRE 4.0 TOPPER STUDY MATERIAL
-## 🔁 REVISION DAY: Arrays + Stack + Queue (Days 15–20) | GS: India & Bihar Geography
-### 🎯 Phase 1 — Week 3 Complete | Target: TOPPER RANK
+# 📅 BPSC TRE 4.0 — DAY 21 COMPLETE REVISION MODULE
+### REVISION DAY: Arrays + Stack + Queue (Days 15–20) + GS Geography & Polity
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-> **⚠️ BPSC EXAM FORMAT REMINDER:**
-> Every question = 5 options → **(A) (B) (C) (D) (E)**
-> **Option D = "More than one of the above"**
-> **Option E = "None of the above"**
-> 📌 20–25% of answers are D or E. NEVER mark these blindly — verify each statement!
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): CS Master Revision — Arrays, Stack, Queue, Circular Queue, Deque, Priority Queue
+> - Afternoon (1 hr): GS Master Revision — Bihar Geography, Eastern Ghats, Plateau, Monsoon, Constitution
+> - Evening (1 hr): Solve all 50 Mixed PYQ MCQs (25 CS + 25 GS)
+> - Night (30 min): Write YOUR personal top 10 traps in a notebook
 
 ---
 
-> 🏆 **DAY 21 GOAL:** Consolidate everything from Days 15–20.
-> Today you don't learn NEW topics — you MASTER what you already studied.
-> A revision day done right is worth 5 new topic days.
-> Target on today's 50 questions: **45+ / 50**
+# PART 1: CS MASTER REVISION
+## ⚡ WEEK 3 RAPID RECALL — Arrays, Stacks, Queues
 
 ---
 
-# ══════════════════════════════════════════════════════
-# 🖥️ CS MEGA REVISION — ARRAYS, STACK, QUEUE (Days 15–20)
-# ══════════════════════════════════════════════════════
-
----
-
-## 📌 MASTER CONCEPT 1: ARRAYS AS DATA STRUCTURE
-
-### Quick Visual Recap:
+## 🔷 MODULE 1: ARRAYS — One-Line Concepts
 
 ```
-ARRAY — CONTIGUOUS MEMORY STORAGE:
-
- Index:  [0]   [1]   [2]   [3]   [4]   [5]   [6]
- Value:  [10]  [25]  [30]  [45]  [60]  [75]  [90]
-          ↑                                    ↑
-      Base addr                           Base + 6×(size)
-      (arr[0])
-
-★ KEY PROPERTY: Elements stored in CONSECUTIVE memory locations
-★ ACCESS: arr[i] = Base_Address + i × (size_of_element)
-★ Random access in O(1) — just calculate address!
+WHAT:     Fixed-size, contiguous memory, homogeneous elements
+ACCESS:   O(1) — address CALCULATED (Base + i×size), NOT searched
+INSERT end: O(1) — no shifting needed
+INSERT mid: O(n) — elements after insertion point must shift RIGHT
+DELETE end: O(1) — just reduce counter
+DELETE mid: O(n) — elements after deletion point shift LEFT
+TRAVERSE:   O(n) — visit each element once
+SEARCH unsorted: O(n) | SEARCH sorted (binary): O(log n)
+FIND max/min:    O(n) — must check every element
 ```
 
-### Arrays — Complete Complexity Table:
-
+### Array Address Formulas:
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│              ARRAY OPERATIONS — TIME COMPLEXITY                 │
-├──────────────────────────────┬────────────────┬─────────────────┤
-│ Operation                    │ Time           │ Why?            │
-├──────────────────────────────┼────────────────┼─────────────────┤
-│ Access by index (arr[i])     │ O(1) ★ BEST!   │ Direct formula  │
-│ Search (unsorted array)      │ O(N)           │ Must check all  │
-│ Search (sorted — binary)     │ O(log N)       │ Divide & conquer│
-│ Insertion at END             │ O(1) amortized │ Just add at end │
-│ Insertion at BEGINNING       │ O(N)           │ Shift all right │
-│ Insertion at MIDDLE (index i)│ O(N)           │ Shift N-i elem. │
-│ Deletion at END              │ O(1)           │ Just reduce size│
-│ Deletion at BEGINNING        │ O(N)           │ Shift all left  │
-│ Deletion at MIDDLE           │ O(N)           │ Shift elements  │
-└──────────────────────────────┴────────────────┴─────────────────┘
+1D: arr[i] = Base + (i × sizeof(datatype))
+2D Row-Major (C++ default): arr[i][j] = Base + (i×cols + j) × size
+2D Column-Major (FORTRAN):  arr[i][j] = Base + (j×rows + i) × size
 
-★ MAIN ADVANTAGE of Array = Random Access in O(1)
-★ MAIN DISADVANTAGE = Fixed size; costly insert/delete in middle
+Array name = pointer to base address = &arr[0]
+arr[i] ≡ *(arr + i)  ← equivalent expressions
 ```
 
-### Sparse Matrix — PYQ Fact:
-
+### Sparse Matrix:
 ```
-SPARSE MATRIX:
-→ A matrix where MOST elements are ZERO
-→ Official definition: Zero elements > (M × N) / 2
-  (More than half of elements are zero)
+SPARSE when: zero elements > (m × n) / 2  (more than HALF are zero)
+Storage: Triplet (row, col, value) — only non-zero elements stored
+```
 
-Example (4×4 matrix):
-[0]  [0]  [0]  [5]
-[0]  [0]  [3]  [0]
-[0]  [0]  [0]  [0]
-[7]  [0]  [0]  [0]
+### Spatial Locality:
+```
+Arrays = CONTIGUOUS memory → neighboring elements load together in CPU cache
+→ CACHE-FRIENDLY (fewer cache misses)
+Linked List = scattered memory → NOT cache-friendly
+```
 
-Only 3 non-zero elements out of 16 → SPARSE MATRIX!
-Store efficiently using: Triplet form (row, col, value)
+### Arrays vs Linked Lists — Quick Decide:
+```
+USE ARRAY WHEN:              USE LINKED LIST WHEN:
+✓ Fast random access needed  ✓ Size changes dynamically
+✓ Size known and fixed       ✓ Frequent mid-insertions/deletions
+✓ Binary search needed       ✓ Random access NOT needed
+✓ Cache performance matters  ✓ Memory allocation flexibility
 ```
 
 ---
 
-## 📌 MASTER CONCEPT 2: STACK — COMPLETE REVISION
-
-### Stack Visual:
+## 🔷 MODULE 2: STACK — One-Line Concepts
 
 ```
-STACK — LIFO (Last In, First Out):
-
- PUSH →        POP ←
-              ┌─────┐
-              │  50 │ ← TOP (last pushed, first popped)
-              ├─────┤
-              │  30 │
-              ├─────┤
-              │  10 │
-              ├─────┤
-              │  20 │ ← BOTTOM (first pushed, last popped)
-              └─────┘
-
-Real world: Stack of plates — you add on top, take from top!
+WHAT:  LIFO (Last In, First Out) — last pushed = first popped
+ANALOGY: Plate stack — add/remove from TOP only
+POINTER: top (single pointer, starts at -1)
+EMPTY:  top == -1
+FULL:   top == MAX - 1
+ALL ops: O(1) — Push, Pop, Peek, isEmpty, isFull
 ```
 
-### Stack Operations & Conditions:
-
+### Stack Operations — Pseudocode Snapshots:
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                STACK COMPLETE REFERENCE                         │
-├─────────────────────┬────────────────────────────────────────── │
-│ Operation           │ Description                               │
-├─────────────────────┼───────────────────────────────────────────┤
-│ PUSH(item)          │ Insert at TOP; check OVERFLOW first       │
-│ POP()               │ Remove from TOP; check UNDERFLOW first    │
-│ PEEK / TOP          │ View TOP element WITHOUT removing         │
-│ isEmpty()           │ Returns true if stack is empty            │
-│ isFull()            │ Returns true if stack is full             │
-├─────────────────────┼───────────────────────────────────────────┤
-│ OVERFLOW Condition  │ top == MAX_SIZE - 1 (stack is full)       │
-│ UNDERFLOW Condition │ top == -1 (stack is empty)                │
-└─────────────────────┴───────────────────────────────────────────┘
+PUSH:  if(top==MAX-1)→OVERFLOW; else top++; stack[top]=value
+POP:   if(top==-1)→UNDERFLOW; else value=stack[top]; top--; return value
+PEEK:  if(top==-1)→EMPTY; else return stack[top]  (top unchanged!)
 ```
 
-### Stack Applications — THE DEFINITIVE LIST:
-
+### Stack Applications — COMPLETE LIST:
 ```
-✅ CORRECT Applications of STACK:
-┌─────────────────────────────────────────────────────────────────┐
-│ 1. RECURSION — Function calls stored in call stack             │
-│ 2. EXPRESSION EVALUATION — Infix to Postfix/Prefix             │
-│ 3. BACKTRACKING — Maze solving, undo operations               │
-│ 4. STRING REVERSAL — Push all chars, pop them out             │
-│ 5. BALANCING SYMBOLS — (), {}, [] matching                    │
-│ 6. BROWSER BACK BUTTON — History stored in stack              │
-│ 7. FUNCTION CALL MANAGEMENT — Return addresses                │
-└─────────────────────────────────────────────────────────────────┘
+✅ Recursion (call stack — MOST IMPORTANT)
+✅ Infix→Postfix/Prefix conversion
+✅ Postfix/Prefix evaluation
+✅ Parenthesis/Symbol balancing
+✅ DFS (Depth-First Search)
+✅ Undo/Redo operations
+✅ Browser back button
+✅ Tower of Hanoi (recursion)
 
-❌ NOT Applications of Stack (BPSC TRAP!):
-→ Asynchronous data transfer between processes → That's QUEUE!
-→ BFS (Breadth First Search) → That's QUEUE!
-→ CPU Scheduling → That's QUEUE!
-→ Printer Spooling → That's QUEUE!
-```
-
-### Infix → Postfix Conversion (PYQ Hotspot!):
-
-```
-INFIX TO POSTFIX CONVERSION — USES STACK:
-
-OPERATOR PRECEDENCE (High to Low):
-^ (Exponent) > * / (Multiply/Divide) > + - (Add/Subtract)
-
-EXAMPLE: Convert A + B * C - D to Postfix
-
-Step-by-step using Stack:
-
-Token  Stack    Output      Action
-─────  ─────    ──────      ──────
-  A    []       A           Operand → directly to output
-  +    [+]      A           Operator → push to stack
-  B    [+]      A B         Operand → output
-  *    [+ *]    A B         * has higher prec than + → push
-  C    [+ *]    A B C       Operand → output
-  -    [−]      A B C * +   - lower prec: pop * and + → push -
-  D    [−]      A B C * + D Operand → output
- END   []       A B C*+D-   Pop remaining: pop -
-
-POSTFIX: A B C * + D -
-Verify: A + (B*C) - D  ✓
-
-TIME COMPLEXITY of Infix to Postfix: O(N)
+❌ Asynchronous data transfer → QUEUE (biggest PYQ trap)
+❌ BFS → QUEUE
+❌ CPU scheduling → QUEUE
+❌ Print spooling → QUEUE
 ```
 
 ---
 
-## 📌 MASTER CONCEPT 3: QUEUE — COMPLETE REVISION
+## 🔷 MODULE 3: EXPRESSION CONVERSION — One-Line Concepts
 
-### All Queue Types at a Glance:
-
+### Three Expression Types:
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                   QUEUE FAMILY TREE                             │
-│                                                                 │
-│                        QUEUE                                    │
-│                    (FIFO concept)                               │
-│                   /      |       \          \                   │
-│           Linear     Circular   Deque   Priority                │
-│           Queue      Queue              Queue                   │
-│           (Simple)  (Ring Buffer)      (Binary Heap)            │
-│                          |                                      │
-│                    Input-Restricted                             │
-│                    Output-Restricted                            │
-└──────────────────────────────────────────────────────────────────┘
+INFIX:   A + B       Operator BETWEEN operands (humans write this)
+POSTFIX: A B +       Operator AFTER operands (Reverse Polish Notation)
+PREFIX:  + A B       Operator BEFORE operands (Polish Notation)
+
+Postfix/Prefix = NO brackets needed, NO precedence rules during evaluation
 ```
 
-### Linear Queue:
-
+### Operator Precedence (HIGH → LOW):
 ```
-LINEAR QUEUE — FIFO (First In, First Out):
-
-ENQUEUE →  [10][20][30][40][50]  → DEQUEUE
-           REAR               FRONT
-         (insert here)      (delete here)
-
-Real world: Bank queue — first person to join leaves first!
-
-OVERFLOW:  rear == MAX_SIZE - 1 (queue full)
-UNDERFLOW: front == -1 OR front > rear (queue empty)
-
-⚠️ FALSE OVERFLOW PROBLEM:
-After some dequeues, front moves right.
-Positions 0,1,2... become empty but CANNOT be reused.
-Solution: CIRCULAR QUEUE!
+^ (right assoc) > * / % (left assoc) > + - (left assoc)
+Parentheses override everything
 ```
 
-### Circular Queue Complete Reference:
-
+### Infix → Postfix Algorithm (5 Rules):
 ```
-CIRCULAR QUEUE (RING BUFFER):
-
-         [INDEX 0]
-        /          \
-   [INDEX 5]      [INDEX 1]
-      |                |
-   [INDEX 4]      [INDEX 2]
-        \          /
-         [INDEX 3]
-
-rear = (rear + 1) % SIZE    ← THIS creates the circular wrap!
-front = (front + 1) % SIZE
-
-┌────────────────────────────────────────────────────────────────┐
-│         CIRCULAR QUEUE CONDITIONS — MUST MEMORIZE             │
-├──────────────────────────┬─────────────────────────────────────┤
-│ Condition                │ Formula                             │
-├──────────────────────────┼─────────────────────────────────────┤
-│ EMPTY                    │ front == rear == -1                 │
-│ FULL                     │ (rear + 1) % SIZE == front          │
-│ Enqueue (insert at rear) │ rear = (rear + 1) % SIZE            │
-│ Dequeue (delete at front)│ front = (front + 1) % SIZE          │
-│ One element remains      │ front == rear (but ≠ -1)            │
-│ After last dequeue       │ Reset: front = rear = -1            │
-└──────────────────────────┴─────────────────────────────────────┘
-
-WHY CIRCULAR QUEUE? → Avoids MEMORY WASTAGE / False Overflow
-ALSO CALLED? → RING BUFFER
+1. Operand      → directly to OUTPUT
+2. '('          → PUSH onto stack
+3. ')'          → POP until '('; discard both parentheses
+4. Operator     → POP while top has equal/higher precedence → PUSH current
+                  (for ^: only pop if STRICTLY higher precedence)
+5. End of input → POP ALL remaining stack elements to output
 ```
 
-### Deque — Double-Ended Queue:
-
+### Infix → Prefix (3 Steps):
 ```
-DEQUE (Double-Ended Queue):
-
-     Insert ←→ [F][E][D][C][B][A] ←→ Delete
-     Delete ←→                   ←→ Insert
-
-BOTH ends support INSERT and DELETE!
-
-TWO TYPES:
-┌────────────────────────────────────────────────────────────────┐
-│ Input-Restricted Deque  │ Insert at ONE end only              │
-│                         │ Delete from BOTH ends               │
-├────────────────────────────────────────────────────────────────┤
-│ Output-Restricted Deque │ Insert from BOTH ends               │
-│                         │ Delete from ONE end only            │
-└────────────────────────────────────────────────────────────────┘
-
-★ KEY COMPLEXITY TRAP:
-Delete from REAR in Singly Linked List = O(N)  ← PYQ!
-Delete from REAR in Doubly Linked List = O(1)
-(SLL has no backward pointer; must traverse entire list)
+Step 1: Reverse input (swap '(' ↔ ')')
+Step 2: Apply postfix algorithm
+Step 3: Reverse result
 ```
 
-### Priority Queue:
-
+### Quick Conversion Table:
 ```
-PRIORITY QUEUE:
-→ Served by PRIORITY, not arrival order
-→ BEST IMPLEMENTATION: Binary Heap
-→ Min-Heap: Minimum element served first
-→ Max-Heap: Maximum element served first
+A + B * C      → Postfix: A B C * +    → Prefix: + A * B C
+(A + B) * C    → Postfix: A B + C *    → Prefix: * + A B C
+A ^ B ^ C      → Postfix: A B C ^ ^    → Prefix: ^ A ^ B C
+A * B + C * D  → Postfix: A B * C D * + → Prefix: + * A B * C D
+```
 
-┌────────────────────────────────────────────────────────────────┐
-│ Binary Heap Properties:                                        │
-│ • Complete Binary Tree                                         │
-│ • Max-Heap: Parent ≥ both children (root = MAX)               │
-│ • Min-Heap: Parent ≤ both children (root = MIN)               │
-│ • Insert: O(log N) via Heapify Up                             │
-│ • Delete: O(log N) via Heapify Down                           │
-│ • Build heap: O(N)                                            │
-└────────────────────────────────────────────────────────────────┘
-
-Applications:
-• Dijkstra's algorithm → Min-Heap
-• Huffman coding → Min-Heap  
-• CPU Priority Scheduling → Max-Heap
-• Round Robin → Circular Queue (NOT Priority Queue!)
+### Postfix Evaluation:
+```
+Scan L→R: operand→PUSH; operator→POP b(right), POP a(left), PUSH (a OP b)
+TRAP: First pop = RIGHT operand; second pop = LEFT operand
+Time complexity of conversion = O(N)
 ```
 
 ---
 
-## 📌 MASTER CONCEPT 4: ULTIMATE COMPARISON TABLE
+## 🔷 MODULE 4: QUEUE — One-Line Concepts
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│            THE ULTIMATE REVISION TABLE — STACK vs ALL QUEUES            │
-├────────────────┬──────────┬──────────┬──────────┬──────────┬────────────┤
-│ Feature        │ Stack    │ Linear Q │ Circ. Q  │ Deque    │ Priority Q │
-├────────────────┼──────────┼──────────┼──────────┼──────────┼────────────┤
-│ Order          │ LIFO     │ FIFO     │ FIFO     │ Both     │ Priority   │
-│ Insert at      │ Top      │ Rear     │ Rear     │ Both     │ Any        │
-│ Delete from    │ Top      │ Front    │ Front    │ Both     │ Highest    │
-│ Overflow cond. │ top=MAX-1│rear=MAX-1│(r+1)%S=f │ Both full│ Heap full  │
-│ Underflow cond.│ top=-1   │front=-1  │f=r=-1    │ Both empy│ Heap empty │
-│ Also called    │ —        │ —        │Ring Buffer│ —       │ —          │
-│ Best impl.     │ Array/LL │ Array/LL │ Array    │ DLL      │ Binary Heap│
-│ OS Use         │ Call stk │ Job queue│ Round    │ Thread   │ Priority   │
-│                │          │          │ Robin    │ sched.   │ scheduling │
-│ Real example   │ Undo btn │ Bank Q   │ Traffic  │ Browser  │ Hospital   │
-│                │          │          │ light    │ history  │ emergency  │
-└────────────────┴──────────┴──────────┴──────────┴──────────┴────────────┘
+WHAT:  FIFO (First In, First Out) — first enqueued = first dequeued
+ANALOGY: Bank line — join from REAR, served from FRONT
+POINTERS: TWO: front AND rear (both start at -1)
+EMPTY:  front == -1
+FULL:   rear == MAX - 1 (linear queue)
+ALL ops: O(1) — Enqueue, Dequeue, Peek, isEmpty, isFull
 ```
 
----
-
-## 📌 MASTER CONCEPT 5: COMMON PYQ TRAPS — REVISION CHECKLIST
-
+### Queue Operations — Pseudocode:
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                TOP PYQ TRAPS — ARRAYS, STACK, QUEUE                     │
-├──────────────────────────────────┬──────────────────────────────────────┤
-│ WRONG (common mistake)           │ CORRECT FACT                         │
-├──────────────────────────────────┼──────────────────────────────────────┤
-│ Before deletion from queue,      │ Check UNDERFLOW                      │
-│ check overflow                   │ (is queue empty?)                    │
-├──────────────────────────────────┼──────────────────────────────────────┤
-│ BFS uses Stack                   │ BFS uses QUEUE                       │
-│                                  │ DFS uses STACK                       │
-├──────────────────────────────────┼──────────────────────────────────────┤
-│ Circular Queue created for       │ Created to avoid MEMORY WASTAGE      │
-│ faster access                    │ / False Overflow                     │
-├──────────────────────────────────┼──────────────────────────────────────┤
-│ front == rear means EMPTY        │ front == rear means ONE ELEMENT      │
-│ in circular queue                │ EMPTY is front == rear == -1         │
-├──────────────────────────────────┼──────────────────────────────────────┤
-│ Recursion uses Queue             │ Recursion uses STACK                 │
-├──────────────────────────────────┼──────────────────────────────────────┤
-│ Priority Queue best with sorted  │ BINARY HEAP is the best              │
-│ array                            │                                      │
-├──────────────────────────────────┼──────────────────────────────────────┤
-│ Deque rear deletion in SLL =O(1) │ O(N) — no backward pointer           │
-├──────────────────────────────────┼──────────────────────────────────────┤
-│ Heap Sort is STABLE              │ Heap Sort is NOT stable              │
-├──────────────────────────────────┼──────────────────────────────────────┤
-│ Array insertion is O(1)          │ Only at END is O(1); middle = O(N)   │
-├──────────────────────────────────┼──────────────────────────────────────┤
-│ Balancing symbols uses Queue     │ Balancing symbols uses STACK         │
-└──────────────────────────────────┴──────────────────────────────────────┘
+ENQUEUE: if(rear==MAX-1)→OVERFLOW; if(front==-1)front=0; rear++; q[rear]=val
+DEQUEUE: if(front==-1)→UNDERFLOW;
+         val=q[front];
+         if(front==rear){front=-1;rear=-1;}  ← last element: reset both
+         else front++;
+         return val
+```
+
+### Linear Queue Problem:
+```
+rear==MAX-1 → reports OVERFLOW even when front has moved forward
+→ Slots at beginning are WASTED (false overflow)
+→ SOLUTION: CIRCULAR QUEUE
+```
+
+### Queue Applications:
+```
+✅ BFS (Breadth-First Search)
+✅ CPU Scheduling (FCFS, Round Robin)
+✅ Print Spooler
+✅ Asynchronous data transfer (producer-consumer buffer)
+✅ Interrupt handling in OS
+✅ Traffic management
+
+❌ Recursion → Stack
+❌ DFS → Stack
+❌ Symbol balancing → Stack
+❌ Undo operations → Stack
 ```
 
 ---
 
-## 📌 MASTER CONCEPT 6: FORMULA FLASH SHEET
+## 🔷 MODULE 5: CIRCULAR QUEUE — All Critical Formulas
 
 ```
-╔══════════════════════════════════════════════════════════════════════╗
-║           CS FORMULA FLASH SHEET — DAY 21 REVISION                  ║
-╠══════════════════════════════════════════════════════════════════════╣
-║ ARRAY:                                                               ║
-║   Address of arr[i] = Base + i × element_size                       ║
-║   Array access = O(1) | Insertion middle = O(N)                     ║
-║   Sparse Matrix: zero elements > (M×N)/2                            ║
-╠══════════════════════════════════════════════════════════════════════╣
-║ STACK:                                                               ║
-║   OVERFLOW: top == MAX_SIZE - 1                                      ║
-║   UNDERFLOW: top == -1                                               ║
-║   Infix to Postfix: O(N) using Stack                                 ║
-╠══════════════════════════════════════════════════════════════════════╣
-║ CIRCULAR QUEUE:                                                      ║
-║   FULL: (rear + 1) % SIZE == front                                   ║
-║   EMPTY: front == rear == -1                                         ║
-║   Enqueue: rear = (rear + 1) % SIZE                                  ║
-║   Dequeue: front = (front + 1) % SIZE                                ║
-╠══════════════════════════════════════════════════════════════════════╣
-║ BINARY HEAP:                                                         ║
-║   Height of heap: ⌊log₂N⌋                                           ║
-║   Left child (0-indexed): 2i + 1                                     ║
-║   Right child (0-indexed): 2i + 2                                    ║
-║   Parent (0-indexed): (i-1) / 2                                      ║
-║   Insert = O(log N) | Delete = O(log N) | Build = O(N)              ║
-╠══════════════════════════════════════════════════════════════════════╣
-║ SORTING USING HEAPS:                                                 ║
-║   Heap Sort: O(N log N) time, O(1) space, NOT stable                ║
-╚══════════════════════════════════════════════════════════════════════╝
+WHAT: Circular queue solves linear queue's false overflow problem
+      rear wraps around using MODULO arithmetic
+
+FORMULAS — MEMORIZE PERFECTLY:
+  Empty:         front == -1  (initial state)
+  Full:          (rear + 1) % SIZE == front   ← MOST ASKED
+  Enqueue rear:  rear = (rear + 1) % SIZE
+  Dequeue front: front = (front + 1) % SIZE
+  DeleteRear:    rear = (rear - 1 + SIZE) % SIZE  ← (+SIZE avoids negative)
+  Elements count:(rear - front + SIZE) % SIZE
+  Max capacity:  SIZE - 1 (NOT SIZE — 1 slot reserved!)
+
+After last element dequeued: reset front = -1, rear = -1
+
+Also called: RING BUFFER
+Use case:    Round Robin scheduling, keyboard buffer, audio streaming
 ```
 
 ---
 
-# ══════════════════════════════════════════════════════
-# 🌏 GS REVISION — INDIA & BIHAR GEOGRAPHY
-# ══════════════════════════════════════════════════════
-> Reference: Lucent GK — Section 3 (Geography, Pages 157–238) + BPSC PYQ Analysis
-
----
-
-## 📌 GS SECTION 1: INDIA — PHYSICAL FEATURES
-
-### The 5 Major Physical Divisions of India:
+## 🔷 MODULE 6: DEQUE — One-Line Concepts
 
 ```
-INDIA'S PHYSICAL DIVISIONS:
+WHAT: Double-Ended Queue — insert & delete from BOTH ends
+ALL 4 ops: insertFront, insertRear, deleteFront, deleteRear → O(1)
+Can simulate BOTH Stack and Queue
 
-╔══════════════════════════════════════════════════════════════════════╗
-║                    INDIA — NORTH TO SOUTH                          ║
-╠═══════════════════╦══════════════════════════════════════════════════╣
-║ 1. HIMALAYAN      ║ Northern boundary of India                      ║
-║    MOUNTAINS      ║ Young fold mountains (youngest in world!)       ║
-║                   ║ 3 parallel ranges:                              ║
-║                   ║  • Himadri (Greater Himalayas) — highest        ║
-║                   ║  • Himachal (Lesser Himalayas) — hill stations  ║
-║                   ║  • Shiwalik (Outer Himalayas) — foothills       ║
-╠═══════════════════╬══════════════════════════════════════════════════╣
-║ 2. NORTHERN       ║ Formed by sediment from Himalayan rivers        ║
-║    PLAINS         ║ Also called Indo-Gangetic Plains                ║
-║    (Gangetic      ║ Most fertile region of India                    ║
-║     Plains)       ║ Bihar lies in this zone!                        ║
-╠═══════════════════╬══════════════════════════════════════════════════╣
-║ 3. PENINSULAR     ║ Old, hard rock (part of Gondwana Land)          ║
-║    PLATEAU        ║ Deccan Plateau — most of South India            ║
-║                   ║ Malnad region = hilly part of Karnataka         ║
-╠═══════════════════╬══════════════════════════════════════════════════╣
-║ 4. COASTAL        ║ East Coast (Coromandel + Northern Circars)      ║
-║    PLAINS         ║ West Coast (Konkan + Malabar)                   ║
-║                   ║ Western = narrow | Eastern = wider/deltas       ║
-╠═══════════════════╬══════════════════════════════════════════════════╣
-║ 5. ISLANDS        ║ Andaman & Nicobar (Bay of Bengal)               ║
-║                   ║ Lakshadweep (Arabian Sea)                       ║
-╚═══════════════════╩══════════════════════════════════════════════════╝
-```
+INPUT-RESTRICTED:   Insert REAR only; Delete BOTH ends
+OUTPUT-RESTRICTED:  Delete FRONT only; Insert BOTH ends
 
-### Key Mountain Peaks — PYQ Direct Questions:
-
-```
-┌────────────────────────────────────────────────────────────────────┐
-│              IMPORTANT MOUNTAIN PEAKS — INDIA                     │
-├───────────────────────────┬───────────────────────────────────────┤
-│ Peak                      │ Details                               │
-├───────────────────────────┼───────────────────────────────────────┤
-│ K2 (Godwin Austen)        │ 2nd highest in world (8,611 m)        │
-│                           │ In Pakistan-occupied Kashmir          │
-│                           │ NOT in India proper                   │
-├───────────────────────────┼───────────────────────────────────────┤
-│ Kangchenjunga             │ Highest peak IN INDIA (8,586 m)       │
-│                           │ Sikkim–Nepal border                   │
-│                           │ 3rd highest in the world              │
-├───────────────────────────┼───────────────────────────────────────┤
-│ Nanda Devi                │ Highest peak entirely IN INDIA        │
-│                           │ (7,816 m) — Uttarakhand               │
-├───────────────────────────┼───────────────────────────────────────┤
-│ Mt. Everest               │ WORLD'S HIGHEST (8,849 m)             │
-│                           │ Nepal–Tibet border (NOT in India)     │
-├───────────────────────────┼───────────────────────────────────────┤
-│ Mahendragiri              │ Highest peak of EASTERN GHATS         │
-│                           │ In Odisha (Gajapati district)         │
-├───────────────────────────┼───────────────────────────────────────┤
-│ Anai Mudi                 │ Highest peak of South India           │
-│                           │ Western Ghats, Kerala (2,695 m)       │
-└───────────────────────────┴───────────────────────────────────────┘
-
-BPSC TRAP: "Highest peak IN INDIA" → Kangchenjunga
-           "Highest peak ENTIRELY in India" → Nanda Devi
-           (Kangchenjunga is on Sikkim-Nepal border)
+Best implementation: DOUBLY LINKED LIST
+  → deleteRear in Singly LL = O(N)   ← KEY PYQ TRAP
+  → deleteRear in Doubly LL = O(1)
 ```
 
 ---
 
-## 📌 GS SECTION 2: INDIAN RIVERS — COMPLETE GUIDE
-
-### River Systems of India:
+## 🔷 MODULE 7: PRIORITY QUEUE — One-Line Concepts
 
 ```
-INDIA'S RIVER SYSTEMS:
+WHAT: Elements served by PRIORITY (not insertion order)
+Min-Heap: Root = MINIMUM; parent ≤ children
+Max-Heap: Root = MAXIMUM; parent ≥ children
+SHAPE: Complete Binary Tree (last level left-to-right)
 
-╔═══════════════════════════════════════════════════════════════════╗
-║              HIMALAYAN RIVERS (Perennial — year-round flow)      ║
-╠═══════════════╦══════════════════════════════════════════════════ ║
-║ INDUS SYSTEM  ║ Indus, Jhelum, Chenab, Ravi, Beas, Sutlej       ║
-║               ║ Mostly in Pakistan (after partition)             ║
-║               ║ Indus water treaty: India + Pakistan (1960)      ║
-╠═══════════════╬══════════════════════════════════════════════════ ║
-║ GANGA SYSTEM  ║ Ganga = NATIONAL RIVER of India                  ║
-║               ║ Originates: Gangotri Glacier (Uttarakhand)       ║
-║               ║ TRIBUTARIES from North (Left bank):              ║
-║               ║  Yamuna, Ghaghra, Gandak, Kosi, Mahananda       ║
-║               ║ TRIBUTARIES from South (Right bank):             ║
-║               ║  Son, Damodar, Chambal, Ken, Betwa              ║
-║               ║ Ganga flows through: UP → Bihar → WB → Bay       ║
-╠═══════════════╬══════════════════════════════════════════════════ ║
-║ BRAHMAPUTRA   ║ Originates in: Tibet (called Tsangpo in Tibet)   ║
-║               ║ Enters India through Arunachal Pradesh           ║
-║               ║ Major tributary: Teesta                          ║
-║               ║ Forms ISLAND: Majuli (world's largest river isl.)║
-╚═══════════════╩══════════════════════════════════════════════════ ║
+INDEX FORMULAS (0-indexed):
+  Left child  = 2i + 1
+  Right child = 2i + 2
+  Parent      = (i - 1) / 2
 
-╔═══════════════════════════════════════════════════════════════════╗
-║         PENINSULAR RIVERS (Seasonal — rain dependent)            ║
-╠═══════════════╦══════════════════════════════════════════════════ ║
-║ WEST FLOWING  ║ Narmada, Tapi/Tapti (flow into Arabian Sea)     ║
-║               ║ Flow through RIFT VALLEYS (not regular valleys)  ║
-║               ║ Narmada: longest W-flowing river, MP+Gujarat    ║
-╠═══════════════╬══════════════════════════════════════════════════ ║
-║ EAST FLOWING  ║ Mahanadi, Godavari, Krishna, Kaveri             ║
-║               ║ Flow into Bay of Bengal                          ║
-║               ║ Form DELTAS at mouth                             ║
-╚═══════════════╩══════════════════════════════════════════════════ ║
-```
+TIME COMPLEXITY:
+  Insert (heapify up):   O(log n)
+  Delete (heapify down): O(log n)
+  Peek (root):           O(1)
+  Build heap (Floyd's):  O(n)
 
-### River PYQ Facts:
+APPLICATIONS:
+  Dijkstra's → Min-Heap
+  Huffman Coding → Min-Heap
+  CPU Priority Scheduling → Max-Heap
+  Prim's MST → Min-Heap
 
-```
-┌────────────────────────────────────────────────────────────────────┐
-│             RIVER FACTS — HIGH BPSC PYQ VALUE                     │
-├─────────────────────────────────────────────────────────────────── │
-│ Longest river in India: Ganga (approx. 2,525 km)                  │
-│ Longest peninsular river: Godavari ("Dakshin Ganga")               │
-│ Sacred river: Ganga (National River)                               │
-│ Narmada flows in: RIFT VALLEY (not typical valley)                │
-│ Majuli island: Brahmaputra river, Assam (world's largest river isl)│
-│ Sundarbans delta: Ganga + Brahmaputra (Bangladesh + WB)           │
-│ Damodar river: "Sorrow of Bengal" (floods Bengal)                  │
-│ Kosi river: "Sorrow of Bihar" (floods Bihar annually)              │
-│ Tsangpo (Tibet) = Brahmaputra (India) — SAME RIVER!               │
-└────────────────────────────────────────────────────────────────────┘
+OS QUEUES:
+  Job Queue   → All submitted processes (long-term scheduler)
+  Ready Queue → In RAM, waiting for CPU (short-term scheduler)
+  Device Queue→ Waiting for specific I/O device
 ```
 
 ---
 
-## 📌 GS SECTION 3: SOIL TYPES IN INDIA — PYQ EVERY EXAM!
+## 📊 MASTER COMPARISON TABLES
+
+### Table 1: Stack vs Queue vs Deque
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│              SOIL TYPES OF INDIA — COMPLETE TABLE                  │
-├──────────────────┬────────────────────────────────────────────────  │
-│ Soil Type        │ Key Facts for BPSC                              │
-├──────────────────┼─────────────────────────────────────────────────┤
-│ ALLUVIAL ★       │ Most widespread soil in India                   │
-│                  │ Found in: Northern Plains (Bihar! UP! Punjab!)  │
-│                  │ Most FERTILE soil                               │
-│                  │ Old alluvial = Bhangar; New = Khadar            │
-│                  │ Best for: Rice, Wheat, Sugarcane, Jute          │
-├──────────────────┼─────────────────────────────────────────────────┤
-│ BLACK/REGUR ★    │ Also called COTTON SOIL (best for cotton!)      │
-│                  │ Found in: Deccan Plateau (Maharashtra, MP, AP)  │
-│                  │ High moisture retention                          │
-│                  │ Rich in: Iron, Calcium, Potassium               │
-│                  │ Also found in: Karnataka, Gujarat               │
-├──────────────────┼─────────────────────────────────────────────────┤
-│ RED SOIL         │ Red color due to IRON OXIDE (Fe₂O₃)            │
-│                  │ Found in: Tamil Nadu, Odisha, parts of AP       │
-│                  │ Less fertile; good for: Millet, Tobacco         │
-├──────────────────┼─────────────────────────────────────────────────┤
-│ LATERITE         │ Formed by leaching in high rainfall areas       │
-│                  │ Found in: Kerala, Karnataka, NE India           │
-│                  │ Rich in: Iron and Aluminium (after leaching)    │
-│                  │ Poor in: Nitrogen, Phosphorus                   │
-│                  │ Good for: Tea, Coffee, Cashew                   │
-├──────────────────┼─────────────────────────────────────────────────┤
-│ DESERT/ARID      │ Found in: Rajasthan (Thar), Gujarat             │
-│                  │ Sandy, low moisture, low organic matter         │
-│                  │ Limited agriculture; some millets grown         │
-├──────────────────┼─────────────────────────────────────────────────┤
-│ MOUNTAIN SOIL    │ Found in: Himalayan states (HP, UK, J&K)        │
-│                  │ Thin layer, not very fertile                    │
-│                  │ Good for: Apple, Tea, Coniferous forests        │
-└──────────────────┴─────────────────────────────────────────────────┘
-
-BPSC TRAP: "Black soil found in which states?"
-Answer: Maharashtra (most), MP, AP, Karnataka, Gujarat
-→ Option D (more than one) is usually correct here!
+Feature          Stack (LIFO)    Queue (FIFO)    Deque
+──────────────────────────────────────────────────────
+Principle        LIFO            FIFO            Both ends
+Pointers         1 (top)         2 (front,rear)  2 (front,rear)
+Insert at front  YES (push)      NO              YES
+Insert at rear   NO              YES (enqueue)   YES
+Delete at front  YES (pop)       YES (dequeue)   YES
+Delete at rear   NO              NO              YES
+Order preserved  REVERSED        SAME order      Depends
+BFS/DFS          DFS             BFS             Either
+Recursion        YES             NO              NO
+Undo/Backtrack   YES             NO              YES
 ```
 
----
-
-## 📌 GS SECTION 4: BIHAR — COMPREHENSIVE GEOGRAPHY (HIGH BPSC VALUE!)
-
-### Bihar — Basic Facts:
+### Table 2: Linear Queue vs Circular Queue
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                   BIHAR — COMPLETE GK PROFILE                      │
-├─────────────────────────────────────────────────────────────────────┤
-│ State Formation: November 1, 2000 (Jharkhand separated from Bihar) │
-│ State Capital: PATNA (on the banks of Ganga)                       │
-│ Ancient name of Patna: PATALIPUTRA                                  │
-│ Rajdhani: Patna | Official Language: Hindi (Maithili also official)│
-├─────────────────────────────────────────────────────────────────────┤
-│ LOCATION:                                                           │
-│ Latitude: 24°20'N to 27°31'N                                       │
-│ Longitude: 83°19'E to 88°17'E                                      │
-│ Borders: Nepal (North), WB (East), Jharkhand (South), UP (West)   │
-├─────────────────────────────────────────────────────────────────────┤
-│ AREA: 94,163 sq km (12th largest state by area)                    │
-│ POPULATION: ~104 million (Census 2011)                             │
-│ Bihar's % of India's population: 8.58% ← PYQ DIRECT!             │
-│ Population Density: 1,106/sq km (highest in India!)               │
-├─────────────────────────────────────────────────────────────────────┤
-│ DIVISIONS: 9 divisions, 38 districts                               │
-│ NEW districts formed in 2023: Increased to 38                     │
-│ LARGEST DISTRICT: Paschim Champaran (by area)                      │
-│ SMALLEST DISTRICT: Sheohar (by area)                               │
-│ MOST POPULOUS DISTRICT: Patna                                      │
-└─────────────────────────────────────────────────────────────────────┘
+Feature              Linear Queue        Circular Queue
+──────────────────────────────────────────────────────────
+Memory reuse         NO (false overflow)  YES
+Full condition       rear == MAX-1        (rear+1)%SIZE == front
+Empty condition      front == -1          front == -1
+Rear update formula  rear++               rear = (rear+1)%SIZE
+Max elements         MAX                  SIZE - 1
+Applications         Simple FIFO          Buffers, Round Robin
 ```
 
-### Bihar's Rivers — PYQ Hotspot:
+### Table 3: Queue vs Priority Queue
 
 ```
-BIHAR'S RIVERS:
+Feature              Queue (normal)      Priority Queue
+──────────────────────────────────────────────────────────
+Order principle      FIFO                Priority-based
+Insertion            At rear             By priority
+Deletion             Front (FIFO)        Highest priority first
+Implementation       Array/LL            Binary Heap
+Insert complexity    O(1)                O(log n)
+Delete complexity    O(1)                O(log n)
+Use case             BFS, scheduling     Dijkstra's, Huffman
+```
 
-                  NEPAL
-    ┌─────────────────────────────────────┐
-    │                                     │
-    │  Gandak  Kosi  Bagmati  Mahananda  │  ← Enter from Nepal
-    │    ↓      ↓      ↓        ↓        │
-    │    ↓      ↓      ↓        ↓        │  BIHAR
-    │         GANGA (flows E→W)          │
-    │              ↑                     │
-    │             Son  ← from Jharkhand  │
-    └─────────────────────────────────────┘
+### Table 4: Time Complexity — MASTER SUMMARY
 
-┌──────────────────────────────────────────────────────────────────┐
-│            BIHAR'S IMPORTANT RIVERS                             │
-├──────────────┬────────────────────────────────────────────────── │
-│ River        │ Key Facts                                         │
-├──────────────┼─────────────────────────────────────────────────  │
-│ GANGA ★      │ Main river; flows E-W across Bihar               │
-│              │ Enters Bihar at Buxar; exits at Rajmahal (WB)    │
-│              │ National river of India                           │
-├──────────────┼─────────────────────────────────────────────────  │
-│ KOSI ★       │ "Sorrow of Bihar" — floods annually              │
-│              │ Comes from Nepal; changes course frequently      │
-│              │ Flows through: Supaul, Madhepura, Saharsa        │
-│              │ Joins Ganga near: Kursela (Katihar)              │
-├──────────────┼─────────────────────────────────────────────────  │
-│ GANDAK ★     │ Also called Narayani / Sadanira                  │
-│              │ Originates in Nepal                               │
-│              │ Joins Ganga at: Hajipur (Vaishali district)      │
-├──────────────┼─────────────────────────────────────────────────  │
-│ BAGMATI      │ Flows through: Sitamarhi, Muzaffarpur            │
-│              │ Joins Kosi near Badlaghat                         │
-├──────────────┼─────────────────────────────────────────────────  │
-│ KAMLA-BALAN  │ Flows through Madhubani, Darbhanga               │
-│              │ Also called Kamla river                           │
-├──────────────┼─────────────────────────────────────────────────  │
-│ SON ★        │ Flows from RIGHT (south) bank of Ganga           │
-│              │ Originates in Amarkantak (MP)                     │
-│              │ Joins Ganga near: Arrah / Patna area             │
-│              │ Important for: Irrigation in South Bihar         │
-├──────────────┼─────────────────────────────────────────────────  │
-│ FALGU        │ Flows through Gaya (sacred river)                │
-│              │ Associated with Pitru Paksha rituals at Gaya     │
-│              │ Mostly dry in surface (underground flow)         │
-├──────────────┼─────────────────────────────────────────────────  │
-│ MAHANANDA    │ Easternmost river of Bihar                        │
-│              │ Flows through Kishanganj, Purnia                 │
-└──────────────┴─────────────────────────────────────────────────  │
+```
+Operation        Array   Stack  Queue  Circular Q  Heap(PQ)
+──────────────────────────────────────────────────────────────
+Access by index  O(1)    O(1)   O(1)   O(1)         —
+Insert at end    O(1)    O(1)   O(1)   O(1)         O(log n)
+Insert at middle O(n)    —      —      —            —
+Delete at end    O(1)    O(1)   —      —            —
+Delete at front  O(n)    —      O(1)   O(1)         —
+Delete max/min   O(n)    —      —      —            O(log n)
+Peek max/min     O(n)    O(1)*  O(1)*  O(1)*        O(1)
+Traverse         O(n)    O(n)   O(n)   O(n)         O(n)
+Search           O(n)    O(n)   O(n)   O(n)         O(n)
+Build from n     —       —      —      —            O(n)
+*top/front peek
 ```
 
 ---
 
-## 📌 GS SECTION 5: BIHAR — DISTRICTS & AGRICULTURE (PYQ DIRECT!)
+## 🚨 TOP 15 PYQ TRAPS — CS (Days 15–20)
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│        BIHAR DISTRICTS — AGRICULTURE & PRODUCTION PYQ FACTS        │
-├──────────────────────────────┬───────────────────────────────────── │
-│ Category                     │ District                             │
-├──────────────────────────────┼─────────────────────────────────────┤
-│ MAX PADDY production ★       │ ROHTAS district ← PYQ DIRECT!      │
-│ MAX SILK TEXTILE (Tussar) ★  │ BHAGALPUR district ← PYQ DIRECT!   │
-│   (Bhagalpur silk famous!)   │ Also called "Silk City of India"    │
-├──────────────────────────────┼─────────────────────────────────────┤
-│ MAX WHEAT production         │ West Champaran (Paschim Champaran)  │
-├──────────────────────────────┼─────────────────────────────────────┤
-│ MAX MAKHANA production       │ Darbhanga, Madhubani (North Bihar)  │
-│ (Lotus seeds / Fox nuts)     │ Bihar = 80% of India's Makhana!     │
-├──────────────────────────────┼─────────────────────────────────────┤
-│ MAX LITCHI production        │ Muzaffarpur (Shahi Litchi — GI tag) │
-│ (GI tagged variety)          │ Bihar = world's 2nd largest litchi  │
-├──────────────────────────────┼─────────────────────────────────────┤
-│ MAX HONEY production         │ West Champaran (Valmiki area)       │
-├──────────────────────────────┼─────────────────────────────────────┤
-│ HIGHEST RAINFALL district    │ KISHANGANJ (NE Bihar, near Bengal)  │
-├──────────────────────────────┼─────────────────────────────────────┤
-│ LOWEST RAINFALL area         │ Gaya, Jehanabad (South Bihar)       │
-├──────────────────────────────┼─────────────────────────────────────┤
-│ MAX FLOOD-PRONE area         │ North Bihar (Kosi belt — Supaul,    │
-│                              │ Madhepura, Saharsa, Darbhanga)      │
-└──────────────────────────────┴─────────────────────────────────────┘
+TRAP 1:  Array access O(1) because address CALCULATED, not searched
+TRAP 2:  sizeof() does NOT evaluate expression; sizeof(x++) → x unchanged
+TRAP 3:  Sparse matrix: zero elements > m×n/2 (not "all zeros")
+TRAP 4:  Asynchronous data transfer → QUEUE (NOT Stack!)
+TRAP 5:  Stack top starts at -1 (not 0)
+TRAP 6:  bool = 1 BYTE (not 1 bit)
+TRAP 7:  Postfix evaluation: first pop = RIGHT operand, not left
+TRAP 8:  ^ is RIGHT-associative; A^B^C = A^(B^C) → postfix: A B C ^ ^
+TRAP 9:  Parentheses NEVER appear in postfix or prefix output
+TRAP 10: Circular Queue max elements = SIZE-1 (not SIZE)
+TRAP 11: (rear+1)%SIZE == front → FULL (not rear == front)
+TRAP 12: deleteRear in Singly Linked List = O(N) (not O(1)!)
+TRAP 13: Heap shape = COMPLETE binary tree (not full, not perfect)
+TRAP 14: Build heap from n elements using Floyd's = O(n) (not O(n log n))
+TRAP 15: Ready Queue in OS ≠ always FIFO; can be Priority Queue
 ```
 
 ---
+---
 
-## 📌 GS SECTION 6: INDIA GEOGRAPHY — PYQ DIRECT FACTS
+# PART 2: GS MASTER REVISION
+## ⚡ GEOGRAPHY & POLITY RAPID RECALL (Days 15–20)
 
-### Physical Geography Facts:
+---
 
+## 🔷 GS MODULE 1: Bihar Geography — Rivers Quick Recall
+
+### North Bihar Rivers (Himalayan — PERENNIAL, FLOOD-PRONE):
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│         INDIA PHYSICAL GEOGRAPHY — MUST-KNOW BPSC FACTS            │
-├──────────────────────────────────────────────────────────────────────┤
-│ Total area of India: 3,287,263 sq km (7th largest in world)        │
-│ India's land boundary: ~15,200 km                                   │
-│ India's coastline: ~7,516 km                                        │
-│ Southernmost point: Indira Point, Andaman & Nicobar Islands         │
-│ Northernmost point: Siachen Glacier, Ladakh (J&K)                  │
-│ Westernmost point: Ghuar Mota, Gujarat                              │
-│ Easternmost point: Kibithu, Arunachal Pradesh                       │
-├──────────────────────────────────────────────────────────────────────┤
-│ Tropic of Cancer passes through 8 states:                           │
-│ Gujarat, Rajasthan, MP, Chhattisgarh, Jharkhand, WB, Tripura,      │
-│ Mizoram                                                             │
-│ MEMORY: "Gujarat Rajasthan Mein Chhattisgarhiyon Jhumte Wale        │
-│          Tripuriyas Milenge" → GR MC JW TM                         │
-├──────────────────────────────────────────────────────────────────────┤
-│ Largest state by area: Rajasthan (3,42,239 sq km)                  │
-│ Smallest state by area: Goa (3,702 sq km)                          │
-│ Most populous state: UP (Uttar Pradesh)                             │
-│ Highest population DENSITY state: Bihar (1,106/sq km) ★           │
-│ Lowest population density: Arunachal Pradesh                        │
-│ Highest urbanization: GOA (most urbanized state) ← PYQ!           │
-│ Highest literacy: Kerala (94%)                                      │
-│ Lowest literacy: Bihar (~61%) — was lowest for long                │
-├──────────────────────────────────────────────────────────────────────┤
-│ GHATS COMPARISON:                                                    │
-│ Western Ghats: Longer, higher, continuous, windward side = rain     │
-│ Eastern Ghats: Shorter, lower, discontinuous, lower rainfall        │
-│ Highest in W. Ghats: Anai Mudi (Kerala) = 2,695 m                  │
-│ Highest in E. Ghats: Mahendragiri (Odisha) = 1,501 m               │
-│ East-West Corridor highway: Porbandar to Silchar                    │
-└──────────────────────────────────────────────────────────────────────┘
+River         Districts              Special Fact
+────────────────────────────────────────────────────────────────
+Ganga         Buxar→Patna→Bhagalpur  Enters Bihar at BUXAR; Patna on SOUTH bank
+Kosi          Supaul→Saharsa→Katihar "SORROW OF BIHAR" — course changes; 2008 flood
+Gandak        W.Champaran→Vaishali   Meets Ganga at HAJIPUR; Valmiki Tiger Reserve
+Bagmati       Sitamarhi→Darbhanga    Sacred; Sitamarhi connection (Sita's birthplace myth)
+Kamla-Balan   Madhubani              Madhubani painting region
+Mahananda     Kishanganj→Katihar     Tea gardens in Kishanganj
+Burhi Gandak  Muzaffarpur            Separate from Gandak (smaller)
+```
+
+### South Bihar Rivers (Peninsular — SEASONAL):
+```
+Son     → Amarkantak (MP) → meets Ganga near Patna south bank; "Sone" = Gold
+Punpun  → Jharkhand → Gaya, Patna area
+Falgu   → Gaya → Sacred (underground flow; "cursed river")
+```
+
+### Most Flood-Prone: "SSMD + Champaran"
+```
+Supaul + Saharsa + Madhepura (Kosi floods) + Darbhanga + W/E Champaran (Gandak)
+```
+
+### Bihar Agriculture Specials:
+```
+Muzaffarpur → Shahi Litchi (GI tag)
+Hajipur (Vaishali) → Banana capital
+Darbhanga/Katihar → Makhana (80–90% world production, GI tag 2022)
+Kishanganj → Tea gardens
+Bhagalpur → Tussar (Kosa) silk (GI tag)
 ```
 
 ---
 
-## 📌 GS SECTION 7: IMPORTANT PASSES — PYQ LEVEL
+## 🔷 GS MODULE 2: Rohtas & Bhagalpur Quick Recall
 
+### ROHTAS (7 Must-Know):
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│                    IMPORTANT MOUNTAIN PASSES                        │
-├──────────────────────┬────────────────────────────────────────────── │
-│ Pass                 │ Location & Importance                         │
-├──────────────────────┼─────────────────────────────────────────────  │
-│ ZOJI LA              │ J&K — connects Srinagar to Leh               │
-│                      │ Most strategic Himalayan pass                 │
-├──────────────────────┼─────────────────────────────────────────────  │
-│ ROHTANG PASS         │ Himachal Pradesh (Manali–Lahaul area)         │
-│                      │ Now tunnel: Atal Tunnel                       │
-├──────────────────────┼─────────────────────────────────────────────  │
-│ SHIPKI LA            │ Himachal Pradesh — connects India to Tibet    │
-├──────────────────────┼─────────────────────────────────────────────  │
-│ NATHU LA             │ Sikkim — India–China trade route             │
-│                      │ Reopened in 2006 for trade                   │
-├──────────────────────┼─────────────────────────────────────────────  │
-│ BOLAN PASS           │ Pakistan (formerly British India)             │
-│                      │ Route from India to Afghanistan               │
-├──────────────────────┼─────────────────────────────────────────────  │
-│ PALAKKAD GAP         │ Western Ghats — between Tamil Nadu & Kerala  │
-│                      │ Only major break in Western Ghats            │
-│                      │ (Important for transport & climate)          │
-└──────────────────────┴─────────────────────────────────────────────  │
+1. HQ = Sasaram
+2. Sher Shah Suri tomb = Sasaram (octagonal, in middle of lake)
+3. Grand Trunk Road + Rupee currency = Sher Shah Suri (born near Sasaram)
+4. Amjhor = Asia's LARGEST Pyrite (iron sulphide) deposit
+5. Son river enters Bihar at Rohtas (Indrapuri Barrage)
+6. Rice Bowl of Bihar (paddy + wheat, Son canal irrigation)
+7. Dalmianagar = Cement + Paper industry
+```
+
+### BHAGALPUR (7 Must-Know):
+```
+1. Silk City of India → Tussar (Kosa) silk → GI tag
+2. Tussar silkworms eat Arjun + Sal trees (NOT mulberry)
+3. Vikramshila University ruins (Pala king Dharmapala built; Bakhtiyar Khilji destroyed 1203 CE)
+4. Sultanganj = Ganga flows NORTHWARD + Kanwar Yatra start
+5. NTPC Kahalgaon = Bihar's only thermal power plant
+6. Vikramshila Gangetic Dolphin Sanctuary (national aquatic animal)
+7. Ancient Anga Mahajanapada capital (Champa)
 ```
 
 ---
 
-## 📌 GS SECTION 8: LANDFORMS & GEOGRAPHY TERMS — PYQ DIRECT
+## 🔷 GS MODULE 3: Eastern Ghats Quick Recall
 
 ```
-LANDFORMS YOU MUST KNOW:
+KEY WORD: DISCONTINUOUS (most important exam fact)
+Coast:    Eastern coast (Coromandel) / Bay of Bengal
+States:   "OATT" = Odisha, AP, Telangana, Tamil Nadu
+Highest:  Mahendragiri (Odisha) ~1,501 m
+Meet:     Eastern + Western Ghats meet at NILGIRI HILLS
+Rivers:   "My Great King Came" = Mahanadi → Godavari → Krishna → Kaveri
+Forests:  Tropical DRY DECIDUOUS (NOT evergreen)
 
-┌──────────────────────────────────────────────────────────────────────┐
-│              LANDFORM TYPES (by agent of formation)                 │
-├──────────────────────┬────────────────────────────────────────────── │
-│ Agent                │ Landforms formed                              │
-├──────────────────────┼─────────────────────────────────────────────  │
-│ RIVER action         │ Delta, Floodplain, Gorge, Meander, Oxbow lake│
-│                      │ Waterfall, Alluvial fan                       │
-├──────────────────────┼─────────────────────────────────────────────  │
-│ GLACIER action       │ Cirque, Moraine, Fjord, Glacial trough       │
-│                      │ U-shaped valley (glacial), Horn               │
-├──────────────────────┼─────────────────────────────────────────────  │
-│ WIND action          │ Sand dune, Loess, Yardang (mushroom rock)    │
-│                      │ Barchans (crescent-shaped dunes)              │
-├──────────────────────┼─────────────────────────────────────────────  │
-│ UNDERGROUND          │ Stalactite (hangs from ceiling)               │
-│ WATER                │ Stalagmite (rises from floor)                 │
-│                      │ Karst topography, Limestone caves             │
-└──────────────────────┴─────────────────────────────────────────────  │
+EASTERN vs WESTERN GHATS:
+  Eastern = DISCONTINUOUS, Lower, Drier, Bay of Bengal, Mahendragiri
+  Western = CONTINUOUS, Higher, Wetter, Arabian Sea, Anamudi (2,695m)
+  Western = UNESCO World Heritage + Global Biodiversity Hotspot
 
-MEMORY: STALACTITE vs STALAGMITE
-"stalaCtite has a C like Ceiling — it hangs DOWN"
-"stalagMite has an M like Mountain — it grows UP"
-
-BPSC PYQ: "Stalactites and Stalagmites are formed by ___?"
-Answer: Underground water (not rivers, not glaciers)
+KEY LANDMARKS:
+  Simlipal (Odisha) = Tiger Reserve + Biosphere Reserve
+  Nagarjunasagar-Srisailam (AP/TG) = Largest tiger reserve by area
+  Papi Hills (Godavari gorge through Eastern Ghats)
+  Doddabetta = highest in Nilgiri Hills (2,637 m)
 ```
 
 ---
 
-## 📌 GS SECTION 9: GS QUICK-FIRE FACTS — 30 MUST-KNOW GEOGRAPHY FACTS
+## 🔷 GS MODULE 4: Peninsular Plateau Quick Recall
 
+### Structure:
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│        30 GEOGRAPHY RAPID-FIRE FACTS (PYQ Level — Bihar Focus)     │
-├──────────────────────────────────────────────────────────────────────┤
-│  1. Bihar population % of India = 8.58% (PYQ DIRECT!)             │
-│  2. Bihar highest population density = 1,106/sq km                 │
-│  3. Kosi = "Sorrow of Bihar" (floods annually)                     │
-│  4. Bihar's Rohtas district = MAX paddy production                 │
-│  5. Bihar's Bhagalpur = MAX silk textile ("Silk City")             │
-│  6. Bihar's Muzaffarpur = famous for Shahi Litchi (GI tag)         │
-│  7. Bihar's Kishanganj = highest rainfall district                 │
-│  8. Patna ancient name = Pataliputra                               │
-│  9. Ganga enters Bihar at Buxar                                    │
-│ 10. Gandak joins Ganga at Hajipur                                  │
-│ 11. Malnad region = Karnataka Plateau (hilly part)                 │
-│ 12. South Peninsular Upland = part of GONDWANA LAND               │
-│ 13. Highest peak Eastern Ghats = Mahendragiri (Odisha)            │
-│ 14. East-West Corridor = Silchar to Porbandar highway             │
-│ 15. Black soil found in Karnataka AND Gujarat (both!)             │
-│ 16. Most urbanized state = GOA (not Maharashtra)                  │
-│ 17. India's highest population density state = Bihar              │
-│ 18. Stalactites formed by: Underground water (not rivers)         │
-│ 19. Largeststate by area = Rajasthan                              │
-│ 20. Smallest state by area = Goa                                   │
-│ 21. SW Monsoon withdrawal from Hyderabad = 1st October            │
-│ 22. Mawsynram = highest rainfall in India (Meghalaya)             │
-│ 23. Sundarbans delta = Ganga + Brahmaputra                        │
-│ 24. Tsangpo (Tibet) = Brahmaputra in India                        │
-│ 25. Anai Mudi = highest peak of South India (Western Ghats)       │
-│ 26. Narmada flows in a RIFT VALLEY (not normal valley)            │
-│ 27. Alluvial soil = MOST widespread + MOST FERTILE in India       │
-│ 28. Laterite soil good for Tea, Coffee, Cashew                    │
-│ 29. Majuli = world's largest river island (Brahmaputra, Assam)    │
-│ 30. Zoji La pass = connects Srinagar to Leh (J&K)                │
-└──────────────────────────────────────────────────────────────────────┘
+Narmada DIVIDES Peninsular Plateau:
+  NORTH → Central Highlands (Malwa, Chota Nagpur, Bundelkhand)
+  SOUTH → Deccan Plateau (Maharashtra, Karnataka, AP, TN)
+```
+
+### 5 Must-Know Facts:
+```
+1. Narmada + Tapi = ONLY west-flowing peninsular rivers
+   → Rift valley origin → NO DELTA → ESTUARY at mouth
+2. Narmada + Son = SAME origin (Amarkantak) → OPPOSITE directions
+3. Chota Nagpur = "Mineral Heartland" (Coal, Iron, Copper, Mica, Uranium)
+   → Jaduguda (Jharkhand) = India's FIRST uranium mine
+4. Regur (Black Cotton) Soil = Deccan Trap basalt weathering → good for Cotton
+5. Godavari = "Dakshin Ganga" = LONGEST peninsular river
+```
+
+### Key Peaks:
+```
+Dhupgarh (1,350 m) = highest in Satpura = highest in MP
+Parasnath (1,350 m) = highest in Jharkhand (sacred Jain site)
+Pachmarhi = only hill station in MP (Satpura range)
+```
+
+### River Nicknames:
+```
+Godavari → Dakshin Ganga, Vridha Ganga    Kaveri → Ponni (Tamil)
+Narmada  → Life Line of Madhya Pradesh    Son → "Sone" (gold)
 ```
 
 ---
 
-# ══════════════════════════════════════════════════════
-# 📝 DAY 21 PRACTICE QUESTIONS
-# ══════════════════════════════════════════════════════
-
-> ⚠️ **TOPPER'S RULE: Solve ALL 50 questions FIRST — no peeking!**
-> The answer key is ONLY at the very end of this document.
-> This is a REVISION day — target score: **45+ out of 50!**
-> Option D = "More than one of the above" | Option E = "None of the above"
-
----
-
-## 🖥️ CS QUESTIONS (Q1–Q25): Arrays, Stack, Queue Revision
-
----
-
-**Q1.** The main advantage of using an Array over a Linked List is:
-- (A) Dynamic size — can grow as needed
-- (B) Efficient insertion and deletion in the middle
-- (C) Random access in O(1) time using index
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q2.** What is a SPARSE MATRIX?
-- (A) A matrix with more non-zero elements than zero elements
-- (B) A matrix where zero elements are more than half of total elements
-- (C) A matrix where all elements are zero
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q3.** The OVERFLOW condition for a Stack implemented using an array is:
-- (A) top == -1
-- (B) top == 0
-- (C) top == MAX_SIZE - 1
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q4.** Which of the following is/are CORRECT applications of a STACK?
-- (A) Recursion (function call management)
-- (B) Balancing of parentheses and symbols
-- (C) Expression evaluation (Infix to Postfix)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q5.** Which of the following is NOT an application of Stack?
-- (A) String reversal
-- (B) Backtracking in maze problems
-- (C) Asynchronous data transfer between two processes
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q6.** The time complexity of converting Infix to Postfix expression using a Stack is:
-- (A) O(N²)
-- (B) O(N log N)
-- (C) O(N)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q7.** Convert the infix expression A + B * C to Postfix:
-- (A) A B + C *
-- (B) A B C * +
-- (C) A + B C *
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q8.** Before performing a DEQUEUE operation on a Queue, which condition MUST be checked?
-- (A) OVERFLOW (is queue full?)
-- (B) UNDERFLOW (is queue empty?)
-- (C) Both Overflow and Underflow
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q9.** The OVERFLOW condition for a Linear Queue is:
-- (A) front == -1
-- (B) front == rear
-- (C) rear == MAX_SIZE - 1
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q10.** A Circular Queue is also known as:
-- (A) Double Queue
-- (B) Ring Buffer
-- (C) Priority Buffer
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q11.** The FULL condition for a Circular Queue of size N is:
-- (A) rear == N - 1
-- (B) front == rear
-- (C) (rear + 1) % N == front
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q12.** In a Circular Queue, the EMPTY condition is:
-- (A) front == 0 and rear == 0
-- (B) front == -1 and rear == -1
-- (C) front == rear and both are positive
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q13.** After performing a Dequeue from a Circular Queue that had exactly ONE element, what should front and rear be set to?
-- (A) front = 0, rear = 0
-- (B) front = -1, rear = -1
-- (C) front = rear = SIZE - 1
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q14.** The PRIMARY reason for using a Circular Queue instead of a Linear Queue is:
-- (A) Faster search time
-- (B) To avoid memory wastage / false overflow problem
-- (C) To allow insertion at both ends
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q15.** In a Deque (Double-Ended Queue):
-- (A) Insertion is allowed at both front and rear
-- (B) Deletion is allowed at both front and rear
-- (C) It stands for Double-Ended Queue
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q16.** In an INPUT-RESTRICTED Deque:
-- (A) Insertion is allowed at ONE end only
-- (B) Deletion is allowed at both ends
-- (C) Output is also restricted to one end
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q17.** The time complexity of deleting from the REAR in a Deque implemented with a SINGLY LINKED LIST is:
-- (A) O(1)
-- (B) O(log N)
-- (C) O(N)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q18.** Which of the following correctly states the LIFO and FIFO principles?
-- (A) Stack = LIFO (Last In, First Out)
-- (B) Queue = FIFO (First In, First Out)
-- (C) Deque = can implement both LIFO and FIFO
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q19.** Which data structure does an Operating System use for ROUND ROBIN CPU scheduling?
-- (A) Stack
-- (B) Priority Queue (Binary Heap)
-- (C) Circular Queue
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q20.** The BEST implementation for a Priority Queue is:
-- (A) Sorted Array
-- (B) Binary Heap
-- (C) Sorted Linked List
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q21.** In a MAX-HEAP, which of the following statements is CORRECT?
-- (A) The maximum element is always at the root
-- (B) Every parent node is greater than or equal to its children
-- (C) It is a Complete Binary Tree
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q22.** Which algorithm uses BFS (Breadth First Search) for traversal, and which data structure does BFS use?
-- (A) BFS uses Stack
-- (B) BFS uses Queue
-- (C) DFS uses Stack
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q23.** What is the time complexity of accessing an element at index i in an Array?
-- (A) O(N)
-- (B) O(log N)
-- (C) O(1)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q24.** Which of the following SORTING algorithms uses a HEAP data structure?
-- (A) Merge Sort
-- (B) Heap Sort
-- (C) Bubble Sort
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q25.** A Queue is being used in which of the following REAL-WORLD scenarios?
-- (A) Printer spooling (print jobs lined up in order)
-- (B) CPU scheduling (process waiting for CPU)
-- (C) Keyboard buffer (keystrokes stored in order)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-## 🌏 GS QUESTIONS (Q26–Q50): India & Bihar Geography
-
----
-
-**Q26.** Which river is known as the "Sorrow of Bihar"?
-- (A) Gandak
-- (B) Son
-- (C) Kosi
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q27.** Bihar's population as a percentage of India's total population (Census 2011) is approximately:
-- (A) 6.25%
-- (B) 10.50%
-- (C) 8.58%
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q28.** Which district of Bihar is the LARGEST PRODUCER of paddy (rice)?
-- (A) Patna
-- (B) Muzaffarpur
-- (C) Rohtas
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q29.** Bhagalpur in Bihar is famous for:
-- (A) Shahi Litchi production
-- (B) Makhana (Fox nut) production
-- (C) Silk textile (Tussar silk) production
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q30.** The Gandak river joins the Ganga at:
-- (A) Patna
-- (B) Hajipur (Vaishali district)
-- (C) Buxar
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q31.** Which of the following correctly identifies the SOIL TYPE found in the Northern Plains of India (including Bihar)?
-- (A) Black soil (Regur)
-- (B) Laterite soil
-- (C) Alluvial soil
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q32.** Black soil (Regur soil) is known as COTTON SOIL because:
-- (A) It is the best soil for growing cotton
-- (B) It retains moisture well, ideal for cotton cultivation
-- (C) It is found mainly in the Deccan Plateau region
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q33.** The highest peak of the EASTERN GHATS is:
-- (A) Anai Mudi
-- (B) Doddabetta
-- (C) Mahendragiri
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q34.** The "Malnad" region refers to:
-- (A) The coastal plain of Kerala
-- (B) The hilly plateau region of Karnataka
-- (C) The Deccan plateau of Maharashtra
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q35.** The East-West Corridor highway in India connects:
-- (A) Porbandar to Silchar
-- (B) Srinagar to Kanyakumari
-- (C) Mumbai to Kolkata
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q36.** The Narmada river is different from most Indian rivers because:
-- (A) It flows from east to west (not east)
-- (B) It flows through a rift valley
-- (C) It drains into the Arabian Sea
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q37.** Stalactites and Stalagmites are formed by the action of:
-- (A) River water (fluvial action)
-- (B) Glacial action
-- (C) Underground water (groundwater / limestone dissolution)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q38.** Which Indian state has the HIGHEST POPULATION DENSITY?
-- (A) Uttar Pradesh
-- (B) West Bengal
-- (C) Bihar
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q39.** The Tropic of Cancer (23.5°N) passes through which of the following Indian states?
-- (A) Gujarat
-- (B) Madhya Pradesh
-- (C) Jharkhand
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q40.** The ancient name of PATNA (capital of Bihar) is:
-- (A) Vaishali
-- (B) Rajgir
-- (C) Pataliputra
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q41.** Which river flows through GAYA (Bihar), associated with Pitru Paksha rituals?
-- (A) Ganga
-- (B) Son
-- (C) Falgu
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q42.** The most URBANIZED STATE in India is:
-- (A) Maharashtra
-- (B) Tamil Nadu
-- (C) Goa
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q43.** Which of the following correctly identifies the LARGEST state by area in India?
-- (A) Madhya Pradesh
-- (B) Maharashtra
-- (C) Rajasthan
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q44.** The world's LARGEST RIVER ISLAND, Majuli, is located in which river?
-- (A) Ganga
-- (B) Brahmaputra
-- (C) Godavari
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q45.** Which district of Bihar is known for the HIGHEST RAINFALL?
-- (A) Patna
-- (B) Gaya
-- (C) Kishanganj
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q46.** Which of the following rivers flow from EAST to WEST (unlike most Indian rivers)?
-- (A) Narmada
-- (B) Tapi (Tapti)
-- (C) Mahanadi
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q47.** LATERITE soil is best suited for growing which of the following crops?
-- (A) Wheat and Rice
-- (B) Cotton
-- (C) Tea, Coffee, and Cashew
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q48.** The Brahmaputra River is known by which name in TIBET?
-- (A) Tsangpo
-- (B) Teesta
-- (C) Dihang
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q49.** Which of the following statements about Bihar's geography is/are CORRECT?
-- (A) Bihar borders Nepal to the North
-- (B) Bihar has 38 districts (as of 2023)
-- (C) Paschim Champaran is the largest district by area
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q50.** The Son River, which flows through Bihar, originates in:
-- (A) Nepal
-- (B) Uttarakhand
-- (C) Amarkantak (Madhya Pradesh)
-- (D) More than one of the above
-- (E) None of the above
-
----
----
-
-# ══════════════════════════════════════════════════════
-# ✅ ANSWER KEY WITH EXPLANATIONS — DAY 21
-# ══════════════════════════════════════════════════════
-
-> 🔴 **CHECK ONLY AFTER ATTEMPTING ALL 50 QUESTIONS!**
-> Revision day target = 45+ out of 50. Be honest about your score!
-
----
-
-## 🖥️ CS ANSWERS (Q1–Q25)
-
-| Q | Ans | Key Explanation |
-|---|-----|-----------------|
-| Q1 | **(C)** | Main advantage of Array = Random Access O(1). Dynamic size = LL's advantage. Middle insertion is O(N) for array (disadvantage). |
-| Q2 | **(B)** | Sparse Matrix: zero elements > (M×N)/2. More than HALF the elements are zero. |
-| Q3 | **(C)** | Stack OVERFLOW: top == MAX_SIZE - 1 (full). UNDERFLOW: top == -1 (empty). |
-| Q4 | **(D)** | All three (A, B, C) are correct Stack applications. D = More than one. |
-| Q5 | **(C)** | Asynchronous data transfer = QUEUE application, NOT Stack. (A) and (B) ARE stack applications. |
-| Q6 | **(C)** | Infix to Postfix = O(N). Each element processed once through the stack. Direct PYQ from TRE 1.0, 2.0. |
-| Q7 | **(B)** | A + B * C → B*C first (higher precedence) → result is A B C * + |
-| Q8 | **(B)** | Before DEQUEUE → check UNDERFLOW (empty?). Before ENQUEUE → check OVERFLOW. This is a REPEATED PYQ trap! |
-| Q9 | **(C)** | Linear Queue OVERFLOW: rear == MAX_SIZE - 1. This is when the rear pointer reaches end of array. |
-| Q10 | **(B)** | Circular Queue = Ring Buffer. This is a direct PYQ synonym tested multiple times. |
-| Q11 | **(C)** | Circular Queue FULL: (rear + 1) % N == front. The modulo formula is the key. |
-| Q12 | **(B)** | EMPTY condition: front == -1 AND rear == -1. NOT front == rear (that means 1 element). |
-| Q13 | **(B)** | After last dequeue → queue is empty → reset front = -1, rear = -1 (empty state). |
-| Q14 | **(B)** | Circular Queue created to avoid MEMORY WASTAGE / False Overflow. Not faster search or both-end insert. |
-| Q15 | **(D)** | All three statements (A, B, C) about Deque are correct. D = More than one. |
-| Q16 | **(D)** | Both (A) and (B) are correct for Input-Restricted Deque. (C) is WRONG — output is NOT restricted. D = More than one (A and B only). |
-| Q17 | **(C)** | Singly LL rear deletion = O(N). Must traverse whole list to find second-last node. |
-| Q18 | **(D)** | All three (A, B, C) are correct. Deque can implement both LIFO (use one end) and FIFO (use both). D = More than one. |
-| Q19 | **(C)** | Round Robin = Circular Queue. Each process gets a fixed time slice, then moves to back of circular queue. |
-| Q20 | **(B)** | BINARY HEAP is the BEST for Priority Queue. O(log N) for both insert and delete. |
-| Q21 | **(D)** | All three (A, B, C) correctly describe Max-Heap. D = More than one. |
-| Q22 | **(D)** | Both (B) and (C) are correct: BFS uses Queue, DFS uses Stack. D = More than one. (A) is WRONG. |
-| Q23 | **(C)** | Array element access = O(1). Direct address calculation: Base + i × element_size. |
-| Q24 | **(B)** | Heap Sort uses Binary Heap. Merge Sort uses divide & conquer (merging). Bubble Sort uses comparisons. |
-| Q25 | **(D)** | All three (A, B, C) are correct Queue applications. D = More than one. |
-
----
-
-## 🌏 GS ANSWERS (Q26–Q50)
-
-| Q | Ans | Key Explanation |
-|---|-----|-----------------|
-| Q26 | **(C)** | Kosi = "Sorrow of Bihar." Changes course frequently, floods North Bihar annually. |
-| Q27 | **(C)** | Bihar = 8.58% of India's population (Census 2011). PYQ DIRECT question! |
-| Q28 | **(C)** | ROHTAS district = highest paddy production in Bihar. PYQ DIRECT! |
-| Q29 | **(C)** | Bhagalpur = Tussar Silk (Silk City of India). Muzaffarpur = Litchi. Darbhanga = Makhana. |
-| Q30 | **(B)** | Gandak joins Ganga at HAJIPUR (Vaishali district), not Patna. Important Bihar geography fact! |
-| Q31 | **(C)** | Northern Plains including Bihar = ALLUVIAL SOIL (most fertile, most widespread). |
-| Q32 | **(D)** | All three (A, B, C) statements about Black (Cotton) soil are correct. D = More than one. |
-| Q33 | **(C)** | Mahendragiri (Odisha) = highest peak of Eastern Ghats. Anai Mudi = Western Ghats. |
-| Q34 | **(B)** | Malnad = hilly plateau/upland region of Karnataka. PYQ DIRECT from TRE papers! |
-| Q35 | **(A)** | East-West Corridor = Porbandar (Gujarat) to Silchar (Assam). PYQ DIRECT from TRE analysis! |
-| Q36 | **(D)** | All three (A, B, C) are correct about Narmada — it flows W, in rift valley, into Arabian Sea. D = More than one. |
-| Q37 | **(C)** | Stalactites/Stalagmites formed by UNDERGROUND WATER dissolving limestone. PYQ DIRECT! |
-| Q38 | **(C)** | Bihar has India's HIGHEST population density (1,106/sq km) as per Census 2011. |
-| Q39 | **(D)** | All three (A: Gujarat, B: MP, C: Jharkhand) have Tropic of Cancer passing through them. D = More than one. |
-| Q40 | **(C)** | Patna's ancient name = PATALIPUTRA (capital of Mauryan Empire). |
-| Q41 | **(C)** | Falgu River flows through Gaya. Sacred for Pitru Paksha. Mostly has underground flow. |
-| Q42 | **(C)** | GOA is India's most urbanized state (highest % of urban population). PYQ DIRECT! |
-| Q43 | **(C)** | RAJASTHAN is India's largest state by area (3,42,239 sq km). MP was largest before 2000. |
-| Q44 | **(B)** | Majuli island = Brahmaputra river, Assam = world's largest river island. |
-| Q45 | **(C)** | KISHANGANJ = highest rainfall district in Bihar (NE corner, near Bengal border). |
-| Q46 | **(D)** | Both Narmada (A) and Tapi/Tapti (B) flow from EAST to WEST. Mahanadi flows East. D = More than one. |
-| Q47 | **(C)** | Laterite soil good for Tea, Coffee, Cashew (Kerala, Karnataka, NE India). NOT wheat/rice or cotton. |
-| Q48 | **(A)** | Brahmaputra is called TSANGPO in Tibet. (Dihang = name in Arunachal Pradesh). |
-| Q49 | **(D)** | All three (A, B, C) statements about Bihar's geography are correct. D = More than one. |
-| Q50 | **(C)** | Son River originates at AMARKANTAK in Madhya Pradesh (not Nepal or Uttarakhand). |
-
----
-
-## 📊 DAY 21 REVISION SCORE TRACKER:
+## 🔷 GS MODULE 5: Monsoon System Quick Recall
 
 ```
-┌────────────────────────────────────────────────────────────────┐
-│                DAY 21 — REVISION PERFORMANCE                   │
-├─────────────────────┬──────────────────────────────────────────┤
-│ CS (Q1–Q25)         │ ______ / 25                              │
-│ GS (Q26–Q50)        │ ______ / 25                              │
-│ TOTAL               │ ______ / 50                              │
-├─────────────────────┴──────────────────────────────────────────┤
-│ 48–50 → LEGEND Level 🏆 Absolutely topper material!           │
-│ 45–47 → TOPPER Level ✅ You're on track for top 10 rank!     │
-│ 40–44 → EXCELLENT ✅ Minor gaps — re-read weak sections       │
-│ 35–39 → GOOD ⚠️ Revisit Circular Queue conditions & Bihar GK  │
-│ Below 35 → NEEDS WORK ❌ Go back to Days 15–20 concepts       │
-├────────────────────────────────────────────────────────────────┤
-│ D/E ANSWER COUNT:                                              │
-│ CS D answers: Q4,Q15,Q18,Q21,Q22,Q25 (+ partial in Q16)      │
-│ GS D answers: Q32,Q36,Q39,Q46,Q49                             │
-│ If D/E wrong 4+ times → Practice identifying all statements   │
-└────────────────────────────────────────────────────────────────┘
+SW MONSOON (June–Sept):
+  → 75–80% of India's total annual rainfall
+  → Onset: June 1 = Kerala → June 20-25 = Bihar → July 1 = Delhi
+  → Retreat starts: Rajasthan (Sept 1) → complete by Nov 15
+  → Two branches:
+      Arabian Sea → hits Western Ghats first
+      Bay of Bengal → hits NE India, Bihar, UP, Delhi
+  → Bihar source = Bay of Bengal branch
+
+NE MONSOON (Oct–Dec):
+  → Affects Tamil Nadu MAINLY (gets rain while rest of India is dry)
+  → Tamil Nadu = only state with BOTH SW + NE monsoon
+
+WETTEST: Mawsynram (Meghalaya) → BoB branch + funnel hills
+DRIEST:  Rajasthan (Thar Desert)
+Rain shadow: East side of Western Ghats = Deccan Plateau = DRY
+
+CROPS:
+  Kharif: June–July sow; Sept–Oct harvest → Rice, Maize, Cotton
+  Rabi:   Oct–Nov sow; March–April harvest → Wheat, Mustard, Gram
 ```
 
 ---
 
-## 🌙 NIGHT REVISION — WRITE FROM MEMORY (No cheating!):
+## 🔷 GS MODULE 6: Indian Constitution Quick Recall
 
 ```
-CS (write all without looking):
-1. STACK OVERFLOW condition: _________ | UNDERFLOW: _________
-2. Circular Queue FULL: _________ | EMPTY: _________
-3. Circular Queue also called: _________
-4. Recursion uses: _________ data structure
-5. Priority Queue BEST implementation: _________
-6. BFS uses: _________ | DFS uses: _________
-7. Deque delete from rear (Singly LL) = O(___)
+KEY DATES:
+  Dec 9, 1946   → Constituent Assembly first meeting
+  Nov 26, 1949  → Constitution ADOPTED (Constitution Day)
+  Jan 26, 1950  → Constitution came into FORCE (Republic Day)
 
-GS (write all without looking):
-1. "Sorrow of Bihar" = _________
-2. Bihar % of India's population = _________
-3. Rohtas = max _________ | Bhagalpur = max _________
-4. Kishanganj = highest _________ in Bihar
-5. Gandak meets Ganga at _________
-6. Patna ancient name = _________
-7. Highest population density state = _________
-8. Mahendragiri = highest peak of _________
+KEY PEOPLE:
+  Dr. Rajendra Prasad (BIHAR!) → President of Constituent Assembly + First President
+  Dr. B.R. Ambedkar → Chairman of Drafting Committee
+
+KEY FACTS:
+  Longest written constitution in the world
+  Original: 395 articles, 8 schedules, 22 parts
+  2 years, 11 months, 18 days to draft
+
+SOURCES: UK=Parliament, USA=FRs+Judicial Review, Ireland=DPSP, Canada=Federal+Residuary
+         USSR=Fundamental Duties, Australia=Concurrent List
+
+6 FUNDAMENTAL RIGHTS (post-1978):
+  Equality (14-18) | Freedom (19-22) | Against Exploitation (23-24)
+  Religion (25-28) | Cultural/Education (29-30) | Constitutional Remedies (32)
+
+DPSP (Part IV, Art 36-51):
+  → Non-justiciable (cannot sue govt) | from Ireland | Welfare State goal
+
+42nd Amendment 1976: "Socialist" + "Secular" added to Preamble; Fundamental Duties added
+44th Amendment 1978: Right to Property REMOVED from FRs → now legal right (Art 300A)
+86th Amendment 2002: Right to Education (Art 21A) for 6-14 year olds added
+
+7th Schedule: Union List (97), State List (66), Concurrent List (52)
+8th Schedule: 22 Scheduled Languages (Maithili added 2003 — 92nd Amendment)
+Residuary Powers → UNION (not States, unlike USA)
+Art 32 = "Heart and Soul" (Dr. Ambedkar's words)
 ```
 
 ---
 
-## ⚡ DAY 21 COMPLETE CHECKLIST
+## 🚨 TOP 15 PYQ TRAPS — GS (Days 15–20)
 
-**CS Revision:**
-- [ ] Re-read Array complexity table (O(1) access, O(N) middle insert)
-- [ ] Revised Stack LIFO, overflow/underflow, applications list
-- [ ] Confirmed all Circular Queue conditions (full, empty, enqueue, dequeue)
-- [ ] Confirmed Deque types (Input-Restricted vs Output-Restricted)
-- [ ] Recalled Priority Queue = Binary Heap implementation
-- [ ] Memorized all PYQ traps (check underflow before dequeue, etc.)
-
-**GS Revision:**
-- [ ] India's 5 physical divisions memorized
-- [ ] Bihar rivers: Kosi, Gandak, Son, Falgu, Mahananda
-- [ ] Bihar agriculture: Rohtas (paddy), Bhagalpur (silk), Muzaffarpur (litchi)
-- [ ] Bihar's 8.58% population fact
-- [ ] Soil types: Alluvial (N.Plains), Black (Deccan), Laterite (SW India)
-- [ ] Key peaks: Kangchenjunga, Mahendragiri, Anai Mudi
-- [ ] Bihar density = India's highest
-
-**Practice:**
-- [ ] Attempted all 50 questions before looking at answers
-- [ ] Score: ______ / 50
+```
+TRAP 1:  Kosi = "Sorrow of Bihar" — course changes + floods (NOT because it's small)
+TRAP 2:  Narmada + Son = SAME SOURCE (Amarkantak) → flow OPPOSITE directions
+TRAP 3:  Narmada/Tapi = RIFT VALLEY → estuary (NO delta)
+TRAP 4:  Eastern Ghats = DISCONTINUOUS; Western Ghats = CONTINUOUS
+TRAP 5:  Highest Eastern Ghats = Mahendragiri (Odisha); Highest WG = Anamudi (Kerala)
+TRAP 6:  Bhagalpur silk = TUSSAR (not mulberry); feeds on Arjun+Sal trees
+TRAP 7:  Amjhor (Rohtas) = Asia's LARGEST pyrite deposit (not bauxite!)
+TRAP 8:  NE Monsoon = Tamil Nadu (Oct-Dec); SW Monsoon = June 1 Kerala onset
+TRAP 9:  Mawsynram = wettest (not Cherrapunji — both in Meghalaya)
+TRAP 10: Constitution ADOPTED Nov 26 ≠ came into force Jan 26 (different dates!)
+TRAP 11: "Socialist"+"Secular" = NOT original Preamble; added 42nd Amendment 1976
+TRAP 12: FRs = 6 (Right to Property removed 1978 by 44th Amendment)
+TRAP 13: DPSP = NON-JUSTICIABLE (not enforceable in courts)
+TRAP 14: Residuary powers → UNION (not States, unlike USA)
+TRAP 15: Art 32 = Constitutional Remedies = "Heart and Soul" (Ambedkar's quote)
+```
 
 ---
 
-> 🎯 **DAY 22 PREVIEW:** Linked Lists (Singly & Doubly) | GS: Indian Polity — Fundamental Rights
-> **Come back tomorrow: "Day-22"** 🔁
-> You have now completed Week 3 of Phase 1 — WELL DONE! 🏆
+# PART 3: MIXED PRACTICE QUESTIONS
+
+## 📝 COMPUTER SCIENCE — 25 Mixed PYQ MCQs (Days 15–20)
 
 ---
-*Day 21 | BPSC TRE 4.0 Topper Study Plan | Phase 1 — Week 3 Complete*
-*CS: REVISION — Arrays, Stack, Queue, Circular Queue, Deque, Priority Queue*
-*GS: REVISION — India Geography + Bihar Geography (Districts, Rivers, Agriculture)*
-*Prepared for: TOPPER RANK | Bihar Public Service Commission Teacher Recruitment Exam 4.0*
+
+**Q1.** What is the main advantage of arrays over linked lists?
+(A) Dynamic size
+(B) Efficient insertion in middle
+(C) O(1) random access using index
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q2.** A 5×6 matrix has 22 zero elements. Is it a sparse matrix?
+(A) No, because not all elements are zero
+(B) Yes, because 22 > (5×6)/2 = 15
+(C) No, because the matrix needs to be square
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q3.** In a Stack, after pushing 5 elements into an array-based stack (initially empty), what is the value of `top`?
+(A) 5
+(B) 4
+(C) -1
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q4.** Which of the following uses STACK internally?
+(A) CPU job scheduling
+(B) Print spooler
+(C) Recursive function calls
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q5.** Convert the infix expression `(A + B) * (C - D)` to Postfix:
+(A) A B + C D - *
+(B) * + A B - C D
+(C) A + B * C - D
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q6.** Evaluate the Postfix expression `6 2 3 + * 5 -`:
+(A) 25
+(B) 35
+(C) 25
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q7.** In the Infix to Postfix conversion algorithm, when we encounter a RIGHT parenthesis `)`, we:
+(A) Push it onto the stack
+(B) Pop all operators until LEFT parenthesis is found and discard both parentheses
+(C) Clear the entire stack
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q8.** In a Queue, if front=3 and rear=7 (linear queue, MAX=10), how many elements are in the queue?
+(A) 4
+(B) 5
+(C) 7
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q9.** Which statement is TRUE about Circular Queue?
+(A) It can store exactly SIZE elements
+(B) It uses (rear+1)%SIZE to wrap rear around
+(C) It has the same false overflow problem as linear queue
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q10.** In a Circular Queue of SIZE=7, if front=5 and rear=3, how many elements does it contain?
+(A) 2
+(B) 3
+(C) 5
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q11.** An Input-Restricted Deque:
+(A) Allows insertion only from the rear; deletion from both ends
+(B) Allows deletion only from the front; insertion from both ends
+(C) Allows insertion and deletion from both ends without restriction
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q12.** In a Min-Heap, which operation is performed after INSERTING a new element?
+(A) Heapify Down (sift down from root)
+(B) Heapify Up (new element bubbles up toward root)
+(C) Rebuild the entire heap from scratch
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q13.** For a heap array (0-indexed), what is the RIGHT child index of the node at index 3?
+(A) 7
+(B) 8
+(C) 6
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q14.** Which of the following is the CORRECT full condition for a Circular Queue?
+(A) rear == SIZE - 1
+(B) front == rear
+(C) (rear + 1) % SIZE == front
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q15.** What is the time complexity of the Heapify-Down operation after deleting root from a heap of n elements?
+(A) O(1)
+(B) O(n)
+(C) O(log n)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q16.** Which algorithm uses a Min-Priority Queue (Min-Heap) to find the shortest path in a weighted graph?
+(A) BFS
+(B) DFS
+(C) Dijkstra's Algorithm
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q17.** The "Ready Queue" in an Operating System is maintained by:
+(A) Long-term scheduler
+(B) Short-term scheduler (CPU Scheduler)
+(C) Medium-term scheduler
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q18.** In a Max-Heap, which of the following is NOT guaranteed?
+(A) The root is the maximum element
+(B) Every parent ≥ its children
+(C) The array is sorted in descending order
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q19.** The `deleteRear()` operation in a Deque implemented with a SINGLY Linked List has time complexity:
+(A) O(1)
+(B) O(log n)
+(C) O(n)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q20.** Polish Notation is another name for:
+(A) Postfix expression
+(B) Infix expression
+(C) Prefix expression
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q21.** The time complexity of building a heap from n elements using Floyd's Build-Heap algorithm is:
+(A) O(n log n)
+(B) O(n)
+(C) O(n²)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q22.** Which of the following correctly identifies the operation where the Circular Queue rear wraps to index 0?
+(A) When front reaches index 0
+(B) When rear = SIZE - 1 and a new enqueue is attempted with available space
+(C) When the queue is empty
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q23.** Which of the following correctly states the relationship between Stack and Queue?
+(A) Both use LIFO principle
+(B) Stack uses LIFO, Queue uses FIFO; Stack has 1 pointer, Queue has 2 pointers
+(C) Stack has 2 pointers, Queue has 1 pointer
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q24.** `sizeof(x++)` where x is an int. What is returned AND what is x's value after?
+(A) Returns 4; x is incremented to original_x + 1
+(B) Returns 4; x remains UNCHANGED (sizeof doesn't evaluate)
+(C) Returns the value of x; x is incremented
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q25.** Which of the following is TRUE about Postfix expressions?
+(A) They require parentheses and precedence rules for evaluation
+(B) They require precedence rules during evaluation
+(C) They require neither parentheses nor precedence rules for evaluation
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+## 📝 GENERAL STUDIES — 25 Mixed PYQ MCQs (Days 15–20)
+
+---
+
+**Q26.** Identify the CORRECT statement about the Kosi river:
+(A) It is called "Sorrow of Bihar" because it is a small, unimportant river
+(B) It originates in the Vindhya mountains
+(C) It is called "Sorrow of Bihar" because of frequent course changes causing massive floods
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q27.** Which of the following rivers does NOT originate from Himalayan/Nepal region?
+(A) Kosi
+(B) Gandak
+(C) Son
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q28.** The Ganga flows NORTHWARD at which location in Bihar?
+(A) Hajipur
+(B) Sultanganj
+(C) Buxar
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q29.** Match correctly: Rohtas → Bhagalpur
+(A) Rohtas: Silk; Bhagalpur: Pyrite
+(B) Rohtas: Pyrite (Amjhor) + Rice Bowl; Bhagalpur: Tussar Silk + Vikramshila
+(C) Rohtas: NTPC; Bhagalpur: Sher Shah Suri tomb
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q30.** Which of the following CORRECTLY distinguishes Eastern and Western Ghats?
+(A) Eastern = Continuous; Western = Discontinuous
+(B) Eastern = Discontinuous; Western = Continuous; Western = higher + biodiversity hotspot
+(C) Both are discontinuous; Eastern is higher
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q31.** Mahendragiri, the highest peak of the Eastern Ghats, is in which state?
+(A) Andhra Pradesh
+(B) Tamil Nadu
+(C) Odisha
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q32.** Anamudi, the highest peak of the Western Ghats, is located in:
+(A) Karnataka
+(B) Tamil Nadu
+(C) Kerala
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q33.** Both the Narmada and Son rivers originate from the SAME place. Where?
+(A) Nilgiri Hills
+(B) Amarkantak (Vindhya-Satpura junction)
+(C) Western Ghats (Sahyadri)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q34.** Why do Narmada and Tapi rivers NOT form deltas?
+(A) They are too short
+(B) They flow through rift valleys; their mouths form estuaries not deltas
+(C) They are completely dammed before reaching the sea
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q35.** The Chota Nagpur Plateau is called the "Mineral Heartland" of India. Which mineral has its FIRST Indian mine in Jharkhand?
+(A) Coal
+(B) Iron ore
+(C) Uranium (Jaduguda)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q36.** The Southwest Monsoon normally arrives at Kerala on:
+(A) July 1
+(B) June 1
+(C) June 15
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q37.** Which state receives rainfall from BOTH Southwest AND Northeast Monsoon?
+(A) Bihar
+(B) Maharashtra
+(C) Tamil Nadu
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q38.** The Coromandel Coast (Southeast India) receives most rainfall from:
+(A) Southwest (June-September) Monsoon
+(B) Northeast (October-December) Monsoon
+(C) Western Disturbances
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q39.** Bihar's main source of monsoon rainfall is:
+(A) Arabian Sea branch of SW Monsoon
+(B) Bay of Bengal branch of SW Monsoon
+(C) Northeast Monsoon
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q40.** Which of the following is the CORRECT chronological order of events?
+(A) Constitution Day (Nov 26) → Republic Day (Jan 26) — in the same year 1950
+(B) Constituent Assembly first met (Dec 1946) → Constitution adopted (Nov 1949) → Enforced (Jan 1950)
+(C) Republic Day → Constitution Day (within 1950)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q41.** Who was the Chairman of the Drafting Committee of the Indian Constitution?
+(A) Dr. Rajendra Prasad
+(B) Jawaharlal Nehru
+(C) Dr. B.R. Ambedkar
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q42.** The words "Socialist" and "Secular" in the Preamble were added by:
+(A) 44th Amendment Act, 1978
+(B) 42nd Amendment Act, 1976
+(C) 86th Amendment Act, 2002
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q43.** Currently, India has how many Fundamental Rights?
+(A) 7 (original number)
+(B) 6 (after 44th Amendment removed Right to Property)
+(C) 5
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q44.** Directive Principles of State Policy are:
+(A) Enforceable by courts (justiciable)
+(B) Non-enforceable guidelines (non-justiciable) for welfare state
+(C) More binding than Fundamental Rights
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q45.** The 7th Schedule of the Constitution divides subjects into three lists. Which list covers EDUCATION?
+(A) Union List
+(B) State List
+(C) Concurrent List
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q46.** Residuary powers (subjects not in any list) belong to:
+(A) State legislatures
+(B) Both Parliament and State equally
+(C) Parliament (Union)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q47.** Article 32 (Right to Constitutional Remedies) was described by Dr. Ambedkar as:
+(A) "The Backbone of the Constitution"
+(B) "The Heart and Soul of the Constitution"
+(C) "The Foundation of Democracy"
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q48.** Maithili language (Bihar) was added to the 8th Schedule by which constitutional amendment?
+(A) 71st Amendment
+(B) 86th Amendment 2002
+(C) 92nd Amendment 2003
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q49.** Which of the following is CORRECT about the Indian Constitution?
+(A) It is an unwritten constitution like the British
+(B) India is described as a "Federation of States" in Article 1
+(C) India is described as a "Union of States"; the constitution is written and the world's longest
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q50.** Bihar's Dr. Rajendra Prasad is associated with which of the following (choose all that apply)?
+(A) President of Constituent Assembly
+(B) First President of India
+(C) Born in Siwan district, Bihar
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+# ANSWER KEY
+
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
+
+---
+
+### CS Answers (Q1–Q25):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (C) | O(1) random access = main array advantage |
+| 2 | (B) | 22 > (5×6)/2 = 15 → YES sparse |
+| 3 | (B) | 5 pushes: top goes -1→0→1→2→3→4 = 4 |
+| 4 | (C) | Recursive calls use call stack (LIFO) |
+| 5 | (A) | (A+B)*(C-D) → postfix: A B + C D - * |
+| 6 | (C) | 6 2 3 + * 5 - = 6*(2+3)-5 = 6*5-5 = 30-5 = 25 |
+| 7 | (B) | ')' → pop until '('; discard both brackets |
+| 8 | (B) | Elements = rear-front+1 = 7-3+1 = 5 |
+| 9 | (B) | Circular uses (rear+1)%SIZE to wrap |
+| 10 | (C) | (rear-front+SIZE)%SIZE = (3-5+7)%7 = 5%7 = 5 |
+| 11 | (A) | Input-restricted: insert rear only; delete both ends |
+| 12 | (B) | Insert → new element at end → Heapify UP |
+| 13 | (B) | Right child of 3 = 2×3+2 = 8 |
+| 14 | (C) | Full: (rear+1)%SIZE == front |
+| 15 | (C) | Heapify-Down = O(log n) (tree height) |
+| 16 | (C) | Dijkstra's uses Min-Priority Queue |
+| 17 | (B) | Short-term (CPU) scheduler manages Ready Queue |
+| 18 | (C) | Heap ≠ sorted; only parent≥child, not total order |
+| 19 | (C) | Singly LL deleteRear = O(n) traversal needed |
+| 20 | (C) | Polish Notation = Prefix; Reverse Polish = Postfix |
+| 21 | (B) | Floyd's Build-Heap = O(n) |
+| 22 | (B) | Wrap: when rear=SIZE-1 and space exists → rear=(rear+1)%SIZE=0 |
+| 23 | (B) | Stack=LIFO/1pointer; Queue=FIFO/2pointers |
+| 24 | (B) | sizeof doesn't evaluate; returns 4 (int size); x unchanged |
+| 25 | (C) | Postfix: no brackets, no precedence needed during eval |
+
+---
+
+### GS Answers (Q26–Q50):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (C) | Kosi = course changes + massive floods = "Sorrow of Bihar" |
+| 27 | (C) | Son originates from Amarkantak (MP) — peninsular origin |
+| 28 | (B) | Sultanganj (Bhagalpur) — Ganga flows northward |
+| 29 | (B) | Rohtas: Amjhor pyrite + Rice Bowl; Bhagalpur: Tussar silk + Vikramshila |
+| 30 | (B) | Eastern=Discontinuous; Western=Continuous+higher+hotspot |
+| 31 | (C) | Mahendragiri = Odisha |
+| 32 | (C) | Anamudi = Kerala (Western Ghats) |
+| 33 | (B) | Amarkantak = source of Narmada (W) + Son (E) |
+| 34 | (B) | Rift valley rivers → estuary not delta |
+| 35 | (C) | Jaduguda (Jharkhand) = India's first uranium mine |
+| 36 | (B) | June 1 = SW Monsoon arrives Kerala |
+| 37 | (C) | Tamil Nadu = both SW + NE monsoon |
+| 38 | (B) | Coromandel Coast = NE monsoon (Oct-Dec) |
+| 39 | (B) | Bihar = Bay of Bengal branch of SW Monsoon |
+| 40 | (B) | Dec 1946 → Nov 1949 → Jan 1950 (correct sequence) |
+| 41 | (C) | Dr. B.R. Ambedkar = Drafting Committee Chairman |
+| 42 | (B) | 42nd Amendment 1976 added Socialist + Secular |
+| 43 | (B) | 6 FRs (after 44th Amendment 1978) |
+| 44 | (B) | DPSP = non-justiciable welfare state guidelines |
+| 45 | (C) | Education = Concurrent List (both Union + State) |
+| 46 | (C) | Residuary powers → Parliament (Union) |
+| 47 | (B) | "Heart and Soul" = Article 32 (Dr. Ambedkar's quote) |
+| 48 | (C) | 92nd Amendment 2003 added Maithili to 8th Schedule |
+| 49 | (C) | Written, longest, "Union of States" (Art 1) |
+| 50 | (D) | All three are correct (A + B + C) |
+
+---
+---
+
+# 🔁 DAY 21 — ULTRA-CRISP FINAL NOTES
+## "Last 1-Hour Before Exam" Revision Format
+
+---
+
+## ⚡ CS — 60-SECOND RECALL CARDS
+
+### ARRAYS:
+```
+Access=O(1), Insert/Del mid=O(n), Insert/Del end=O(1)
+Sparse: zero>(m×n)/2 | Spatial locality = cache-friendly
+Array name = base address pointer | C++ = Row-Major
+```
+
+### STACK:
+```
+LIFO | top starts -1 | Overflow: top==MAX-1 | Underflow: top==-1
+All ops O(1) | Applications: Recursion, Postfix, DFS, Undo, Brackets
+NOT stack: Async transfer → Queue
+```
+
+### EXPRESSION CONVERSION:
+```
+Postfix = Reverse Polish | Prefix = Polish
+Infix→Postfix: O(N) | No brackets in output
+^ = RIGHT associative | Eval: first pop = RIGHT operand
+A+B*C-D → postfix: A B C * + D - | prefix: - + A * B C D
+```
+
+### QUEUE:
+```
+FIFO | front+rear both start -1 | Two pointers
+Overflow: rear==MAX-1 | Underflow: front==-1
+Apps: BFS, Async, Print, CPU FCFS | NOT queue: Recursion, DFS
+```
+
+### CIRCULAR QUEUE:
+```
+Full: (rear+1)%SIZE==front | Empty: front==-1
+rear update: (rear+1)%SIZE | front update: (front+1)%SIZE
+deleteRear: (rear-1+SIZE)%SIZE | Max elements: SIZE-1
+Ring Buffer | Round Robin scheduling
+```
+
+### DEQUE:
+```
+All 4 ops O(1) | Input-restricted: insert rear only
+Output-restricted: delete front only | Doubly LL = O(1) deleteRear
+Singly LL deleteRear = O(N) ← KEY TRAP
+```
+
+### PRIORITY QUEUE / HEAP:
+```
+Complete binary tree | Min-Heap: root=min | Max-Heap: root=max
+Insert=O(logn) | Delete=O(logn) | Peek=O(1) | Build(Floyd)=O(n)
+0-indexed: Left=2i+1, Right=2i+2, Parent=(i-1)/2
+Dijkstra/Huffman/Prim → Min-Heap | CPU scheduling → Max-Heap
+```
+
+---
+
+## ⚡ GS — 60-SECOND RECALL CARDS
+
+### BIHAR RIVERS:
+```
+Kosi=Sorrow of Bihar | Ganga enters Buxar | Patna on south bank
+Ganga flows north at Sultanganj | Son+Narmada = Amarkantak origin
+Flood: SSMD+Champaran | Bihar rain = Bay of Bengal branch
+```
+
+### ROHTAS + BHAGALPUR:
+```
+Rohtas: Sasaram, Sher Shah tomb, Amjhor pyrite (Asia's largest), Rice Bowl, Son entry
+Bhagalpur: Tussar silk (Arjun+Sal), Vikramshila (Dharmapala→Bakhtiyar Khilji 1203)
+           NTPC Kahalgaon, Sultanganj northward Ganga, Dolphin Sanctuary
+```
+
+### EASTERN/WESTERN GHATS:
+```
+Eastern=DISCONTINUOUS, Mahendragiri (Odisha), OATT states, Dry deciduous forests
+Western=CONTINUOUS, Anamudi (Kerala 2695m), UNESCO+hotspot, Tropical evergreen
+BOTH meet at NILGIRI HILLS | Rivers: Mahanadi→Godavari→Krishna→Kaveri
+```
+
+### PENINSULAR PLATEAU:
+```
+Narmada divides: N=Central Highlands, S=Deccan Plateau
+Narmada+Tapi: west-flowing, rift valley, ESTUARY (no delta)
+Narmada+Son: SAME source (Amarkantak), OPPOSITE directions
+Chota Nagpur=Mineral Heartland | Regur=black cotton soil=basalt
+Godavari=Dakshin Ganga=LONGEST peninsular river
+```
+
+### MONSOON:
+```
+SW Monsoon: June 1 Kerala → June 20 Bihar → July 1 Delhi; 75-80% rainfall
+NE Monsoon: Oct-Dec → Tamil Nadu only
+Mawsynram=wettest | Rajasthan=driest | BoB branch → Bihar
+Kharif=Rice(June-July) | Rabi=Wheat(Oct-Nov)
+```
+
+### CONSTITUTION:
+```
+Adopted: Nov 26, 1949 | Enforced: Jan 26, 1950
+Rajendra Prasad (BIHAR)=CA President+1st President | Ambedkar=Drafting Chair
+6 FRs (44th Amend 1978 removed Property) | DPSP=non-justiciable (Ireland)
+42nd Amend 1976: Socialist+Secular+FDs | 92nd Amend 2003: Maithili
+7th Schedule=3 Lists | 8th Schedule=22 languages | Residuary→Union
+Art 32 = "Heart and Soul" (Ambedkar)
+```
+
+---
+
+## 🎯 COMMON MISTAKES TO NEVER MAKE AGAIN:
+
+```
+CS:
+✗ Never say Async data transfer uses Stack → it uses QUEUE
+✗ Never say Circular Queue holds SIZE elements → SIZE-1
+✗ Never say Build-Heap is O(n log n) → Floyd's is O(n)
+✗ Never say Postfix has brackets → NO brackets in Postfix/Prefix
+✗ Never say deleteRear in Singly LL is O(1) → it's O(n)
+✗ Never say first popped = left operand → first popped = RIGHT operand
+
+GS:
+✗ Never confuse Nov 26 (Adopted) with Jan 26 (Enforced)
+✗ Never say Socialist/Secular were in original Preamble → added 1976
+✗ Never say India has 7 FRs → it's 6 (after 1978)
+✗ Never say DPSP is enforceable → it is NOT
+✗ Never say residuary powers go to States → they go to UNION
+✗ Never confuse Mahendragiri (Eastern Ghats) with Anamudi (Western Ghats)
+✗ Never say Narmada forms a delta → it forms an ESTUARY
+```
+
+---
+
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. Stack=LIFO(1ptr,top=-1) vs Queue=FIFO(2ptrs,both=-1); Circular full=(rear+1)%SIZE==front; max=SIZE-1
+2. Postfix: no brackets, O(N); Heap: O(logn) insert/delete; Floyd build=O(n); Dijkstra→Min-Heap
+3. Kosi=Sorrow of Bihar; Sultanganj=Ganga flows north; Amarkantak=source of Narmada+Son
+4. Eastern Ghats=Discontinuous(Mahendragiri); Western=Continuous(Anamudi,UNESCO hotspot); Meet at Nilgiri
+5. Constitution: Nov26=Adopted; Jan26=Enforced; Ambedkar=DraftChair; 6FRs; Socialist+Secular=42nd Amend 1976
+
+---
+
+*Next: Day 22 — Linked Lists: Singly Linked List — Concepts, Operations, Traversal + GS Bihar Economy & Industry*

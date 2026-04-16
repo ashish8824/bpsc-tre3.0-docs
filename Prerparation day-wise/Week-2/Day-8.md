@@ -1,1447 +1,1476 @@
-# 📅 DAY-8 — BPSC TRE 4.0 TOPPER GUIDE
-## CS: C++ Basics — Variables, Data Types, Naming Rules, sizeof(), Scope, Header Files
-## GS: Modern Indian History — Overview (Freedom Struggle Essentials)
-
-> **Topper Target:** Score 23+/25 in CS and 23+/25 in GS practice sets today.
-> **Option (D) Alert:** 20–25% answers in BPSC TRE are "More than one of the above" — never skip it!
+# 📅 BPSC TRE 4.0 — DAY 8 COMPLETE STUDY MODULE
+### C++ Basics: Variables, Data Types, Naming Rules + Modern Indian History — Overview
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-# ═══════════════════════════════════════════════
-# 🖥️ PART 1: COMPUTER SCIENCE
-## C++ Basics — Variables, Data Types, Naming, sizeof(), Scope, Header Files
-# ═══════════════════════════════════════════════
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): C++ Variables, Data Types, Naming Rules, sizeof, Scope, Header Files
+> - Afternoon (1 hr): Modern Indian History — Overview
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-## 📌 SECTION 1: VARIABLE NAMING RULES IN C++
+# PART 1: COMPUTER SCIENCE
+## 📘 C++ Basics — Variables, Data Types, Naming Rules
 
-### What is a Variable?
-A variable is a **named memory location** that stores a value which can change during program execution.
+---
+
+## 🔷 SECTION 1: What is a Variable?
+
+### Real-Life Analogy:
+Think of a variable as a **labelled storage box**.
+- The **label** is the variable name (e.g., `age`)
+- The **box size** depends on the data type (e.g., int = 4 bytes)
+- The **content** is the value stored (e.g., 25)
 
 ```
-Memory:
+Variable Declaration in C++:
+┌─────────────────────────────────────┐
+│  data_type  variable_name = value;  │
+│  int        age           = 25;     │
+└─────────────────────────────────────┘
+```
+
+### Memory Visualization:
+```
+Memory Address:  1000   1001   1002   1003
+                ┌──────────────────────────┐
+int age = 25:   │  0  │  0  │  0  │  25  │  ← 4 bytes for int
+                └──────────────────────────┘
+                       variable name "age" points here
+```
+
+---
+
+## 🔷 SECTION 2: Variable Naming Rules (EXAM GOLDMINE)
+
+### ✅ VALID Naming Rules:
+```
+Rule 1: Can use letters (A-Z, a-z), digits (0-9), underscore (_)
+Rule 2: MUST start with a letter OR underscore (_)
+Rule 3: CANNOT start with a digit
+Rule 4: NO spaces allowed
+Rule 5: NO special characters except underscore (_)
+Rule 6: Case-sensitive: 'Age' ≠ 'age' ≠ 'AGE'
+Rule 7: Cannot use C++ reserved/keywords
+Rule 8: No length limit (practically), but keep reasonable
+```
+
+### 📊 VALID vs INVALID — Master Table:
+
+| Variable Name | Valid/Invalid | Reason |
+|---------------|---------------|--------|
+| `age` | ✅ VALID | Letters only |
+| `_age` | ✅ VALID | Starts with underscore |
+| `age_1` | ✅ VALID | Letters + digit + underscore |
+| `Age` | ✅ VALID | Case-sensitive, but valid |
+| `_123` | ✅ VALID | Starts with underscore |
+| `__score` | ✅ VALID | Multiple underscores allowed |
+| `MAX_SIZE` | ✅ VALID | All caps + underscore |
+| `123age` | ❌ INVALID | Starts with digit |
+| `123Variable` | ❌ INVALID | Starts with digit ← **PYQ TRAP** |
+| `my age` | ❌ INVALID | Contains space |
+| `my-age` | ❌ INVALID | Hyphen is not allowed |
+| `int` | ❌ INVALID | Reserved keyword |
+| `float` | ❌ INVALID | Reserved keyword |
+| `my@var` | ❌ INVALID | @ is special character |
+| `2sum` | ❌ INVALID | Starts with digit |
+
+### 🚨 PYQ TRAP #1:
+> **Q: Which of the following is a valid variable name?**
+> `123abc` → INVALID (digit start)
+> `_123abc` → **VALID** (underscore start)
+>
+> Many students confuse these. Underscore at start = VALID!
+
+### 🚨 PYQ TRAP #2:
+> **C++ is case-sensitive.**
+> `int Score = 10;` and `int score = 10;` are TWO DIFFERENT variables.
+> Both can exist in the same program without conflict.
+
+### 📋 Reserved Keywords (Cannot be used as variable names):
+```
+int     float   double  char    bool    void
+if      else    while   for     do      switch
+case    break   return  class   public  private
+protected new   delete  virtual struct  namespace
+```
+
+---
+
+## 🔷 SECTION 3: Data Types in C++ (Deep Dive)
+
+### The Big Picture:
+```
+DATA TYPES IN C++
+├── Primitive (Built-in)
+│   ├── int      → whole numbers
+│   ├── float    → decimal (single precision)
+│   ├── double   → decimal (double precision)
+│   ├── char     → single character
+│   ├── bool     → true/false
+│   └── void     → no value
+├── Derived
+│   ├── array
+│   ├── pointer
+│   └── function
+└── User-Defined
+    ├── class
+    ├── struct
+    ├── union
+    └── enum
+```
+
+### 📊 Master Data Types Table (Memorize This!):
+
+| Data Type | Size (bytes) | Range | Format Specifier |
+|-----------|-------------|-------|-----------------|
+| `char` | 1 | -128 to 127 | %c |
+| `unsigned char` | 1 | 0 to 255 | %c |
+| `short int` | 2 | -32,768 to 32,767 | %hd |
+| `int` | **4** | -2,147,483,648 to 2,147,483,647 | %d |
+| `unsigned int` | 4 | 0 to 4,294,967,295 | %u |
+| `long int` | 4 or 8 | system-dependent | %ld |
+| `long long int` | **8** | very large range | %lld |
+| `float` | **4** | 6–7 decimal digits precision | %f |
+| `double` | **8** | 15–16 decimal digits precision | %lf |
+| `long double` | 12 or 16 | platform-dependent | %Lf |
+| `bool` | **1** | 0 (false) or 1 (true) | %d |
+| `void` | 0 | No value | — |
+
+### 🚨 IMPORTANT: Default sizes on most 32-bit systems:
+```
+char   = 1 byte
+int    = 4 bytes
+float  = 4 bytes
+double = 8 bytes
+bool   = 1 byte
+```
+
+### Deep Dive: Each Data Type
+
+#### 1. `int` — Integer Type
+```cpp
+int marks = 95;      // Whole number, no decimal
+int negative = -50;  // Can be negative
+int zero = 0;
+// Range: -2,147,483,648 to +2,147,483,647 (on 32-bit)
+// Size: 4 bytes (on most systems)
+```
+
+#### 2. `float` — Single Precision Decimal
+```cpp
+float pi = 3.14f;         // 'f' suffix recommended for float
+float temp = 36.6f;
+// Precision: ~6-7 significant digits
+// Size: 4 bytes
+// ⚠️ Precision issue: 0.1 + 0.2 ≠ 0.3 exactly (floating point error)
+```
+
+#### 3. `double` — Double Precision Decimal
+```cpp
+double pi = 3.141592653589793;  // More precise
+double salary = 75000.50;
+// Precision: ~15-16 significant digits
+// Size: 8 bytes
+// PREFERRED over float when high precision needed
+```
+
+#### 4. `char` — Character Type
+```cpp
+char grade = 'A';        // Single character, use single quotes
+char letter = 65;        // Stores ASCII value — same as 'A'
+char newline = '\n';     // Escape sequences also valid
+// Size: 1 byte
+// Stores ASCII values internally (0–127 for basic ASCII)
+```
+
+**ASCII Table Shortcuts (Exam Important):**
+```
+'A' = 65,  'Z' = 90
+'a' = 97,  'z' = 122
+'0' = 48,  '9' = 57
+```
+
+#### 5. `bool` — Boolean Type
+```cpp
+bool isLoggedIn = true;
+bool isEmpty = false;
+// Only two values: true (1) or false (0)
+// Size: 1 byte (even though only 1 bit needed — exam trap!)
+// In conditions: 0 = false, any non-zero = true
+```
+
+**🚨 PYQ TRAP #3:**
+> `bool` takes **1 byte**, NOT 1 bit, even though it only stores 0 or 1.
+> This is a very common exam question!
+
+#### 6. `void` — No Type
+```cpp
+void printHello() {     // Function returns nothing
+    cout << "Hello";
+}
+// void* is a generic pointer (can point to any type)
+// Cannot declare: void x;  ← COMPILATION ERROR
+```
+
+**🚨 PYQ TRAP #4:**
+> You CANNOT declare a variable of type `void`.
+> `void x = 5;` → **Compilation Error**
+> But `void* ptr;` → **Valid** (void pointer)
+
+---
+
+## 🔷 SECTION 4: sizeof() — The Exam Trap Master
+
+### What is sizeof()?
+`sizeof()` is a **compile-time operator** (not a function!) that returns the size in bytes of a data type or variable.
+
+### 🚨 CRITICAL RULE — Most Asked in BPSC PYQs:
+```
+sizeof() does NOT EVALUATE the expression inside it.
+sizeof() only determines the SIZE of the TYPE.
+```
+
+### Examples:
+```cpp
+int a = 5;
+cout << sizeof(a);      // Output: 4 (size of int)
+cout << sizeof(int);    // Output: 4
+cout << sizeof(char);   // Output: 1
+cout << sizeof(float);  // Output: 4
+cout << sizeof(double); // Output: 8
+cout << sizeof(bool);   // Output: 1
+
+// THE TRAP:
+int x = 5;
+cout << sizeof(x++);    // Output: 4 (size of int)
+                        // x is STILL 5 after this!
+                        // sizeof does NOT execute x++
+```
+
+### sizeof() Trap Visual:
+```
+Code: sizeof(x++)
+      ↓
+sizeof looks at TYPE of (x++) → int
+sizeof does NOT run x++
+sizeof returns: 4
+x remains: unchanged (still 5!)
+
+This is the #1 BPSC TRE PYQ trap on sizeof()
+```
+
+### sizeof() with Arrays:
+```cpp
+int arr[5];
+cout << sizeof(arr);           // Output: 20 (5 × 4 bytes)
+cout << sizeof(arr)/sizeof(int); // Output: 5 (number of elements)
+```
+
+### sizeof() with Structures:
+```cpp
+struct Point {
+    int x;   // 4 bytes
+    int y;   // 4 bytes
+};
+cout << sizeof(Point);  // Output: 8 bytes (may vary with padding)
+```
+
+---
+
+## 🔷 SECTION 5: Scope of Variables
+
+### What is Scope?
+**Scope** = the region of a program where a variable is accessible (visible and usable).
+
+### Types of Scope — Diagram:
+```
 ┌─────────────────────────────────────────────────┐
-│  Variable name → acts as label for memory cell   │
-│                                                   │
-│   int age = 25;                                   │
-│       ↑           ↑                               │
-│    name (label)  value stored in memory           │
+│ GLOBAL SCOPE                                    │
+│ int globalVar = 100;    ← accessible everywhere │
+│                                                 │
+│  ┌──────────────────────────────────────────┐   │
+│  │ FUNCTION SCOPE: main()                   │   │
+│  │ int localVar = 10;  ← only inside main() │   │
+│  │                                          │   │
+│  │  ┌──────────────────────────────────┐    │   │
+│  │  │ BLOCK SCOPE: if / for / while    │    │   │
+│  │  │ int blockVar = 5; ← only here    │    │   │
+│  │  └──────────────────────────────────┘    │   │
+│  └──────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────┘
 ```
 
----
-
-### ✅ VALID Naming Rules — The "CAN DO" List
-
-| Rule | Example |
-|------|---------|
-| Can start with a **letter (a-z, A-Z)** | `int age;` ✅ |
-| Can start with an **underscore `_`** | `int _count;` ✅ |
-| Can contain **digits (0-9)** — but NOT at start | `int age25;` ✅ |
-| Can contain **underscore** anywhere | `int my_name;` ✅ |
-| Can be of **any length** | `int totalNumberOfStudents;` ✅ |
-| **Case sensitive** — `Age` ≠ `age` ≠ `AGE` | All three are different variables ✅ |
-
----
-
-### ❌ INVALID Naming Rules — The "CANNOT DO" List
-
-| Rule Violated | Invalid Example | Why Invalid |
-|---------------|----------------|-------------|
-| **Cannot start with a digit** | `123Variable` ❌ | Starts with '1' |
-| **Cannot have spaces** | `my variable` ❌ | Space not allowed |
-| **Cannot use special chars** (except `_`) | `my-var`, `my@var` ❌ | `-` and `@` not allowed |
-| **Cannot be a keyword** | `int`, `float`, `class` ❌ | Reserved by C++ |
-| **Cannot use `$` sign** | `my$var` ❌ | Not allowed in C++ |
-
----
-
-### 🎯 PYQ TRAP — Most Tested Rule
-
-```
-Q: Which of the following is a VALID C++ variable name?
-(A) 123Variable    ← INVALID (starts with digit)
-(B) my variable    ← INVALID (has space)
-(C) int            ← INVALID (keyword)
-(D) _myVar         ← VALID ✅
-(E) my-var         ← INVALID (hyphen not allowed)
-
-Answer: (D)
-```
-
-**Memory Trick:** "Variables must start like names — with a letter or underscore, never a number."
-
----
-
-## 📌 SECTION 2: DATA TYPES IN C++
-
-### Primary / Fundamental Data Types
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    C++ DATA TYPES                                    │
-│                                                                      │
-│   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐           │
-│   │   int    │  │  float   │  │  double  │  │   char   │           │
-│   │ 4 bytes  │  │ 4 bytes  │  │ 8 bytes  │  │ 1 byte   │           │
-│   │Whole nos.│  │Decimals  │  │More prec.│  │Single chr│           │
-│   └──────────┘  └──────────┘  └──────────┘  └──────────┘           │
-│                                                                      │
-│   ┌──────────┐  ┌──────────┐  ┌──────────┐                          │
-│   │   bool   │  │   void   │  │  wchar_t │                          │
-│   │ 1 byte   │  │ 0 bytes  │  │ 2-4 bytes│                          │
-│   │true/false│  │No value  │  │Wide char │                          │
-│   └──────────┘  └──────────┘  └──────────┘                          │
-└─────────────────────────────────────────────────────────────────────┘
-```
-
-### Data Type Size Table (Most PYQ-Tested)
-
-| Data Type | Size (typical 32-bit) | Range | Example |
-|-----------|----------------------|-------|---------|
-| `int` | **4 bytes** | -2,147,483,648 to 2,147,483,647 | `int x = 5;` |
-| `short int` | **2 bytes** | -32,768 to 32,767 | `short x = 100;` |
-| `long int` | **4 or 8 bytes** | Larger than int | `long x = 100000L;` |
-| `float` | **4 bytes** | 6-7 decimal digits precision | `float x = 3.14f;` |
-| `double` | **8 bytes** | 15-16 decimal digits precision | `double x = 3.14;` |
-| `char` | **1 byte** | -128 to 127 (or 0 to 255) | `char c = 'A';` |
-| `bool` | **1 byte** | true or false (1 or 0) | `bool flag = true;` |
-| `void` | **0 bytes** | No value | Return type only |
-
-### Type Modifiers
-
-| Modifier | Effect | Example |
-|----------|--------|---------|
-| `signed` | Can store +ve and -ve | `signed int x;` (default) |
-| `unsigned` | Only +ve values, doubles range | `unsigned int x;` |
-| `short` | Smaller size | `short int x;` |
-| `long` | Larger size | `long int x;` |
-
----
-
-### 🎯 PYQ Trick: float vs double
-
-```
-float  → 4 bytes → ~7 significant digits → single precision
-double → 8 bytes → ~15 significant digits → double precision
-
-Q: Which data type provides MORE precision?
-Answer: double
-```
-
----
-
-## 📌 SECTION 3: `sizeof()` OPERATOR — A PYQ GOLDMINE
-
-### What is `sizeof()`?
-`sizeof()` is a **compile-time unary operator** that returns the size (in bytes) of a data type or variable.
-
-### 🔴 CRITICAL PYQ FACT: sizeof() does NOT EVALUATE expressions!
-
+### 1. Local Variables:
 ```cpp
-int x = 5;
-cout << sizeof(x++);   // Output: 4 (size of int)
-                       // x is STILL 5 after this line!
-                       // x++ is NOT executed!
-```
-
-**Why?** Because `sizeof()` is evaluated at **compile time**, not runtime. The expression inside is never actually run.
-
-### More Examples:
-
-```cpp
-sizeof(int)       → 4
-sizeof(char)      → 1
-sizeof(double)    → 8
-sizeof(float)     → 4
-sizeof(bool)      → 1
-
-int arr[10];
-sizeof(arr)       → 40   (10 × 4 bytes)
-sizeof(arr[0])    → 4    (just one element)
-
-// Number of elements in array:
-int n = sizeof(arr) / sizeof(arr[0]);  // = 40/4 = 10
-```
-
-### PYQ-Style Question:
-
-```
-int a = 3;
-int result = sizeof(a = 7 + 3);
-cout << a;            // Output: 3 (NOT 10!)
-cout << result;       // Output: 4 (size of int)
-
-Explanation: sizeof() does NOT execute 'a = 7 + 3'
-             a remains 3!
-```
-
----
-
-## 📌 SECTION 4: SCOPE OF VARIABLES
-
-### Types of Scope
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                   SCOPE OF VARIABLES                         │
-│                                                              │
-│  ┌──────────────────────┐   ┌──────────────────────────┐   │
-│  │    LOCAL VARIABLE     │   │    GLOBAL VARIABLE        │   │
-│  │                      │   │                          │   │
-│  │ • Declared inside {}  │   │ • Declared outside all   │   │
-│  │ • Only accessible     │   │   functions              │   │
-│  │   within that block   │   │ • Accessible everywhere  │   │
-│  │ • Created when block  │   │ • Default value = 0      │   │
-│  │   starts              │   │ • Lives for entire       │   │
-│  │ • Destroyed when      │   │   program duration       │   │
-│  │   block ends          │   │                          │   │
-│  └──────────────────────┘   └──────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Code Example — Scope in Action:
-
-```cpp
-#include <iostream>
-using namespace std;
-
-int globalVar = 100;   // GLOBAL — accessible everywhere
-
 void myFunction() {
-    int localVar = 50; // LOCAL — only inside myFunction()
-    cout << globalVar; // ✅ Can access global
-    cout << localVar;  // ✅ Can access local
+    int x = 10;   // LOCAL variable
+    // x is only accessible inside myFunction()
+}
+// x is NOT accessible here — compile error if you try
+```
+- Defined inside a function or block
+- Created when function is called, destroyed when function ends
+- Stored in **stack memory**
+- NOT automatically initialized (contains garbage value)
+
+### 2. Global Variables:
+```cpp
+int count = 0;   // GLOBAL variable — defined outside all functions
+
+void increment() {
+    count++;     // Accessible here ✅
 }
 
 int main() {
-    cout << globalVar; // ✅ Can access global
-    // cout << localVar; // ❌ ERROR! localVar not in scope here!
-    
-    {
-        int blockVar = 10; // Block scope variable
-        cout << blockVar;  // ✅ Inside block — OK
+    count = 5;   // Accessible here ✅
+    return 0;
+}
+```
+- Defined outside all functions
+- Accessible throughout the entire program
+- **Automatically initialized to 0** (for numeric types)
+- Stored in **data segment** memory
+
+### 🚨 PYQ TRAP #5: Local vs Global Conflict
+```cpp
+int x = 100;    // Global x
+
+void demo() {
+    int x = 50; // Local x — shadows global x
+    cout << x;  // Prints: 50 (local takes priority)
+    cout << ::x; // Prints: 100 (:: is scope resolution operator → global)
+}
+```
+> **Scope Resolution Operator `::` accesses the global variable when a local variable has the same name.**
+
+### 3. Block Scope:
+```cpp
+int main() {
+    if (true) {
+        int temp = 42;   // Block scope variable
+        cout << temp;    // ✅ Works here
     }
-    // cout << blockVar; // ❌ ERROR! blockVar destroyed after }
-    
+    // cout << temp;     // ❌ ERROR — temp is out of scope
     return 0;
 }
 ```
 
-### When Local and Global have SAME NAME:
-
+### 🚨 PYQ TRAP #6: Loop variable scope
 ```cpp
-int x = 100;  // global
-
-int main() {
-    int x = 50;   // local — SHADOWS the global x
-    cout << x;    // Output: 50 (local takes priority)
-    cout << ::x;  // Output: 100 (:: is scope resolution operator)
-    return 0;
+for (int i = 0; i < 5; i++) {
+    // i is accessible here
 }
+// cout << i;  ← ERROR in C++ (i is out of scope outside for loop)
 ```
+In C++ (C++98 and later), `i` in for-loop is strictly local to the loop.
 
-**PYQ Trick:** `::` (scope resolution operator) is used to access the **global variable** when a local variable has the same name.
+### 4. Function Scope (Labels):
+- Labels (used with `goto`) have function scope
+- Accessible anywhere within that function
+
+### Summary Table:
+
+| Scope Type | Where Defined | Where Accessible | Memory | Default Value |
+|-----------|---------------|-----------------|--------|---------------|
+| Local | Inside function/block | Only inside that block | Stack | Garbage |
+| Global | Outside all functions | Entire program | Data segment | 0 / null |
+| Block | Inside { } block | Only inside { } | Stack | Garbage |
+| Function | Inside function (labels) | Entire function | — | — |
 
 ---
 
-### Types of Storage Classes (Related to Scope):
+## 🔷 SECTION 6: Header Files
 
-| Storage Class | Keyword | Scope | Lifetime | Default Value |
-|---------------|---------|-------|----------|---------------|
-| Automatic | `auto` | Local block | Till block ends | Garbage |
-| Register | `register` | Local block | Till block ends | Garbage |
-| Static | `static` | Local block | Entire program | 0 |
-| External | `extern` | Global | Entire program | 0 |
+### What is a Header File?
+A header file contains **declarations** of functions, classes, constants, and macros that can be shared across multiple source files.
 
-### Static Variable — PYQ Important:
+### Types of Header Files:
 
+```
+HEADER FILES
+├── Standard (Pre-defined) Header Files
+│   ├── No .h extension in modern C++
+│   ├── Example: #include <iostream>
+│   ├── Surrounded by angle brackets < >
+│   └── Come with the C++ standard library
+│
+└── User-Defined Header Files
+    ├── Have .h extension
+    ├── Example: #include "mymath.h"
+    ├── Surrounded by double quotes " "
+    └── Created by the programmer
+```
+
+### Standard Header Files — Exam Important List:
+
+| Header File | Purpose |
+|-------------|---------|
+| `<iostream>` | Input/Output (cin, cout) |
+| `<fstream>` | File handling (ifstream, ofstream) |
+| `<string>` | String operations |
+| `<cmath>` | Math functions (sqrt, pow, sin, cos) |
+| `<cstdlib>` | General utilities (rand, malloc, free) |
+| `<cstring>` | C-style string functions (strcpy, strlen) |
+| `<vector>` | STL vector |
+| `<algorithm>` | sort, find, etc. |
+| `<ctime>` | Time functions |
+| `<cassert>` | Assertions |
+
+### Syntax Difference — KEY EXAM POINT:
 ```cpp
-void counter() {
-    static int count = 0;  // initialized only ONCE
-    count++;
-    cout << count;
-}
+#include <iostream>      // Standard: angle brackets, NO .h
+#include "myHeader.h"    // User-defined: double quotes, WITH .h
+```
 
-int main() {
-    counter();   // Output: 1
-    counter();   // Output: 2
-    counter();   // Output: 3
-    // static variable retains its value between function calls!
-}
+### 🚨 PYQ TRAP #7: Old C headers in C++
+```
+Old C-style:    #include <stdio.h>    ← C style (with .h)
+Modern C++:     #include <cstdio>     ← C++ style (no .h, 'c' prefix)
+
+Both work in C++, but modern C++ prefers the <cstdio> form.
+```
+
+### 🚨 PYQ TRAP #8:
+> **User-defined header files use `.h` extension and double quotes.**
+> `#include "mylib.h"` — the compiler searches the **current directory first**, then the system directories.
+> `#include <iostream>` — searches **system directories only**.
+
+### What goes in a Header File?
+```
+✅ Function declarations (prototypes)
+✅ Class definitions
+✅ Constants (#define, const)
+✅ Macro definitions
+✅ Inline function definitions
+✅ Template definitions
+
+❌ Function definitions (should be in .cpp file to avoid multiple definition errors)
+❌ Global variable definitions (use extern declaration instead)
 ```
 
 ---
 
-## 📌 SECTION 5: HEADER FILES — PYQ IMPORTANT
+## 🔷 SECTION 7: Type Modifiers
 
-### What are Header Files?
-Header files contain **declarations of functions, classes, macros** that you want to use in your program.
+These modify the behavior of basic data types:
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    HEADER FILES                              │
-│                                                              │
-│  Standard Library Headers        User-defined Headers        │
-│  (come with compiler)            (made by programmer)        │
-│                                                              │
-│  #include <iostream>             #include "myfile.h"         │
-│  #include <cmath>                                            │
-│  #include <string>               Use DOUBLE QUOTES ""        │
-│  #include <algorithm>            Use .h extension            │
-│                                                              │
-│  Use ANGLE BRACKETS <>                                       │
-│  No .h extension needed                                      │
-└─────────────────────────────────────────────────────────────┘
-```
+| Modifier | Effect |
+|----------|--------|
+| `signed` | Can hold negative values (default for int) |
+| `unsigned` | Only non-negative values; doubles the positive range |
+| `short` | Reduces size (2 bytes for int) |
+| `long` | Increases size |
 
-### Key Header Files and What They Contain:
-
-| Header File | Contains | Used For |
-|-------------|----------|----------|
-| `<iostream>` | cin, cout, cerr | Input/Output |
-| `<cmath>` | sqrt(), pow(), sin(), log() | Math functions |
-| `<cstring>` | strlen(), strcpy(), strcmp() | String operations |
-| `<cstdlib>` | malloc(), free(), rand(), exit() | Memory, random |
-| `<algorithm>` | sort(), find(), max(), min() | Algorithms |
-| `<vector>` | vector class | Dynamic arrays |
-| `<fstream>` | ifstream, ofstream, fstream | File operations |
-
-### 🎯 PYQ CRITICAL FACT:
-
-```
-User-defined header files use:
-✅ .h extension          →  #include "myheader.h"
-✅ Double quotes ""      →  tells compiler to search in current directory first
-✅ .hpp extension also valid for C++ user headers
-
-Standard library headers:
-✅ Angle brackets < >   →  #include <iostream>
-✅ No extension needed in modern C++
-❌ Old style: #include <iostream.h>  (deprecated in modern C++)
-```
-
----
-
-## 📌 SECTION 6: TYPE CONVERSION / TYPE CASTING
-
-### Implicit (Automatic) Type Conversion:
-
+### Example:
 ```cpp
-int x = 5;
-double y = x;   // int → double automatically
-                // y = 5.0 (implicit conversion)
-
-// Hierarchy: char < int < float < double
-// Lower type is automatically promoted to higher type in expressions
+unsigned int x = 300;  // Range: 0 to 4,294,967,295
+short int y = 100;     // Range: -32,768 to 32,767
+long long int z = 1000000000LL;  // Very large numbers
 ```
 
-### Explicit Type Conversion (Type Casting):
-
+### 🚨 PYQ TRAP #9: unsigned overflow
 ```cpp
-double pi = 3.14159;
-int approx = (int)pi;    // C-style cast → approx = 3 (decimal truncated!)
-int approx2 = int(pi);   // Function-style cast → same result
-
-// C++ Style Casts:
-static_cast<int>(pi);    // Most common — compile-time check
-```
-
-### PYQ-Style:
-
-```
-int x = 7, y = 2;
-double result = x / y;   // What is result?
-
-Answer: 2.0  (NOT 3.5!)
-Reason: Both x and y are int → integer division happens FIRST → 7/2 = 3
-        Then 3 is stored as double → 3.0
-
-To get 3.5:
-double result = (double)x / y;  // Cast first, then divide
+unsigned int x = 0;
+x = x - 1;
+// NOT -1! Wraps around to 4,294,967,295 (max unsigned int)
+// This is called "unsigned integer wrap-around"
 ```
 
 ---
 
-## 📌 SECTION 7: INPUT / OUTPUT IN C++
+## 📊 VISUAL SUMMARY — C++ Data Types Mind Map
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    I/O OPERATORS                             │
-│                                                              │
-│   cin  >> variable    →  EXTRACTION operator >>             │
-│                          Reads FROM keyboard INTO variable   │
-│                                                              │
-│   cout << value       →  INSERTION operator <<              │
-│                          Puts value INTO output stream       │
-│                                                              │
-│   cerr << "error"     →  Error output (not buffered)        │
-│   clog << "log"       →  Log output (buffered)              │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Cascading:
-
-```cpp
-// Multiple inputs:
-cin >> a >> b >> c;    // reads a, then b, then c
-
-// Multiple outputs:
-cout << "a=" << a << " b=" << b << endl;
-```
-
-### endl vs "\n":
-
-| Feature | `endl` | `"\n"` |
-|---------|--------|--------|
-| Purpose | Newline + flush buffer | Newline only |
-| Speed | Slower (flushes) | Faster |
-| Use in exams | Both produce newline | Both produce newline |
-
----
-
-## 📌 SECTION 8: FILE I/O MODES — PYQ TESTED
-
-```cpp
-#include <fstream>
-
-// Open modes:
-ios::in     → Open for reading
-ios::out    → Open for writing (creates file, erases existing content)
-ios::app    → Append — writes at END of file (preserves existing content)
-ios::trunc  → Truncate — erases existing content (default with ios::out)
-ios::binary → Binary mode
-ios::ate    → Opens and moves to END of file
-```
-
-### PYQ Diagram — File Modes:
-
-```
-ios::out         ios::app          ios::in
-┌──────────┐    ┌──────────┐    ┌──────────┐
-│ FILE.TXT │    │ FILE.TXT │    │ FILE.TXT │
-│ [erased] │    │ Hello    │    │ Hello    │
-│ new data │    │ new data │    │ (read)   │
-└──────────┘    └──────────┘    └──────────┘
-Existing data   Data appended   Data read,
-DESTROYED       at end          not modified
-```
-
-### PYQ Trick:
-
-```
-Q: Which mode preserves existing file content when writing?
-Answer: ios::app (append mode)
-
-Q: Which mode is used to read a file?
-Answer: ios::in
-
-Q: Default mode for ofstream?
-Answer: ios::out (creates/overwrites file)
-```
-
----
-
-## 📌 SECTION 9: CONSTANTS IN C++
-
-### Ways to Define Constants:
-
-```cpp
-// Method 1: const keyword (PREFERRED in C++)
-const int MAX = 100;     // Cannot be changed after initialization
-const double PI = 3.14159;
-
-// Method 2: #define preprocessor directive (C-style)
-#define MAX 100          // No type, no semicolon, text replacement
-
-// Method 3: constexpr (C++11 — evaluated at compile time)
-constexpr int SIZE = 256;
-```
-
-### Difference: const vs #define
-
-| Feature | `const` | `#define` |
-|---------|---------|-----------|
-| Type checking | ✅ Has type | ❌ No type |
-| Debugger visible | ✅ Yes | ❌ No |
-| Scope | ✅ Block scope | ❌ File scope |
-| Can be pointer | ✅ Yes | ❌ No |
-| Memory | Stored in memory | Text substitution |
-
----
-
-## 📌 QUICK REVISION DIAGRAM — Day 8 CS Summary
-
-```
-C++ BASICS — TOPPER MIND MAP
-═══════════════════════════════════════════════════════════
-                      C++ BASICS
-                          │
-      ┌───────────────────┼────────────────────┐
-      ↓                   ↓                    ↓
-  VARIABLES           DATA TYPES           SCOPE
-  ─────────          ──────────          ─────────
-  • Must start        • int = 4 bytes     • Local: inside {}
-    with letter       • char = 1 byte     • Global: outside all
-    or underscore     • float = 4 bytes   • Static: retains value
-  • No spaces         • double = 8 bytes  • :: for global access
-  • No special        • bool = 1 byte
-    chars except _    • void = no value
-  • Case sensitive
-      │
-      ↓
-  sizeof()
-  ─────────
-  • Does NOT evaluate
-    expressions inside
-  • Compile-time op
-  • sizeof(int) = 4
-
-      ↓
-  HEADER FILES
-  ─────────────
-  • Standard: <> angle brackets
-  • User-defined: "" double quotes
-  • User files use .h extension
-═══════════════════════════════════════════════════════════
-```
-
----
----
----
-
-# ═══════════════════════════════════════════════
-# 🇮🇳 PART 2: GENERAL STUDIES
-## Modern Indian History — Freedom Struggle Overview
-## (Bihar Focus + National Movement Key Facts)
-# ═══════════════════════════════════════════════
-
----
-
-## 📌 SECTION 1: THE BIG PICTURE — FREEDOM STRUGGLE TIMELINE
-
-```
-MODERN INDIAN HISTORY — KEY TIMELINE
-══════════════════════════════════════════════════════════════════
-1757  ← Battle of Plassey → British power begins in India
-1857  ← First War of Independence (Revolt of 1857)
-1885  ← Indian National Congress (INC) founded
-1905  ← Partition of Bengal → Swadeshi Movement
-1906  ← Muslim League founded (Dhaka)
-1907  ← Surat Split — INC divides into Moderates & Extremists
-1915  ← Gandhi returns to India from South Africa
-1916  ← Lucknow Pact — INC + Muslim League
-1917  ← Champaran Satyagraha (Gandhi's FIRST civil disobedience)
-1919  ← Rowlatt Act + Jallianwala Bagh Massacre
-1920  ← Non-Cooperation Movement
-1922  ← Chauri Chaura → Gandhi withdraws Non-Cooperation
-1923  ← Swaraj Party formed (C.R. Das + Motilal Nehru)
-1927  ← Simon Commission (NO Indian member)
-1929  ← Lahore Session → Purna Swaraj resolution
-1930  ← Civil Disobedience Movement + Dandi March
-1930  ← Round Table Conferences
-1935  ← Government of India Act 1935
-1940  ← August Offer; Pakistan Resolution (Lahore)
-1942  ← Quit India Movement
-1946  ← Cabinet Mission Plan
-1947  ← Independence (Aug 15) + Partition
-══════════════════════════════════════════════════════════════════
-```
-
----
-
-## 📌 SECTION 2: REVOLT OF 1857 — PYQ TESTED FACTS
-
-### Key Facts about 1857 Revolt:
-
-| Aspect | Fact |
-|--------|------|
-| Other names | Sepoy Mutiny (British), First War of Independence |
-| Who called it "First War of Independence"? | **V.D. Savarkar** (in his book) |
-| Immediate cause | Greased cartridges (pig + cow fat) — Enfield rifles |
-| Started at | **Meerut** (May 10, 1857) |
-| Leader at Delhi | **Bahadur Shah Zafar II** |
-| Leader at Kanpur | **Nana Sahib** |
-| Leader at Jhansi | **Rani Lakshmibai** |
-| Leader at Lucknow | **Begum Hazrat Mahal** |
-| Leader at Bihar/Arrah | **Kunwar Singh** (Jagdispur) |
-| Why it failed | Lack of unified leadership; confined to North India |
-| Result | End of East India Company rule → British Crown |
-
-### Bihar in 1857:
-
-```
-Kunwar Singh
-    │
-    ├── Age: 80+ years during revolt (still fought!)
-    ├── Place: Jagdispur, Arrah district, Bihar
-    ├── Fought British and won battles
-    └── Died: April 26, 1858 (after crossing river with wounded arm)
-```
-
----
-
-## 📌 SECTION 3: INDIAN NATIONAL CONGRESS (INC)
-
-| Fact | Detail |
-|------|--------|
-| Founded | **1885** |
-| Founded by | **A.O. Hume** (retired British civil servant) |
-| First session | **Bombay** (December 1885) |
-| First President | **W.C. Bonnerjee** (Womesh Chandra Bonnerjee) |
-| "Grand Old Man of India" | **Dadabhai Naoroji** |
-| First Indian President of INC | W.C. Bonnerjee |
-
-### INC Splits — Moderates vs Extremists:
-
-```
-                    INC (before 1907)
+                    C++ VARIABLES
                          │
-        ┌────────────────┴─────────────────┐
-        ↓                                  ↓
-   MODERATES                          EXTREMISTS
-   ──────────                         ──────────
-   Gopal Krishna Gokhale              Bal Gangadhar Tilak
-   Dadabhai Naoroji                   Bipin Chandra Pal
-   M.G. Ranade                        Lala Lajpat Rai
-                                      (Lal-Bal-Pal trio)
-   Method: Petitions,                 Method: Mass agitation,
-   prayers, memorials                 Swaraj, Swadeshi
-   to British
+          ┌──────────────┼──────────────┐
+          │              │              │
+     NAMING RULES    DATA TYPES       SCOPE
+          │              │              │
+    ┌─────┴─────┐   ┌────┴────┐    ┌───┴───┐
+  Valid      Invalid int    char  Local  Global
+  _age       123age  float  bool  ↓      ↓
+  myVar      my-age  double void  Stack  Data
+  MAX        int     ...        Segment
+                     │
+                  sizeof()
+                     │
+              Returns SIZE only
+              Does NOT evaluate
+              expression inside
+```
 
-   Surat Split (1907) → Two factions separate
+---
+---
+
+# PART 2: GENERAL STUDIES
+## 🏛️ Modern Indian History — Overview (Timeline-Based)
+
+---
+
+## 🔷 WHY THIS MATTERS FOR BPSC TRE:
+- GS section has 40 questions; History typically 6–8 questions
+- Modern History questions are very PYQ-heavy
+- Bihar-specific events have HIGH probability of appearance
+
+---
+
+## 🔷 MODERN INDIAN HISTORY — ERA OVERVIEW
+
+### Timeline Framework:
+```
+1600       1757      1857       1885      1905      1919      1942   1947
+  │          │         │          │         │         │         │      │
+East       Battle   Revolt     INC      Partition  Rowlatt  Quit   Indep-
+India      of       of 1857   founded  of Bengal  Act /    India  endence
+Company    Plassey  (Sepoy                         Jalian-  Move-
+formed             Mutiny)                         wala     ment
+                                                   Bagh
 ```
 
 ---
 
-## 📌 SECTION 4: GANDHI AND SATYAGRAHA MOVEMENTS
-
-### Gandhi's Timeline in India:
+## 🔷 PERIOD 1: ARRIVAL OF EUROPEANS (1498–1757)
 
 | Year | Event |
 |------|-------|
-| 1915 | Returned from South Africa |
-| 1917 | **Champaran Satyagraha** (Bihar) — First civil disobedience |
-| 1918 | Kheda Satyagraha (Gujarat) — farmers' cause |
-| 1919 | Rowlatt Act protest + Khilafat issue |
-| 1920 | Non-Cooperation Movement |
-| 1922 | Withdraws NCM after Chauri Chaura violence |
-| 1930 | Civil Disobedience + **Dandi March** |
-| 1942 | Quit India Movement — "Do or Die" |
+| 1498 | Vasco da Gama reaches India (Calicut) — Portuguese |
+| 1510 | Portuguese capture Goa |
+| 1600 | British East India Company established |
+| 1602 | Dutch East India Company established |
+| 1664 | French East India Company established |
+| 1690 | Calcutta founded by Job Charnock (British) |
+
+### Key Point:
+- Portuguese were the FIRST Europeans to arrive
+- British East India Company was a TRADING company initially
+- Surat was the FIRST factory (1612) established by British
 
 ---
 
-### 🎯 CHAMPARAN SATYAGRAHA 1917 — BPSC Bihar PYQ Focus
+## 🔷 PERIOD 2: ESTABLISHMENT OF BRITISH RULE (1757–1857)
 
+### 2.1 Battle of Plassey — 1757 (MOST ASKED)
 ```
-╔══════════════════════════════════════════════════════════╗
-║           CHAMPARAN SATYAGRAHA (1917)                    ║
-║                                                          ║
-║  Location: Champaran, Bihar                              ║
-║  Issue: Tinkathia System — Indigo farmers forced to      ║
-║         cultivate indigo on 3/20th of their land         ║
-║  Gandhi's role: FIRST visit to Bihar; first              ║
-║         civil disobedience in India                      ║
-║  Who invited Gandhi: Rajkumar Shukla (indigo farmer)     ║
-║  Key associate: Rajendra Prasad (later President)        ║
-║  Result: Champaran Agrarian Act 1918 passed              ║
-║         Tinkathia system abolished                       ║
-╚══════════════════════════════════════════════════════════╝
+Clive (British) vs Siraj-ud-Daula (Bengal)
+↓
+Mir Jafar betrayed Siraj
+↓
+British victory — foundation of British rule in India
+↓
+British controlled Bengal's revenue
 ```
+- **Mir Jafar** = traitor who helped British
+- After Plassey: British got Zamindari rights in Bengal
+
+### 2.2 Battle of Buxar — 1764
+- British (Hector Munro) defeated combined forces of:
+  - Mir Qasim (Bengal)
+  - Shuja-ud-Daula (Awadh)
+  - Shah Alam II (Mughal Emperor)
+- **More significant than Plassey** — confirmed British supremacy
+- Led to Treaty of Allahabad (1765)
+
+### 🚨 PYQ TRAP: Battle of Plassey (1757) vs Buxar (1764)
+> Plassey established British power; Buxar CONFIRMED it.
+> Buxar involved 3 rulers; Plassey only 1.
+
+### 2.3 Important Acts:
+| Act/Regulation | Year | Significance |
+|----------------|------|-------------|
+| Regulating Act | 1773 | First step towards parliamentary control over Company |
+| Pitt's India Act | 1784 | Dual control — Company + British government |
+| Charter Act | 1813 | Ended Company's trade monopoly (except tea and China trade) |
+| Charter Act | 1833 | Company's trading powers abolished; became only administrative |
+| Charter Act | 1853 | Last charter act; introduced competitive exams for civil services |
 
 ---
 
-## 📌 SECTION 5: KEY MOVEMENTS — DETAIL
+## 🔷 PERIOD 3: THE REVOLT OF 1857
 
-### Non-Cooperation Movement (1920–22):
+### Quick Reference:
+```
+Name: "Revolt of 1857" / "Sepoy Mutiny" / "First War of Independence"
+Date Started: May 10, 1857 — Meerut
+Trigger: Greased cartridges (pig/cow fat) in Enfield rifles
+```
 
-| Aspect | Detail |
+### Spread of Revolt — Key Centers:
+| Center | Leader |
 |--------|--------|
-| Started | September 1920 |
-| Slogan | Swaraj within a year |
-| Methods | Boycott of British goods, schools, courts, titles |
-| Ended | February 1922 |
-| Why ended | **Chauri Chaura** incident (Feb 5, 1922) — mob burned police station |
-| INC Session 1922 (Gaya) | President: **Chittaranjan Das** |
+| Delhi | Bahadur Shah Zafar (last Mughal) |
+| Kanpur (Cawnpore) | Nana Sahib |
+| Lucknow | Begum Hazrat Mahal |
+| Jhansi | Rani Laxmibai |
+| Bihar / Jagdishpur | **Kunwar Singh** ← BIHAR FOCUS |
+| Bareilly | Khan Bahadur Khan |
 
-### Civil Disobedience Movement (1930):
+### Bihar Connection — BPSC IMPORTANT:
+> **Kunwar Singh** (from Jagdishpur, Bhojpur district, Bihar) led the revolt in Bihar.
+> He was 80 years old when he fought the British.
+> He is a major folk hero of Bihar — very likely to appear in BPSC TRE!
 
-| Aspect | Detail |
-|--------|--------|
-| Started | March 12, 1930 |
-| Famous event | **Dandi March** (Salt Satyagraha) |
-| Distance | 240 miles, 24 days |
-| Reached Dandi | April 6, 1930 |
-| Associates | Sarojini Naidu, C. Rajagopalachari |
-| Suspended | Gandhi-Irwin Pact (March 1931) |
-
-### Quit India Movement (1942):
-
-| Aspect | Detail |
-|--------|--------|
-| Started | August 8–9, 1942 |
-| Resolution | Bombay session of INC |
-| Slogan | **"Do or Die"** (Karo ya Maro) |
-| Gandhi arrested | August 9, 1942 |
-| Radio announcements | **Aruna Asaf Ali** (hoisted flag at Gowalia Tank) |
-| Underground leader | **JP Narayan** (Jayaprakash Narayan) — Bihar |
+### Results of 1857 Revolt:
+- Company rule ended; Crown/British Parliament took over
+- Governor-General became **Viceroy** (first: Lord Canning)
+- Queen Victoria's Proclamation of 1858
 
 ---
 
-## 📌 SECTION 6: JALLIANWALA BAGH 1919 — PYQ Tested
+## 🔷 PERIOD 4: NATIONAL MOVEMENTS (1885–1947)
 
-| Aspect | Detail |
-|--------|--------|
-| Date | **April 13, 1919** (Baisakhi day) |
-| Location | Amritsar, Punjab |
-| Responsible | General **O'Dwyer** ordered; **General Dyer** executed |
-| Viceroy at the time | **Lord Chelmsford** |
-| Who demanded public apology? | **Rabindranath Tagore** (returned knighthood) |
-| How many killed? | ~400 officially; estimates say 1000+ |
+### 4.1 Indian National Congress (INC) — Founded 1885
+- Founder: **A.O. Hume** (British civil servant)
+- First president: **W.C. Banerjee**
+- First session: **Bombay, December 1885**
+
+### 🚨 Memory Trick:
+> "**A**ll **O**rganizations **H**ave **U**niqueFounders" → A.O. Hume founded INC
+
+### 4.2 Partition of Bengal — 1905
+- By Viceroy **Lord Curzon**
+- Bengal divided into:
+  - East Bengal + Assam (Muslim majority)
+  - West Bengal (Hindu majority)
+- Led to **Swadeshi Movement** and **Boycott Movement**
+- Annulled in **1911** (Delhi Durbar)
+
+### 4.3 Two Factions: Moderates vs Extremists
+
+| Feature | Moderates | Extremists |
+|---------|-----------|-----------|
+| Leaders | Gopal Krishna Gokhale, Dadabhai Naoroji | Bal Gangadhar Tilak, Lala Lajpat Rai, Bipin Chandra Pal |
+| Method | Prayers, petitions, appeals | Mass agitation, passive resistance |
+| Goal | Self-governance within British Empire | Complete Swaraj |
+| Motto | Slow reform | "Swaraj is my birthright" (Tilak) |
+
+**Memory Trick for Extremists: "Lal-Bal-Pal"**
+- **Lal** = Lala Lajpat Rai
+- **Bal** = Bal Gangadhar Tilak
+- **Pal** = Bipin Chandra Pal
+
+### 4.4 Muslim League Founded — 1906
+- Founded at Dhaka
+- Promoted separate political identity for Muslims
+- Key figure: Nawab Salimullah, Aga Khan
+
+### 4.5 Morley-Minto Reforms — 1909
+- Introduced **communal electorate** for Muslims (separate electorates)
+- Very significant — sowed seeds of partition
+
+### 4.6 Lucknow Pact — 1916
+- Agreement between INC and Muslim League
+- Both agreed to work together against British
+- Congress accepted separate electorates for Muslims
+
+### 4.7 Home Rule Movement — 1916
+- **Bal Gangadhar Tilak**: Indian Home Rule League (Poona, April 1916)
+- **Annie Besant**: Home Rule League (Madras, September 1916)
+- Inspired by Irish Home Rule Movement
+- Goal: Self-governance within British Empire
 
 ---
 
-## 📌 SECTION 7: KEY PERSONALITIES — QUICK REFERENCE
+## 🔷 GANDHI ERA (1915–1947) — THE MOST TESTED PERIOD
 
-### National Leaders:
+### Gandhi's Return to India: 1915
 
-| Leader | Key Association |
-|--------|----------------|
-| Bal Gangadhar Tilak | "Swaraj is my birthright"; Home Rule League; "Lokmanya" |
-| Lala Lajpat Rai | "Punjab Kesari"; died after lathi charge during Simon Commission protest |
-| Bipin Chandra Pal | "Thundering Voice of India"; Extremist |
-| Gopal Krishna Gokhale | Gandhi's political guru; Moderate |
-| Subhas Chandra Bose | "Netaji"; INA (Indian National Army) |
-| Bhagat Singh | Executed March 23, 1931; "Inquilab Zindabad" |
-| V.D. Savarkar | Founded **Abhinav Bharat** (London); first called 1857 as War of Independence |
-
-### Bihar-Specific Leaders (HIGH PRIORITY for BPSC):
-
-| Leader | Contribution |
-|--------|-------------|
-| **Rajendra Prasad** | With Gandhi in Champaran; First President of India |
-| **Jayaprakash Narayan (JP)** | Socialist leader; Bihar Socialist Party; Quit India underground hero |
-| **Kunwar Singh** | 1857 revolt hero of Bihar (Jagdispur, Arrah) |
-| **Sachindra Nath Sanyal** | Founded **Anushilan Samiti Patna** (1913) |
-| **Phulan Prasad Varma** | Co-founded Bihar Socialist Party with JP |
-| **Swami Sahajanand Saraswati** | Founded AIKS (All India Kisan Sabha) Bihar branch 1936 |
-| **Gaya Munda** | Commander-in-Chief of Birsa Munda's army |
-
----
-
-## 📌 SECTION 8: REVOLUTIONARY ORGANIZATIONS — PYQ Tested
-
-| Organization | Founded By | Year/Place |
-|-------------|-----------|------------|
-| Anushilan Samiti (Patna) | **Sachindra Nath Sanyal** | **1913** |
-| Abhinav Bharat | **V.D. Savarkar** | **London** |
-| Ghadar Party | Lala Har Dayal | **USA (San Francisco)** |
-| Hindustan Socialist Republican Association | Bhagat Singh, Chandrashekar Azad | 1928 India |
-| Indian National Army (INA) | Rash Behari Bose; Subhas Chandra Bose | Singapore |
-
----
-
-## 📌 SECTION 9: BIHAR PROVINCIAL CONGRESS COMMITTEE
-
+### 4.8 Champaran Satyagraha — 1917 (BIHAR FOCUS!)
 ```
-Bihar Provincial Congress Committee (BPCC)
-├── Founded: 1908
-├── Headquarters: Patna
-├── Key Leaders: Rajendra Prasad, JP Narayan, Anugrah Narayan Sinha
-└── Role: Coordinated freedom struggle activities in Bihar
+Location: Champaran, Bihar
+Issue: Indigo plantation farmers forced under "Tinkathia system"
+       (farmers had to grow indigo on 3/20 parts of their land)
+Gandhi's first Satyagraha in India
+Result: Champaran Agrarian Act (1918) — protection for farmers
 ```
+> **Bihar-specific fact**: Champaran is now split into East and West Champaran districts.
+> Gandhi came to Bihar at the request of **Raj Kumar Shukla** (an indigo farmer).
+> **Very high probability in BPSC TRE!**
 
----
+### 4.9 Kheda Satyagraha — 1918
+- Location: Kheda district, Gujarat
+- Issue: Crop failure, but British demanded full land revenue
+- Gandhi supported farmers demanding revenue remission
+- Result: British suspended revenue collection
 
-## 📌 SECTION 10: INC SESSIONS — BPSC PYQ Tested
+### 4.10 Ahmedabad Mill Strike — 1918
+- Gandhi's first hunger strike
+- Mill workers demanded 35% wage hike
+- Result: 35% increase granted
 
-| Year | Place | President | Key Event |
-|------|-------|-----------|-----------|
-| 1885 | Bombay | W.C. Bonnerjee | First session |
-| 1907 | Surat | — | Great Split (Moderates vs Extremists) |
-| 1916 | Lucknow | — | Lucknow Pact with Muslim League |
-| 1920 | Nagpur | C. Vijayaraghavachariar | Non-Cooperation resolution |
-| 1922 | **Gaya** | **Chittaranjan Das** | After Chauri Chaura |
-| 1929 | Lahore | **Jawaharlal Nehru** | Purna Swaraj resolution |
-| 1931 | Karachi | **Sardar Patel** | Fundamental Rights resolution |
+### 4.11 Rowlatt Act — 1919
+- Allowed imprisonment without trial
+- Gandhi called it "Black Act"
+- Led to nationwide hartal (April 6, 1919)
 
----
-
-## 📌 SECTION 11: PARTITION OF BENGAL + SWADESHI
-
-| Aspect | Detail |
-|--------|--------|
-| Announced by | Lord **Curzon** |
-| Date | **October 16, 1905** |
-| Reason | Administrative (real: divide Hindu-Muslim Bengal) |
-| Result | Mass protests → **Swadeshi Movement** |
-| Annulled | **1911** (Delhi Durbar) |
-| Method | Boycott of British goods; use of Indian goods (Swadeshi) |
-| Who tied Rakhi (Aug 16, 1905) | **Rabindranath Tagore** — as symbol of Hindu-Muslim unity |
-
----
-
-## 📌 SECTION 12: MISCELLANEOUS PYQ-READY FACTS
-
-| Question Type | Answer |
-|---------------|--------|
-| First Bhojpuri film | **Ganga Maiya Tohe Piyari Chadhaibo** (1963) |
-| "Vande Mataram" from which book? | **Anandamath** by Bankim Chandra Chattopadhyay |
-| Sannyasi Revolt mentioned in | **Anandamath** |
-| "Sare Jahan Se Accha" written by | **Allama Iqbal** |
-| Indian National Anthem written by | **Rabindranath Tagore** |
-| Bardoli Satyagraha led by | **Sardar Vallabhbhai Patel** |
-| Home Rule Movement started by | Bal Gangadhar Tilak + Annie Besant (NOT Sarojini Naidu) |
-| First woman President of INC | **Annie Besant** (1917) |
-| Dandi March companion (famous woman) | **Sarojini Naidu** |
-| "Father of Indian Unrest" | Bal Gangadhar Tilak (given by British Viceroy) |
-| Speed of electron in hydrogen orbit | c/137 (GS Science PYQ — appears in Physics section) |
-
----
-
-## 📌 GS QUICK REVISION DIAGRAM
-
+### 4.12 Jallianwala Bagh Massacre — April 13, 1919
 ```
-MODERN INDIAN HISTORY — KEY FRAMEWORK
-══════════════════════════════════════════════════════════
-PHASE 1: EARLY RESISTANCE
-   1857 Revolt → Kunwar Singh (Bihar) → Bahadur Shah Zafar
+Date: April 13, 1919 (Baisakhi Day)
+Location: Amritsar, Punjab
+Commander: General Reginald Dyer
+Victims: Hundreds killed (official 379, actual much higher)
+Context: Crowd gathered to protest Rowlatt Act
+Result: Led to Non-Cooperation Movement
+```
+> **Memory Trick**: 13 April 1919 → Today is April 13, 2026 → exactly 107 years ago!
 
-PHASE 2: MODERATE PHASE (1885–1905)
-   INC founded → W.C. Bonnerjee → Gokhale, Naoroji
-   Method: Petitions and prayers
+### Rabindranath Tagore's Response:
+- Tagore returned his **Knighthood** in protest
 
-PHASE 3: EXTREMIST + SWADESHI (1905–1919)
-   Partition of Bengal (1905) → Swadeshi
-   Lal-Bal-Pal → Mass agitation
-   Surat Split (1907)
+### 4.13 Non-Cooperation Movement — 1920–1922
+- Launched by Gandhi at Calcutta session of INC (September 1920)
+- Methods: Boycott of schools, courts, foreign goods, government jobs
+- **Suspension**: After **Chauri Chaura incident** (February 5, 1922)
+  - Chauri Chaura: UP village where crowd burned police station, killed 22 policemen
+  - Gandhi suspended movement immediately due to violence
 
-PHASE 4: GANDHI ERA (1915–1942)
-   1917: Champaran (Bihar) ← FIRST civil disobedience
-   1919: Rowlatt + Jallianwala Bagh (Viceroy: Chelmsford)
-   1920: Non-Cooperation → Chauri Chaura → Withdrawn 1922
-   1930: Civil Disobedience + Dandi March
-   1942: Quit India → JP Narayan underground (Bihar)
+### 4.14 Swaraj Party — 1923
+- Founded by **C.R. Das** and **Motilal Nehru**
+- They disagreed with Gandhi's suspension of movement
+- Goal: Enter councils and obstruct British from within
 
-PHASE 5: INDEPENDENCE (1947)
-   Cabinet Mission → Mountbatten Plan → Independence Aug 15
-══════════════════════════════════════════════════════════
+### 4.15 Simon Commission — 1927–1928
+- 7-member all-British commission to review Indian constitution
+- No Indian members → Indians protested
+- **"Simon Go Back"** slogan
+- **Lala Lajpat Rai** injured in police lathi charge during protest in Lahore
+- Lala Lajpat Rai later died from injuries → called "Punjab Kesari"
+
+### 4.16 Nehru Report — 1928
+- INC's constitutional proposal
+- Demanded **Dominion Status** (not full independence)
+- Authored by **Motilal Nehru**
+
+### 4.17 Lahore Session — December 1929 (VERY IMPORTANT)
+```
+President: Jawaharlal Nehru
+Resolution: Poorna Swaraj (Complete Independence)
+Date: December 31, 1929 — midnight resolution
+Result: January 26, 1930 declared as "Independence Day"
+        (This is why January 26 is Republic Day)
 ```
 
----
----
----
-
-# ═══════════════════════════════════════════════
-# 📝 PRACTICE QUESTIONS
-# ═══════════════════════════════════════════════
-
-> **⚠️ INSTRUCTIONS:** Solve ALL questions FIRST before looking at answers.
-> Answers are given at the VERY END of this file.
-> Cover the answer section while solving!
-
----
-
-## 💻 CS PRACTICE QUESTIONS (Day 8) — 25 Questions
-### Topic: C++ Basics — Variables, Data Types, sizeof(), Scope, Header Files
-
----
-
-**Q1.** Which of the following is a valid C++ variable name?
-- (A) 2myVar
-- (B) my var
-- (C) _count
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q2.** What is the size of `double` data type in C++?
-- (A) 2 bytes
-- (B) 4 bytes
-- (C) 8 bytes
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q3.** Consider: `int x = 5; int result = sizeof(x++);`. After this statement, what is the value of `x`?
-- (A) 6
-- (B) 5
-- (C) Undefined behavior
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q4.** Which header file is required to use `sqrt()` function in C++?
-- (A) `<math.h>` (C-style)
-- (B) `<cmath>`
-- (C) `<stdlib.h>`
-- (D) More than one of the above (A and B both can be used)
-- (E) None of the above
-
----
-
-**Q5.** User-defined header files in C++ use which extension?
-- (A) `.cpp`
-- (B) `.h`
-- (C) `.obj`
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q6.** Which of the following are valid C++ keywords that CANNOT be used as variable names?
-- (A) `int`
-- (B) `class`
-- (C) `return`
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q7.** What will be the output of the following code?
-```cpp
-int a = 10;
-{
-    int a = 20;
-    cout << a;
-}
-cout << a;
+### 4.18 Civil Disobedience Movement & Salt March — 1930
 ```
-- (A) 10 10
-- (B) 20 10
-- (C) 20 20
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q8.** What is the output of `sizeof(char)`?
-- (A) 2
-- (B) 4
-- (C) 1
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q9.** Which of the following is used to include a standard library header file in C++?
-- (A) `#include "iostream"`
-- (B) `#include <iostream>`
-- (C) `import iostream`
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q10.** What is the default value of an uninitialized **global** integer variable in C++?
-- (A) Garbage value
-- (B) -1
-- (C) 0
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q11.** Consider this code:
-```cpp
-void counter() {
-    static int n = 0;
-    n++;
-    cout << n << " ";
-}
-int main() { counter(); counter(); counter(); }
+Date: March 12 – April 6, 1930
+Route: Sabarmati Ashram to Dandi (Gujarat coast)
+Distance: 241 miles (12 days)
+Purpose: To break Salt Law (British monopoly on salt)
+April 6, 1930: Gandhi makes salt at Dandi → Civil Disobedience begins
 ```
-What is the output?
-- (A) 1 1 1
-- (B) 0 1 2
-- (C) 1 2 3
-- (D) More than one of the above
-- (E) None of the above
+- **Gandhi-Irwin Pact (1931)**: Truce between Gandhi and Viceroy Irwin
+  - Movement suspended
+  - Gandhi attended 2nd Round Table Conference
 
----
+### 4.19 Round Table Conferences:
+| Conference | Year | Gandhi's Participation |
+|------------|------|----------------------|
+| 1st RTC | 1930 | No (in jail) |
+| 2nd RTC | 1931 | Yes |
+| 3rd RTC | 1932 | No (in jail) |
 
-**Q12.** Which operator is used to access a global variable when a local variable has the same name?
-- (A) `.` (dot operator)
-- (B) `->` (arrow operator)
-- (C) `::` (scope resolution operator)
-- (D) More than one of the above
-- (E) None of the above
+### 4.20 Poona Pact — 1932
+- Between Gandhi and B.R. Ambedkar
+- Context: Communal Award gave separate electorates to Dalits
+- Gandhi went on hunger strike against separate electorates for Dalits
+- Result: Dalits got reserved seats within general electorate (not separate)
 
----
-
-**Q13.** Which of the following data types can hold the value `true` or `false`?
-- (A) `int`
-- (B) `bool`
-- (C) `char`
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q14.** What is the output of the following code?
-```cpp
-int x = 7, y = 2;
-float result = x / y;
-cout << result;
+### 4.21 Quit India Movement — August 9, 1942
 ```
-- (A) 3.5
-- (B) 3
-- (C) 3.0
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q15.** Which of the following are characteristics of a `static` local variable?
-- (A) It is initialized only once
-- (B) It retains its value between function calls
-- (C) Its default value is 0
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q16.** What is the output size of `int arr[5]` using `sizeof(arr)`?
-- (A) 5
-- (B) 10
-- (C) 20
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q17.** Which C++ file I/O mode appends data at the end of an existing file without destroying its contents?
-- (A) `ios::out`
-- (B) `ios::in`
-- (C) `ios::app`
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q18.** Which of the following variable names is **INVALID** in C++?
-- (A) `_total`
-- (B) `Total_marks`
-- (C) `123abc`
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q19.** `sizeof()` operator in C++ is evaluated at:
-- (A) Runtime
-- (B) Compile time
-- (C) Link time
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q20.** Which of the following is the correct way to include a user-defined header file named `mylib.h`?
-- (A) `#include <mylib.h>`
-- (B) `#include "mylib.h"`
-- (C) `#include mylib.h`
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q21.** What is the output of this code?
-```cpp
-int a = 10;
-int b = sizeof(a = 50);
-cout << a << " " << b;
+Date: August 9, 1942 — "August Kranti Diwas"
+Venue: Bombay (Gowalia Tank Maidan)
+Gandhi's call: "Do or Die" (Karo ya Maro)
+Leaders arrested: Gandhi, Nehru, Patel — all imprisoned immediately
+Underground leaders: Aruna Asaf Ali (hoisted INC flag at Gowalia Tank)
+JP (Jayaprakash Narayan) led underground movement
+Bihar's role: VERY strong participation — Hazaribagh jail break by JP
 ```
-- (A) 50 4
-- (B) 10 4
-- (C) 10 2
-- (D) More than one of the above
-- (E) None of the above
+
+> **Bihar Connection**: JP (Jayaprakash Narayan) escaped Hazaribagh Central Jail on November 9, 1942 during Quit India Movement. **High BPSC probability!**
+
+### 4.22 INA (Indian National Army) — 1942
+- Founded by **Subhas Chandra Bose** (Netaji)
+- Earlier started by **Mohan Singh** in 1942
+- Bose reorganized it after "Forward Bloc" (1939)
+- Azad Hind Fauj slogan: "Jai Hind", "Dilli Chalo"
+
+### 4.23 Cabinet Mission Plan — 1946
+- Three-tier federal structure proposed
+- Goal: United India with some autonomy to provinces
+- Both INC and Muslim League initially accepted, then disputes arose
+
+### 4.24 Independence — 1947
+```
+August 15, 1947: India's Independence
+First PM: Jawaharlal Nehru
+First President: Dr. Rajendra Prasad (Bihar's own!)
+First Governor-General: Lord Mountbatten
+First Indian Governor-General: C. Rajagopalachari (Chakravarti Rajagopalachari)
+```
+
+> **Bihar Connection**: **Dr. Rajendra Prasad** — first President of India — was from **Zeradei, Siwan, Bihar**.
+> He presided over the Constituent Assembly that drafted the Constitution.
+> **Extremely high BPSC probability!**
 
 ---
 
-**Q22.** Which of the following correctly declares a constant in C++?
-- (A) `const int MAX = 100;`
-- (B) `#define MAX 100`
-- (C) `constexpr int MAX = 100;`
-- (D) More than one of the above
-- (E) None of the above
+## 🔷 KEY ACTS & THEIR SIGNIFICANCE — MASTER TABLE:
+
+| Act/Event | Year | Key Point |
+|-----------|------|-----------|
+| Regulating Act | 1773 | First parliamentary oversight |
+| Pitt's India Act | 1784 | Board of Control established |
+| Government of India Act | 1858 | Company rule ended, Crown took over |
+| Indian Councils Act | 1861 | Indians nominated to councils |
+| Indian Councils Act | 1892 | Limited elections introduced |
+| Morley-Minto Reforms | 1909 | Separate communal electorates |
+| Montagu-Chelmsford Reforms | 1919 | Dyarchy introduced |
+| Government of India Act | 1935 | Provincial autonomy; All-India federation |
+| Indian Independence Act | 1947 | Independence + Partition |
 
 ---
 
-**Q23.** The `>>` operator in `cin >> x` is called:
-- (A) Insertion operator
-- (B) Extraction operator
-- (C) Shift operator
-- (D) More than one of the above
-- (E) None of the above
+# PART 3: PRACTICE QUESTIONS
+
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: Naming Rules, Data Types, sizeof(), Scope, Header Files
 
 ---
 
-**Q24.** Which of the following are true about the `void` data type?
-- (A) It represents absence of a value
-- (B) It is used as a return type for functions that return nothing
-- (C) You cannot declare a variable of type `void`
-- (D) More than one of the above
-- (E) None of the above
+**Q1.** Which of the following is a VALID variable name in C++?
+(A) `123abc`
+(B) `my-var`
+(C) `_myVar`
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q25.** In C++, which of the following is NOT a valid way to initialize a variable?
-- (A) `int x = 5;`
-- (B) `int x(5);`
-- (C) `int x{5};`
-- (D) More than one of the above
-- (E) None of the above (All are valid)
+**Q2.** Which of the following variable names is INVALID in C++?
+(A) `_123`
+(B) `value_1`
+(C) `MAX_SIZE`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q3.** What is the size of `int` data type on a typical 32-bit system in C++?
+(A) 1 byte
+(B) 2 bytes
+(C) 4 bytes
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q4.** Consider: `int x = 5; cout << sizeof(x++);` What is the output?
+(A) 5
+(B) 6
+(C) 4
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q5.** After executing `int x = 5; sizeof(x++);`, what is the value of `x`?
+(A) 6
+(B) 5
+(C) Undefined behavior
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q6.** Which header file is used for input/output operations in C++?
+(A) `<stdio.h>`
+(B) `<iostream>`
+(C) `<fstream>`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q7.** Which of the following correctly includes a user-defined header file?
+(A) `#include <myheader.h>`
+(B) `#include "myheader.h"`
+(C) `#include myheader.h`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q8.** What is the size of `bool` data type in C++?
+(A) 1 bit
+(B) 1 byte
+(C) 4 bytes
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q9.** Which of the following CANNOT be used as a variable name in C++?
+(A) `_int`
+(B) `Int`
+(C) `int`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q10.** What is the output of `cout << sizeof(double);` on a typical system?
+(A) 4
+(B) 6
+(C) 8
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q11.** A global variable in C++ is automatically initialized to:
+(A) Garbage value
+(B) -1
+(C) 0 (for numeric types)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q12.** Which of the following statements about `void` is correct?
+(A) You can declare a `void` variable
+(B) `void*` is a valid pointer type
+(C) void function must return an int
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q13.** In C++, `char` can store which of the following?
+(A) A single character
+(B) An ASCII value (integer)
+(C) An escape sequence like `'\n'`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q14.** Which operator is used to access a global variable when a local variable has the same name?
+(A) `.` (dot operator)
+(B) `->` (arrow operator)
+(C) `::` (scope resolution operator)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q15.** What is the range of `unsigned char` in C++?
+(A) -128 to 127
+(B) 0 to 255
+(C) -256 to 255
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q16.** Which of the following is TRUE about `sizeof()`?
+(A) It is a function
+(B) It evaluates the expression inside and returns result
+(C) It is a compile-time operator
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q17.** What is the difference between `float` and `double` in C++?
+(A) float is 4 bytes; double is 8 bytes
+(B) float has less precision than double
+(C) double is the default floating point type
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q18.** A variable declared inside a `for` loop in C++ is accessible:
+(A) Throughout the entire function
+(B) Only within that for loop
+(C) Globally, once the loop runs once
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q19.** Which of the following is a valid declaration in C++?
+(A) `void x = 10;`
+(B) `void* ptr;`
+(C) `void func;`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q20.** `sizeof(int arr[5]) / sizeof(int)` gives:
+(A) 4
+(B) 5
+(C) 20
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q21.** Which of the following is correct about variable naming in C++?
+(A) Variable names are case-insensitive
+(B) `score` and `Score` are different variables
+(C) Variable names can start with a digit
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q22.** Which standard header file is used for mathematical functions like `sqrt()` in C++?
+(A) `<math.h>` only
+(B) `<cmath>`
+(C) `<algorithm>`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q23.** What happens when you declare a local variable with the same name as a global variable?
+(A) Compilation error
+(B) Both variables coexist; local takes priority inside its scope
+(C) Global variable is deleted
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q24.** The ASCII value of character `'A'` is:
+(A) 97
+(B) 65
+(C) 48
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q25.** Which of the following data types can store the value `true` or `false` in C++?
+(A) `int`
+(B) `bool`
+(C) `char`
+(D) More than one of the above
+(E) None of the above
 
 ---
 ---
 
-## 🇮🇳 GS PRACTICE QUESTIONS (Day 8) — 25 Questions
-### Topic: Modern Indian History — Freedom Struggle
+## 📝 GENERAL STUDIES — 25 MCQs
+### Modern Indian History — Overview
 
 ---
 
-**Q26.** The First War of Independence (1857) was first described as such by:
-- (A) Bal Gangadhar Tilak
-- (B) Mahatma Gandhi
-- (C) V.D. Savarkar
-- (D) More than one of the above
-- (E) None of the above
+**Q26.** Who founded the Indian National Congress in 1885?
+(A) Bal Gangadhar Tilak
+(B) Dadabhai Naoroji
+(C) A.O. Hume
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q27.** Who was the first President of the Indian National Congress (INC)?
-- (A) Dadabhai Naoroji
-- (B) Gopal Krishna Gokhale
-- (C) W.C. Bonnerjee
-- (D) More than one of the above
-- (E) None of the above
+**Q27.** The Battle of Plassey was fought in:
+(A) 1764
+(B) 1757
+(C) 1775
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q28.** The Champaran Satyagraha of 1917 was related to:
-- (A) Salt tax
-- (B) Forced cultivation of indigo — Tinkathia system
-- (C) Zamindari system
-- (D) More than one of the above
-- (E) None of the above
+**Q28.** Who was the British commander who won the Battle of Buxar (1764)?
+(A) Robert Clive
+(B) Hector Munro
+(C) Lord Dalhousie
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q29.** Who invited Mahatma Gandhi to Champaran?
-- (A) Rajendra Prasad
-- (B) Rajkumar Shukla
-- (C) JP Narayan
-- (D) More than one of the above
-- (E) None of the above
+**Q29.** The Jallianwala Bagh massacre occurred on:
+(A) August 9, 1942
+(B) March 12, 1930
+(C) April 13, 1919
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q30.** The Non-Cooperation Movement was withdrawn by Gandhi because of:
-- (A) Dandi March
-- (B) Jallianwala Bagh massacre
-- (C) Chauri Chaura incident
-- (D) More than one of the above
-- (E) None of the above
+**Q30.** Which freedom fighter is known for leading the revolt of 1857 in Bihar?
+(A) Mangal Pandey
+(B) Nana Sahib
+(C) Kunwar Singh
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q31.** Who founded the Anushilan Samiti in Patna in 1913?
-- (A) Bhagat Singh
-- (B) Sachindra Nath Sanyal
-- (C) V.D. Savarkar
-- (D) More than one of the above
-- (E) None of the above
+**Q31.** The slogan "Swaraj is my birthright and I shall have it" was given by:
+(A) Mahatma Gandhi
+(B) Lala Lajpat Rai
+(C) Bal Gangadhar Tilak
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q32.** The Ghadar Party was established in:
-- (A) England
-- (B) Canada
-- (C) USA
-- (D) More than one of the above
-- (E) None of the above
+**Q32.** The Champaran Satyagraha (1917) was related to which issue?
+(A) Salt tax
+(B) Forced indigo cultivation under Tinkathia system
+(C) Communal representation
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q33.** Who was the Viceroy of India during the Jallianwala Bagh massacre (1919)?
-- (A) Lord Curzon
-- (B) Lord Chelmsford
-- (C) Lord Mountbatten
-- (D) More than one of the above
-- (E) None of the above
+**Q33.** The Non-Cooperation Movement was suspended due to:
+(A) Gandhi's arrest
+(B) Chauri Chaura incident
+(C) Partition of Bengal
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q34.** The Abhinav Bharat society was founded by:
-- (A) Lala Lajpat Rai
-- (B) V.D. Savarkar
-- (C) Bal Gangadhar Tilak
-- (D) More than one of the above
-- (E) None of the above
+**Q34.** Who was the first President of the Indian National Congress?
+(A) A.O. Hume
+(B) Dadabhai Naoroji
+(C) W.C. Banerjee
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q35.** The INC session held at Gaya in 1922 was presided over by:
-- (A) Jawaharlal Nehru
-- (B) Mahatma Gandhi
-- (C) Chittaranjan Das
-- (D) More than one of the above
-- (E) None of the above
+**Q35.** Which Viceroy was responsible for the Partition of Bengal in 1905?
+(A) Lord Mountbatten
+(B) Lord Curzon
+(C) Lord Dalhousie
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q36.** Which of the following leaders were associated with the founding of Bihar Socialist Party?
-- (A) Phulan Prasad Varma
-- (B) Jayaprakash Narayan
-- (C) Swami Sahajanand Saraswati
-- (D) More than one of the above
-- (E) None of the above
+**Q36.** The Lahore Session of INC (1929) was presided over by:
+(A) Mahatma Gandhi
+(B) Motilal Nehru
+(C) Jawaharlal Nehru
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q37.** The Partition of Bengal was announced by Lord:
-- (A) Wellesley
-- (B) Dalhousie
-- (C) Curzon
-- (D) More than one of the above
-- (E) None of the above
+**Q37.** The Dandi March covered a distance of approximately:
+(A) 100 miles
+(B) 200 miles
+(C) 241 miles
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q38.** The first Bhojpuri film was:
-- (A) Nadiya Ke Paar
-- (B) Ganga Maiya Tohe Piyari Chadhaibo
-- (C) Hum Hain Rahi Pyar Ke
-- (D) More than one of the above
-- (E) None of the above
+**Q38.** Who gave the call "Do or Die" during the Quit India Movement?
+(A) Subhas Chandra Bose
+(B) Jawaharlal Nehru
+(C) Mahatma Gandhi
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q39.** The novel "Anandamath" written by Bankim Chandra Chattopadhyay mentions:
-- (A) Champaran Satyagraha
-- (B) Sannyasi Revolt
-- (C) Quit India Movement
-- (D) More than one of the above
-- (E) None of the above
+**Q39.** The Regulating Act of 1773 was significant because:
+(A) It ended East India Company's rule
+(B) It was the first step toward parliamentary control of Company
+(C) It introduced communal electorates
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q40.** Who was the Commander-in-Chief of Birsa Munda's army?
-- (A) Sidhu
-- (B) Gaya Munda
-- (C) Kanhu
-- (D) More than one of the above
-- (E) None of the above
+**Q40.** Who among the following is associated with the "Lal-Bal-Pal" trio?
+(A) Lala Lajpat Rai, Bal Gangadhar Tilak, Bipin Chandra Pal
+(B) Lal Bahadur Shastri, Bal Thackeray, Palaniswami
+(C) Leaders of Moderate faction
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q41.** The Quit India Movement (1942) was launched from:
-- (A) Calcutta
-- (B) Delhi
-- (C) Bombay (Gowalia Tank Maidan)
-- (D) More than one of the above
-- (E) None of the above
+**Q41.** The Poona Pact (1932) was an agreement between:
+(A) Gandhi and Lord Irwin
+(B) Gandhi and B.R. Ambedkar
+(C) Congress and Muslim League
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q42.** Who hoisted the Indian flag at Gowalia Tank during Quit India Movement?
-- (A) Sarojini Naidu
-- (B) Aruna Asaf Ali
-- (C) Vijay Lakshmi Pandit
-- (D) More than one of the above
-- (E) None of the above
+**Q42.** Arrange the following events in CHRONOLOGICAL ORDER:
+1. Quit India Movement
+2. Civil Disobedience Movement
+3. Non-Cooperation Movement
+4. Partition of Bengal
+
+(A) 4 → 3 → 2 → 1
+(B) 3 → 4 → 2 → 1
+(C) 4 → 2 → 3 → 1
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q43.** The Bihar Provincial Congress Committee was founded in:
-- (A) 1905
-- (B) 1908
-- (C) 1915
-- (D) More than one of the above
-- (E) None of the above
+**Q43.** The first session of INC was held in:
+(A) Calcutta
+(B) Lahore
+(C) Bombay
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q44.** Who was the leader of 1857 revolt in Bihar (Jagdispur)?
-- (A) Mangal Pandey
-- (B) Bahadur Shah Zafar
-- (C) Kunwar Singh
-- (D) More than one of the above
-- (E) None of the above
+**Q44.** Which act introduced the concept of "Dyarchy" in Indian provinces?
+(A) Morley-Minto Reforms, 1909
+(B) Montagu-Chelmsford Reforms, 1919
+(C) Government of India Act, 1935
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q45.** The Dandi March (Salt Satyagraha) began on:
-- (A) January 26, 1930
-- (B) March 12, 1930
-- (C) August 9, 1942
-- (D) More than one of the above
-- (E) None of the above
+**Q45.** Who invited Gandhi to Bihar for the Champaran Satyagraha?
+(A) Rajendra Prasad
+(B) Raj Kumar Shukla
+(C) Brij Kishore Prasad
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q46.** The "Grand Old Man of India" was:
-- (A) Gopal Krishna Gokhale
-- (B) W.C. Bonnerjee
-- (C) Dadabhai Naoroji
-- (D) More than one of the above
-- (E) None of the above
+**Q46.** Vasco da Gama arrived in India at which port?
+(A) Mumbai
+(B) Surat
+(C) Calicut (Kozhikode)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q47.** The Bardoli Satyagraha was led by:
-- (A) Mahatma Gandhi
-- (B) Jawaharlal Nehru
-- (C) Sardar Vallabhbhai Patel
-- (D) More than one of the above
-- (E) None of the above
+**Q47.** The Swaraj Party was founded in 1923 by:
+(A) Bal Gangadhar Tilak and Lala Lajpat Rai
+(B) C.R. Das and Motilal Nehru
+(C) Gandhi and Nehru
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q48.** Rabindranath Tagore returned his knighthood in protest against:
-- (A) Partition of Bengal (1905)
-- (B) Jallianwala Bagh massacre (1919)
-- (C) Non-Cooperation Movement
-- (D) More than one of the above
-- (E) None of the above
+**Q48.** Rabindranath Tagore returned his knighthood as a protest against:
+(A) Partition of Bengal
+(B) Rowlatt Act
+(C) Jallianwala Bagh Massacre
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q49.** All India Kisan Sabha Bihar branch was founded in 1936 by:
-- (A) Rajendra Prasad
-- (B) JP Narayan
-- (C) Swami Sahajanand Saraswati
-- (D) More than one of the above
-- (E) None of the above
+**Q49.** Who was the first Indian Governor-General of independent India?
+(A) Jawaharlal Nehru
+(B) C. Rajagopalachari
+(C) Lord Mountbatten
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q50.** The Home Rule Movement was associated with which leaders?
-- (A) Bal Gangadhar Tilak
-- (B) Annie Besant
-- (C) Sarojini Naidu
-- (D) More than one of the above (A and B)
-- (E) None of the above
+**Q50.** The first President of independent India, Dr. Rajendra Prasad, was from which district of Bihar?
+(A) Patna
+(B) Bhojpur
+(C) Siwan
+(D) More than one of the above
+(E) None of the above
 
 ---
 ---
----
 
-# ═══════════════════════════════════════════════
-# ✅ ANSWER KEY
-# ═══════════════════════════════════════════════
+# ANSWER KEY
 
-> **STOP! Do not read below until you have answered ALL 50 questions!**
+## ⚠️ Note: DO NOT look at answers before attempting all 50 questions!
 
 ---
 
-## 💻 CS ANSWERS (Q1–Q25)
+### CS Answers (Q1–Q25):
 
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| Q1 | **(C)** | `_count` is valid — starts with underscore. `2myVar` starts with digit (invalid). `my var` has space (invalid). |
-| Q2 | **(C)** | `double` = **8 bytes** (15–16 significant digits). `float` = 4 bytes. |
-| Q3 | **(B)** | `sizeof()` does NOT evaluate `x++`. x remains **5**. This is the most important PYQ fact about sizeof(). |
-| Q4 | **(D)** | Both `<math.h>` (C-style) and `<cmath>` (C++ style) can be used — **more than one correct**. |
-| Q5 | **(B)** | User-defined headers use `.h` extension. Standard C++ headers use no extension. |
-| Q6 | **(D)** | `int`, `class`, AND `return` are ALL keywords — **more than one correct**. |
-| Q7 | **(B)** | Inner block's `a` (=20) shadows outer. Prints 20, then block ends, outer `a` (=10) prints. Output: **20 10**. |
-| Q8 | **(C)** | `sizeof(char)` = **1 byte** (always, by C++ standard). |
-| Q9 | **(B)** | Standard headers use angle brackets: `#include <iostream>`. Double quotes are for user-defined files. |
-| Q10 | **(C)** | Global variables are automatically initialized to **0** in C++. Local variables have garbage values. |
-| Q11 | **(C)** | Static variable `n` retains its value. Calls: n=1, n=2, n=3. Output: **1 2 3**. |
-| Q12 | **(C)** | `::` is the **scope resolution operator** used to access global variable when local has same name. |
-| Q13 | **(D)** | `bool` directly stores true/false. `int` can also hold 0/1 (used as bool). In C, `char` too — **more than one** technically correct, but `bool` is the designed type. |
-| Q14 | **(C)** | `x/y` = 7/2 = **3** (integer division). Stored in float → `3.0`. NOT 3.5 (that would need casting). |
-| Q15 | **(D)** | Static local variables: initialized once ✅, retain value between calls ✅, default value is 0 ✅ — **ALL three are correct**. |
-| Q16 | **(C)** | `sizeof(arr)` = 5 × 4 (sizeof int) = **20 bytes**. |
-| Q17 | **(C)** | `ios::app` appends at end without destroying content. `ios::out` destroys existing content. |
-| Q18 | **(C)** | `123abc` starts with digit — **INVALID**. `_total` and `Total_marks` are both valid. |
-| Q19 | **(B)** | `sizeof()` is a **compile-time** operator — this is why it doesn't evaluate expressions. |
-| Q20 | **(B)** | User-defined headers use double quotes: `#include "mylib.h"`. |
-| Q21 | **(B)** | `sizeof()` does NOT execute `a = 50`. `a` remains **10**. `b` = sizeof(int) = **4**. Output: `10 4`. |
-| Q22 | **(D)** | `const`, `#define`, AND `constexpr` are ALL valid ways — **more than one correct**. |
-| Q23 | **(B)** | `>>` with `cin` is the **extraction** operator (extracts from stream into variable). `<<` with `cout` is insertion. |
-| Q24 | **(D)** | `void` represents no value ✅, used as return type ✅, cannot declare `void x` ✅ — **all three correct**. |
-| Q25 | **(E)** | All three — `= 5`, `(5)`, `{5}` — are valid C++ initialization syntax. Answer is **None of the above** (all are valid). |
-
----
-
-## 🇮🇳 GS ANSWERS (Q26–Q50)
-
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| Q26 | **(C)** | **V.D. Savarkar** was the first to call 1857 revolt "First War of Independence" in his book. |
-| Q27 | **(C)** | **W.C. Bonnerjee** (Womesh Chandra Bonnerjee) was first President of INC (1885 session, Bombay). |
-| Q28 | **(B)** | Champaran was about **Tinkathia system** — forced indigo cultivation. Not salt, not zamindari. |
-| Q29 | **(B)** | **Rajkumar Shukla**, an indigo farmer, invited Gandhi to Champaran. Rajendra Prasad assisted later. |
-| Q30 | **(C)** | Gandhi withdrew NCM due to **Chauri Chaura** (1922) — mob burned police station killing 22 policemen. |
-| Q31 | **(B)** | **Sachindra Nath Sanyal** founded Anushilan Samiti Patna in 1913. |
-| Q32 | **(C)** | Ghadar Party was founded in **USA** (San Francisco) by Lala Har Dayal in 1913. |
-| Q33 | **(B)** | **Lord Chelmsford** was Viceroy during Jallianwala Bagh (1919). Curzon partitioned Bengal (1905). |
-| Q34 | **(B)** | **V.D. Savarkar** founded Abhinav Bharat in **London**. |
-| Q35 | **(C)** | **Chittaranjan Das** presided the Gaya session 1922. Important Bihar-connection PYQ! |
-| Q36 | **(D)** | Bihar Socialist Party founded by **Phulan Prasad Varma AND Jayaprakash Narayan** — **both correct**. |
-| Q37 | **(C)** | **Lord Curzon** announced Partition of Bengal in 1905. Dalhousie is known for Doctrine of Lapse. |
-| Q38 | **(B)** | **Ganga Maiya Tohe Piyari Chadhaibo** (1963) was the first Bhojpuri film. |
-| Q39 | **(B)** | **Anandamath** by Bankim Chandra mentions the **Sannyasi Revolt**. Also source of "Vande Mataram". |
-| Q40 | **(B)** | **Gaya Munda** was the Commander-in-Chief of Birsa Munda's army. |
-| Q41 | **(C)** | Quit India resolution was passed at **Gowalia Tank Maidan, Bombay** on August 8, 1942. |
-| Q42 | **(B)** | **Aruna Asaf Ali** hoisted the Indian National Flag at Gowalia Tank on August 9, 1942. |
-| Q43 | **(B)** | Bihar Provincial Congress Committee was founded in **1908** with HQ at Patna. |
-| Q44 | **(C)** | **Kunwar Singh** of Jagdispur (Arrah), Bihar was the 1857 revolt hero of Bihar. |
-| Q45 | **(B)** | Dandi March began on **March 12, 1930** and reached Dandi on April 6, 1930. |
-| Q46 | **(C)** | **Dadabhai Naoroji** is called the "Grand Old Man of India." Gokhale was Gandhi's political guru. |
-| Q47 | **(C)** | **Sardar Vallabhbhai Patel** led Bardoli Satyagraha. He earned the title "Sardar" from this. |
-| Q48 | **(B)** | Tagore returned his knighthood protesting **Jallianwala Bagh massacre (1919)**. Not Bengal partition. |
-| Q49 | **(C)** | **Swami Sahajanand Saraswati** founded AIKS Bihar in 1936. JP Narayan was socialist, not AIKS. |
-| Q50 | **(D)** | Home Rule Movement led by **Bal Gangadhar Tilak AND Annie Besant** — **both** are correct. Sarojini Naidu was NOT associated with Home Rule League. Answer is D (More than one). |
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (C) | _myVar starts with underscore — valid |
+| 2 | (E) | All three are valid variable names |
+| 3 | (C) | int = 4 bytes on 32-bit system |
+| 4 | (C) | sizeof(x++) returns sizeof(int) = 4 |
+| 5 | (B) | sizeof does NOT evaluate — x stays 5 |
+| 6 | (D) | Both <stdio.h> (C-style) and <iostream> (C++ style) work |
+| 7 | (B) | User-defined headers use double quotes |
+| 8 | (B) | bool = 1 byte (NOT 1 bit!) |
+| 9 | (C) | `int` is a reserved keyword |
+| 10 | (C) | double = 8 bytes |
+| 11 | (C) | Global numeric variables auto-initialize to 0 |
+| 12 | (B) | void* (void pointer) is valid |
+| 13 | (D) | char can store all three (char, ASCII int, escape sequence) |
+| 14 | (C) | :: scope resolution operator |
+| 15 | (B) | unsigned char: 0 to 255 |
+| 16 | (C) | sizeof is a compile-time operator, not a function |
+| 17 | (D) | All three statements about float vs double are true |
+| 18 | (B) | for-loop variable scope is limited to the loop |
+| 19 | (B) | void* ptr is valid; void x is not |
+| 20 | (B) | sizeof(arr) = 20, sizeof(int) = 4; 20/4 = 5 |
+| 21 | (B) | C++ is case-sensitive |
+| 22 | (D) | Both <math.h> and <cmath> work in C++ |
+| 23 | (B) | Local takes priority; use :: for global |
+| 24 | (B) | ASCII of 'A' = 65 |
+| 25 | (D) | Both bool (natively) and int (0/non-zero) store true/false |
 
 ---
 
-## 📊 SCORING GUIDE
+### GS Answers (Q26–Q50):
 
-| Score (out of 25) | Assessment | Action |
-|-------------------|------------|--------|
-| 23–25 | 🏆 Topper Level | Excellent! Revise wrong ones only |
-| 20–22 | ✅ Strong | Review 3–5 weak topics |
-| 16–19 | 🔄 Good | Re-read relevant sections above |
-| Below 16 | 📖 Needs Work | Re-read full section and retry tomorrow |
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (C) | A.O. Hume — founder of INC |
+| 27 | (B) | Battle of Plassey — 1757 |
+| 28 | (B) | Hector Munro — Battle of Buxar 1764 |
+| 29 | (C) | April 13, 1919 |
+| 30 | (C) | Kunwar Singh — Bihar's hero of 1857 |
+| 31 | (C) | Bal Gangadhar Tilak |
+| 32 | (B) | Tinkathia system — forced indigo cultivation |
+| 33 | (B) | Chauri Chaura incident |
+| 34 | (C) | W.C. Banerjee — first INC president |
+| 35 | (B) | Lord Curzon |
+| 36 | (C) | Jawaharlal Nehru — Lahore 1929 |
+| 37 | (C) | 241 miles / 385 km |
+| 38 | (C) | Gandhi — "Do or Die" / "Karo ya Maro" |
+| 39 | (B) | First step of parliamentary control |
+| 40 | (A) | Lala Lajpat Rai, Tilak, Bipin Chandra Pal |
+| 41 | (B) | Gandhi and Ambedkar |
+| 42 | (A) | 1905 → 1920 → 1930 → 1942 |
+| 43 | (C) | Bombay, December 1885 |
+| 44 | (B) | Montagu-Chelmsford 1919 — Dyarchy |
+| 45 | (B) | Raj Kumar Shukla — indigo farmer |
+| 46 | (C) | Calicut (Kozhikode), 1498 |
+| 47 | (B) | C.R. Das and Motilal Nehru |
+| 48 | (C) | Jallianwala Bagh Massacre |
+| 49 | (B) | C. Rajagopalachari (Chakravarti) |
+| 50 | (C) | Siwan district, Bihar |
 
-**Target: 23+/25 in both CS and GS to stay on topper track!**
+---
+---
+
+# 🔁 DAY 8 — CRISP REVISION NOTES
+
+## ⚡ RAPID FIRE — C++ Variables & Data Types
+
+### Variable Naming Rules — One-Liners:
+1. **Start**: Letters or underscore only — NEVER a digit
+2. **Contains**: Letters, digits, underscore ONLY — no spaces, no special chars
+3. **Case-sensitive**: `score` ≠ `Score` ≠ `SCORE` — three different variables
+4. **Keywords forbidden**: `int`, `float`, `class` etc. cannot be variable names
+5. **_underscore start**: `_age` is VALID, `123age` is INVALID
+
+### Data Types — Size Cheat Sheet:
+```
+char   = 1 byte   (single character)
+bool   = 1 byte   (NOT 1 bit — exam trap!)
+short  = 2 bytes
+int    = 4 bytes
+float  = 4 bytes
+double = 8 bytes
+long long = 8 bytes
+void   = 0 bytes (no value — cannot declare void variable)
+```
+
+### sizeof() — The #1 Exam Trap:
+- sizeof() is a **compile-time OPERATOR** (not function)
+- sizeof() does **NOT execute** the expression inside
+- `sizeof(x++)` → returns 4 (for int), and x is **NOT incremented**
+- `sizeof(arr) / sizeof(int)` → number of elements in array
+
+### Scope — Quick Rules:
+- **Local**: inside { } only, garbage default value, stack memory
+- **Global**: everywhere, auto-initialized to 0, data segment memory
+- **Same name**: local shadows global; use `::` to access global
+- **for-loop variable**: local to loop only (C++ strict)
+
+### Header Files — Key Rule:
+- Standard: `#include <iostream>` — angle brackets, NO .h
+- User-defined: `#include "myfile.h"` — double quotes, WITH .h
 
 ---
 
-## 📝 NIGHT REVISION — 5-BULLET SUMMARY (Write from memory before sleeping)
+## ⚡ RAPID FIRE — Modern Indian History
 
-### CS Key Points to Remember:
-1. Variable names cannot start with a digit — `123Var` is INVALID
-2. `sizeof()` does NOT evaluate expressions — it's a compile-time operator
-3. Global variables default to **0**; local variables have **garbage** values
-4. User-defined headers use `""` double quotes and `.h` extension
-5. `static` local variable: initialized once, retains value, default = 0
+### Critical Dates:
+```
+1498 → Vasco da Gama arrives (Calicut)
+1600 → British East India Company formed
+1757 → Battle of Plassey (Clive vs Siraj — Mir Jafar betrays)
+1764 → Battle of Buxar (Munro vs 3 rulers — confirmed British rule)
+1857 → First War of Independence (Sepoy Mutiny)
+       → Bihar: Kunwar Singh led revolt (Jagdishpur, Bhojpur)
+1885 → INC founded by A.O. Hume (Bombay session, W.C. Banerjee president)
+1905 → Partition of Bengal (Lord Curzon) → Swadeshi Movement
+1906 → Muslim League founded (Dhaka)
+1909 → Morley-Minto Reforms (communal electorate begins)
+1915 → Gandhi returns to India
+1916 → Lucknow Pact (INC + Muslim League agreement)
+1917 → Champaran Satyagraha (Bihar — Tinkathia system, Raj Kumar Shukla)
+1919 → Rowlatt Act + Jallianwala Bagh (April 13)
+1920 → Non-Cooperation Movement launched
+1922 → NCM suspended (Chauri Chaura incident)
+1929 → Lahore Session — Poorna Swaraj declared (JN presided)
+1930 → Civil Disobedience + Dandi March (241 miles)
+1932 → Poona Pact (Gandhi + Ambedkar)
+1942 → Quit India (Aug 9) — "Do or Die" — JP escaped Hazaribagh jail
+1947 → Independence — Nehru (PM), Rajendra Prasad (President — Bihar!)
+```
 
-### GS Key Points to Remember:
-1. Champaran (1917) — first civil disobedience; invited by Rajkumar Shukla; Bihar
-2. V.D. Savarkar — first called 1857 "First War of Independence"; founded Abhinav Bharat (London)
-3. Ghadar Party — USA; Anushilan Samiti Patna (1913) — Sachindra Nath Sanyal
-4. Jallianwala Bagh (1919) — Viceroy: Lord Chelmsford; Tagore returned knighthood
-5. Bihar Socialist Party — Phulan Prasad Varma + JP Narayan (BOTH)
+### Bihar-Specific Facts (HIGH PROBABILITY):
+1. **Champaran Satyagraha 1917** — Gandhi's first Satyagraha in India — Tinkathia system
+2. **Kunwar Singh** — 1857 revolt leader — Jagdishpur, Bhojpur district
+3. **JP (Jayaprakash Narayan)** — escaped Hazaribagh jail 1942 — led underground Quit India
+4. **Dr. Rajendra Prasad** — first President of India — from Siwan, Bihar
+
+### Memory Tricks:
+- **Lal-Bal-Pal** = Lala Lajpat Rai + Bal Gangadhar Tilak + Bipin Chandra Pal (Extremists)
+- **A.O. Hume → INC** — British civil servant who ironically founded India's nationalist party
+- **Chauri Chaura → NCM Suspended** — violence ended the movement
+- **April 13** = Jallianwala Bagh date (same as today's date in April!)
+- **January 26** = Republic Day because 1929 Lahore session declared Jan 26 as Independence Day
+
+### Common Exam Traps:
+1. Plassey (1757) ≠ Buxar (1764) — different battles, different significance
+2. INC founded by A.O. Hume (British!) — not an Indian
+3. First President of INC = W.C. Banerjee ≠ A.O. Hume (founder)
+4. First RTC = Gandhi NOT present (he was in jail)
+5. First Indian GG ≠ First PM — C. Rajagopalachari was GG, Nehru was PM
 
 ---
 
-## ⏭️ PREVIEW: DAY 9
-
-**CS:** Pointers in C++ — `&`, `*`, NULL pointer, `delete`/`delete[]`, dangling pointer, `new` vs `malloc`
-**GS:** Champaran Satyagraha 1917 (Deep Dive) + Non-Cooperation Movement details
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. sizeof() is compile-time operator; does NOT evaluate expression inside it
+2. bool = 1 byte (not 1 bit); void cannot be used to declare variable
+3. Variable names: start with letter/underscore only; case-sensitive; no keywords
+4. Champaran 1917 → Bihar → Tinkathia system → Gandhi's first Indian Satyagraha
+5. Kunwar Singh (Bihar) + Rajendra Prasad (Bihar's President) = high-priority BPSC facts
 
 ---
 
-*Day-8 Complete | Phase 1 → Week 2 | BPSC TRE 4.0 Topper Preparation*
-*"Every concept mastered today is one more question answered correctly in September 2026."* 🎯
+*Next: Day 9 — Pointers in C++ + Champaran Satyagraha (Deep Dive)*
