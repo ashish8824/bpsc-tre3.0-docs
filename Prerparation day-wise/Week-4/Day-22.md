@@ -1,1755 +1,1655 @@
-# 📅 DAY 22 — BPSC TRE 4.0 TOPPER GUIDE
-## CS: Singly Linked List (Complete) | GS: Indian Polity — Fundamental Rights
-### Phase 1 | Week 4 | Target: TOP RANK
+# 📅 BPSC TRE 4.0 — DAY 22 COMPLETE STUDY MODULE
+### Singly Linked List (SLL) + Indian Polity — Fundamental Rights
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-> **🎯 Today's Targets:**
-> - CS: Master Singly Linked List — all operations, complexities, PYQ traps
-> - GS: Master Fundamental Rights (Articles 12–35) — most tested Polity topic
-> - Solve: 25 CS + 25 GS PYQ-style questions (answers ONLY at end)
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): Singly Linked List — Concepts, Node Structure, Operations, Complexity
+> - Afternoon (1 hr): Indian Polity — Fundamental Rights (Articles 12–35)
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-# ═══════════════════════════════════════════════
-# 🖥️ PART 1: COMPUTER SCIENCE
-## SINGLY LINKED LIST — COMPLETE TOPPER GUIDE
-# ═══════════════════════════════════════════════
+# PART 1: COMPUTER SCIENCE
+## 📘 Singly Linked List — Deep Conceptual Guide
 
 ---
 
-## 📌 SECTION 1: WHAT IS A LINKED LIST?
+## 🔷 SECTION 1: What is a Linked List?
 
-A **Linked List** is a **linear data structure** where elements (called **nodes**) are stored at **non-contiguous memory locations**, connected via **pointers**.
+### Real-Life Analogy — The Treasure Hunt Chain:
+Imagine a **treasure hunt game**:
+- You start at **Clue #1** — it tells you something AND gives you the **location of Clue #2**
+- Clue #2 tells you something AND gives you the **location of Clue #3**
+- The last clue says: "No more clues ahead" (NULL)
+
+This is exactly how a **Linked List** works!
+- Each **clue = a node** (contains data + address of next node)
+- The **starting point = HEAD pointer** (tells you where the list begins)
+- "No more clues" = **NULL** (marks the end of the list)
 
 ```
-ARRAY (contiguous memory):
-[10][20][30][40][50]
- 100 101 102 103 104   ← memory addresses
+Treasure Hunt Chain (Singly Linked List):
 
-LINKED LIST (non-contiguous memory):
-[10|→300]   [20|→550]   [30|→120]   [40|NULL]
-  100           300         550         120
+HEAD
+ |
+ v
+[Data:10 | Next:-->] ---> [Data:20 | Next:-->] ---> [Data:30 | Next:NULL]
+   Node 1                    Node 2                     Node 3 (last)
 ```
 
-> 🔑 **KEY INSIGHT:** In an array, elements sit next to each other. In a linked list, they are scattered in memory — each node has a **pointer to the next node's address**.
+### Another Analogy — Railway Coaches:
+```
+Each coach has:
+  - Passengers (DATA)
+  - A coupling hook to the NEXT coach (POINTER/NEXT)
+  - The last coach has no coupling hook attached (NULL)
+  - The engine = HEAD (tells us where the train starts)
+
+ENGINE(HEAD) ---> [Coach A | -->] ---> [Coach B | -->] ---> [Coach C | NULL]
+```
+
+### Formal Definition:
+A **Linked List** is a **linear data structure** where elements (called **nodes**) are stored at **non-contiguous (random) memory locations**. Each node contains:
+1. **Data** — the actual value stored
+2. **Pointer (Next)** — the memory address of the NEXT node
 
 ---
 
-## 📌 SECTION 2: NODE STRUCTURE
+## 🔷 SECTION 2: Structure of a Node — The Building Block
 
-A node in a **Singly Linked List (SLL)** has exactly **TWO parts**:
+### What a Node Looks Like in Memory:
 
 ```
-+--------+----------+
-|  DATA  |   NEXT   |
-|  part  | (pointer)|
-+--------+----------+
-    ^           ^
-  stores      stores address
-  the value   of next node
+A Single Node:
++----------+----------+
+|   DATA   |   NEXT   |
+| (value)  |(address) |
++----------+----------+
+    4 bytes   4/8 bytes
+              (pointer)
 ```
 
-### C++ Node Structure:
+### In C++ Code:
 ```cpp
 struct Node {
     int data;       // stores the value
-    Node* next;     // pointer to next node
+    Node* next;     // pointer to the next node
 };
 ```
 
-### Java Node Structure:
+### In Java Code:
 ```java
 class Node {
-    int data;
+    int data;       // stores the value
     Node next;      // reference to next node
-    Node(int d) { data = d; next = null; }
+    
+    Node(int val) {
+        data = val;
+        next = null;
+    }
 }
 ```
 
----
-
-## 📌 SECTION 3: TYPES OF LINKED LISTS
+### How a 3-Node Linked List Looks in Memory:
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                  LINKED LISTS                        │
-│                      │                               │
-│        ┌─────────────┼─────────────┐                │
-│        │             │             │                 │
-│   SINGLY LL    DOUBLY LL    CIRCULAR LL              │
-│  (1 pointer) (2 pointers) (last→first)               │
-└─────────────────────────────────────────────────────┘
+Memory Address:   1000          2500          1800
+                  +-----------+ +-----------+ +-----------+
+                  | 10 | 2500 | | 20 | 1800 | | 30 | NULL |
+                  +-----------+ +-----------+ +-----------+
+                    Node 1         Node 2         Node 3
+                      ^
+                     HEAD = 1000
+
+HEAD stores address 1000 (Node 1)
+Node 1's NEXT stores 2500 (Node 2's address)
+Node 2's NEXT stores 1800 (Node 3's address)
+Node 3's NEXT stores NULL (end of list)
+
+CRITICAL: Nodes are at RANDOM addresses (1000, 2500, 1800)
+          NOT contiguous like arrays!
 ```
 
-| Type | Pointers per Node | Traversal | Memory |
-|------|-------------------|-----------|--------|
-| Singly LL | 1 (next only) | Forward only | Less |
-| Doubly LL | 2 (prev + next) | Both directions | More |
-| Circular LL | 1 (last→first) | Forward (circular) | Less |
-
----
-
-## 📌 SECTION 4: SINGLY LINKED LIST — VISUAL DIAGRAM
-
-```
-HEAD
- │
- ▼
-[10 | •]──►[20 | •]──►[30 | •]──►[40 | NULL]
-  Node1       Node2       Node3       Node4
-```
-
-- **HEAD** = pointer to the first node
-- **NULL** at last node = marks end of list
-- If HEAD = NULL → **empty list**
+### 🚨 PYQ TRAP #1: Memory Allocation
+> In a linked list, nodes are stored at **non-contiguous** (scattered/random) memory locations.
+> This is the FUNDAMENTAL difference from arrays.
+> Each node is dynamically allocated using `new` (C++) or `new` (Java) — heap memory.
 
 ---
 
-## 📌 SECTION 5: OPERATIONS ON SINGLY LINKED LIST
+## 🔷 SECTION 3: Types of Linked Lists — Brief Overview
 
-### 5.1 TRAVERSAL
-Visit each node one by one from HEAD to NULL.
-
+### 1. Singly Linked List (SLL) — TODAY'S FOCUS
 ```
-Algorithm: Traverse(HEAD)
-  curr = HEAD
-  while curr ≠ NULL:
-      print curr.data
-      curr = curr.next
+HEAD --> [10|-->] --> [20|-->] --> [30|NULL]
+- Each node has ONE pointer (to next)
+- Can traverse ONLY forward (left to right)
+- Last node points to NULL
 ```
 
+### 2. Doubly Linked List (DLL)
 ```
-Step 1: curr → [10|→]──►[20|→]──►[30|NULL]
-              ^curr
-
-Step 2: curr → [10|→]──►[20|→]──►[30|NULL]
-                          ^curr
-
-Step 3: curr → [10|→]──►[20|→]──►[30|NULL]
-                                    ^curr
-Step 4: curr = NULL → STOP
-Output: 10 20 30
+HEAD --> [NULL|10|-->] <--> [<--|20|-->] <--> [<--|30|NULL]
+- Each node has TWO pointers (prev + next)
+- Can traverse BOTH forward and backward
+- More memory per node (extra pointer)
 ```
 
-**Time Complexity: O(n)** — must visit every node
-**Space Complexity: O(1)**
+### 3. Circular Linked List
+```
+HEAD --> [10|-->] --> [20|-->] --> [30|-->] --+
+           ^                                   |
+           +-----------------------------------+
+- Last node's NEXT points back to HEAD (not NULL)
+- No NULL pointer
+- Used in round-robin scheduling, circular queues
+```
+
+### Quick Comparison:
+| Type | Pointers/Node | Direction | NULL at end |
+|------|--------------|-----------|-------------|
+| Singly (SLL) | 1 (next) | Forward only | YES |
+| Doubly (DLL) | 2 (prev + next) | Both ways | YES (both ends) |
+| Circular | 1 (next) | Forward (loops) | NO (points to HEAD) |
 
 ---
 
-### 5.2 INSERTION — THREE CASES
+## 🔷 SECTION 4: Array vs Linked List — The Core Comparison
 
-#### CASE 1: Insert at BEGINNING ← O(1)
+### Side-by-Side Memory Model:
 
 ```
-BEFORE:
-HEAD──►[20|→]──►[30|→]──►[40|NULL]
+ARRAY (Contiguous):
+Address:  1000  1004  1008  1012  1016
+         +----+----+----+----+----+
+         | 10 | 20 | 30 | 40 | 50 |
+         +----+----+----+----+----+
+          All elements sit TOGETHER in memory
 
-Insert 10 at beginning:
-Step 1: Create new node [10|→]
-Step 2: newNode.next = HEAD
-Step 3: HEAD = newNode
-
-AFTER:
-HEAD──►[10|→]──►[20|→]──►[30|→]──►[40|NULL]
+LINKED LIST (Non-Contiguous):
+                    1800         3200         1000
+                  +------+     +------+     +------+
+                  |10|-->|---->|20|-->|---->|30|NULL|
+                  +------+     +------+     +------+
+          Nodes can be ANYWHERE in memory
 ```
 
-```cpp
-void insertAtBeginning(Node*& head, int data) {
-    Node* newNode = new Node();
-    newNode->data = data;
-    newNode->next = head;   // point to old first
-    head = newNode;         // update head
+### Master Comparison Table:
+
+| Feature | Array | Singly Linked List |
+|---------|-------|--------------------|
+| Memory layout | Contiguous | Non-contiguous (scattered) |
+| Access by index | O(1) — DIRECT | O(n) — must traverse from HEAD |
+| Insertion at beginning | O(n) — shift all | O(1) — just change pointers |
+| Insertion at end | O(1) — if space | O(n) — traverse to last node |
+| Insertion at middle | O(n) — shift | O(n) — traverse to position |
+| Deletion at beginning | O(n) — shift all | O(1) — move HEAD forward |
+| Deletion at end | O(1) | O(n) — traverse to second-last |
+| Deletion at middle | O(n) | O(n) — traverse to position |
+| Memory per element | Only data | Data + pointer (overhead) |
+| Size | Fixed (static) | Dynamic (grows/shrinks) |
+| Cache performance | Excellent (spatial locality) | Poor (random memory) |
+| Binary search | O(log n) possible | NOT efficient (no random access) |
+| Reverse traversal | Easy (index--) | NOT possible in SLL |
+
+### 🚨 PYQ TRAP #2: The Key Trade-off
+> Array: FAST access (O(1)) but SLOW insertion/deletion at beginning (O(n))
+> SLL: SLOW access (O(n)) but FAST insertion/deletion at beginning (O(1))
+> This trade-off is the most tested comparison in exams.
+
+---
+
+## 🔷 SECTION 5: Traversal Operation
+
+### What is Traversal?
+Visiting every node in the linked list from HEAD to the last node (NULL).
+
+### Step-by-Step Traversal:
+```
+List: HEAD --> [10|-->] --> [20|-->] --> [30|NULL]
+
+Step 1: curr = HEAD (curr points to Node with 10)
+        Print curr->data = 10
+        curr = curr->next (move to Node with 20)
+
+Step 2: curr points to Node with 20
+        Print curr->data = 20
+        curr = curr->next (move to Node with 30)
+
+Step 3: curr points to Node with 30
+        Print curr->data = 30
+        curr = curr->next = NULL
+
+Step 4: curr == NULL → STOP
+
+Output: 10 → 20 → 30 → NULL
+```
+
+### Pointer Movement Diagram:
+```
+Pass 1:                Pass 2:               Pass 3:
+curr                                          
+ |                     curr                   
+ v                      |                    curr
+[10|-->]-->[20|-->]-->[30|NULL]               |
+                                             [30|NULL]
+print 10                print 20              print 30
+```
+
+### Code (Java):
+```java
+Node curr = head;
+while (curr != null) {
+    System.out.print(curr.data + " -> ");
+    curr = curr.next;
 }
+System.out.println("NULL");
 ```
 
-**Time: O(1)** ← This is FAST! No traversal needed.
+**Time Complexity: O(n)** — must visit all n nodes
+**Space Complexity: O(1)** — only one `curr` pointer used
 
 ---
 
-#### CASE 2: Insert at END ← O(n)
-
-```
-BEFORE:
-HEAD──►[10|→]──►[20|→]──►[30|NULL]
-
-Insert 40 at end:
-Step 1: Create [40|NULL]
-Step 2: Traverse to last node (30)
-Step 3: lastNode.next = newNode
-
-AFTER:
-HEAD──►[10|→]──►[20|→]──►[30|→]──►[40|NULL]
-```
-
-**Time: O(n)** ← Must traverse entire list to find last node.
+## 🔷 SECTION 6: Insertion Operations (Most Important for Exam)
 
 ---
 
-#### CASE 3: Insert at Middle (after given position) ← O(n)
+### ✅ INSERTION AT BEGINNING — O(1)
 
+This is the MOST important operation — it is O(1) unlike arrays!
+
+**Before:**
 ```
-Insert 25 after position 2:
-
-BEFORE: [10]→[20]→[30]→[40]
-                ↑pos=2
-
-Step 1: Traverse to position 2 → reach node [20]
-Step 2: newNode.next = node[20].next (→[30])
-Step 3: node[20].next = newNode
-
-AFTER: [10]→[20]→[25]→[30]→[40]
+HEAD --> [20|-->] --> [30|-->] --> [40|NULL]
 ```
 
-**Time: O(n)** ← Traversal needed
+**Goal: Insert 10 at beginning**
+
+```
+Step 1: Create a new node with data = 10
+        newNode = new Node(10)
+        newNode.next = NULL (initially)
+
+        newNode: [10|NULL]
+
+Step 2: Point newNode's NEXT to current HEAD
+        newNode.next = HEAD
+        
+        newNode: [10|-->] --> [20|-->] --> [30|-->] --> [40|NULL]
+
+Step 3: Update HEAD to point to newNode
+        HEAD = newNode
+
+        HEAD --> [10|-->] --> [20|-->] --> [30|-->] --> [40|NULL]
+```
+
+**Pointer Movement (Visual):**
+```
+BEFORE:    HEAD
+            |
+            v
+           [20|-->] --> [30|-->] --> [40|NULL]
+
+STEP 2:   newNode       HEAD
+            |            |
+            v            v
+           [10|  ]      [20|-->] --> [30|-->] --> [40|NULL]
+                |________|
+          (newNode.next = HEAD)
+
+AFTER:    HEAD
+            |
+            v
+           [10|-->] --> [20|-->] --> [30|-->] --> [40|NULL]
+```
+
+**Why O(1)?** Only 2 pointer changes needed — regardless of list size!
 
 ---
 
-### 5.3 DELETION — THREE CASES
+### ✅ INSERTION AT END — O(n)
 
-#### CASE 1: Delete from BEGINNING ← O(1)
-
+**Before:**
 ```
-BEFORE:
-HEAD──►[10|→]──►[20|→]──►[30|NULL]
-
-Step 1: temp = HEAD
-Step 2: HEAD = HEAD.next    ← move head forward
-Step 3: delete temp
-
-AFTER:
-HEAD──►[20|→]──►[30|NULL]
+HEAD --> [10|-->] --> [20|-->] --> [30|NULL]
 ```
 
-**Time: O(1)**
+**Goal: Insert 40 at end**
+
+```
+Step 1: Create new node
+        newNode = [40|NULL]
+
+Step 2: Traverse to the LAST node
+        curr = HEAD
+        While curr.next != NULL:
+            curr = curr.next
+        (After loop, curr points to [30|NULL])
+
+Step 3: Point last node's NEXT to newNode
+        curr.next = newNode
+
+AFTER:  HEAD --> [10|-->] --> [20|-->] --> [30|-->] --> [40|NULL]
+```
+
+**Pointer Movement:**
+```
+TRAVERSE:   curr starts at HEAD
+            curr                curr               curr (LAST: next==NULL)
+             |                   |                   |
+            [10|-->] -->        [20|-->] -->        [30|NULL]
+            
+            Move curr forward until curr.next == NULL
+
+ATTACH:     curr.next = newNode
+            
+            [30|-->] --> [40|NULL]
+                   ^
+                   curr
+```
+
+**Why O(n)?** Must traverse entire list to find the LAST node.
+
+**Optimization:** Maintain a **TAIL pointer** → insertion at end becomes O(1)!
 
 ---
 
-#### CASE 2: Delete from END ← O(n)
+### ✅ INSERTION AT MIDDLE (at position k) — O(n)
+
+**Goal: Insert 25 at position 2 in: HEAD --> [10|-->] --> [20|-->] --> [30|NULL]**
 
 ```
-Must find SECOND-LAST node (traverse to it)
-Then: secondLast.next = NULL
+Step 1: Create newNode = [25|NULL]
 
-Time: O(n)
+Step 2: Traverse to node at position (k-1) — the node BEFORE insertion point
+        curr = HEAD
+        Move (k-1) = 1 times: curr now points to [10|-->]
+
+Step 3: newNode.next = curr.next  (newNode points to what curr was pointing to)
+        newNode: [25|-->] --> [20|-->] --> [30|NULL]
+
+Step 4: curr.next = newNode       (previous node now points to newNode)
+        [10|-->] --> [25|-->] --> [20|-->] --> [30|NULL]
+
+RESULT: HEAD --> [10|-->] --> [25|-->] --> [20|-->] --> [30|NULL]
 ```
+
+**⚠️ CRITICAL ORDER: Step 3 MUST come before Step 4!**
+```
+If you do Step 4 before Step 3:
+curr.next = newNode   (now [10] points to [25])
+newNode.next = curr.next   ← WRONG! curr.next is now newNode itself!
+                             You create a circular reference and LOSE [20] and [30]!
+
+ALWAYS: newNode.next = curr.next  FIRST
+         curr.next = newNode       SECOND
+```
+
+### 🚨 PYQ TRAP #3: Order of Pointer Assignment
+> When inserting in the middle, ALWAYS connect the new node to the NEXT node BEFORE disconnecting the previous node's link. Reversing this order causes data loss (the rest of the list is lost).
 
 ---
 
-#### CASE 3: Delete a given node (by value/position) ← O(n)
-
-```
-Delete node with value 20:
-
-BEFORE: [10]→[20]→[30]→[40]
-
-Step 1: Traverse to node BEFORE 20, i.e., node [10]
-Step 2: node[10].next = node[20].next  (skip 20)
-Step 3: delete node[20]
-
-AFTER: [10]→[30]→[40]
-```
-
-**Time: O(n)** ← Need to find the previous node
+## 🔷 SECTION 7: Deletion Operations
 
 ---
 
-### 5.4 SEARCHING
+### ✅ DELETION FROM BEGINNING — O(1)
+
+**Before:** HEAD --> [10|-->] --> [20|-->] --> [30|NULL]
 
 ```
-Search for value 30:
-[10]→[20]→[30]→[40]→NULL
-  ↑    ↑    ↑
-  no   no   FOUND! return position 3
+Step 1: Check if HEAD == NULL (empty list) → nothing to delete
+
+Step 2: Store HEAD in a temp variable: temp = HEAD
+
+Step 3: Move HEAD forward: HEAD = HEAD.next
+        HEAD now points to [20|-->]
+
+Step 4: Free temp (delete the old first node)
+        free(temp) in C++ / garbage collected in Java
+
+AFTER: HEAD --> [20|-->] --> [30|NULL]
 ```
 
-**Time: O(n)** — linear search (no random access!)
+**Why O(1)?** Just move HEAD one step forward — no traversal!
 
 ---
 
-## 📌 SECTION 6: COMPLEXITY SUMMARY TABLE
+### ✅ DELETION FROM END — O(n)
+
+**Before:** HEAD --> [10|-->] --> [20|-->] --> [30|NULL]
 
 ```
-┌─────────────────────────┬──────────┬──────────┐
-│       OPERATION         │  TIME    │  SPACE   │
-├─────────────────────────┼──────────┼──────────┤
-│ Insert at BEGINNING     │  O(1)    │  O(1)    │
-│ Insert at END           │  O(n)    │  O(1)    │
-│ Insert at Middle        │  O(n)    │  O(1)    │
-│ Delete from BEGINNING   │  O(1)    │  O(1)    │
-│ Delete from END         │  O(n)    │  O(1)    │
-│ Delete middle node      │  O(n)    │  O(1)    │
-│ Search                  │  O(n)    │  O(1)    │
-│ Traversal               │  O(n)    │  O(1)    │
-│ Access by index         │  O(n)    │  O(1)    │
-└─────────────────────────┴──────────┴──────────┘
+Step 1: Special case: if only ONE node (HEAD.next == NULL)
+        HEAD = NULL → list is now empty
+
+Step 2: Traverse to the SECOND-TO-LAST node
+        curr = HEAD
+        While curr.next.next != NULL:
+            curr = curr.next
+        (curr now points to [20|-->])
+
+Step 3: Store the last node: temp = curr.next (= [30|NULL])
+
+Step 4: Set curr.next = NULL
+        [20|NULL] ← second-to-last becomes new last
+
+Step 5: Free temp (delete [30])
+
+AFTER: HEAD --> [10|-->] --> [20|NULL]
 ```
 
-> ⚠️ **BPSC TRAP:** "Insert at beginning of Linked List is O(1)" — TRUE.
-> But "Insert at end of Linked List is O(1)" — FALSE for SLL (it's O(n)).
-> Exception: If you maintain a **TAIL pointer**, insert at end becomes O(1).
+**Pointer Movement:**
+```
+FIND SECOND-TO-LAST:
+        curr                curr (second-to-last: curr.next.next == NULL)
+         |                   |
+        [10|-->] -->        [20|-->] -->        [30|NULL]
+                                                   ^
+                                                  temp
+
+SET NULL:   curr.next = NULL
+            [20|NULL]  ← new last node
+```
+
+**Why O(n)?** Must traverse to the SECOND-TO-LAST node (can't go backwards in SLL!).
+
+### 🚨 PYQ TRAP #4: Why O(n) for end deletion?
+> In SLL, we cannot go BACKWARD. To delete the last node, we need to update the SECOND-TO-LAST node's pointer. To find it, we must traverse from HEAD. Hence O(n).
+> In DLL (doubly linked list), last node has a `prev` pointer, so end deletion is O(1)!
 
 ---
 
-## 📌 SECTION 7: ADVANTAGES vs DISADVANTAGES
+### ✅ DELETION FROM GIVEN POSITION k — O(n)
 
-### ✅ ADVANTAGES (Why use Linked List over Array?)
-
-```
-┌────────────────────────────────────────────────┐
-│  ADVANTAGE             │  EXPLANATION           │
-│────────────────────────│────────────────────────│
-│ Dynamic size           │ Grows/shrinks at runtime│
-│ Easy insert at start   │ O(1) — no shifting      │
-│ Easy deletion          │ No shifting elements    │
-│ Memory efficient       │ Allocate only as needed │
-└────────────────────────────────────────────────┘
-```
-
-### ❌ DISADVANTAGES (Why NOT use Linked List over Array?)
+**Delete node at position 2 from: HEAD --> [10|-->] --> [20|-->] --> [30|NULL]**
 
 ```
-┌────────────────────────────────────────────────┐
-│  DISADVANTAGE          │  EXPLANATION           │
-│────────────────────────│────────────────────────│
-│ NO random access       │ Cannot do list[5]       │
-│ Extra memory per node  │ Pointer uses memory too │
-│ Not cache-friendly     │ Non-contiguous storage  │
-│ Reverse traversal hard │ Need to go HEAD→NULL    │
-└────────────────────────────────────────────────┘
+Step 1: Traverse to node at position (k-1) = position 1
+        curr = HEAD (curr = [10|-->])
+
+Step 2: Store node to delete: temp = curr.next (= [20|-->])
+
+Step 3: Skip over it: curr.next = curr.next.next
+        [10|-->] now points to [30|NULL]
+
+Step 4: Free temp (delete [20|-->])
+
+AFTER: HEAD --> [10|-->] --> [30|NULL]
 ```
 
-> 🔑 **PYQ GOLD:** "Which data structure does NOT support random access?"
-> **Answer: Linked List** (Array DOES support random access in O(1))
-
----
-
-## 📌 SECTION 8: LINKED LIST vs ARRAY — MASTER COMPARISON
-
+**Visual:**
 ```
-┌──────────────────┬──────────────────┬──────────────────┐
-│   PARAMETER      │     ARRAY        │  LINKED LIST     │
-├──────────────────┼──────────────────┼──────────────────┤
-│ Memory           │ Contiguous       │ Non-contiguous   │
-│ Size             │ Fixed (static)   │ Dynamic          │
-│ Access by index  │ O(1) ✓           │ O(n) ✗           │
-│ Insert at start  │ O(n) — shifting  │ O(1) ✓           │
-│ Insert at end    │ O(1) (if space)  │ O(n) SLL         │
-│ Cache friendly   │ YES ✓            │ NO ✗             │
-│ Extra memory     │ No overhead      │ Pointer overhead │
-│ Binary Search    │ Possible O(logn) │ NOT possible     │
-└──────────────────┴──────────────────┴──────────────────┘
-```
+BEFORE:   HEAD --> [10|-->] --> [20|-->] --> [30|NULL]
+                    curr         temp
 
-> ⚠️ **BPSC TRAP:** "Binary search can be applied on linked list"
-> **Answer: NO/FALSE** — Binary search requires random access (O(1) index).
-> Linked list has only O(n) access, so binary search cannot be applied.
-
----
-
-## 📌 SECTION 9: IMPORTANT PYQ FACTS — MEMORIZE THESE!
-
-| # | Fact | Correct Answer |
-|---|------|----------------|
-| 1 | Linked list random access? | NOT possible (no index) |
-| 2 | Insert at beginning SLL? | O(1) |
-| 3 | Insert at end SLL (no tail ptr)? | O(n) |
-| 4 | Main advantage over array? | Dynamic size + easy insert/delete |
-| 5 | Main disadvantage vs array? | No random access |
-| 6 | Head pointer in empty list? | NULL |
-| 7 | Which sorting works on LL? | Merge Sort (preferred) |
-| 8 | Binary search on LL? | NOT possible |
-| 9 | How to detect cycle in LL? | Floyd's cycle detection algorithm |
-| 10 | Memory per node in SLL? | data size + 1 pointer size |
-
----
-
-## 📌 SECTION 10: SPECIAL LINKED LIST CONCEPTS (BPSC LEVEL)
-
-### 10.1 Floyd's Cycle Detection Algorithm (Tortoise & Hare)
-
-Used to detect if a linked list has a **cycle (loop)**:
-
-```
-Two pointers:
-  SLOW pointer → moves 1 step at a time
-  FAST pointer → moves 2 steps at a time
-
-If Fast == Slow at any point → CYCLE EXISTS
-If Fast reaches NULL → NO CYCLE
-```
-
-```
-Example — Cycle:
-[1]→[2]→[3]→[4]→[5]
-              ↑        ↑
-              └────────┘  (5 points back to 3)
-
-Slow: 1→2→3→4→5→3→4...
-Fast: 1→3→5→4→3→4...
-They MEET → cycle detected!
-```
-
-### 10.2 Merge Sort on Linked List — O(n log n)
-
-**Best sorting algorithm for Linked Lists** because:
-- It requires no random access
-- It works on sequential access (perfect for LL)
-- Quick Sort is BAD for LL (needs random access for pivot)
-
-### 10.3 Reverse a Singly Linked List
-
-```
-Original:  [1]→[2]→[3]→[4]→NULL
-Reversed:  NULL←[1]←[2]←[3]←[4]
-
-Algorithm (Iterative — 3 pointers):
-  prev = NULL
-  curr = HEAD
-  while curr ≠ NULL:
-      next = curr.next   ← save next
-      curr.next = prev   ← reverse the link
-      prev = curr        ← move prev forward
-      curr = next        ← move curr forward
-  HEAD = prev
-```
-
-### 10.4 Find Middle of Linked List
-
-Use **Two Pointer** approach:
-- Slow pointer: 1 step
-- Fast pointer: 2 steps
-- When fast reaches end → slow is at MIDDLE
-
-**Time: O(n) in single pass!**
-
----
-
-## 📌 SECTION 11: MEMORY REPRESENTATION (BPSC Diagram Type)
-
-```
-How [10]→[20]→[30] looks in memory:
-
-Address  | Data | Next
----------|------|-----
-  200    |  10  | 450     ← Node 1 (HEAD points here)
-  300    |  XX  | XXX     ← some other data (not our list)
-  450    |  20  | 800     ← Node 2
-  600    |  XX  | XXX     ← some other data
-  800    |  30  | NULL    ← Node 3 (last)
-
-HEAD = 200
-```
-
-> This shows nodes are **NOT contiguous** — they are scattered in memory, linked only through pointers.
-
----
-
-## 📌 SECTION 12: APPLICATIONS OF LINKED LIST
-
-```
-┌──────────────────────────────────────────────────┐
-│           WHERE LINKED LISTS ARE USED            │
-├──────────────────────────────────────────────────┤
-│ 1. Implementation of STACK and QUEUE             │
-│ 2. Implementation of Hash Tables (chaining)      │
-│ 3. Dynamic memory allocation                     │
-│ 4. Representing POLYNOMIALS (each term = node)   │
-│ 5. Music playlist (circular LL)                  │
-│ 6. Browser history (doubly LL)                   │
-│ 7. Undo/Redo in editors                          │
-│ 8. Adjacency list in Graphs                      │
-└──────────────────────────────────────────────────┘
-```
-
-> ⚠️ **BPSC TRAP — Option D Watch:**
-> "Which of the following use linked lists?"
-> (A) Stack implementation  (B) Queue implementation
-> (C) Hash table chaining   (D) More than one of the above ← **CORRECT**
-
----
-
-# ═══════════════════════════════════════════════
-# 📚 PART 2: GENERAL STUDIES
-## INDIAN POLITY — FUNDAMENTAL RIGHTS (Articles 12–35)
-### Most Tested Polity Topic in BPSC TRE
-# ═══════════════════════════════════════════════
-
----
-
-## 📌 SECTION 1: WHERE DO FUNDAMENTAL RIGHTS COME FROM?
-
-```
-PART III of the Indian Constitution
-Articles 12 to 35
-Inspired by: Bill of Rights of USA
-Called: "Magna Carta of India"
-```
-
-> 🔑 **Fundamental Rights are JUSTICIABLE** = enforceable in courts.
-> Unlike DPSP (non-justiciable), FRs can be challenged in court if violated.
-
----
-
-## 📌 SECTION 2: THE 6 FUNDAMENTAL RIGHTS — COMPLETE CHART
-
-```
-┌────┬─────────────────────────────────┬─────────────────┐
-│ #  │         RIGHT                   │   ARTICLES      │
-├────┼─────────────────────────────────┼─────────────────┤
-│ 1  │ Right to Equality               │  14 – 18        │
-│ 2  │ Right to Freedom                │  19 – 22        │
-│ 3  │ Right Against Exploitation      │  23 – 24        │
-│ 4  │ Right to Freedom of Religion    │  25 – 28        │
-│ 5  │ Cultural & Educational Rights   │  29 – 30        │
-│ 6  │ Right to Constitutional Remedies│  32             │
-└────┴─────────────────────────────────┴─────────────────┘
-
-NOTE: Originally 7 FRs — Right to Property (Article 31) REMOVED
-      by 44th Amendment, 1978 → now a LEGAL RIGHT (Article 300A)
+SKIP:     curr.next = curr.next.next
+          
+AFTER:    HEAD --> [10|-->] --> [30|NULL]
+                               ^
+                         (temp [20] is freed)
 ```
 
 ---
 
-## 📌 SECTION 3: RIGHT TO EQUALITY (Articles 14–18)
+## 🔷 SECTION 8: Complete Complexity Table — SLL
 
-### Article 14 — Equality before Law
+| Operation | Time Complexity | Space | Key Reason |
+|-----------|----------------|-------|-----------|
+| Traversal (visit all) | O(n) | O(1) | Visit all n nodes |
+| Access by index | O(n) | O(1) | No random access — must traverse |
+| Search | O(n) | O(1) | Linear scan only |
+| Insert at BEGINNING | **O(1)** | O(1) | Only pointer changes — no traversal |
+| Insert at END | O(n) | O(1) | Traverse to last node |
+| Insert at END (with tail ptr) | **O(1)** | O(1) | Tail pointer gives direct access |
+| Insert at MIDDLE (position k) | O(n) | O(1) | Traverse to position k-1 |
+| Delete from BEGINNING | **O(1)** | O(1) | Just advance HEAD |
+| Delete from END | O(n) | O(1) | Traverse to second-to-last |
+| Delete from MIDDLE | O(n) | O(1) | Traverse to position k-1 |
+| Find Length | O(n) | O(1) | Count all nodes |
+| Reverse SLL | O(n) | O(1) | Visit each node once |
+
+### 🚨 PYQ TRAP #5: The O(1) Exceptions in SLL
+> The only O(1) operations in SLL are:
+> 1. Insert at BEGINNING
+> 2. Delete from BEGINNING
+> 3. Insert at END — ONLY when a TAIL pointer is maintained
+> Everything else is O(n) because we must traverse from HEAD.
+
+---
+
+## 🔷 SECTION 9: Dynamic Memory Allocation in Linked Lists
+
+### What is Dynamic Allocation?
+Memory is **allocated at runtime** (when the program runs), NOT at compile time.
+
 ```
-"The State shall not deny to any person equality before 
- the law or the equal protection of the laws"
+Array: int arr[100];
+       → 100 × 4 = 400 bytes reserved at COMPILE TIME
+       → Even if you use only 3 elements, 400 bytes are occupied
 
-Equality before Law    = British concept (negative concept)
-                       = No one is above law
-Equal Protection       = American concept (positive concept)
-                       = Like should be treated alike
-```
-
-### Article 15 — Prohibition of Discrimination
-```
-No discrimination on grounds of:
-R  – Race
-R  – Religion  
-C  – Caste
-S  – Sex
-P  – Place of birth
-
-MNEMONIC: "RRCSP" or "Religion, Race, Caste, Sex, Place"
-
-EXCEPTION: State CAN make special provisions for:
-  → Women and children
-  → Socially/educationally backward classes
-  → SC/ST communities
-```
-
-### Article 16 — Equality of Opportunity in Public Employment
-```
-Equal opportunity in matters of public employment.
-No discrimination in government jobs based on:
-Religion, Race, Caste, Sex, Descent, Place of Birth/Residence
-
-EXCEPTION: State CAN reserve posts for backward classes.
-```
-
-### Article 17 — Abolition of Untouchability
-```
-Untouchability ABOLISHED and its practice is FORBIDDEN
-Practice of untouchability = PUNISHABLE OFFENCE
-
-This is an ABSOLUTE RIGHT — no exceptions, 
-cannot be suspended even during Emergency
+Linked List: Node* newNode = new Node(10);
+             → Memory allocated ONLY when you create a new node
+             → Use 3 nodes? Only 3 nodes' worth of memory used
+             → This is DYNAMIC allocation (from HEAP memory)
 ```
 
-> ⚠️ **PYQ TRAP:** Article 17 is ABSOLUTE — no exceptions, no suspension even during National Emergency.
-
-### Article 18 — Abolition of Titles
+### Heap vs Stack:
 ```
-State CANNOT confer any title (except military/academic)
-Citizens CANNOT accept title from foreign State
+STACK memory:    Local variables, function calls (auto-freed)
+HEAP memory:     Dynamic allocation (new/malloc) — manual management
 
-BHARAT RATNA, PADMA AWARDS = NOT titles under Art 18
-  (they are civilian honours, court verdict in 1996)
+Linked List nodes live on the HEAP:
+  C++:  Node* p = new Node(5);   // allocate
+        delete p;                 // you must manually free!
+  
+  Java: Node p = new Node(5);    // allocate
+        p = null;                 // garbage collector frees automatically
+```
+
+### 🚨 PYQ TRAP #6: Memory Leak
+> In C++, if you delete a node from a linked list without calling `delete`, the memory remains allocated but unreachable — this is called a **MEMORY LEAK**.
+> Java avoids this through automatic garbage collection.
+
+---
+
+## 🔷 SECTION 10: Advantages & Disadvantages of Singly Linked List
+
+### Advantages:
+```
+1. DYNAMIC SIZE     → Can grow/shrink at runtime (no wasted memory)
+2. O(1) INSERT/DEL  → At beginning: extremely fast (no shifting like arrays)
+3. FLEXIBLE         → Easy to merge, split, or rearrange lists
+4. MEMORY EFFICIENT → Use exactly as much memory as needed
+5. BASIS for other  → Stacks, Queues, Graphs (adjacency list) built on it
+```
+
+### Disadvantages:
+```
+1. NO RANDOM ACCESS    → Cannot do arr[i]; must traverse from HEAD every time
+2. EXTRA MEMORY        → Each node stores a pointer (4–8 extra bytes overhead)
+3. POOR CACHE PERF     → Non-contiguous memory → frequent cache misses
+4. NO BACKWARD TRAVEL  → SLL is one-directional; cannot go backwards
+5. COMPLEX CODE        → Pointer manipulation is error-prone
+6. NO BINARY SEARCH    → Without random access, binary search is inefficient
+```
+
+### Memory Overhead Calculation:
+```
+Array of 100 ints:
+  100 × 4 = 400 bytes total
+
+SLL of 100 ints (assuming 4-byte pointer):
+  100 × (4 + 4) = 800 bytes total
+  DOUBLE the memory for same data!
+
+This overhead is the PRICE of dynamic sizing.
 ```
 
 ---
 
-## 📌 SECTION 4: RIGHT TO FREEDOM (Articles 19–22)
-
-### Article 19 — Six Freedoms (originally 7, one removed)
+## 🔷 SECTION 11: SLL Mind Map — Visual Summary
 
 ```
-ARTICLE 19 FREEDOMS:
-┌────────────────────────────────────────────────────┐
-│ 19(1)(a) → Freedom of Speech and Expression        │
-│ 19(1)(b) → Freedom of Peaceful Assembly            │
-│ 19(1)(c) → Freedom to form Associations/Unions     │
-│ 19(1)(d) → Freedom of Movement throughout India    │
-│ 19(1)(e) → Freedom to Reside anywhere in India     │
-│ 19(1)(g) → Freedom to practice any Profession/Trade│
-└────────────────────────────────────────────────────┘
-
-NOTE: 19(1)(f) = Freedom to acquire property → REMOVED 
-      by 44th Amendment 1978
-
-So NOW only 6 freedoms remain (not 7)
-```
-
-> ⚠️ **KEY PYQ FACT:** Article 19 freedoms are available ONLY to CITIZENS (not foreigners).
-> Article 14 is available to ALL PERSONS (including foreigners).
-
-### Article 20 — Protection in Respect of Conviction
-```
-THREE PROTECTIONS:
-1. Ex-post-facto law protection:
-   No person convicted for an act which was NOT an offence when done
-   
-2. Double Jeopardy protection:
-   No person prosecuted TWICE for same offence
-   ("Nemo debet bis vexari" — no one should be vexed twice)
-   
-3. Self-incrimination protection:
-   No person compelled to be witness against himself
-```
-
-> ⚠️ **EXAM TIP:** Article 20 CANNOT be suspended even during National Emergency!
-
-### Article 21 — Protection of Life and Personal Liberty
-```
-"No person shall be deprived of his life or personal liberty 
- except according to procedure established by law"
-
-This is the MOST LITIGATED fundamental right.
-Supreme Court has expanded it to include:
-  → Right to live with dignity
-  → Right to livelihood
-  → Right to education (before Art 21A was added)
-  → Right to privacy (Puttaswamy case 2017)
-  → Right to a clean environment
-  → Right to speedy trial
-```
-
-### Article 21A — Right to Education
-```
-Added by: 86th Constitutional Amendment, 2002
-"Free and compulsory education to all children 
- aged 6–14 years"
-
-Implemented by: Right to Education Act (RTE Act), 2009
-```
-
-> ⚠️ **BPSC PYQ TRAP:** Art 21A is RIGHT TO EDUCATION for 6–14 age group.
-> It is NOT in the original constitution — added by 86th Amendment.
-
-### Article 22 — Protection Against Arrest and Detention
-```
-Rights of an arrested person:
-1. Right to be informed of grounds of arrest
-2. Right to consult and be defended by a lawyer
-3. Produced before magistrate within 24 hours of arrest
-
-EXCEPTIONS (Preventive Detention):
-→ Enemy alien
-→ Person arrested under Preventive Detention Law
-   (can be detained for 3 months without magistrate approval)
+                    SINGLY LINKED LIST
+                           |
+          ┌────────────────┼─────────────────┐
+          |                |                 |
+     NODE STRUCTURE    OPERATIONS       PROPERTIES
+          |                |                 |
+   [DATA | NEXT]      INSERT:           Dynamic size
+          |           - Beginning O(1)  No random access
+   HEAD pointer       - End O(n)        Memory overhead
+   NULL = end         - Middle O(n)     Non-contiguous
+                           |            Cache unfriendly
+                      DELETE:
+                      - Beginning O(1)       |
+                      - End O(n)        VS ARRAY:
+                      - Middle O(n)     Array: fast access
+                           |            SLL: fast begin-insert
+                      TRAVERSAL O(n)
+                      SEARCH O(n)
+                      ACCESS O(n)
 ```
 
 ---
 
-## 📌 SECTION 5: RIGHT AGAINST EXPLOITATION (Articles 23–24)
-
-### Article 23 — Prohibition of Traffic in Human Beings
-```
-PROHIBITS:
-→ Traffic in human beings (human trafficking)
-→ Begar (forced labour without payment)
-→ Other forms of forced labour
-
-EXCEPTION: State can impose compulsory service for 
-           public purpose (without discrimination)
-```
-
-### Article 24 — Prohibition of Child Labour
-```
-"No child below the age of 14 years shall be employed 
- to work in any factory, mine, or other hazardous employment"
-
-Age: 14 years
-Applicable: Factories, Mines, Hazardous work
-```
-
-> ⚠️ **BPSC TRAP:** Article 24 says 14 years for hazardous employment.
-> Child Labour Act 2016 amended this to 14 years generally,
-> and 18 years for hazardous occupations.
+# PART 2: GENERAL STUDIES
+## ⚖️ Indian Polity — Fundamental Rights (Articles 12–35)
 
 ---
 
-## 📌 SECTION 6: RIGHT TO FREEDOM OF RELIGION (Articles 25–28)
+## 🔷 SECTION 1: What are Fundamental Rights?
 
-### Article 25 — Freedom of Conscience and Religion
+### Definition:
+**Fundamental Rights** are the basic rights guaranteed to every citizen of India by **Part III (Articles 12–35)** of the Indian Constitution. They are called "fundamental" because:
+1. They are **essential** for the all-round development of individuals
+2. They are **justiciable** — enforceable by courts (you can go to court if violated)
+3. They are **supreme** — no law can take them away (only constitutional amendment can)
+
+### Key Features:
 ```
-Every person has the right to:
-→ Freely profess, practice, and propagate religion
-
-SUBJECT TO: Public order, morality, health, other FRs
-
-EXCEPTIONS (State CAN regulate):
-→ Economic, financial, political secular activities 
-   associated with religion
-→ Social reforms (e.g., abolish untouchability)
-```
-
-### Article 26 — Freedom to Manage Religious Affairs
-```
-Every RELIGIOUS DENOMINATION has right to:
-→ Establish and maintain institutions
-→ Manage its own affairs in religious matters
-→ Own and acquire property
-→ Administer property as per law
+1. JUSTICIABLE → Courts can enforce them (vs. Directive Principles which are non-justiciable)
+2. NOT ABSOLUTE → Subject to reasonable restrictions by the State
+3. SOME FOR ALL  → Some rights for all persons (citizens + foreigners)
+4. SOME ONLY FOR CITIZENS → Like cultural rights, right to equality in employment
+5. SUSPENDED DURING EMERGENCY → Article 352 emergency can suspend some rights
+   Exception: Articles 20 and 21 CANNOT be suspended even during emergency
+6. AMENDABLE → Parliament can amend but cannot destroy the BASIC STRUCTURE
 ```
 
-### Article 27 — Freedom from Taxation for Religion
-```
-No person shall be compelled to pay taxes for 
-promotion of any particular religion
-
-State CANNOT use tax money to promote a religion
-```
-
-### Article 28 — Freedom from Religious Instruction
-```
-NO religious instruction in fully state-funded institutions
-
-Institutions RECEIVING state aid → can give religious 
-instruction but no student can be compelled to attend
-```
+### 🚨 PYQ TRAP #1: Justiciability
+> **Fundamental Rights** = Justiciable (Part III, enforceable by courts)
+> **Directive Principles of State Policy (DPSP)** = Non-justiciable (Part IV, guidelines for govt)
+> This distinction is very frequently tested!
 
 ---
 
-## 📌 SECTION 7: CULTURAL AND EDUCATIONAL RIGHTS (Articles 29–30)
+## 🔷 SECTION 2: Overview of Articles 12–35
 
-### Article 29 — Protection of Interests of Minorities
+### Article 12 — Definition of "State"
 ```
-Any section of citizens having:
-  → distinct language, script, culture
-  → have right to CONSERVE it
+"State" includes:
+  → Government of India (Central)
+  → Parliament of India
+  → State Governments
+  → State Legislatures
+  → Local/Statutory Authorities under State control
 
-NO citizen shall be DENIED ADMISSION to 
-state-aided institutions on grounds of:
-  → Religion, Race, Caste, Language
-```
-
-### Article 30 — Right of Minorities to Establish Educational Institutions
-```
-All minorities (religious OR linguistic) have right to:
-  → Establish educational institutions
-  → Administer educational institutions
-
-State cannot discriminate in granting aid to 
-minority-managed institutions
+IMPORTANT: Fundamental Rights are against the STATE — not against private individuals.
+(You can't sue a private person for violating your FR — only the State)
 ```
 
-> ⚠️ **KEY DIFFERENCE:**
-> Art 29 = available to ALL citizens (not just minorities)
-> Art 30 = available to MINORITIES ONLY (religious or linguistic)
+### Article 13 — Laws Inconsistent with FRs are Void
+```
+→ Any law that violates Fundamental Rights is VOID (invalid)
+→ This gives courts power of JUDICIAL REVIEW
+→ Pre-constitutional laws = void to the extent of inconsistency
+→ "Law" here includes ordinances, orders, regulations, bye-laws
+```
+
+### 🚨 PYQ TRAP #2: Doctrine of Eclipse
+> A pre-constitutional law that violates FR is not dead — it is merely "eclipsed" (shadowed). If the FR is later amended, the law revives. This is the **Doctrine of Eclipse**.
 
 ---
 
-## 📌 SECTION 8: RIGHT TO CONSTITUTIONAL REMEDIES (Article 32)
-
-```
-Called the "HEART AND SOUL of the Constitution" 
-by Dr. B.R. Ambedkar
-
-Article 32 = Right to approach SUPREME COURT 
-             for enforcement of FRs
-
-Article 226 = Right to approach HIGH COURT 
-              for enforcement of ANY right (wider scope)
-```
-
-### The 5 Writs (BPSC Most Important!)
-
-```
-┌─────────────────┬────────────────────────────────────────┐
-│     WRIT        │           MEANING & USE                │
-├─────────────────┼────────────────────────────────────────┤
-│ HABEAS CORPUS   │ "Have the body"                        │
-│                 │ To produce detained person in court    │
-│                 │ Against illegal detention              │
-│                 │ Available to: ALL persons (not just    │
-│                 │ citizens)                              │
-├─────────────────┼────────────────────────────────────────┤
-│ MANDAMUS        │ "We command"                           │
-│                 │ Directs public official to perform     │
-│                 │ their DUTY                             │
-│                 │ Cannot be issued against: President,  │
-│                 │ Governors, Private persons             │
-├─────────────────┼────────────────────────────────────────┤
-│ PROHIBITION     │ "Stop it"                              │
-│                 │ Issued by superior court to inferior   │
-│                 │ court to STOP proceedings              │
-│                 │ (Preventive writ)                      │
-├─────────────────┼────────────────────────────────────────┤
-│ CERTIORARI      │ "To be certified"                      │
-│                 │ Issued to quash order of inferior court│
-│                 │ (Corrective writ — AFTER decision)     │
-├─────────────────┼────────────────────────────────────────┤
-│ QUO WARRANTO   │ "By what authority"                    │
-│                 │ Challenges a person's right to hold   │
-│                 │ a public office                        │
-│                 │ Only for PUBLIC offices (not private)  │
-└─────────────────┴────────────────────────────────────────┘
-```
-
-> 🔑 **MNEMONIC FOR WRITS:** **"H M P C Q"**
-> **H**abeas Corpus | **M**andamus | **P**rohibition | **C**ertiorari | **Q**uo Warranto
+## 🔷 SECTION 3: The SIX Fundamental Rights — Detailed
 
 ---
 
-## 📌 SECTION 9: ARTICLE 13 — LAWS INCONSISTENT WITH FRs
+### RIGHT 1: Right to Equality (Articles 14–18)
 
+| Article | Content | Key Point |
+|---------|---------|-----------|
+| **14** | Equality before law and equal protection of laws | Two concepts: (1) Rule of Law (2) Equal protection |
+| **15** | Prohibition of discrimination on grounds of religion, race, caste, sex, place of birth | State cannot discriminate; exceptions for women, children, SC/ST |
+| **16** | Equality of opportunity in public employment | No discrimination in govt jobs; exceptions for reservations |
+| **17** | Abolition of Untouchability | Made a PUNISHABLE OFFENCE |
+| **18** | Abolition of Titles | State cannot confer titles (Bharat Ratna, Padma awards are NOT titles) |
+
+**Article 14 — Two Key Concepts:**
 ```
-Article 13 = GUARDIAN of Fundamental Rights
+Equality BEFORE law:   Everyone is equal in the eyes of law
+                       (British concept — Rule of Law by Dicey)
 
-"Any law inconsistent with or in derogation of FRs 
- shall be VOID to the extent of inconsistency"
-
-This gives courts power of JUDICIAL REVIEW
+Equal PROTECTION of law: Equals to be treated equally
+                          Unequals CAN be treated differently
+                          (American concept — allows reasonable classification)
 ```
+
+**Article 15 — Exceptions (Protective Discrimination):**
+```
+Article 15(3): State CAN make special provisions for WOMEN and CHILDREN
+Article 15(4): State CAN make special provisions for SC/ST/OBC (added by 1st Amendment 1951)
+Article 15(5): State CAN reserve seats in private unaided educational institutions for SC/ST/OBC
+               (added by 93rd Amendment 2005)
+```
+
+### 🚨 PYQ TRAP #3: Article 17
+> Untouchability was ABOLISHED by Article 17. Practising untouchability is a punishable offence under the **Protection of Civil Rights Act, 1955** (earlier called Untouchability Offences Act).
+> Article 17 applies to ALL persons — State AND private individuals (unique exception!)
 
 ---
 
-## 📌 SECTION 10: FRs SUSPENDED DURING EMERGENCY
+### RIGHT 2: Right to Freedom (Articles 19–22)
 
-```
-NATIONAL EMERGENCY (Article 352):
-  → Article 19 suspended (6 freedoms)
-  → Art 20, 21 CANNOT be suspended (ABSOLUTE)
-
-PRESIDENT'S RULE (Article 356):
-  → FRs NOT automatically suspended
-
-FINANCIAL EMERGENCY (Article 360):
-  → FRs NOT suspended
-```
-
-> ⚠️ **BPSC GOLD:** Articles 20 and 21 CANNOT be suspended even during National Emergency.
-> This is tested EVERY year in GS section.
-
----
-
-## 📌 SECTION 11: IMPORTANT ARTICLES QUICK REFERENCE
-
-| Article | Subject |
+| Article | Content |
 |---------|---------|
-| 12 | Definition of "State" |
-| 13 | Laws inconsistent with FRs — void |
-| 14 | Equality before law |
-| 15 | Prohibition of discrimination |
-| 16 | Equality of opportunity in employment |
-| 17 | Abolition of untouchability |
-| 18 | Abolition of titles |
-| 19 | Six freedoms |
-| 20 | Protection in conviction (ex-post-facto, double jeopardy, self-incrimination) |
-| 21 | Right to life and personal liberty |
-| 21A | Right to Education (6–14 years) — 86th Amendment |
-| 22 | Protection against arrest (24-hour rule) |
-| 23 | Prohibition of traffic in humans and forced labour |
-| 24 | Prohibition of child labour (under 14 years) |
-| 25 | Freedom of religion |
-| 26 | Manage religious affairs |
-| 27 | No tax for religion |
-| 28 | No religious instruction in state schools |
-| 29 | Protection of minority interests |
-| 30 | Minorities' right to educational institutions |
-| 32 | Right to Constitutional Remedies (Heart & Soul) |
+| **19** | Six Freedoms (originally 7, now 6 after 44th Amendment) |
+| **20** | Protection in respect of conviction for offences |
+| **21** | Protection of life and personal liberty |
+| **21A** | Right to Education (added by 86th Amendment, 2002) |
+| **22** | Protection against arrest and detention |
 
----
-
-## 📌 SECTION 12: BIHAR-SPECIFIC POLITY FACTS
-
+**Article 19 — Six Freedoms:**
 ```
-BIHAR SPECIFIC:
-→ Bihar has UNICAMERAL legislature (Vidhan Sabha only)
-  WAIT — Actually Bihar HAS BICAMERAL:
-  • Vidhan Sabha (243 seats)
-  • Vidhan Parishad (75 seats) ← Upper House (Bihar is one of 6 states with it)
+19(1)(a) → Freedom of SPEECH AND EXPRESSION
+19(1)(b) → Freedom to ASSEMBLE peacefully without arms
+19(1)(c) → Freedom to form ASSOCIATIONS and UNIONS
+19(1)(d) → Freedom to MOVE FREELY throughout India
+19(1)(e) → Freedom to RESIDE and SETTLE in any part of India
+19(1)(g) → Freedom to PRACTISE any profession or trade/business
 
-States WITH Vidhan Parishad (6 states):
-  UP, Maharashtra, Karnataka, Bihar, Telangana, Andhra Pradesh
-  MNEMONIC: "UP MaKaBATA"
-
-Bihar Governor: Appointed by President
-Chief Minister: Nitish Kumar (as of last data)
-
-Bihar Panchayati Raj:
-→ 3-tier: Gram Panchayat → Panchayat Samiti → Zila Parishad
-→ Under 73rd Amendment (1992)
+REMOVED: 19(1)(f) — Right to acquire, hold and dispose of PROPERTY
+         (Removed by 44th Constitutional Amendment Act, 1978)
 ```
 
----
-
-# ═══════════════════════════════════════════════
-# 📝 PRACTICE QUESTIONS — PART 1 (CS)
-## 25 Questions on Singly Linked List
-### ⚠️ SOLVE ALL 25 FIRST. ANSWERS AT END OF FILE.
-# ═══════════════════════════════════════════════
-
----
-
-**Q1.** What is the time complexity of inserting a new node at the BEGINNING of a singly linked list?
-- (A) O(log n)
-- (B) O(n)
-- (C) O(n²)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q2.** Which of the following is the MAIN disadvantage of a linked list over an array?
-- (A) Dynamic memory allocation
-- (B) No random access (cannot access by index)
-- (C) Easy insertion and deletion
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q3.** In a singly linked list, the last node contains:
-- (A) Address of the first node
-- (B) Address of the previous node
-- (C) NULL pointer
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q4.** The time complexity to search for an element in a singly linked list is:
-- (A) O(1)
-- (B) O(log n)
-- (C) O(n)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q5.** A singly linked list node in C++ has the correct definition as:
-- (A) `struct Node { int data; Node* prev; Node* next; };`
-- (B) `struct Node { int data; Node* next; };`
-- (C) `struct Node { int data; int next; };`
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q6.** Which sorting algorithm is BEST suited for sorting a singly linked list?
-- (A) Quick Sort
-- (B) Bubble Sort
-- (C) Merge Sort
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q7.** What is the space complexity of a singly linked list with n nodes compared to an array of n elements?
-- (A) Less than array
-- (B) Same as array
-- (C) More than array (due to pointer overhead)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q8.** Floyd's cycle detection algorithm uses:
-- (A) One pointer moving one step at a time
-- (B) Two pointers — one fast (2 steps), one slow (1 step)
-- (C) Three pointers — prev, curr, next
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q9.** An empty singly linked list is represented by:
-- (A) HEAD pointing to a dummy node
-- (B) HEAD = -1
-- (C) HEAD = NULL
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q10.** Which of the following operations on a singly linked list has O(1) time complexity?
-- (A) Access the 5th element
-- (B) Insert at the beginning
-- (C) Delete from the end
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q11.** Binary search CANNOT be applied on a singly linked list because:
-- (A) It is not a sorted data structure
-- (B) It does not support random access
-- (C) It requires more memory
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q12.** To find the MIDDLE element of a singly linked list efficiently in O(n) single pass, we use:
-- (A) Stack and queue
-- (B) Two pointers — fast and slow
-- (C) Recursive function
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q13.** In a singly linked list, deletion of a node requires:
-- (A) Access to the node to be deleted only
-- (B) Access to the previous node of the node to be deleted
-- (C) Rebuilding the entire list
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q14.** Which of the following correctly identifies the ADVANTAGE of a linked list over an array?
-- (A) Better cache performance
-- (B) Support for random access
-- (C) Dynamic memory allocation without wasting space
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q15.** In memory, the nodes of a linked list are stored:
-- (A) In contiguous memory locations
-- (B) In non-contiguous memory locations
-- (C) In stack memory only
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q16.** Which data structure is typically used to IMPLEMENT a stack?
-- (A) Array only
-- (B) Linked List only
-- (C) Both array and linked list can be used
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q17.** Given a singly linked list: 1→2→3→4→5. After reversing, the list becomes:
-- (A) 5→4→3→2→1
-- (B) 1→2→3→4→5 (unchanged)
-- (C) 5→4→3→2→NULL
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q18.** What is the time complexity of DELETING a node from the BEGINNING of a singly linked list?
-- (A) O(n)
-- (B) O(log n)
-- (C) O(1)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q19.** A polynomial can be represented using a linked list where each node stores:
-- (A) Only the coefficient
-- (B) Only the exponent
-- (C) Both coefficient and exponent
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q20.** Which of the following is TRUE about a singly linked list?
-- (A) It supports bidirectional traversal
-- (B) It requires extra memory for the pointer field
-- (C) It can perform binary search in O(log n)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q21.** If a singly linked list has a TAIL pointer maintained, what is the time complexity of inserting at the END?
-- (A) O(n)
-- (B) O(log n)
-- (C) O(1)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q22.** To detect a cycle in a linked list, Floyd's algorithm works because:
-- (A) If a cycle exists, the fast pointer will eventually catch up to the slow pointer
-- (B) If no cycle, the fast pointer reaches NULL
-- (C) Both A and B
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q23.** Which of the following is an APPLICATION of a linked list?
-- (A) Implementing adjacency list representation of graphs
-- (B) Dynamic memory allocation
-- (C) Polynomial representation
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q24.** In a linked list containing n nodes, what is the time complexity for accessing the LAST node?
-- (A) O(1)
-- (B) O(log n)
-- (C) O(n)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q25.** What is the CORRECT order of steps to INSERT a node after a given node X in a singly linked list?
-- (A) newNode.next = X.next; X.next = newNode
-- (B) X.next = newNode; newNode.next = X.next
-- (C) newNode.next = X; X.next = newNode
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-# ═══════════════════════════════════════════════
-# 📝 PRACTICE QUESTIONS — PART 2 (GS)
-## 25 Questions on Fundamental Rights (Articles 12–35)
-### ⚠️ SOLVE ALL 25 FIRST. ANSWERS AT END OF FILE.
-# ═══════════════════════════════════════════════
-
----
-
-**Q26.** Fundamental Rights in India are contained in which PART of the Constitution?
-- (A) Part II
-- (B) Part III
-- (C) Part IV
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q27.** Dr. B.R. Ambedkar called which article the "Heart and Soul of the Constitution"?
-- (A) Article 14
-- (B) Article 21
-- (C) Article 32
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q28.** The Right to Property was removed from Fundamental Rights by which Constitutional Amendment?
-- (A) 42nd Amendment, 1976
-- (B) 44th Amendment, 1978
-- (C) 86th Amendment, 2002
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q29.** Article 17 of the Constitution deals with:
-- (A) Right to equality before law
-- (B) Abolition of untouchability
-- (C) Abolition of titles
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q30.** Article 19 of the Constitution provides freedom of speech to:
-- (A) All persons including foreigners
-- (B) Only citizens of India
-- (C) Only minority communities
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q31.** Under Article 21A (added by 86th Amendment), free and compulsory education is provided to children of age:
-- (A) 0–6 years
-- (B) 6–14 years
-- (C) 14–18 years
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q32.** The writ of HABEAS CORPUS can be issued against:
-- (A) Only Central Government
-- (B) Only private individuals
-- (C) Both public authorities and private individuals in case of illegal detention
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q33.** Which of the following CANNOT be suspended even during a National Emergency?
-- (A) Article 14
-- (B) Article 19
-- (C) Article 20 and Article 21
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q34.** The writ of MANDAMUS CANNOT be issued against:
-- (A) Government department
-- (B) Public authority
-- (C) President of India
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q35.** Article 24 prohibits employment of children below which age in hazardous occupations?
-- (A) 12 years
-- (B) 14 years
-- (C) 16 years
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q36.** Which writ is issued to challenge a person's right to hold a PUBLIC OFFICE?
-- (A) Habeas Corpus
-- (B) Mandamus
-- (C) Quo Warranto
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q37.** Article 15 prohibits discrimination on grounds of:
-- (A) Religion and Race
-- (B) Caste and Sex
-- (C) Place of Birth
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q38.** "No person shall be compelled to be a witness against himself" is guaranteed under:
-- (A) Article 19
-- (B) Article 20(3) — Right against self-incrimination
-- (C) Article 21
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q39.** Which Article states that the State shall not deny any person EQUALITY BEFORE LAW?
-- (A) Article 13
-- (B) Article 14
-- (C) Article 15
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q40.** Under Article 22, an arrested person must be produced before a magistrate within:
-- (A) 12 hours
-- (B) 24 hours (excluding travel time)
-- (C) 48 hours
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q41.** The RIGHT TO LIFE (Article 21) was interpreted to include right to PRIVACY in which landmark case?
-- (A) Kesavananda Bharati Case (1973)
-- (B) K.S. Puttaswamy vs Union of India (2017)
-- (C) Maneka Gandhi Case (1978)
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q42.** Article 30 gives the right to establish and administer educational institutions to:
-- (A) All citizens of India
-- (B) Only religious minorities
-- (C) Religious AND linguistic minorities
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q43.** Bihar has how many seats in the STATE LEGISLATIVE ASSEMBLY (Vidhan Sabha)?
-- (A) 200
-- (B) 243
-- (C) 294
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q44.** Which writ literally means "TO BE CERTIFIED" and is used to quash the order of a lower court?
-- (A) Prohibition
-- (B) Certiorari
-- (C) Mandamus
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q45.** How many states in India have a LEGISLATIVE COUNCIL (Vidhan Parishad)?
-- (A) 4
-- (B) 6
-- (C) 8
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q46.** Article 29 protects:
-- (A) Minority groups only
-- (B) Any section of citizens with distinct language, script, or culture
-- (C) Only linguistic minorities
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q47.** Under the DOCTRINE OF DOUBLE JEOPARDY (Article 20), a person cannot be:
-- (A) Arrested without warrant
-- (B) Prosecuted and punished for the SAME offence more than once
-- (C) Forced to testify against himself
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q48.** Article 23 deals with:
-- (A) Prohibition of child labour
-- (B) Prohibition of traffic in human beings and forced labour
-- (C) Freedom of religion
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q49.** The writ of PROHIBITION is different from CERTIORARI because:
-- (A) Prohibition is issued before judgment; Certiorari after judgment
-- (B) Prohibition is issued after judgment; Certiorari before judgment
-- (C) Both are issued at the same time
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-**Q50.** Under Article 32, which court has the power to issue writs for enforcement of Fundamental Rights?
-- (A) High Court
-- (B) Supreme Court
-- (C) District Court
-- (D) More than one of the above
-- (E) None of the above
-
----
-
-# ═══════════════════════════════════════════════
-# ✅ ANSWER KEY WITH DETAILED EXPLANATIONS
-## CS Answers (Q1–Q25) | GS Answers (Q26–Q50)
-# ═══════════════════════════════════════════════
-
----
-
-## 🖥️ CS ANSWERS (Q1–Q25)
-
----
-
-**A1. → (E) None of the above**
-**Correct answer: O(1)**
-Insert at beginning = Just create new node, point it to current HEAD, update HEAD. No traversal needed. Time = O(1). None of the options A/B/C said O(1), so answer is (E).
-
----
-
-**A2. → (B) No random access**
-Linked list does NOT support index-based access. You cannot do `list[5]` — you must traverse from HEAD. This is the MAIN disadvantage vs arrays.
-- Option A (dynamic memory) = ADVANTAGE, not disadvantage
-- Option C (easy insertion/deletion) = ADVANTAGE, not disadvantage
-
----
-
-**A3. → (C) NULL pointer**
-The last node of a singly linked list always has `next = NULL`, marking the end of the list. Option A would make it circular (not singly). Option B would make it doubly linked.
-
----
-
-**A4. → (C) O(n)**
-Search in SLL = Linear Search. Must traverse from HEAD checking each node. Worst case = element at last position = n comparisons. Hence O(n).
-
----
-
-**A5. → (B) `struct Node { int data; Node* next; };`**
-Singly Linked List node has only ONE pointer (next). Option A has two pointers (doubly linked list). Option C uses `int next` (wrong — must be pointer type `Node*`).
-
----
-
-**A6. → (C) Merge Sort**
-Merge Sort works on sequential access — perfect for linked lists. Quick Sort requires random access for pivot selection — BAD for LL. Merge Sort on LL = O(n log n) without extra space.
-
----
-
-**A7. → (C) More than array (due to pointer overhead)**
-Each node in a linked list stores: data + pointer (extra 4 or 8 bytes). An array stores only data. So linked list uses MORE memory per element.
-
----
-
-**A8. → (B) Two pointers — one fast (2 steps), one slow (1 step)**
-Floyd's Tortoise and Hare: Slow moves 1 step, Fast moves 2 steps. If cycle exists, Fast catches up with Slow. If no cycle, Fast reaches NULL.
-
----
-
-**A9. → (C) HEAD = NULL**
-An empty linked list has HEAD = NULL. NULL means the pointer points to nothing — no nodes exist.
-
----
-
-**A10. → (B) Insert at the beginning**
-- Access 5th element → O(n) (traverse)
-- Insert at beginning → O(1) ✓
-- Delete from end → O(n) (traverse to second-last)
-
----
-
-**A11. → (B) It does not support random access**
-Binary search requires accessing middle element directly (index-based). Linked list = O(n) to reach middle. No random access = binary search not applicable.
-
-> Note: Option A says "not sorted" — but even if sorted, binary search still won't work because of no random access. The PRIMARY reason is (B).
-
----
-
-**A12. → (B) Two pointers — fast and slow**
-Slow moves 1 step, Fast moves 2 steps. When Fast reaches end (or NULL), Slow is at the middle. Single O(n) pass — efficient!
-
----
-
-**A13. → (B) Access to the previous node**
-To delete node X: you must set `prev.next = X.next`. You need the PREVIOUS node's reference. In SLL (singly), you cannot go backward, so you need to traverse from HEAD to find the previous node.
-
----
-
-**A14. → (C) Dynamic memory allocation without wasting space**
-- Option A (cache performance) = DISADVANTAGE of LL (arrays are cache-friendly)
-- Option B (random access) = ADVANTAGE of arrays, NOT LL
-- Option C = TRUE advantage of LL ✓
-
----
-
-**A15. → (B) Non-contiguous memory locations**
-Linked list nodes are scattered in memory. They are connected via pointers, NOT by being adjacent in memory (unlike arrays).
-
----
-
-**A16. → (C) Both array and linked list can be used**
-Stack can be implemented using:
-1. Array: top pointer moves up/down
-2. Linked list: HEAD acts as top
-Both are valid implementations → Option D might seem right, but (C) already captures "both" — answer is (C).
-
----
-
-**A17. → (A) 5→4→3→2→1**
-Reversing 1→2→3→4→5 gives 5→4→3→2→1. The last node (5) becomes HEAD, and the original HEAD (1) becomes tail pointing to NULL.
-
----
-
-**A18. → (C) O(1)**
-Delete from beginning: Save HEAD, move HEAD to HEAD.next, delete saved node. No traversal needed → O(1).
-
----
-
-**A19. → (C) Both coefficient and exponent**
-A polynomial term like 3x⁴ needs BOTH:
-- coefficient = 3
-- exponent = 4
-Each node stores both. Multiple nodes → complete polynomial.
-
----
-
-**A20. → (B) It requires extra memory for the pointer field**
-- Option A: SLL only traverses FORWARD (no bidirectional) → FALSE
-- Option B: TRUE — each node has extra pointer field
-- Option C: Cannot do binary search → FALSE
-Answer = (B)
-
----
-
-**A21. → (C) O(1)**
-If a TAIL pointer is maintained separately (always points to last node), inserting at end just requires: `tail.next = newNode; tail = newNode` → O(1). No traversal needed!
-
----
-
-**A22. → (D) More than one of the above**
-Both A and B are correct:
-- If cycle: fast eventually meets slow (like running on circular track)
-- If no cycle: fast reaches NULL
-Both statements describe why Floyd's algorithm works → (D).
-
----
-
-**A23. → (D) More than one of the above**
-All three are applications of linked list:
-- Adjacency list for graphs ✓
-- Dynamic memory allocation ✓
-- Polynomial representation ✓
-→ Answer = (D)
-
----
-
-**A24. → (C) O(n)**
-To access LAST node in SLL: must traverse from HEAD node by node until NULL. In worst case (accessing last), traversal = n steps → O(n).
-
----
-
-**A25. → (A) newNode.next = X.next; X.next = newNode**
-CORRECT ORDER:
-1. First: `newNode.next = X.next` (save link to next node)
-2. Then: `X.next = newNode` (connect X to new node)
-
-Option B is WRONG — if you do `X.next = newNode` first, you LOSE the reference to the original next node!
-
----
-
-## 📚 GS ANSWERS (Q26–Q50)
-
----
-
-**A26. → (B) Part III**
-Fundamental Rights = Part III, Articles 12–35.
-- Part II = Citizenship
-- Part IV = DPSP (Directive Principles)
-
----
-
-**A27. → (C) Article 32**
-Dr. Ambedkar called Article 32 the "Heart and Soul of the Constitution" — it gives the right to approach the Supreme Court to enforce Fundamental Rights.
-
----
-
-**A28. → (B) 44th Amendment, 1978**
-Right to Property (Article 31) was removed from Part III (Fundamental Rights) by the 44th Amendment, 1978 under Janata Party government. It became a legal/constitutional right under Article 300A.
-
----
-
-**A29. → (B) Abolition of untouchability**
-- Article 14 = Equality before law
-- Article 17 = Abolition of untouchability ✓
-- Article 18 = Abolition of titles
-
----
-
-**A30. → (B) Only citizens of India**
-Article 19 freedoms (including speech) are available ONLY to CITIZENS. Foreigners do NOT get Article 19 rights. However, Articles 14 and 21 apply to ALL persons including foreigners.
-
----
-
-**A31. → (B) 6–14 years**
-Article 21A (86th Amendment, 2002): Free and compulsory education for all children aged **6 to 14 years**. Implemented through RTE Act, 2009.
-
----
-
-**A32. → (C) Both public authorities and private individuals**
-Habeas Corpus is unique — it can be issued against ANY person (public or private) detaining someone illegally. It is available to protect personal liberty broadly.
-
----
-
-**A33. → (C) Article 20 and Article 21**
-During National Emergency (Article 352):
-- Article 19 (six freedoms) CAN be suspended
-- Articles 20 and 21 CANNOT be suspended — absolute protection
-This was reinforced by the 44th Amendment.
-
----
-
-**A34. → (C) President of India**
-Mandamus ("we command") directs public officials to do their duty.
-CANNOT be issued against:
-- President of India
-- Governors of States
-- Private individuals or organizations
-- Inferior court for judicial decisions
-
----
-
-**A35. → (B) 14 years**
-Article 24: "No child below the age of **14 years** shall be employed to work in any factory or mine or engaged in any other hazardous employment."
-
----
-
-**A36. → (C) Quo Warranto**
-Quo Warranto = "By what authority?" Used to challenge a person's legal right to hold a public office. Example: If someone is holding a government post without proper qualification/authority.
-
----
-
-**A37. → (D) More than one of the above**
-Article 15 prohibits discrimination on ALL of these grounds:
-- Religion ✓ (A)
-- Race ✓ (A)
-- Caste ✓ (B)
-- Sex ✓ (B)
-- Place of Birth ✓ (C)
-All three options A, B, C are correct → Answer = (D)
-
----
-
-**A38. → (B) Article 20(3)**
-Self-incrimination protection = Article 20(3): "No person accused of any offence shall be compelled to be a witness against himself."
-This is one of the three protections under Article 20.
-
----
-
-**A39. → (B) Article 14**
-Article 14: "The State shall not deny to any person equality before the law or the equal protection of the laws within the territory of India."
-
----
-
-**A40. → (B) 24 hours**
-Article 22: An arrested person must be produced before the nearest magistrate within **24 hours** of arrest (excluding travel time). This is a fundamental protection against illegal detention.
-
----
-
-**A41. → (B) K.S. Puttaswamy vs Union of India (2017)**
-The 9-judge bench in Puttaswamy case declared RIGHT TO PRIVACY as a fundamental right under Article 21 in 2017.
-- Maneka Gandhi case (1978) expanded Art 21 to "procedure must be fair, just and reasonable"
-
----
-
-**A42. → (C) Religious AND linguistic minorities**
-Article 30: Right of minorities to establish and administer educational institutions applies to BOTH:
-- Religious minorities (e.g., Christians, Muslims)
-- Linguistic minorities (e.g., Tamil speakers in Maharashtra)
-Note: Article 29 is broader — applies to ANY section of citizens.
-
----
-
-**A43. → (B) 243**
-Bihar Vidhan Sabha = **243 seats**
-Bihar Vidhan Parishad = 75 seats
-Bihar is one of only 6 states with a bicameral legislature.
-
----
-
-**A44. → (B) Certiorari**
-Certiorari = "To be certified" = issued by superior court to QUASH (cancel) the order/decision already made by a lower court or tribunal. It is a corrective writ (issued AFTER the decision).
-
----
-
-**A45. → (B) 6**
-States with Legislative Council (Vidhan Parishad):
-1. Uttar Pradesh
-2. Maharashtra
-3. Karnataka
-4. Bihar
-5. Telangana
-6. Andhra Pradesh
-MNEMONIC: **UP MaKaBATA**
-
----
-
-**A46. → (B) Any section of citizens with distinct language, script, or culture**
-Article 29 is NOT limited to minorities. It protects ANY SECTION of citizens (majority or minority) that has a distinct language, script, or culture. This is broader than Art 30.
-
----
-
-**A47. → (B) Prosecuted and punished for the same offence more than once**
-Article 20(2) = Double Jeopardy = "No person shall be prosecuted and punished for the same offence more than once."
-- Option A = covered by Article 22
-- Option C = covered by Article 20(3) — self-incrimination
-
----
-
-**A48. → (B) Prohibition of traffic in human beings and forced labour**
-Article 23 = Prohibits:
-1. Traffic in human beings (begar, slavery, human trafficking)
-2. Forced labour
-Article 24 = Child labour prohibition
-
----
-
-**A49. → (A) Prohibition issued BEFORE judgment; Certiorari issued AFTER judgment**
-- PROHIBITION = PREVENTIVE — stops inferior court from PROCEEDING with a case (before decision)
-- CERTIORARI = CORRECTIVE — quashes an order ALREADY MADE by inferior court (after decision)
-
----
-
-**A50. → (B) Supreme Court**
-Article 32 = Supreme Court issues writs for enforcement of FRs.
-Article 226 = High Courts can ALSO issue writs, but for enforcement of ANY legal right (not just FRs).
-Note: High Court's jurisdiction (Art 226) is WIDER than Supreme Court's (Art 32).
-
----
-
-# ═══════════════════════════════════════════════
-# 📊 DAY 22 REVISION SUMMARY
-## Quick-Recall Flash Points
-# ═══════════════════════════════════════════════
-
----
-
-## 🖥️ CS — LINKED LIST: 10 MUST-REMEMBER FACTS
-
+**Article 20 — Three Protections:**
 ```
-1. Insert at BEGINNING of SLL → O(1)
-2. Insert at END of SLL (no tail ptr) → O(n)
-3. Search in SLL → O(n)
-4. Access by index (random access) → NOT POSSIBLE in LL
-5. Binary search on LL → NOT POSSIBLE
-6. Best sort for LL → MERGE SORT
-7. Empty LL → HEAD = NULL
-8. Floyd's algorithm → uses slow (1 step) + fast (2 step) pointers
-9. Nodes in LL → stored at NON-CONTIGUOUS memory
-10. SLL node → data + ONE next pointer
+20(1) → No EX-POST FACTO LAW
+        Cannot be convicted for an act that was not a crime when committed
+
+20(2) → No DOUBLE JEOPARDY
+        Cannot be prosecuted twice for the same offence
+
+20(3) → No SELF-INCRIMINATION
+        Cannot be compelled to be a witness against yourself
+        (Right to REMAIN SILENT — like US 5th Amendment)
 ```
 
-## 📚 GS — FUNDAMENTAL RIGHTS: 10 MUST-REMEMBER FACTS
+**Article 21 — The Most Important Fundamental Right:**
+```
+"No person shall be deprived of his LIFE or PERSONAL LIBERTY
+ except according to PROCEDURE ESTABLISHED BY LAW"
+
+→ Interpreted VERY broadly by Supreme Court over decades
+→ Has expanded to include: Right to livelihood, Right to privacy,
+  Right to health, Right to education, Right to die with dignity,
+  Right against solitary confinement, etc.
+
+LANDMARK CASE: Maneka Gandhi v. Union of India (1978)
+  The procedure must be "fair, just, and reasonable" (not merely any procedure)
+```
+
+**Article 21A — Right to Education:**
+```
+→ Added by 86th Constitutional Amendment, 2002
+→ Free and compulsory education for children aged 6 to 14 years
+→ Implemented through Right to Education (RTE) Act, 2009
+```
+
+**Article 22 — Protection from Arbitrary Arrest:**
+```
+On ARREST, a person has the right to:
+  (a) Be informed of GROUNDS of arrest (immediately)
+  (b) Consult and be defended by a LAWYER of choice
+  (c) Be produced before a MAGISTRATE within 24 hours
+  (d) Not be detained beyond 24 hours without magistrate's order
+
+Exceptions: Preventive Detention laws (MISA, NSA, COFEPOSA, etc.)
+```
+
+### 🚨 PYQ TRAP #4: Articles 20 and 21 During Emergency
+> Articles 20 and 21 CANNOT be suspended even during a National Emergency under Article 352.
+> All other Fundamental Rights (including Article 19) can be suspended.
+> This was reinforced by the 44th Constitutional Amendment, 1978 (after Emergency of 1975-77).
+
+---
+
+### RIGHT 3: Right against Exploitation (Articles 23–24)
+
+| Article | Content | Key Point |
+|---------|---------|-----------|
+| **23** | Prohibition of human trafficking and forced labour (begar) | Includes bonded labour, child labour, trafficking |
+| **24** | Prohibition of employment of children in factories and hazardous work | Children below 14 years cannot work in factories/mines |
 
 ```
-1. FRs → Part III, Articles 12–35
-2. "Heart & Soul" of Constitution → Article 32 (Dr. Ambedkar)
-3. FRs inspired by → USA Bill of Rights
-4. Right to Property removed by → 44th Amendment 1978
-5. Article 21A (Education 6-14 yrs) added by → 86th Amendment 2002
-6. Articles 20 & 21 → Cannot be suspended even during Emergency
-7. Article 19 → Only for CITIZENS (not foreigners)
-8. Article 14 → For ALL PERSONS (including foreigners)
-9. Writs: HMPCQ = Habeas Corpus, Mandamus, Prohibition, Certiorari, Quo Warranto
-10. Bihar Vidhan Sabha → 243 seats | Vidhan Parishad → 75 seats
+Article 23: BEGAR (forced labour without payment) is prohibited
+            Violation = punishable offence
+            Applies to BOTH State and private individuals
+
+Article 24: Children below 14 = CANNOT work in:
+              → Factories
+              → Mines
+              → Other hazardous occupations
+            CAN work in: non-hazardous jobs, family businesses, artistic work
+
+IMPORTANT: Article 24 does NOT prohibit ALL child labour —
+           only hazardous employment below age 14.
+           The Child Labour (Prohibition & Regulation) Act, 1986 governs this.
+```
+
+### 🚨 PYQ TRAP #5: Begar vs. Bonded Labour
+> **Begar** = forced labour WITHOUT payment (traditional form of exploitation)
+> **Bonded labour** = working to pay off debt (also covered under Article 23)
+> Both are prohibited. Bonded Labour System (Abolition) Act, 1976 was enacted under Article 23.
+
+---
+
+### RIGHT 4: Right to Freedom of Religion (Articles 25–28)
+
+| Article | Content |
+|---------|---------|
+| **25** | Freedom of CONSCIENCE and right to PROFESS, PRACTISE, and PROPAGATE religion |
+| **26** | Freedom to manage RELIGIOUS AFFAIRS and establish religious institutions |
+| **27** | Freedom from paying taxes for promotion of any particular religion |
+| **28** | Freedom from religious instruction in State-funded educational institutions |
+
+```
+Article 25 — For INDIVIDUALS (Personal Religious Freedom)
+Article 26 — For RELIGIOUS DENOMINATIONS (Institutional Freedom)
+             A religious denomination can:
+             (a) Establish and maintain institutions
+             (b) Manage its own religious affairs
+             (c) Own and acquire property
+             (d) Administer property according to law
+
+Article 27 — State cannot FORCE you to pay tax that goes to promote a religion
+Article 28 — Three types of educational institutions:
+             Type 1: Wholly State-maintained → NO religious instruction at all
+             Type 2: Administered by State but founded by endowment → CAN have religious instruction
+             Type 3: Recognized by State but not funded → CAN have compulsory religious instruction
+```
+
+### 🚨 PYQ TRAP #6: Article 25 vs 26
+> Article 25 is for INDIVIDUALS (right to personal religious practice)
+> Article 26 is for RELIGIOUS DENOMINATIONS (institutions/groups)
+> Both are subject to public order, morality, and health
+
+---
+
+### RIGHT 5: Cultural and Educational Rights (Articles 29–30)
+
+| Article | Content |
+|---------|---------|
+| **29** | Protection of INTERESTS OF MINORITIES (language, script, culture) |
+| **30** | Right of MINORITIES to establish and administer educational institutions |
+
+```
+Article 29:
+→ Any section of citizens (not just religious minorities) with a DISTINCT
+  language, script, or culture has the right to conserve it
+→ No citizen can be denied admission to State-aided educational institutions
+  on grounds of religion, race, caste, language
+
+Article 30:
+→ ALL minorities (religious OR linguistic) can:
+  (a) Establish educational institutions
+  (b) Administer them freely
+→ State cannot discriminate against minority institutions in giving aid
+→ LANDMARK: Minorities have absolute right to establish, but NOT absolute right to bad management
+```
+
+### 🚨 PYQ TRAP #7: Article 29 vs 30
+> Article 29 is available to ALL citizens (any section with distinct culture)
+> Article 30 is available ONLY to minorities (religious or linguistic)
+> Note: Article 30 does NOT include the right to get government grants — just to establish and administer.
+
+---
+
+### RIGHT 6: Right to Constitutional Remedies (Article 32)
+
+**This is called the "HEART and SOUL" of the Constitution — Dr. B.R. Ambedkar's words.**
+
+```
+Article 32 → Right to move the SUPREME COURT for enforcement of Fundamental Rights
+
+Article 226 → Similar power of HIGH COURTS (but wider — can enforce ANY legal right)
+
+Article 32 vs 226:
+  Article 32: Only Supreme Court, only for FRs, itself a Fundamental Right
+  Article 226: Any High Court, for FRs AND other legal rights, NOT a FR
+```
+
+### WRITS — The Five Weapons of Article 32:
+
+| Writ | Meaning | Purpose |
+|------|---------|---------|
+| **Habeas Corpus** | "To have the body" | Release an illegally detained person |
+| **Mandamus** | "We command" | Direct a public authority to perform its duty |
+| **Prohibition** | "To forbid" | Prevent inferior court from exceeding jurisdiction |
+| **Certiorari** | "To be certified" | Quash order of inferior court/tribunal |
+| **Quo Warranto** | "By what authority" | Challenge a person's right to hold public office |
+
+**Memory Trick for Writs — "H M P C Q":**
+```
+H = Habeas Corpus   (Free the body — personal liberty)
+M = Mandamus        (Must do your duty)
+P = Prohibition     (Prevent going beyond limits)
+C = Certiorari      (Cancel a bad order)
+Q = Quo Warranto   (Question authority to hold office)
+```
+
+### 🚨 PYQ TRAP #8: Article 32 during Emergency
+> Article 32 can be SUSPENDED during a National Emergency (Article 359).
+> BUT Article 20 and 21 cannot be suspended (44th Amendment).
+> During suspension of Article 32, you CANNOT move Supreme Court for enforcement of FRs.
+> However, you can still move HIGH COURT under Article 226 (since it's not suspended by Article 359).
+
+---
+
+## 🔷 SECTION 4: Important Miscellaneous Articles (12–35 Range)
+
+| Article | Content | Exam Importance |
+|---------|---------|----------------|
+| **12** | Definition of State | HIGH |
+| **13** | Pre-constitutional laws void if violating FR | HIGH |
+| **17** | Abolition of Untouchability | VERY HIGH |
+| **18** | Abolition of Titles | MEDIUM |
+| **19(1)(a)** | Freedom of Speech & Expression | VERY HIGH |
+| **20** | Protection against ex-post facto laws, double jeopardy, self-incrimination | VERY HIGH |
+| **21** | Right to Life and Personal Liberty | HIGHEST |
+| **21A** | Right to Education (added 2002) | VERY HIGH |
+| **24** | No child labour in hazardous occupations (below 14) | HIGH |
+| **25** | Freedom of religion (individual) | HIGH |
+| **32** | Right to Constitutional Remedies | HIGHEST |
+| **33** | Parliament can restrict FRs of Armed Forces | MEDIUM |
+| **34** | FRs can be restricted during martial law | MEDIUM |
+| **35** | Parliament has power to legislate on matters in Articles 16, 32, 33, 34 | LOW |
+
+---
+
+## 🔷 SECTION 5: Fundamental Rights — Quick Reference Summary
+
+```
+PART III: Articles 12 to 35
+TOTAL FUNDAMENTAL RIGHTS: 6 (originally 7; Right to Property removed in 1978)
+
+1. RIGHT TO EQUALITY          → Articles 14–18
+2. RIGHT TO FREEDOM           → Articles 19–22
+3. RIGHT AGAINST EXPLOITATION → Articles 23–24
+4. RIGHT TO RELIGION          → Articles 25–28
+5. CULTURAL & EDUCATIONAL     → Articles 29–30
+6. RIGHT TO CONST. REMEDIES   → Article 32 (Articles 31A, 31B, 31C are exceptions)
+
+REMOVED RIGHT:
+   Right to PROPERTY (Article 31) → Removed by 44th Amendment Act, 1978
+   Now a Legal Right under Article 300A (not a FR)
+```
+
+### Memory Trick — "E F E R C C":
+```
+E = Equality (14–18)
+F = Freedom (19–22)
+E = Exploitation prevention (23–24)
+R = Religion (25–28)
+C = Cultural & Educational (29–30)
+C = Constitutional Remedies (32)
 ```
 
 ---
 
-## ⚡ OPTION D TRAPS TO WATCH FOR (BPSC Specialty)
+## 🔷 SECTION 6: Article 21 Expanded Rights (Supreme Court Interpretations)
+
+Article 21 has been expanded by the Supreme Court to include:
 
 ```
-TOPIC                          | When Option D applies
--------------------------------|--------------------------------
-Applications of LL             | Multiple correct (graphs + hash + poly)
-Advantages of LL over Array    | Check carefully — only dynamic size + easy insert
-Writs issued by Supreme Court  | Only for FR enforcement (Art 32)
-Article 15 grounds             | ALL 5 grounds = D is correct
-States with Vidhan Parishad    | List exactly 6 states
+Right to LIVELIHOOD (Olga Tellis case)
+Right to PRIVACY (Puttaswamy case, 2017 — 9-judge bench)
+Right to HEALTH and Medical Care
+Right to EDUCATION (before 21A was added)
+Right to CLEAN ENVIRONMENT
+Right against SEXUAL HARASSMENT (Vishaka case — gave POSH guidelines)
+Right to DIE WITH DIGNITY (Common Cause case)
+Right against SOLITARY CONFINEMENT
+Right to SPEEDY TRIAL
+Right to LEGAL AID (Hussainara Khatoon case)
+```
+
+### 🚨 PYQ TRAP #9: Right to Privacy
+> In **K.S. Puttaswamy v. Union of India (2017)**, a 9-judge Supreme Court bench unanimously declared **Right to Privacy** as a Fundamental Right under Article 21.
+> This is a recent landmark judgment — high exam probability!
+
+---
+
+# PART 3: PRACTICE QUESTIONS
+
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: Singly Linked List, Node Structure, Operations, Complexity, Array vs SLL
+
+---
+
+**Q1.** In a Singly Linked List, each node contains:
+(A) Only data
+(B) Data and pointer to previous node
+(C) Data and pointer to next node
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q2.** What does the HEAD pointer in a Singly Linked List point to?
+(A) The last node
+(B) The middle node
+(C) The first node
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q3.** In a Singly Linked List, the last node's NEXT pointer contains:
+(A) Address of the first node
+(B) Address of the head node
+(C) NULL
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q4.** What is the time complexity of inserting a node at the BEGINNING of a Singly Linked List?
+(A) O(n)
+(B) O(log n)
+(C) O(1)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q5.** What is the time complexity of inserting a node at the END of a Singly Linked List (without tail pointer)?
+(A) O(1)
+(B) O(log n)
+(C) O(n)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q6.** What is the time complexity of ACCESSING the k-th element in a Singly Linked List?
+(A) O(1)
+(B) O(k) in worst case, which is O(n)
+(C) O(log n)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q7.** When inserting a new node at the MIDDLE of a Singly Linked List, what is the CORRECT order of pointer operations?
+(A) First connect previous node to new node, then connect new node to next node
+(B) First connect new node to next node, then connect previous node to new node
+(C) The order doesn't matter
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q8.** Why is deletion from the END of a Singly Linked List O(n)?
+(A) Memory deallocation is time-consuming
+(B) The second-to-last node must be found, requiring traversal from HEAD
+(C) All nodes must be deleted and recreated
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q9.** What is the MAIN ADVANTAGE of Singly Linked List over Array?
+(A) O(1) random access
+(B) Better cache performance
+(C) Dynamic size and O(1) insertion at beginning
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q10.** Which memory is used for dynamic allocation of linked list nodes?
+(A) Stack memory
+(B) ROM
+(C) Heap memory
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q11.** In a Singly Linked List with n nodes, what is the time complexity of searching for a value?
+(A) O(1)
+(B) O(log n)
+(C) O(n)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q12.** What is the time complexity of deleting the FIRST node of a Singly Linked List?
+(A) O(n)
+(B) O(1)
+(C) O(log n)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q13.** Which of the following is NOT possible in a Singly Linked List (without modification)?
+(A) Inserting a node at the beginning
+(B) Traversing in reverse order
+(C) Deleting the first node
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q14.** A Singly Linked List with a tail pointer allows END insertion in:
+(A) O(n)
+(B) O(log n)
+(C) O(1)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q15.** What happens if you incorrectly REVERSE the pointer assignment order during middle insertion in an SLL?
+(A) Nothing — both orders work equally
+(B) The insertion succeeds but traversal slows
+(C) You lose the rest of the list (all nodes after insertion point)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q16.** In Singly Linked List, nodes are stored in:
+(A) Contiguous memory locations
+(B) Non-contiguous (random) memory locations
+(C) Stack memory only
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q17.** What additional memory overhead does each Singly Linked List node carry compared to an array element of the same data type?
+(A) No additional memory
+(B) Memory for one pointer (4 or 8 bytes)
+(C) Memory for two pointers
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q18.** Which of the following structures uses Linked List internally?
+(A) Hash table (chaining method)
+(B) Stack (linked implementation)
+(C) Queue (linked implementation)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q19.** What is the time complexity of finding the LENGTH of a Singly Linked List?
+(A) O(1)
+(B) O(log n)
+(C) O(n)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q20.** What distinguishes a Circular Linked List from a Singly Linked List?
+(A) Nodes have two pointers each
+(B) The last node's NEXT points back to HEAD instead of NULL
+(C) All nodes are stored contiguously
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q21.** In C++, when you delete a node from a linked list without using `delete` keyword, the result is:
+(A) Runtime error
+(B) Compile error
+(C) Memory leak
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q22.** Binary Search is NOT efficient on a Singly Linked List because:
+(A) Linked lists cannot store sorted data
+(B) No random access — cannot jump to middle element directly
+(C) Linked lists use too much memory for sorting
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q23.** What is the correct code-level representation of a Singly Linked List node in C++?
+(A) `struct Node { int data; Node* prev; Node* next; };`
+(B) `struct Node { int data; Node* next; };`
+(C) `struct Node { int data; int next; };`
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q24.** The time complexity of REVERSING a Singly Linked List is:
+(A) O(1)
+(B) O(log n)
+(C) O(n)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q25.** Which of the following correctly identifies an advantage of ARRAY over Singly Linked List?
+(A) Array supports dynamic resizing
+(B) Array provides O(1) access by index (random access)
+(C) Array uses less memory per element when compared to SLL
+(D) More than one of the above (B and C are both correct)
+(E) None of the above
+
+---
+---
+
+## 📝 GENERAL STUDIES — 25 MCQs
+### Indian Polity — Fundamental Rights (Articles 12–35)
+
+---
+
+**Q26.** Fundamental Rights in the Indian Constitution are contained in:
+(A) Part II, Articles 5–11
+(B) Part III, Articles 12–35
+(C) Part IV, Articles 36–51
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q27.** Which article of the Indian Constitution defines the term "State" for the purpose of Fundamental Rights?
+(A) Article 13
+(B) Article 14
+(C) Article 12
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q28.** Article 14 of the Indian Constitution guarantees:
+(A) Right to freedom of speech
+(B) Equality before law and equal protection of laws
+(C) Abolition of untouchability
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q29.** Untouchability was abolished by which Article of the Indian Constitution?
+(A) Article 14
+(B) Article 16
+(C) Article 17
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q30.** How many Freedoms are currently guaranteed under Article 19(1) of the Indian Constitution?
+(A) 7
+(B) 4
+(C) 6
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q31.** The Right to Property was removed as a Fundamental Right by which Constitutional Amendment?
+(A) 42nd Amendment, 1976
+(B) 44th Amendment, 1978
+(C) 86th Amendment, 2002
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q32.** Article 21A, which guarantees the Right to Education, was added by:
+(A) 73rd Constitutional Amendment
+(B) 86th Constitutional Amendment, 2002
+(C) 44th Constitutional Amendment, 1978
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q33.** Which Articles of the Indian Constitution CANNOT be suspended even during a National Emergency?
+(A) Articles 14 and 19
+(B) Articles 19 and 21
+(C) Articles 20 and 21
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q34.** "No person shall be prosecuted and punished for the same offence more than once" — this principle is called:
+(A) Ex-post facto law
+(B) Double jeopardy
+(C) Self-incrimination
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q35.** Dr. B.R. Ambedkar described which Article as the "Heart and Soul" of the Constitution?
+(A) Article 14
+(B) Article 21
+(C) Article 32
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q36.** The writ of HABEAS CORPUS is issued to:
+(A) Direct a public official to perform a duty
+(B) Secure release of a person illegally detained
+(C) Question a person's right to hold public office
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q37.** Which writ literally means "What is your authority?" and is used to question the right to hold public office?
+(A) Mandamus
+(B) Certiorari
+(C) Quo Warranto
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q38.** Under Article 24, employment of children below what age in factories and hazardous occupations is prohibited?
+(A) 12 years
+(B) 16 years
+(C) 14 years
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q39.** The Right to Freedom of Religion under Article 25 includes the right to:
+(A) Profess and practise religion only
+(B) Profess, practise, and propagate religion
+(C) Propagate religion using State funds
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q40.** Article 32 gives citizens the right to approach which Court for enforcement of Fundamental Rights?
+(A) District Court
+(B) High Court
+(C) Supreme Court
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q41.** The Right to Privacy was declared a Fundamental Right under Article 21 in which landmark case?
+(A) Maneka Gandhi v. Union of India (1978)
+(B) Kesavananda Bharati v. State of Kerala (1973)
+(C) K.S. Puttaswamy v. Union of India (2017)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q42.** Article 29 of the Indian Constitution protects the interests of:
+(A) Religious minorities only
+(B) Linguistic minorities only
+(C) Any section of citizens having a distinct language, script, or culture
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q43.** The writ of MANDAMUS is issued to:
+(A) Release an illegally detained person
+(B) Stop an inferior court from exceeding its jurisdiction
+(C) Direct a public authority to perform its legal duty
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q44.** Article 30 grants which right to minorities?
+(A) Right to vote in elections
+(B) Right to establish and administer educational institutions
+(C) Right to receive mandatory government grants
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q45.** Which of the following is NOT a Fundamental Right in the Indian Constitution?
+(A) Right to Equality (Article 14)
+(B) Right against Exploitation (Article 23)
+(C) Right to Property
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q46.** The protection against Ex-Post Facto laws, Double Jeopardy, and Self-Incrimination is guaranteed by:
+(A) Article 19
+(B) Article 22
+(C) Article 20
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q47.** High Courts can issue writs under which Article of the Constitution?
+(A) Article 32
+(B) Article 226
+(C) Article 142
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q48.** The "Doctrine of Eclipse" in Constitutional Law means:
+(A) Fundamental Rights can be permanently removed by Parliament
+(B) A pre-constitutional law violating FR is dormant but revives if FR is amended
+(C) Courts can eclipse Parliament's power to amend the Constitution
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q49.** Which Article prohibits the State from levying taxes for promotion of any particular religion?
+(A) Article 25
+(B) Article 28
+(C) Article 27
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q50.** Article 19(1)(f) — Freedom to acquire, hold, and dispose of property — was removed by:
+(A) 42nd Constitutional Amendment, 1976
+(B) 44th Constitutional Amendment, 1978
+(C) 24th Constitutional Amendment, 1971
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+# ANSWER KEY
+
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
+
+---
+
+### CS Answers (Q1–Q25):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (C) | Node = data + pointer to NEXT node |
+| 2 | (C) | HEAD always points to first node |
+| 3 | (C) | Last node's NEXT = NULL (end marker) |
+| 4 | (C) | Insert at beginning = O(1) — only pointer changes |
+| 5 | (C) | Must traverse to last node → O(n) |
+| 6 | (B) | No random access; must traverse from HEAD |
+| 7 | (B) | newNode.next = next node FIRST; then prev.next = newNode |
+| 8 | (B) | SLL is one-directional; must find second-to-last node |
+| 9 | (C) | Dynamic size + O(1) beginning insertion |
+| 10 | (C) | Dynamic allocation uses HEAP memory |
+| 11 | (C) | Linear scan from HEAD → O(n) |
+| 12 | (B) | Just move HEAD forward → O(1) |
+| 13 | (B) | Reverse traversal not possible in SLL (no prev pointer) |
+| 14 | (C) | Tail pointer gives direct end access → O(1) |
+| 15 | (C) | Wrong order breaks chain → lose rest of list |
+| 16 | (B) | Non-contiguous (random) memory locations |
+| 17 | (B) | One pointer per node = 4 or 8 extra bytes |
+| 18 | (D) | Hash chaining + linked stack + linked queue — all use LL |
+| 19 | (C) | Count all nodes = O(n) |
+| 20 | (B) | Last node's NEXT points to HEAD (not NULL) |
+| 21 | (C) | Memory leak — allocated memory not freed |
+| 22 | (B) | No random access → cannot jump to middle |
+| 23 | (B) | `struct Node { int data; Node* next; }` |
+| 24 | (C) | Must visit each node once → O(n) |
+| 25 | (D) | Both O(1) access AND less memory per element are advantages |
+
+---
+
+### GS Answers (Q26–Q50):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (B) | Part III, Articles 12–35 |
+| 27 | (C) | Article 12 defines "State" |
+| 28 | (B) | Article 14 = Equality before law + equal protection |
+| 29 | (C) | Article 17 abolishes untouchability |
+| 30 | (C) | 6 freedoms (Article 19(1)(f) removed in 1978) |
+| 31 | (B) | 44th Amendment, 1978 removed property as FR |
+| 32 | (B) | 86th Amendment, 2002 added Article 21A |
+| 33 | (C) | Articles 20 and 21 — cannot be suspended even during emergency |
+| 34 | (B) | Double jeopardy — Article 20(2) |
+| 35 | (C) | Article 32 — "Heart and Soul" per Ambedkar |
+| 36 | (B) | Habeas Corpus = release of illegally detained person |
+| 37 | (C) | Quo Warranto = challenge to public office authority |
+| 38 | (C) | Article 24 — below 14 years |
+| 39 | (B) | Article 25 — profess, practise, AND propagate |
+| 40 | (C) | Article 32 → Supreme Court |
+| 41 | (C) | K.S. Puttaswamy v. Union of India (2017) |
+| 42 | (C) | Any section of citizens (not just minorities) |
+| 43 | (C) | Mandamus = direct public authority to perform duty |
+| 44 | (B) | Article 30 = establish and administer educational institutions |
+| 45 | (C) | Right to Property was removed as FR in 1978 |
+| 46 | (C) | Article 20 — three protections |
+| 47 | (B) | Article 226 — High Courts |
+| 48 | (B) | Dormant law revives if FR is subsequently amended |
+| 49 | (C) | Article 27 — no tax for religion promotion |
+| 50 | (B) | 44th Constitutional Amendment, 1978 |
+
+---
+---
+
+# 🔁 DAY 22 — CRISP REVISION NOTES
+
+## ⚡ RAPID FIRE — Singly Linked List
+
+### Core One-Liners:
+1. **Node Structure** = Data + Pointer to NEXT node (two fields)
+2. **HEAD** = pointer to first node; **NULL** = marks end of list
+3. **Non-contiguous memory** = nodes scattered in RAM (key difference from array)
+4. **Insert at beginning = O(1)** — only 2 pointer changes, NO traversal
+5. **Insert at end = O(n)** — must find last node by traversal
+6. **Delete at beginning = O(1)** — just advance HEAD
+7. **Delete at end = O(n)** — must find SECOND-TO-LAST node
+8. **Access/Search = O(n)** — no random access; must traverse from HEAD
+9. **Middle insertion order**: newNode.next = next FIRST, then prev.next = newNode (CRITICAL!)
+10. **Memory leak** = in C++, forgetting to `delete` a removed node
+
+### Complexity Cheat Sheet:
+```
+Operation                    | Time  | Key Reason
+-----------------------------|-------|----------------------------------
+Access by index              | O(n)  | No random access; traverse needed
+Search                       | O(n)  | Linear scan from HEAD
+Insert at BEGINNING          | O(1)  | Just 2 pointer changes
+Insert at END (no tail ptr)  | O(n)  | Traverse to last node
+Insert at END (with tail ptr)| O(1)  | Direct access via tail
+Insert at MIDDLE             | O(n)  | Traverse to position k-1
+Delete at BEGINNING          | O(1)  | Advance HEAD
+Delete at END                | O(n)  | Traverse to second-to-last
+Delete at MIDDLE             | O(n)  | Traverse to position k-1
+Traversal                    | O(n)  | Visit all n nodes
+Reversal                     | O(n)  | Visit all n nodes
+```
+
+### SLL vs Array — 3-Line Summary:
+```
+Array:  FAST access O(1), SLOW begin-insert O(n), FIXED size, CONTIGUOUS memory
+SLL:    SLOW access O(n), FAST begin-insert O(1), DYNAMIC size, NON-CONTIGUOUS memory
+DLL:    Like SLL but can traverse BOTH ways (needs 2 pointers; O(1) end deletion)
+```
+
+### Types of Linked Lists:
+```
+SLL:      [data|next] → [data|next] → [data|NULL]
+DLL:      NULL←[prev|data|next] ↔ [prev|data|next]→NULL
+Circular: [data|next] → [data|next] → [data|next] → (back to HEAD)
 ```
 
 ---
 
-## 🎯 TONIGHT'S REVISION TASK (30 min)
+## ⚡ RAPID FIRE — Fundamental Rights
 
-Write these from memory (close this file):
-1. Draw a 5-node SLL diagram with data 10→20→30→40→50
-2. Write the 5 writs with their meanings
-3. Write Articles 14, 17, 19, 20, 21, 21A, 24, 32 with one-line descriptions
-4. State: O complexity for insert-beginning, insert-end, search in SLL
+### The 6 Fundamental Rights + Articles:
+```
+1. Right to EQUALITY         → Articles 14–18
+2. Right to FREEDOM          → Articles 19–22
+3. Right AGAINST EXPLOITATION→ Articles 23–24
+4. Right to RELIGION         → Articles 25–28
+5. CULTURAL & EDUCATIONAL    → Articles 29–30
+6. RIGHT TO CONST. REMEDIES  → Article 32
+```
+
+### Must-Know Articles:
+```
+Art. 12:  Definition of "State" (FRs apply against State)
+Art. 13:  Laws violating FRs = VOID (Judicial Review)
+Art. 14:  Equality before law + equal protection
+Art. 17:  Abolition of untouchability (PUNISHABLE offence)
+Art. 19:  6 freedoms (speech, assembly, association, movement, residence, profession)
+Art. 20:  Ex-post facto, Double Jeopardy, Self-incrimination protection
+Art. 21:  Life + Personal Liberty (most expansive FR)
+Art. 21A: Free education 6–14 years (86th Amendment, 2002)
+Art. 22:  Protection from arbitrary arrest (produce before magistrate within 24 hrs)
+Art. 23:  No begar/forced labour
+Art. 24:  No child labour below 14 in hazardous jobs
+Art. 25:  Freedom of religion (profess, practise, propagate)
+Art. 26:  Religious denomination rights
+Art. 27:  No tax for religion promotion
+Art. 29:  Minority culture protection
+Art. 30:  Minorities can establish & administer educational institutions
+Art. 32:  "Heart & Soul" — remedies via Supreme Court; 5 writs
+```
+
+### The 5 Writs (HMPCQ):
+```
+H = Habeas Corpus  → Illegal detention → Release the body
+M = Mandamus       → Public duty not done → Do your duty
+P = Prohibition    → Inferior court exceeding jurisdiction → Stop!
+C = Certiorari     → Bad order by inferior court → Quash the order
+Q = Quo Warranto  → Illegal occupancy of public office → By what authority?
+```
+
+### Critical Emergency Facts:
+```
+Articles 20 & 21 → CANNOT be suspended even during National Emergency (44th Amendment)
+Article 19 freedoms → CAN be suspended during National Emergency
+Article 32 → CAN be suspended under Article 359 (President's order)
+But Article 226 (HC writs) → CANNOT be suspended
+```
+
+### PYQ Traps — One-Line Reminders:
+```
+FR vs DPSP: FR = justiciable; DPSP = non-justiciable
+Right to Property: Removed as FR by 44th Amendment 1978 → now Article 300A (legal right)
+Article 21A: 86th Amendment 2002 → RTE Act 2009 → ages 6–14
+Art. 17 is unique: applies to PRIVATE individuals too (not just State)
+Right to Privacy: Declared FR under Art. 21 in Puttaswamy case (2017)
+Art. 32 vs Art. 226: SC can only enforce FRs; HC can enforce FRs + other rights
+```
 
 ---
 
-*Day 22 Complete | Next: Day 23 — Doubly Linked List + DPSPs*
-*Target Score Today: 22/25 CS + 22/25 GS = 44/50 minimum*
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. SLL node = Data + Next pointer; HEAD = first node; NULL = end; memory is NON-CONTIGUOUS
+2. Insert/Delete at BEGINNING = O(1) in SLL (key advantage over arrays); everything else = O(n)
+3. Middle insertion: ALWAYS connect newNode.next first, then previous.next = newNode (wrong order = data loss)
+4. Fundamental Rights = Part III, Articles 12–35; 6 rights; justiciable; Articles 20 & 21 cannot be suspended even in emergency
+5. Article 32 = "Heart and Soul" (Ambedkar); 5 writs = Habeas Corpus, Mandamus, Prohibition, Certiorari, Quo Warranto
+
+---
+
+*Next: Day 23 — Doubly Linked List + Stacks (LIFO, Operations, Applications using Arrays & LL) | GS: Indian Polity — Directive Principles & Fundamental Duties*

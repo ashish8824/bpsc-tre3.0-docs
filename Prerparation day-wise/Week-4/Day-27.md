@@ -1,1722 +1,1801 @@
-# 📅 DAY 27 — BPSC TRE 4.0 COMPLETE STUDY MATERIAL
-## CS Topic: Graph Theory — BFS, DFS, Representations, Applications & Algorithms
-## GS Topic: Biology — Plant Kingdom (Ginger, Yeast, Fungi, Algae) + Botany Deep Dive
-
-> **Target:** TOP RANK | Phase 1 — Foundation | Week 4
-> **Day 27 of 170 | April–September 2026**
-> **Format:** 25 CS MCQs + 25 GS MCQs in BPSC 5-option format | Answers ONLY at the END
+# 📅 BPSC TRE 4.0 — DAY 27 COMPLETE STUDY MODULE
+### Graph Basics, BFS & DFS + Biology — Ginger, Yeast & Plant Biology
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-# ═══════════════════════════════════════════════════
-# PART A — COMPUTER SCIENCE
-# GRAPH THEORY: Basics | Representations | BFS | DFS | Applications | Algorithms
-# ═══════════════════════════════════════════════════
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): Graph Basics, Representations, BFS & DFS
+> - Afternoon (1 hr): Biology — Ginger (Rhizome), Yeast (Budding), Plant Classification
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-## 🔷 SECTION 1: WHAT IS A GRAPH?
-
-A **Graph G = (V, E)** is a data structure consisting of:
-- **V** = Set of **Vertices** (also called Nodes)
-- **E** = Set of **Edges** (connections between vertices)
-
-**Real World Examples:**
-- Social Network: People = vertices, Friendship = edges
-- Google Maps: Cities = vertices, Roads = edges
-- Internet: Routers = vertices, Cables = edges
-- Circuit: Components = vertices, Wires = edges
+# PART 1: COMPUTER SCIENCE
+## 📘 Graph Basics, BFS & DFS — Deep Conceptual Guide
 
 ---
 
-## 🔷 SECTION 2: TYPES OF GRAPHS
+## 🔷 SECTION 1: What is a Graph?
 
+### Real-Life Analogy 1 — Social Network:
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    GRAPH TYPES                                   │
-├─────────────────────────┬───────────────────────────────────────┤
-│  UNDIRECTED GRAPH        │  DIRECTED GRAPH (Digraph)             │
-│                          │                                       │
-│   A ─── B                │   A ──→ B                            │
-│   │     │                │   │     ↑                            │
-│   C ─── D                │   ↓     │                            │
-│                          │   C ──→ D                            │
-│  Edge (A,B) = Edge (B,A) │  Edge (A,B) ≠ Edge (B,A)            │
-│  Symmetric edges         │  Direction MATTERS                    │
-│  Example: Facebook friend│  Example: Twitter follow,            │
-│           roads (2-way)  │           one-way roads              │
-├─────────────────────────┴───────────────────────────────────────┤
-│  WEIGHTED GRAPH             │  UNWEIGHTED GRAPH                  │
-│  Edges have values/costs    │  Edges have no weight              │
-│  Example: Road distances,   │  Example: Friendship network       │
-│           flight costs      │                                    │
-├─────────────────────────────┴──────────────────────────────────┤
-│  CONNECTED GRAPH            │  DISCONNECTED GRAPH                │
-│  Every vertex reachable     │  Some vertices NOT reachable       │
-│  from every other vertex    │  from others                       │
-└─────────────────────────────────────────────────────────────────┘
+Think of INSTAGRAM or FACEBOOK:
+  → Each USER = a VERTEX (node)
+  → Each FRIENDSHIP/FOLLOW = an EDGE
+
+Facebook (mutual friendship):
+  If A is friends with B → B is also friends with A
+  → UNDIRECTED graph (friendship goes both ways)
+
+Twitter/Instagram (follower):
+  A can follow B without B following A
+  → DIRECTED graph (follow goes one way)
+
+Social network AS A GRAPH:
+    [Rahul]——[Priya]——[Amit]
+       |         |
+    [Sonia]    [Ravi]
+
+Vertices: {Rahul, Priya, Amit, Sonia, Ravi}
+Edges: {Rahul-Priya, Priya-Amit, Rahul-Sonia, Priya-Ravi}
 ```
 
-### Important Graph Terms:
-
+### Real-Life Analogy 2 — Road Map (GPS):
 ```
-DEGREE OF A VERTEX:
-  Undirected: Number of edges connected to it
-  Directed:   In-degree  = edges COMING IN to vertex
-              Out-degree = edges GOING OUT from vertex
-  
-  Example:
-       A ──→ B ──→ C
-             ↑
-             D
-  
-  For B: In-degree = 2 (from A and D), Out-degree = 1 (to C)
+Think of GOOGLE MAPS:
+  → Each CITY = a VERTEX
+  → Each ROAD between cities = an EDGE
+  → Distance on road = WEIGHT of edge
 
-PATH: Sequence of vertices connected by edges
-CYCLE: Path that starts and ends at same vertex
-SIMPLE PATH: Path with no repeated vertices
+    [Patna]——400km——[Delhi]
+      |                |
+    200km            300km
+      |                |
+    [Gaya]——500km——[Lucknow]
 
-DENSE GRAPH:  Many edges (close to maximum)
-SPARSE GRAPH: Few edges (much less than maximum)
+This is a WEIGHTED, UNDIRECTED graph.
+BFS finds the shortest route between cities (in unweighted version).
 ```
 
-**Maximum edges possible:**
-- Undirected graph with n vertices: **n(n-1)/2**
-- Directed graph with n vertices: **n(n-1)**
-- Complete graph (all possible edges): denoted **Kn**
+### Formal Definition:
+A **Graph G = (V, E)** consists of:
+- **V** = set of **Vertices** (also called Nodes or Points)
+- **E** = set of **Edges** (also called Links or Arcs)
 
----
+Each edge connects a **pair of vertices**.
 
-## 🔷 SECTION 3: GRAPH REPRESENTATIONS
-
-There are TWO main ways to store a graph in memory:
-
-### 3.1 Adjacency Matrix
-
-A 2D array where `matrix[i][j] = 1` if there is an edge between vertex i and j, else `0`.
-
-**Example Graph:**
 ```
-    1
-   / \
-  2   3
-   \ /
-    4
+Graph G = (V, E):
+  V = {A, B, C, D, E}
+  E = {(A,B), (A,C), (B,D), (C,D), (D,E)}
 
-Vertices: {1, 2, 3, 4}
-Edges: {(1,2), (1,3), (2,4), (3,4)}
-```
-
-**Adjacency Matrix:**
-```
-     1   2   3   4
-  ┌──────────────────┐
-1 │  0   1   1   0  │
-2 │  1   0   0   1  │
-3 │  1   0   0   1  │
-4 │  0   1   1   0  │
-  └──────────────────┘
-
-Note: Matrix is SYMMETRIC for undirected graph
-```
-
-**Adjacency Matrix — PROS and CONS:**
-```
-✅ ADVANTAGES:
-   → O(1) to check if edge (i,j) exists
-   → Simple to implement
-   → Good for DENSE graphs
-
-❌ DISADVANTAGES:
-   → O(V²) space — even for sparse graphs (WASTEFUL!)
-   → O(V) time to find all neighbours of a vertex
-   → Adding/removing vertex is expensive
+      A
+     / \
+    B   C
+     \ /
+      D
+      |
+      E
 ```
 
 ---
 
-### 3.2 Adjacency List
+## 🔷 SECTION 2: Graph Terminology
 
-An array of linked lists. `list[i]` contains all vertices adjacent to vertex i.
+### Key Terms:
 
-**Same graph using Adjacency List:**
+**VERTEX (Node):** A fundamental unit. Every object/entity.
+
+**EDGE:** Connection between two vertices.
+
+**ADJACENT VERTICES:** Two vertices connected by an edge.
 ```
-1 → [2, 3]
-2 → [1, 4]
-3 → [1, 4]
-4 → [2, 3]
-
-Visual:
-1 ──→ 2 ──→ 3 ──→ NULL
-2 ──→ 1 ──→ 4 ──→ NULL
-3 ──→ 1 ──→ 4 ──→ NULL
-4 ──→ 2 ──→ 3 ──→ NULL
+If edge (A, B) exists → A and B are adjacent (neighbours).
 ```
 
-**Adjacency List — PROS and CONS:**
+**DEGREE of a vertex:** Number of edges incident to it.
 ```
-✅ ADVANTAGES:
-   → O(V + E) space — EFFICIENT for sparse graphs
-   → O(degree) time to find all neighbours
-   → Good for SPARSE graphs
+In undirected graph:
+  Degree of A = number of edges FROM/TO A
 
-❌ DISADVANTAGES:
-   → O(degree) to check if specific edge exists
-   → Slightly complex to implement
-```
+In directed graph:
+  IN-DEGREE = number of edges COMING IN
+  OUT-DEGREE = number of edges GOING OUT
 
-### Comparison Table — BPSC Favourite!
-
-```
-┌────────────────────┬─────────────────┬─────────────────────┐
-│ Operation          │ Adj. Matrix      │ Adj. List            │
-├────────────────────┼─────────────────┼─────────────────────┤
-│ Space              │ O(V²)            │ O(V + E)             │
-│ Check edge (u,v)   │ O(1)             │ O(degree of u)       │
-│ Find all neighbors │ O(V)             │ O(degree of u)       │
-│ Add vertex         │ O(V²) rebuild    │ O(1)                 │
-│ Add edge           │ O(1)             │ O(1)                 │
-│ Best for           │ Dense graphs     │ Sparse graphs        │
-│ Used in            │ Floyd-Warshall   │ BFS, DFS, Dijkstra  │
-└────────────────────┴─────────────────┴─────────────────────┘
+Graph:  A → B → C → A (cycle)
+        In-degree of B = 1 (from A)
+        Out-degree of B = 1 (to C)
 ```
 
-**KEY PYQ FACT:** Adjacency Matrix space = O(V²). Adjacency List space = O(V+E). For a graph with 1000 vertices and 1000 edges — Adjacency LIST is MUCH more memory efficient.
+**PATH:** Sequence of vertices where each consecutive pair is connected by an edge.
+
+**CYCLE:** A path that starts and ends at the SAME vertex.
+```
+A — B — C — A  is a cycle (length 3)
+```
+
+**CONNECTED GRAPH:** There exists a PATH between every pair of vertices.
+```
+CONNECTED:           DISCONNECTED:
+A — B — C            A — B    C — D
+    |                         (no path from A to C)
+    D
+All vertices reachable       Two separate components
+```
+
+**WEIGHTED GRAPH:** Edges have numerical values (weights/costs).
+```
+    A ——5—— B
+    |        |
+    3        2
+    |        |
+    C ——1—— D
+Edge weights = distances, costs, times, etc.
+```
+
+### 🚨 PYQ TRAP #1: Degree Sum
+```
+HANDSHAKING LEMMA:
+Sum of degrees of ALL vertices = 2 × Number of edges
+
+Because each edge contributes to the degree of TWO vertices.
+
+Example: Graph with 4 vertices and 5 edges
+  Sum of all degrees = 2 × 5 = 10
+
+Implication: In ANY graph, the number of vertices with ODD degree is EVEN.
+```
 
 ---
 
-## 🔷 SECTION 4: BFS — BREADTH FIRST SEARCH
+## 🔷 SECTION 3: Types of Graphs
 
-### What is BFS?
-
-BFS explores a graph **level by level** — visiting all neighbours of a vertex before moving deeper.
-
-**Think of it like:** Dropping a stone in water — ripples spread outward in concentric circles.
-
+### Type 1: UNDIRECTED GRAPH
 ```
-BFS ORDER of Exploration:
+Edges have NO direction. (A-B) means both A→B AND B→A.
 
-        1
-       / \
-      2   3         Level 0: Visit 1
-     / \   \        Level 1: Visit 2, 3
-    4   5   6       Level 2: Visit 4, 5, 6
+      A
+     / \
+    B   C
+     \ /
+      D
 
-BFS Order: 1 → 2 → 3 → 4 → 5 → 6
+Used for: Social networks (mutual friendship), roads (two-way), chemical bonds
 ```
 
-### BFS uses QUEUE (FIFO):
-
+### Type 2: DIRECTED GRAPH (DIGRAPH)
 ```
-ALGORITHM:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. Start: Put starting vertex in Queue, mark VISITED
-2. While Queue is NOT empty:
-     a. DEQUEUE a vertex u
-     b. PROCESS u (print/record it)
-     c. For each unvisited neighbour v of u:
-          → Mark v as VISITED
-          → ENQUEUE v
-3. Done when Queue is empty
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Data Structure Used: QUEUE (FIFO)
+Edges have DIRECTION (arrows). (A→B) means ONLY A to B, NOT B to A.
+
+    A ——→ B
+    ↑     ↓
+    D ←—— C
+
+Used for: Twitter follow, web page links, task dependencies, one-way roads
 ```
 
-### BFS Step-by-Step Trace (Detailed Example):
+### Type 3: WEIGHTED GRAPH
+```
+Edges have numerical WEIGHTS.
 
+    A ——5—— B ——2—— C
+            |
+            3
+            |
+            D
+
+Used for: Road distances, flight costs, network latency
+```
+
+### Type 4: COMPLETE GRAPH (Kₙ)
+```
+Every vertex is connected to EVERY other vertex.
+
+K₄ (complete graph, 4 vertices):
+    A ——— B
+    |  \/ |
+    |  /\ |
+    C ——— D
+
+Number of edges in Kₙ = n(n-1)/2
+
+K₄: 4×3/2 = 6 edges
+K₅: 5×4/2 = 10 edges
+```
+
+### Type 5: CYCLIC vs ACYCLIC
+```
+CYCLIC: Contains at least one cycle.
+  A → B → C → A   (cycle: A→B→C→A)
+
+ACYCLIC: Contains NO cycles.
+  Trees are acyclic connected graphs!
+
+DAG = Directed Acyclic Graph (used in task scheduling, dependency resolution)
+```
+
+---
+
+## 🔷 SECTION 4: Graph Representation — Adjacency Matrix
+
+### What is an Adjacency Matrix?
+A **2D array** of size V × V (where V = number of vertices).
+- `matrix[i][j] = 1` if edge exists between vertex i and vertex j
+- `matrix[i][j] = 0` if no edge exists
+
+### Example Graph:
+```
+Graph (undirected, 4 vertices):
+    0 ——— 1
+    |   / |
+    |  /  |
+    2 ——— 3
+
+Vertices: {0, 1, 2, 3}
+Edges: {0-1, 0-2, 1-2, 1-3, 2-3}
+```
+
+### Adjacency Matrix:
+```
+     0   1   2   3
+  ┌───┬───┬───┬───┐
+0 │ 0 │ 1 │ 1 │ 0 │   Row 0: connected to 1 and 2
+  ├───┼───┼───┼───┤
+1 │ 1 │ 0 │ 1 │ 1 │   Row 1: connected to 0, 2, and 3
+  ├───┼───┼───┼───┤
+2 │ 1 │ 1 │ 0 │ 1 │   Row 2: connected to 0, 1, and 3
+  ├───┼───┼───┼───┤
+3 │ 0 │ 1 │ 1 │ 0 │   Row 3: connected to 1 and 2
+  └───┴───┴───┴───┘
+
+For UNDIRECTED graph: matrix is SYMMETRIC (matrix[i][j] = matrix[j][i])
+For WEIGHTED graph: store weight instead of 1
+```
+
+### Properties:
+```
+SPACE: O(V²) — always V×V matrix regardless of edges
+CHECK if edge exists: O(1) — just look up matrix[i][j]
+FIND all neighbours of v: O(V) — scan the entire row
+SUITABLE for: Dense graphs (many edges), small graphs
+
+DISADVANTAGE: Wastes memory for sparse graphs
+  If V = 1000, matrix size = 1000×1000 = 1,000,000 cells
+  Even if only 1,500 edges → most cells are 0 (wasted!)
+```
+
+---
+
+## 🔷 SECTION 5: Graph Representation — Adjacency List
+
+### What is an Adjacency List?
+An **array of lists** where each index stores the **list of neighbours** of that vertex.
+
+### Same Example Graph:
 ```
 Graph:
-    A ─── B ─── E
-    │     │
-    C ─── D
+    0 ——— 1
+    |   / |
+    |  /  |
+    2 ——— 3
 
 Adjacency List:
-A: [B, C]
-B: [A, D, E]
-C: [A, D]
-D: [B, C]
-E: [B]
+  0: [1, 2]         → vertex 0 is connected to 1 and 2
+  1: [0, 2, 3]      → vertex 1 is connected to 0, 2, and 3
+  2: [0, 1, 3]      → vertex 2 is connected to 0, 1, and 3
+  3: [1, 2]         → vertex 3 is connected to 1 and 2
 
-Start BFS from A:
-
-Step 1: Queue=[A], Visited={A}
-Step 2: Dequeue A → Process A
-        Neighbors of A: B(unvisited), C(unvisited)
-        Queue=[B,C], Visited={A,B,C}
-Step 3: Dequeue B → Process B
-        Neighbors of B: A(visited), D(unvisited), E(unvisited)
-        Queue=[C,D,E], Visited={A,B,C,D,E}
-Step 4: Dequeue C → Process C
-        Neighbors of C: A(visited), D(visited)
-        Queue=[D,E], No new additions
-Step 5: Dequeue D → Process D
-        All neighbors visited
-        Queue=[E]
-Step 6: Dequeue E → Process E
-        Queue=[] → DONE
-
-BFS Order: A → B → C → D → E
+Visual:
+  0 → [1] → [2] → NULL
+  1 → [0] → [2] → [3] → NULL
+  2 → [0] → [1] → [3] → NULL
+  3 → [1] → [2] → NULL
 ```
 
-### BFS Applications:
-
+### Properties:
 ```
-┌─────────────────────────────────────────────────────┐
-│              BFS APPLICATIONS                        │
-├─────────────────────────────────────────────────────┤
-│ 1. SHORTEST PATH in unweighted graphs               │
-│    (BFS guarantees minimum number of edges)         │
-│                                                     │
-│ 2. Web Crawlers (search engines)                    │
-│    (Explore links level by level)                   │
-│                                                     │
-│ 3. Social Network (find people within K hops)       │
-│    (Facebook "People You May Know")                 │
-│                                                     │
-│ 4. Broadcasting in networks                         │
-│    (Send message to all reachable nodes)            │
-│                                                     │
-│ 5. Finding CONNECTED COMPONENTS                     │
-│                                                     │
-│ 6. Bipartite Graph checking                         │
-│    (Can we 2-colour the graph?)                     │
-└─────────────────────────────────────────────────────┘
-```
+SPACE: O(V + E) — only stores actual edges, not all V² possibilities
+CHECK if edge exists: O(degree of vertex) — scan the list
+FIND all neighbours: O(degree) — just read the list
+SUITABLE for: Sparse graphs (few edges), large graphs
 
-### BFS Complexity:
-
-```
-Time:  O(V + E)  — visit each vertex once, explore each edge once
-Space: O(V)      — for visited array and queue
+ADVANTAGE: Much more memory-efficient for sparse graphs
+  1000 vertices, 1500 edges: stores 1000 + 2×1500 = 4000 entries
+  vs adjacency matrix: 1,000,000 entries!
 ```
 
 ---
 
-## 🔷 SECTION 5: DFS — DEPTH FIRST SEARCH
-
-### What is DFS?
-
-DFS explores a graph by going as **deep as possible** along each path before backtracking.
-
-**Think of it like:** Exploring a maze — go as far as you can, hit a dead end, backtrack, try another path.
+## 🔷 SECTION 6: Adjacency Matrix vs Adjacency List — Comparison
 
 ```
-DFS ORDER of Exploration:
+MASTER COMPARISON TABLE:
 
-        1
-       / \
-      2   3         DFS goes DEEP first
-     / \   \
-    4   5   6
-
-DFS Order (from 1, left first): 1 → 2 → 4 → 5 → 3 → 6
-(Goes all the way down before visiting siblings)
+Feature              | Adjacency Matrix      | Adjacency List
+---------------------|----------------------|------------------
+Space complexity     | O(V²)                | O(V + E)
+Check edge (u,v)?    | O(1) — instant       | O(degree of u)
+Find all neighbours  | O(V) — scan row      | O(degree of u)
+Add a vertex         | O(V²) — resize matrix| O(1)
+Add an edge          | O(1)                 | O(1)
+Remove an edge       | O(1)                 | O(degree)
+Best for             | DENSE graphs         | SPARSE graphs
+Memory efficiency    | Poor for sparse      | Excellent
+Used when            | V is small; many edges| V is large; few edges
+BFS/DFS complexity   | O(V²)                | O(V + E)
 ```
 
-### DFS uses STACK (LIFO):
-
-DFS can be implemented two ways:
-1. **Explicitly using a Stack**
-2. **Recursively** (function call stack acts as implicit stack)
-
+### 🚨 PYQ TRAP #2: When to Use Which?
 ```
-ALGORITHM (Recursive):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DFS(vertex u, visited[]):
-   1. Mark u as VISITED
-   2. PROCESS u (print/record it)
-   3. For each unvisited neighbour v of u:
-        → DFS(v, visited)   ← Recursive call!
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Data Structure Used: STACK (explicit or recursive call stack)
-```
-
-### DFS Step-by-Step Trace (Same Graph):
-
-```
-Graph:
-    A ─── B ─── E
-    │     │
-    C ─── D
-
-Start DFS from A (visit in alphabetical order):
-
-DFS(A): Mark A visited → Process A
-  DFS(B): Mark B visited → Process B
-    DFS(D): Mark D visited → Process D
-      DFS(C): Mark C visited → Process C
-        A already visited, D already visited → RETURN
-      → RETURN to D → no more unvisited neighbors → RETURN
-    DFS(E): Mark E visited → Process E
-      B already visited → RETURN
-    → RETURN to B → no more unvisited → RETURN
-  A already visited, C already visited → RETURN
-  → RETURN to A → no more unvisited → DONE
-
-DFS Order: A → B → D → C → E
-```
-
-### DFS Applications:
-
-```
-┌─────────────────────────────────────────────────────┐
-│              DFS APPLICATIONS                        │
-├─────────────────────────────────────────────────────┤
-│ 1. CYCLE DETECTION in graphs                        │
-│    (If we revisit a visited node → cycle exists)    │
-│                                                     │
-│ 2. TOPOLOGICAL SORTING                              │
-│    (Ordering of tasks with dependencies)            │
-│                                                     │
-│ 3. Finding STRONGLY CONNECTED COMPONENTS           │
-│    (Kosaraju's and Tarjan's algorithms)             │
-│                                                     │
-│ 4. MAZE SOLVING                                     │
-│    (Explore all paths)                              │
-│                                                     │
-│ 5. Path finding (not necessarily shortest)          │
-│                                                     │
-│ 6. Detecting BRIDGES and ARTICULATION POINTS       │
-└─────────────────────────────────────────────────────┘
-```
-
-### DFS Complexity:
-
-```
-Time:  O(V + E)  — same as BFS
-Space: O(V)      — for visited array and stack/recursion depth
-```
-
----
-
-## 🔷 SECTION 6: BFS vs DFS — COMPLETE COMPARISON
-
-```
-┌────────────────────┬─────────────────────┬──────────────────────┐
-│ Feature            │ BFS                  │ DFS                   │
-├────────────────────┼─────────────────────┼──────────────────────┤
-│ Full Form          │ Breadth First Search │ Depth First Search    │
-│ Data Structure     │ QUEUE (FIFO)         │ STACK (LIFO)          │
-│                    │                      │ or Recursion          │
-│ Exploration Style  │ Level by Level       │ One path at a time    │
-│ Goes...            │ Wide first           │ Deep first            │
-│ Shortest Path?     │ YES (unweighted)     │ NOT guaranteed        │
-│ Memory Usage       │ More (stores level)  │ Less (recursion)      │
-│ Cycle Detection    │ Yes                  │ Yes (better!)         │
-│ Topological Sort   │ No                   │ YES                   │
-│ Connected Check    │ Yes                  │ Yes                   │
-│ Time Complexity    │ O(V + E)             │ O(V + E)              │
-│ Space Complexity   │ O(V)                 │ O(V)                  │
-│ Use for            │ Shortest path,       │ Cycle detection,      │
-│                    │ Web crawlers         │ Topological sort      │
-└────────────────────┴─────────────────────┴──────────────────────┘
-```
-
-**⭐ BPSC MOST-ASKED FACTS:**
-- BFS uses **QUEUE** | DFS uses **STACK**
-- BFS finds **shortest path** in unweighted graph
-- DFS used for **topological sorting**
-- Both have time complexity **O(V + E)**
-
----
-
-## 🔷 SECTION 7: TOPOLOGICAL SORTING
-
-### What is it?
-
-Topological Sort is a **linear ordering of vertices** in a **Directed Acyclic Graph (DAG)** such that for every directed edge (u → v), vertex **u comes before v** in the ordering.
-
-**Only works on DAG (Directed Acyclic Graph — no cycles!)**
-
-```
-Example: Course Prerequisites
-
-   Math 101 ──→ Math 201 ──→ Math 301
-      │                         ↑
-      └──→ CS 101 ──→ CS 201 ──┘
-      
-Topological Order: Math 101 → CS 101 → Math 201 → CS 201 → Math 301
-(You must take prerequisites FIRST)
-
-Another valid order: Math 101 → Math 201 → CS 101 → CS 201 → Math 301
-(Multiple valid topological orderings possible!)
-```
-
-**Algorithms for Topological Sort:**
-1. **DFS-based** (Kahn's variant using DFS finish times)
-2. **Kahn's Algorithm** (uses in-degree and BFS/Queue)
-
-**KEY PYQ FACT:** Topological sort is possible ONLY on **DAG (no cycles)**. Uses DFS. Result is **NOT unique** (multiple valid orderings possible).
-
----
-
-## 🔷 SECTION 8: ALGORITHM PARADIGMS (BPSC TRAP TOPIC!)
-
-BPSC frequently asks: "Which of the following is a graph traversal method?"
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│       ALGORITHM DESIGN PARADIGMS (NOT Traversals!)          │
-│                                                             │
-│  1. GREEDY Algorithm                                        │
-│     → Make locally optimal choice at each step             │
-│     → Example: Kruskal's MST, Prim's MST, Dijkstra         │
-│     → Does NOT always give global optimum                  │
-│                                                             │
-│  2. DYNAMIC PROGRAMMING (DP)                                │
-│     → Break problem into subproblems, store results         │
-│     → Example: Floyd-Warshall, Fibonacci, Knapsack          │
-│     → Memoization + Optimal Substructure                   │
-│                                                             │
-│  3. DIVIDE AND CONQUER                                      │
-│     → Divide problem into smaller parts, solve, combine     │
-│     → Example: Merge Sort, Quick Sort, Binary Search        │
-│                                                             │
-│  4. BACKTRACKING                                            │
-│     → Try all possibilities, undo bad choices              │
-│     → Example: N-Queens, Sudoku Solver                     │
-└─────────────────────────────────────────────────────────────┘
-
-BFS and DFS are TRAVERSAL METHODS — not algorithm paradigms!
-Greedy, DP, Divide & Conquer are PARADIGMS — not traversals!
-```
-
----
-
-## 🔷 SECTION 9: DIJKSTRA'S ALGORITHM (Shortest Path — Weighted)
-
-BFS finds shortest path in **unweighted** graphs. For **weighted** graphs, use **Dijkstra's Algorithm**.
-
-```
-DIJKSTRA'S ALGORITHM:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. Set distance of source = 0, all others = INFINITY
-2. Use Min-Heap (Priority Queue)
-3. Pick vertex with MINIMUM distance
-4. Update distances of its unvisited neighbours
-5. Repeat until all vertices processed
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Data Structure: MIN-HEAP (Priority Queue)
-Time Complexity: O((V + E) log V) with binary heap
-Works on: NON-NEGATIVE weighted graphs only!
-
-⚠️ LIMITATION: Does NOT work with NEGATIVE edge weights
-   (Use Bellman-Ford for negative weights)
-```
-
-**KEY PYQ COMPARISON:**
-
-| Algorithm | Works On | Finds | Paradigm |
-|-----------|----------|-------|---------|
-| BFS | Unweighted | Shortest path | Traversal |
-| Dijkstra | +ve Weighted | Shortest path | Greedy |
-| Bellman-Ford | Any weight | Shortest path | DP |
-| Floyd-Warshall | Any weight | All pairs shortest | DP |
-| Kruskal's | Weighted | MST | Greedy |
-| Prim's | Weighted | MST | Greedy |
-
----
-
-## 🔷 SECTION 10: SPECIAL GRAPH TYPES
-
-```
-┌──────────────────────────────────────────────────────────────┐
-│  SPECIAL GRAPH TYPES — Quick Reference                        │
-├───────────────────┬──────────────────────────────────────────┤
-│ Bipartite Graph   │ Vertices can be divided into 2 sets;     │
-│                   │ Edges ONLY between sets (not within)     │
-│                   │ Has NO odd-length cycles                 │
-│                   │ Can always be 2-coloured                 │
-├───────────────────┼──────────────────────────────────────────┤
-│ Complete Graph Kn │ Every vertex connected to every other    │
-│                   │ Edges = n(n-1)/2                         │
-│                   │ K4 has 6 edges, K5 has 10 edges          │
-├───────────────────┼──────────────────────────────────────────┤
-│ Tree              │ Connected + Acyclic + N-1 edges          │
-│                   │ (Special case of graph)                  │
-├───────────────────┼──────────────────────────────────────────┤
-│ DAG               │ Directed Acyclic Graph                   │
-│                   │ No directed cycles                       │
-│                   │ Used for topological sort                │
-├───────────────────┼──────────────────────────────────────────┤
-│ Eulerian Graph    │ Contains an Eulerian Circuit:            │
-│                   │ Path that visits every EDGE exactly once │
-│                   │ Condition: All vertices have EVEN degree │
-├───────────────────┼──────────────────────────────────────────┤
-│ Hamiltonian Graph │ Contains path visiting every VERTEX once │
-│                   │ (NP-Complete problem!)                   │
-└───────────────────┴──────────────────────────────────────────┘
-```
-
----
-
-## 🔷 SECTION 11: CONNECTED COMPONENTS
-
-```
-A connected component is a maximal set of vertices such that
-there is a path between every pair of vertices in the set.
-
-Example of Graph with 3 connected components:
-
-  Component 1:    Component 2:    Component 3:
-    A ─── B          D               F ─── G
-    │                                      │
-    C                                      H
-
-DFS or BFS can find all connected components:
-  → Run DFS from any unvisited vertex
-  → All vertices reached = one component
-  → Increment component count
-  → Find next unvisited vertex, repeat
-
-Algorithm Time: O(V + E)
-```
-
----
-
-## 🔑 SECTION 12: CS QUICK REVISION BULLETS
-
-```
-╔═══════════════════════════════════════════════════════╗
-║          DAY 27 CS — TOPPER QUICK REVISION            ║
-╠═══════════════════════════════════════════════════════╣
-║ 1. BFS → QUEUE | DFS → STACK                         ║
-║ 2. BFS = shortest path (unweighted)                   ║
-║ 3. DFS = cycle detection, topological sort            ║
-║ 4. Adjacency Matrix: O(V²) space, O(1) edge check    ║
-║ 5. Adjacency List: O(V+E) space, O(deg) edge check   ║
-║ 6. BFS and DFS: Time = O(V+E), Space = O(V)          ║
-║ 7. Greedy/DP/D&C = paradigms, NOT traversals!        ║
-║ 8. Dijkstra: shortest path, +ve weights, Greedy      ║
-║ 9. Topological sort: only on DAG, uses DFS           ║
-║ 10. Bipartite: 2 vertex sets, no odd cycles          ║
-║ 11. Eulerian circuit: all vertices even degree       ║
-║ 12. Bellman-Ford handles negative edge weights       ║
-╚═══════════════════════════════════════════════════════╝
-```
-
----
-
-# ═══════════════════════════════════════════════════
-# PART B — GENERAL SCIENCE (BIOLOGY / BOTANY)
-# Plant Kingdom: Ginger, Yeast, Fungi, Algae, Bacteria
-# + Full Plant Biology for BPSC
-# ═══════════════════════════════════════════════════
-
----
-
-## 🌿 SECTION 13: FIVE KINGDOM CLASSIFICATION
-
-R.H. Whittaker (1969) proposed the **Five Kingdom Classification**:
-
-```
-┌────────────────────────────────────────────────────────────────┐
-│                  FIVE KINGDOMS                                  │
-├──────────────┬────────────┬────────────────────────────────────┤
-│ Kingdom      │ Cell Type  │ Examples                           │
-├──────────────┼────────────┼────────────────────────────────────┤
-│ MONERA       │ Prokaryote │ Bacteria, Blue-green algae         │
-│              │ (No nucleus│ (Cyanobacteria)                    │
-│              │  no organl.)│                                   │
-├──────────────┼────────────┼────────────────────────────────────┤
-│ PROTISTA     │ Eukaryote  │ Amoeba, Paramecium, Euglena,      │
-│              │ Unicellular│ Diatoms, Spirogyra                 │
-├──────────────┼────────────┼────────────────────────────────────┤
-│ FUNGI        │ Eukaryote  │ Mushroom, Yeast, Molds (Rhizopus) │
-│              │ Heterotroph│ Penicillium, Aspergillus           │
-├──────────────┼────────────┼────────────────────────────────────┤
-│ PLANTAE      │ Eukaryote  │ Mosses, Ferns, Gymnosperms,       │
-│              │ Autotroph  │ Angiosperms (flowering plants)     │
-│              │ Cell wall  │                                    │
-├──────────────┼────────────┼────────────────────────────────────┤
-│ ANIMALIA     │ Eukaryote  │ Insects, Fish, Amphibians,        │
-│              │ Heterotroph│ Reptiles, Birds, Mammals           │
-│              │ No cell wall│                                   │
-└──────────────┴────────────┴────────────────────────────────────┘
-```
-
-**KEY PYQ FACT:** Bacteria belong to Kingdom **MONERA** (Prokaryotes — no membrane-bound nucleus). Yeast is a **Fungus**, not a plant. Amoeba is **Protista**.
-
----
-
-## 🍄 SECTION 14: FUNGI — DETAILED STUDY (BPSC High Frequency!)
-
-### What are Fungi?
-
-Fungi are **eukaryotic, heterotrophic** organisms. They **cannot make their own food** (no chlorophyll). They absorb nutrients from dead/living organic matter.
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│              CHARACTERISTICS OF FUNGI                        │
-├─────────────────────────────────────────────────────────────┤
-│ Cell wall: Made of CHITIN (not cellulose like plants)       │
-│ Food:      Heterotrophic (absorptive nutrition)             │
-│ Chlorophyll: ABSENT (cannot photosynthesize)                │
-│ Body:      Made of Hyphae → network = Mycelium             │
-│ Reproduction: Spores (asexual) + sexual                     │
-│ Mode of life: Saprophytic (dead matter) OR                  │
-│               Parasitic (living host) OR                    │
-│               Symbiotic (with algae → Lichen!)             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Important Fungi — BPSC Must Know:
-
-```
-┌──────────────────┬──────────────────────────────────────────┐
-│ Fungus           │ Importance / Key Fact                     │
-├──────────────────┼──────────────────────────────────────────┤
-│ YEAST            │ Unicellular fungus                        │
-│ (Saccharomyces   │ Reproduces by BUDDING                     │
-│  cerevisiae)     │ Used in: Bread making (fermentation)      │
-│                  │          Beer/Wine making                  │
-│                  │ Converts GLUCOSE → ALCOHOL + CO₂          │
-│                  │ (Anaerobic fermentation)                   │
-│                  │ Also used in baking (CO₂ makes dough rise)│
-├──────────────────┼──────────────────────────────────────────┤
-│ RHIZOPUS         │ Common bread mould (black mould)          │
-│ (Rhizopus        │ Reproduces by SPORES                      │
-│  stolonifer)     │ Sporangia = black dots on bread           │
-│                  │ Saprophyte (grows on dead matter)         │
-├──────────────────┼──────────────────────────────────────────┤
-│ PENICILLIUM      │ Source of PENICILLIN antibiotic           │
-│                  │ Discovered by Alexander Fleming (1928)   │
-│                  │ Blue-green mould on citrus fruits         │
-│                  │ First antibiotic ever discovered!        │
-├──────────────────┼──────────────────────────────────────────┤
-│ ASPERGILLUS      │ Used in industrial enzyme production      │
-│                  │ Some species cause diseases               │
-│                  │ Used to make soy sauce, citric acid      │
-├──────────────────┼──────────────────────────────────────────┤
-│ MUSHROOM         │ Edible fungus (Agaricus bisporus)         │
-│ (Agaricus)       │ Has cap, stalk structure                  │
-│                  │ Rich in protein                           │
-├──────────────────┼──────────────────────────────────────────┤
-│ LICHEN           │ SYMBIOSIS of Fungus + Algae               │
-│                  │ Fungus provides water/minerals            │
-│                  │ Algae provides food (photosynthesis)      │
-│                  │ Pioneer organism on bare rocks            │
-│                  │ Used as pollution indicator               │
-└──────────────────┴──────────────────────────────────────────┘
-```
-
----
-
-## 🌱 SECTION 15: GINGER — A COMPLETE STORY (Bihar Context!)
-
-Bihar is a major producer of Ginger! BPSC frequently asks about Ginger.
-
-```
-GINGER (Zingiber officinale)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Scientific Name: Zingiber officinale
-Family:          Zingiberaceae
-
-WHAT WE EAT: Underground RHIZOME (Modified Stem)
-             → NOT a root! (Common misconception)
-             → A rhizome is a HORIZONTAL underground stem
-             → Has nodes and internodes (proves it's a stem)
-             → Stores food (starch)
-
-REPRODUCTION: Vegetative propagation by RHIZOME
-             → Cut rhizome pieces → each grows new plant
-             → This is ASEXUAL reproduction (clones)
-
-ACTIVE COMPOUND: Gingerol (gives pungent taste)
-                 Zingerone, Shogaols
-
-MEDICINAL USES:
-  → Treats nausea, vomiting, morning sickness
-  → Anti-inflammatory properties
-  → Digestive aid
-  → Treats cold and cough (common in Bihar homes!)
-  → Dried ginger = Sonth/Saunth (used in Ayurveda)
-
-ECONOMIC IMPORTANCE:
-  → India = World's largest producer of Ginger
-  → Bihar, Kerala, Karnataka = major producing states
-  → Used in cooking, medicine, tea
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-**Rhizome vs Root — KEY DISTINCTION:**
-```
-RHIZOME (Modified Stem):          ROOT:
-→ Has NODES and INTERNODES        → NO nodes/internodes
-→ Has scale leaves (buds)         → NO leaves/buds
-→ Grows HORIZONTALLY underground  → Grows VERTICALLY downward
-→ Stores FOOD (carbohydrates)     → Absorbs water/minerals
-→ Examples: Ginger, Turmeric,     → Examples: Carrot (root),
-            Lotus, Fern            Radish (taproot)
-```
-
----
-
-## 🧫 SECTION 16: BACTERIA — FULL DETAILS
-
-```
-BACTERIA (Kingdom MONERA)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TYPE: Prokaryote (no membrane-bound nucleus)
-SIZE: 1-10 micrometers (visible only under microscope)
-CELL WALL: Peptidoglycan (murein)
-
-SHAPES OF BACTERIA:
-  Coccus    → Spherical (e.g., Streptococcus)
-  Bacillus  → Rod-shaped (e.g., E. coli, TB bacteria)
-  Spirillum → Spiral (e.g., Treponema — causes Syphilis)
-  Vibrio    → Comma-shaped (e.g., Vibrio cholerae)
-
-REPRODUCTION:
-  → Binary Fission (asexual)
-  → FASTEST reproducing organism
-  → E. coli divides every 20 minutes!
-  → In ideal conditions: 1 bacterium → millions in hours
-
-USEFUL BACTERIA:
-  Lactobacillus → Curd/yogurt making (converts milk → curd)
-  Rhizobium     → Nitrogen fixation in legume roots
-  Bacillus       → Decomposers (recycle nutrients)
-  Streptomyces  → Source of Streptomycin antibiotic
-
-HARMFUL BACTERIA:
-  Mycobacterium tuberculosis → Tuberculosis (TB)
-  Vibrio cholerae            → Cholera
-  Salmonella typhi           → Typhoid
-  Clostridium tetani         → Tetanus
-  Yersinia pestis            → Plague (Black Death)
-
-GRAM STAINING:
-  Gram Positive: Thick peptidoglycan → Stains PURPLE
-  Gram Negative: Thin peptidoglycan  → Stains PINK/RED
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
----
-
-## 🌊 SECTION 17: ALGAE — KEY FACTS
-
-```
-ALGAE (mainly Kingdom PROTISTA, some in MONERA)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-→ Have CHLOROPHYLL → can PHOTOSYNTHESIZE
-→ Most are AQUATIC (fresh water or marine)
-→ No true roots, stem, or leaves (thallophytes)
-→ Called "PLANT KINGDOM'S PIONEERS"
-
-TYPES BY COLOUR:
-  GREEN ALGAE (Chlorophyceae):
-    → Spirogyra (freshwater), Chlamydomonas, Ulva
-    → Chlorophyll a and b (green)
-    → Ancestor of land plants!
-    
-  RED ALGAE (Rhodophyceae):
-    → Polysiphonia, Gracilaria
-    → Found in deep waters
-    → Used to make AGAR (laboratory culture medium)
-    
-  BROWN ALGAE (Phaeophyceae):
-    → Laminaria (Kelp), Fucus, Sargassum
-    → Marine algae
-    → Source of ALGINIC ACID (used in ice cream, toothpaste!)
-
-IMPORTANT ALGAE PRODUCTS:
-  Agar       → From Red algae → Used in culture media
-  Alginic acid → From Brown algae → Food thickener
-  Carrageenan → From Red algae → Ice cream, jellies
-  Chlorella   → Green algae → Food supplement (protein rich)
-  Spirulina   → Blue-green alga → Superfood, protein
-
-BLUE-GREEN ALGAE (Cyanobacteria) = Kingdom MONERA (Prokaryote!)
-  → Nostoc, Anabaena, Oscillatoria
-  → Fix NITROGEN from atmosphere
-  → Anabaena in Azolla → Natural biofertilizer for rice fields!
-  → Cause water bloom (algal bloom) → Water pollution indicator
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
----
-
-## 🌸 SECTION 18: PLANT HORMONES (PGRs — Plant Growth Regulators)
-
-BPSC asks about plant hormones almost every exam!
-
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                    PLANT HORMONES                                 │
-├───────────────┬──────────────────────────────────────────────────┤
-│ AUXIN (IAA)   │ Produced at shoot TIP                           │
-│               │ Effect: Cell elongation, apical dominance        │
-│               │ Bends stem toward LIGHT (phototropism)          │
-│               │ HIGH concentration → inhibits root growth        │
-│               │ Used in: Rooting powders, weedkillers           │
-├───────────────┼──────────────────────────────────────────────────┤
-│ GIBBERELLIN   │ Produced in: Young leaves, seeds                │
-│ (GA)          │ Effect: Stem elongation, seed germination        │
-│               │ Breaks SEED DORMANCY                            │
-│               │ Promotes FLOWERING (long-day plants)            │
-│               │ Used in: Brewing industry, seedless grapes      │
-├───────────────┼──────────────────────────────────────────────────┤
-│ CYTOKININ     │ Produced in: Roots                              │
-│               │ Effect: Cell DIVISION (cytokinesis)             │
-│               │ Delays AGEING (senescence) of leaves            │
-│               │ Promotes lateral bud growth                     │
-│               │ Used in: Tissue culture                        │
-├───────────────┼──────────────────────────────────────────────────┤
-│ ABSCISIC ACID │ Called "STRESS HORMONE" or "Dormancy hormone"   │
-│ (ABA)         │ Effect: Closes STOMATA (during drought!)        │
-│               │ Promotes seed dormancy                          │
-│               │ Promotes leaf FALL (abscission)                 │
-│               │ INHIBITORY hormone (opposite of Gibberellin)   │
-├───────────────┼──────────────────────────────────────────────────┤
-│ ETHYLENE      │ ONLY GASEOUS plant hormone                      │
-│               │ Effect: Ripening of FRUITS                      │
-│               │ Promotes AGEING                                 │
-│               │ Promotes leaf fall                              │
-│               │ Used to: Artificially ripen mangoes, bananas   │
-│               │ Calcium carbide → releases acetylene →         │
-│               │ mimics ethylene → artificial ripening          │
-└───────────────┴──────────────────────────────────────────────────┘
-```
-
-**KEY PYQ TRICK:** 
-- **GIBBERELLIN** breaks dormancy → promotes germination
-- **ABSCISIC ACID** promotes dormancy → inhibits germination
-- They are OPPOSITES!
-- Ethylene is the ONLY **gaseous** hormone
-
----
-
-## 🌳 SECTION 19: PHOTOSYNTHESIS — DEEP DIVE
-
-```
-PHOTOSYNTHESIS EQUATION:
-6CO₂ + 6H₂O + Light Energy → C₆H₁₂O₆ + 6O₂
-                                (Glucose)
-
-WHERE: Chloroplasts (in MESOPHYLL cells of leaves)
-CHLOROPHYLL: Green pigment that absorbs light
-             Absorbs RED and BLUE light best
-             REFLECTS GREEN light → plants look green!
-
-TWO STAGES:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-LIGHT REACTIONS (Light-dependent, in THYLAKOID membrane):
-  → Needs: LIGHT, Water
-  → Products: ATP, NADPH, O₂ (oxygen released here!)
-  → Water is SPLIT (photolysis of water)
-  → Photosystems I and II involved
-
-DARK REACTIONS / CALVIN CYCLE (Light-independent, in STROMA):
-  → Needs: ATP, NADPH (from light reactions), CO₂
-  → Products: GLUCOSE (C₆H₁₂O₆)
-  → CO₂ is FIXED here (combined into organic molecules)
-  → Doesn't need light directly (but needs products of light rxn)
-  → Named after Melvin Calvin (Nobel Prize 1961)
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FACTORS AFFECTING PHOTOSYNTHESIS:
-  Light intensity, CO₂ concentration, Temperature,
-  Water availability, Chlorophyll content
-```
-
----
-
-## 🌾 SECTION 20: IMPORTANT PLANTS — BPSC SPECIAL
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│          PLANTS WITH SPECIAL IMPORTANCE FOR BPSC               │
-├───────────────────┬─────────────────────────────────────────────┤
-│ PLANT             │ KEY FACTS                                    │
-├───────────────────┼─────────────────────────────────────────────┤
-│ GINGER            │ Rhizome (modified stem), vegetative reprod  │
-│ (Zingiber         │ Active: Gingerol, Zingiber family           │
-│  officinale)      │ India = largest producer                    │
-├───────────────────┼─────────────────────────────────────────────┤
-│ TURMERIC          │ Rhizome (modified stem), like ginger        │
-│ (Curcuma longa)   │ Active: Curcumin (anti-inflammatory)        │
-│                   │ Yellow colour from Curcumin                 │
-│                   │ Also called "Indian Gold"                   │
-├───────────────────┼─────────────────────────────────────────────┤
-│ TULSI             │ Holy Basil — Ocimum sanctum/tenuiflorum    │
-│                   │ Medicinal: Antibacterial, antifungal        │
-│                   │ Sacred in Hinduism                         │
-│                   │ Bihar: Widely grown in courtyards          │
-├───────────────────┼─────────────────────────────────────────────┤
-│ NEEM              │ Azadirachta indica                          │
-│                   │ Active: Azadirachtin (insecticide)          │
-│                   │ Uses: Pesticide, medicine, toothbrush       │
-│                   │ Bihar: Panchpatthi neem toothbrush famous  │
-├───────────────────┼─────────────────────────────────────────────┤
-│ BANANA            │ Pseudostem (NOT a true stem — leaf bases)  │
-│                   │ Reproduces by suckers (vegetative)         │
-│                   │ Fruit: Berry (botanically!)                 │
-├───────────────────┼─────────────────────────────────────────────┤
-│ POTATO            │ Tuber (modified stem), NOT root            │
-│                   │ Eyes of potato = nodes (prove it's stem)   │
-│                   │ C.F.: Sweet potato = tuberous ROOT          │
-├───────────────────┼─────────────────────────────────────────────┤
-│ ONION             │ Bulb (modified stem + leaves)              │
-│                   │ Fleshy leaves store food                   │
-└───────────────────┴─────────────────────────────────────────────┘
-```
-
----
-
-## 🌍 SECTION 21: ECOLOGY — FOOD CHAIN & ENERGY FLOW
-
-```
-FOOD CHAIN:
-Sun → Producers → Primary Consumers → Secondary Consumers → Tertiary
+DENSE graph: E ≈ V² (many edges, nearly complete) → Adjacency MATRIX
+SPARSE graph: E << V² (few edges) → Adjacency LIST
 
 Example:
-Grass → Grasshopper → Frog → Snake → Eagle
-
-TROPHIC LEVELS:
-Level 1: PRODUCERS (Plants, Algae — make own food)
-Level 2: PRIMARY CONSUMERS (Herbivores — eat plants)
-Level 3: SECONDARY CONSUMERS (Carnivores — eat herbivores)
-Level 4: TERTIARY CONSUMERS (Top carnivores)
-Level 5: DECOMPOSERS (Fungi, Bacteria — break down dead matter)
-
-10% ENERGY RULE (Lindemann's Law):
-→ Only 10% energy transfers to next trophic level
-→ 90% lost as heat at each level
-
-Example: 1000 kcal in grass
-  → Grasshopper gets: 100 kcal (10%)
-  → Frog gets:         10 kcal (10% of 100)
-  → Snake gets:         1 kcal (10% of 10)
-  → Eagle gets:       0.1 kcal (10% of 1)
-
-WHY SHORT FOOD CHAINS?
-→ Because energy is lost at each level
-→ Longer chains = less energy available at top
-→ Maximum 4-5 trophic levels practical
+  Road network (1000 cities, 1500 roads): SPARSE → use Adjacency List
+  Social network where everyone knows everyone: DENSE → Matrix acceptable
+  
+DEFAULT CHOICE: Adjacency List is preferred for most real-world graphs
+                because real-world graphs are usually SPARSE.
 ```
 
 ---
 
-## 🔑 SECTION 22: GS QUICK REVISION BULLETS
+## 🔷 SECTION 7: BFS — Breadth-First Search
+
+### The Core Idea:
+**"Explore all NEIGHBOURS first, before going deeper."**
+
+Like ripples spreading from a stone thrown in water — first reaches nearest points, then farther points level by level.
 
 ```
-╔═══════════════════════════════════════════════════════╗
-║          DAY 27 GS — TOPPER QUICK REVISION            ║
-╠═══════════════════════════════════════════════════════╣
-║ 1. Yeast: Unicellular FUNGUS, reproduces by BUDDING  ║
-║ 2. Ginger: RHIZOME (modified stem), NOT a root       ║
-║ 3. Fungi cell wall: CHITIN (not cellulose)           ║
-║ 4. Lichen = Fungus + Algae (symbiosis)               ║
-║ 5. Penicillin source: Penicillium (discovered 1928)  ║
-║ 6. Bacteria: PROKARYOTE, binary fission              ║
-║ 7. Rhizobium: Nitrogen fixation in legume roots      ║
-║ 8. Ethylene = only GASEOUS plant hormone             ║
-║ 9. Abscisic Acid = stress hormone, closes stomata    ║
-║ 10. Gibberellin = breaks seed dormancy               ║
-║ 11. Auxin = cell elongation, phototropism            ║
-║ 12. 10% energy law = Lindemann's law                ║
-║ 13. Agar = from Red algae                            ║
-║ 14. Anabaena in Azolla = nitrogen-fixing rice biofert║
-║ 15. Decomposers = Fungi + Bacteria                   ║
-╚═══════════════════════════════════════════════════════╝
+WAVE ANALOGY:
+  Start at vertex S (like stone dropped in water)
+  Wave 1: All vertices 1 edge away from S
+  Wave 2: All vertices 2 edges away from S
+  Wave 3: All vertices 3 edges away from S
+  ...
+```
+
+### BFS Algorithm:
+```
+BFS(Graph G, start vertex s):
+  1. Create an empty QUEUE Q
+  2. Mark s as VISITED
+  3. Enqueue s into Q
+  4. While Q is NOT empty:
+       a. Dequeue front vertex u from Q
+       b. PROCESS u (print/store it)
+       c. For each UNVISITED neighbour v of u:
+            → Mark v as VISITED
+            → Enqueue v into Q
+```
+
+### Step-by-Step BFS Example:
+```
+Graph:
+    A ——— B ——— E
+    |     |
+    C ——— D
+
+Adjacency List:
+  A: [B, C]
+  B: [A, D, E]
+  C: [A, D]
+  D: [B, C]
+  E: [B]
+
+BFS starting from A:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1: Queue=[A], Visited={A}
+        Dequeue A → Process A → print "A"
+        Neighbours of A: B (unvisited), C (unvisited)
+        Enqueue B, Enqueue C
+        Queue=[B, C], Visited={A, B, C}
+
+Step 2: Queue=[B, C]
+        Dequeue B → Process B → print "B"
+        Neighbours of B: A (visited), D (unvisited), E (unvisited)
+        Enqueue D, Enqueue E
+        Queue=[C, D, E], Visited={A, B, C, D, E}
+
+Step 3: Queue=[C, D, E]
+        Dequeue C → Process C → print "C"
+        Neighbours of C: A (visited), D (visited)
+        Nothing to enqueue
+        Queue=[D, E]
+
+Step 4: Queue=[D, E]
+        Dequeue D → Process D → print "D"
+        Neighbours of D: B (visited), C (visited)
+        Nothing to enqueue
+        Queue=[E]
+
+Step 5: Queue=[E]
+        Dequeue E → Process E → print "E"
+        Neighbours of E: B (visited)
+        Nothing to enqueue
+        Queue=[]
+
+Queue EMPTY → BFS COMPLETE
+
+BFS ORDER: A → B → C → D → E
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Queue State Diagram:
+```
+Step  |  Action         | Queue State     | Output
+------|-----------------|-----------------|-------
+Start | Enqueue A       | [A]             |
+  1   | Dequeue A       | []              | A
+      | Enqueue B, C    | [B, C]          |
+  2   | Dequeue B       | [C]             | B
+      | Enqueue D, E    | [C, D, E]       |
+  3   | Dequeue C       | [D, E]          | C
+      | (nothing new)   | [D, E]          |
+  4   | Dequeue D       | [E]             | D
+      | (nothing new)   | [E]             |
+  5   | Dequeue E       | []              | E
+      | Queue empty     |   DONE          |
+
+RESULT: A, B, C, D, E  (level-by-level)
+Level 0: A
+Level 1: B, C  (1 edge from A)
+Level 2: D, E  (2 edges from A)
+```
+
+### BFS Properties:
+```
+DATA STRUCTURE: QUEUE (FIFO — First In, First Out)
+TRAVERSAL: Level by level (closest vertices first)
+SPACE: O(V) — worst case all vertices in queue
+TIME: O(V + E) with adjacency list; O(V²) with matrix
+
+APPLICATIONS:
+  1. SHORTEST PATH in UNWEIGHTED graphs (minimum number of edges)
+  2. Level-order traversal of trees
+  3. Finding all connected components
+  4. Web crawling (visiting web pages level by level)
+  5. Social network friend suggestions (friends of friends)
+  6. GPS/Map routing (unweighted roads)
+  7. Bipartite graph checking
 ```
 
 ---
 
-# ═══════════════════════════════════════════════════
-# PRACTICE QUESTIONS — DAY 27
-# ═══════════════════════════════════════════════════
+## 🔷 SECTION 8: DFS — Depth-First Search
 
-> ⚠️ **STRICT RULE:**
-> Attempt ALL 50 questions BEFORE looking at the answers.
-> Answers are ONLY at the very end of this document.
-> Cover the answer section while practising!
+### The Core Idea:
+**"Go as DEEP as possible along one path before backtracking."**
+
+Like exploring a maze — go down one corridor completely, hit a dead end, come back, try another corridor.
+
+```
+MAZE ANALOGY:
+  You explore a maze.
+  At each junction, pick a direction and GO.
+  Keep going until you hit a DEAD END.
+  Then BACKTRACK to the last junction.
+  Try another unexplored direction.
+  Repeat until all paths explored.
+```
+
+### DFS Algorithm (Recursive):
+```
+DFS(Graph G, vertex u, visited[]):
+  1. Mark u as VISITED
+  2. PROCESS u (print/store it)
+  3. For each UNVISITED neighbour v of u:
+       → DFS(G, v, visited)   ← Recurse deeply!
+```
+
+### DFS Algorithm (Iterative — using explicit Stack):
+```
+DFS(Graph G, start vertex s):
+  1. Create empty STACK S
+  2. Push s onto S
+  3. While S is NOT empty:
+       a. Pop vertex u from S
+       b. If u is NOT visited:
+            → Mark u as VISITED
+            → PROCESS u (print it)
+            → For each neighbour v of u:
+                 If v is NOT visited → Push v onto S
+```
+
+### Step-by-Step DFS Example (SAME graph as BFS):
+```
+Graph:
+    A ——— B ——— E
+    |     |
+    C ——— D
+
+Adjacency List:
+  A: [B, C]
+  B: [A, D, E]
+  C: [A, D]
+  D: [B, C]
+  E: [B]
+
+DFS starting from A (recursive, visit in order given):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DFS(A):
+  Mark A visited, print A
+  Neighbours of A: B, C
+  Visit B (first unvisited neighbour):
+    DFS(B):
+      Mark B visited, print B
+      Neighbours of B: A(visited), D, E
+      Visit D:
+        DFS(D):
+          Mark D visited, print D
+          Neighbours of D: B(visited), C
+          Visit C:
+            DFS(C):
+              Mark C visited, print C
+              Neighbours of C: A(visited), D(visited)
+              No unvisited neighbours → RETURN (backtrack)
+          ← back to D, no more unvisited → RETURN (backtrack)
+      ← back to B, visit E:
+        DFS(E):
+          Mark E visited, print E
+          Neighbours of E: B(visited)
+          No unvisited neighbours → RETURN (backtrack)
+      ← back to B, no more unvisited → RETURN
+  ← back to A, C is already visited → DONE
+
+DFS ORDER: A → B → D → C → E
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Call Stack Visualization:
+```
+Time:  1    2    3    4    5    5    4    3    6    3
+Action: A→  B→   D→   C→  ret  ret  ret  E→  ret  ret
+Stack: [A] [A,B] [A,B,D] [A,B,D,C] [A,B,D] [A,B] [A,B] [A,B,E] [A,B] [A]
+
+PATH TRACED (going deep first):
+A → B → D → C → (backtrack to D) → (backtrack to B) → E → (backtrack all)
+```
+
+### DFS Properties:
+```
+DATA STRUCTURE: STACK (explicitly or via RECURSION call stack)
+TRAVERSAL: Goes deep before wide (branch-first)
+SPACE: O(V) — worst case all vertices on stack
+TIME: O(V + E) with adjacency list
+
+APPLICATIONS:
+  1. CYCLE DETECTION in graphs
+  2. TOPOLOGICAL SORTING (ordering tasks with dependencies)
+  3. Finding CONNECTED COMPONENTS
+  4. MAZE SOLVING (find any path)
+  5. Detecting articulation points and bridges
+  6. Solving puzzles (e.g., Sudoku, N-Queens)
+  7. Finding strongly connected components (Kosaraju's, Tarjan's)
+  8. Path finding (not shortest, but finds A path)
+```
 
 ---
 
-## 📘 SECTION I: COMPUTER SCIENCE QUESTIONS (Q1–Q25)
-### Topic: Graph Theory — BFS, DFS, Representations, Applications
+## 🔷 SECTION 9: BFS vs DFS — The Master Comparison
+
+```
+SIDE-BY-SIDE COMPARISON ON SAME GRAPH:
+
+Graph:
+    A ——— B ——— E
+    |     |
+    C ——— D
+
+BFS from A: A, B, C, D, E   (level-by-level: closest first)
+DFS from A: A, B, D, C, E   (depth-first: go deep before coming back)
+
+WHY DIFFERENT? BFS explores all at same distance first.
+               DFS dives deep into one branch first.
+```
+
+### Master Comparison Table:
+
+| Feature | BFS | DFS |
+|---------|-----|-----|
+| Data Structure | **QUEUE** (FIFO) | **STACK** (LIFO) or Recursion |
+| Traversal style | Level by level | Branch by branch (deep first) |
+| Space (worst case) | O(V) — wide trees | O(V) — deep trees |
+| Time complexity | O(V + E) | O(V + E) |
+| Finds shortest path? | **YES** (unweighted graphs) | NO |
+| Detects cycles? | Yes (can be done) | **YES** (more naturally) |
+| Topological sort? | No | **YES** |
+| Memory usage | More (all level nodes) | Less (just current path) |
+| Complete for finite? | Yes | Yes |
+| Backtracking? | No | **YES** |
+| Implementation | Usually iterative (queue) | Recursive or iterative (stack) |
+| Best for | Shortest path, nearest friend | Cycle detect, topo sort, maze |
+
+### 🚨 PYQ TRAP #3: BFS Finds Shortest Path
+```
+BFS gives the SHORTEST PATH (fewest edges) in an UNWEIGHTED graph.
+DFS does NOT guarantee shortest path.
+
+For WEIGHTED graphs, use Dijkstra's Algorithm (not covered today).
+
+If someone says "DFS finds shortest path" → WRONG.
+If someone says "BFS uses Stack" → WRONG (BFS uses QUEUE).
+If someone says "DFS uses Queue" → WRONG (DFS uses STACK).
+```
 
 ---
 
-**Q1.** Which data structure does BFS (Breadth First Search) use internally for traversal?
+## 🔷 SECTION 10: Complete BFS vs DFS Visual Trace
 
-(A) Stack
-(B) Array
-(C) Queue
-(D) More than one of the above (Queue and Stack both used)
-(E) None of the above
+### Graph for Both Traces:
+```
+         1
+        / \
+       2   3
+      / \   \
+     4   5   6
+```
+
+**BFS Traversal (starting at 1):**
+```
+Queue progression:
+[1] → Dequeue 1, Enqueue 2,3 → [2,3]
+[2,3] → Dequeue 2, Enqueue 4,5 → [3,4,5]
+[3,4,5] → Dequeue 3, Enqueue 6 → [4,5,6]
+[4,5,6] → Dequeue 4 → [5,6]
+[5,6] → Dequeue 5 → [6]
+[6] → Dequeue 6 → []
+
+BFS: 1, 2, 3, 4, 5, 6   (Level 0→1→2 order)
+```
+
+**DFS Traversal (starting at 1, go left first):**
+```
+Call stack:
+DFS(1): print 1, go to 2
+  DFS(2): print 2, go to 4
+    DFS(4): print 4, no children → return
+  DFS(2): go to 5
+    DFS(5): print 5, no children → return
+  DFS(2): done → return
+DFS(1): go to 3
+  DFS(3): print 3, go to 6
+    DFS(6): print 6, no children → return
+  DFS(3): done → return
+
+DFS: 1, 2, 4, 5, 3, 6   (goes deep left first)
+```
 
 ---
 
-**Q2.** Which data structure does DFS (Depth First Search) use internally for traversal?
+## 🔷 SECTION 11: Applications in Depth
 
-(A) Queue
-(B) Priority Queue
-(C) Stack (or Recursion — call stack)
+### BFS Application — Shortest Path:
+```
+Find minimum edges to get from A to E:
+
+    A ——— B ——— D
+    |           |
+    C ——————————E
+
+BFS from A:
+  Level 0: {A}
+  Level 1: {B, C}        (distance 1 from A)
+  Level 2: {D} from B;   (distance 2 from A)
+           {E} from C    (distance 2 from A)
+  Level 3: {E} from D    (distance 3 — already visited at level 2!)
+
+Shortest path A→E = 2 edges (A→C→E)
+BFS NATURALLY finds this because it explores level by level!
+```
+
+### DFS Application — Cycle Detection:
+```
+DFS can detect if a graph has a BACK EDGE (edge to an ancestor in DFS tree).
+A back edge = CYCLE exists.
+
+In DFS, maintain "currently in stack" set:
+  If DFS visits a node already in the current stack → CYCLE found!
+
+Graph with cycle:  A → B → C → A
+DFS from A:
+  Visit A (push to stack: {A})
+  Visit B (stack: {A,B})
+  Visit C (stack: {A,B,C})
+  Visit A → A is already in stack! → CYCLE DETECTED!
+```
+
+### DFS Application — Topological Sort:
+```
+Used for TASK ORDERING with dependencies.
+
+Example: Course prerequisites
+  Math → Physics → Engineering
+  Math must be done BEFORE Physics
+  Physics must be done BEFORE Engineering
+
+Model as DAG (Directed Acyclic Graph):
+  Math → Physics → Engineering
+
+DFS + Post-order gives TOPOLOGICAL SORT:
+  Visit Math (no prereqs first) → Physics → Engineering
+  TOPO ORDER: Math, Physics, Engineering
+
+RULE: A vertex appears AFTER all its dependencies.
+```
+
+---
+
+## 🔷 SECTION 12: Important Graph Algorithms Overview
+
+```
+ALGORITHM            | PURPOSE                      | METHOD
+---------------------|------------------------------|------------------
+BFS                  | Shortest path (unweighted)   | Queue
+DFS                  | Cycle detection, topo sort   | Stack/Recursion
+Dijkstra's           | Shortest path (weighted)     | Min-Heap + Greedy
+Bellman-Ford         | Shortest path (neg. weights) | Dynamic Programming
+Floyd-Warshall       | All-pairs shortest path      | Dynamic Programming
+Kruskal's            | Minimum Spanning Tree        | Sort edges + Union-Find
+Prim's               | Minimum Spanning Tree        | Min-Heap + Greedy
+Topological Sort     | Task ordering (DAG)          | DFS or Kahn's (BFS)
+```
+
+### 🚨 PYQ TRAP #4: Greedy, DP, Divide & Conquer Are NOT Graph Traversals
+```
+Graph TRAVERSAL algorithms: BFS and DFS
+  → They visit vertices in a specific order
+
+Graph TRAVERSAL ≠ Algorithmic PARADIGMS:
+  GREEDY algorithms: Make locally optimal choice at each step
+    (Dijkstra's, Kruskal's, Prim's ARE greedy — but they're not traversals)
+  DYNAMIC PROGRAMMING: Solve subproblems, cache results
+    (Floyd-Warshall is DP)
+  DIVIDE & CONQUER: Split problem into smaller subproblems
+    (Merge Sort, QuickSort are D&C)
+
+If exam asks "which is a graph TRAVERSAL technique?"
+  Answer: BFS or DFS only
+  NOT: Greedy, DP, Divide & Conquer, Backtracking
+```
+
+---
+
+## 🔷 SECTION 13: Graph Summary Mind Map
+
+```
+                         GRAPH G = (V, E)
+                               |
+            ┌──────────────────┼─────────────────┐
+            |                  |                 |
+        TYPES            REPRESENTATION       TRAVERSAL
+            |                  |                 |
+    Directed/Undirected   Adj. Matrix         BFS          DFS
+    Weighted/Unweighted   → O(V²) space    → Queue      → Stack/Recursion
+    Connected/Disconn.    → O(1) edge chk  → Level-by-  → Deep first
+    Cyclic/Acyclic                         level        → Backtracks
+    Complete (Kₙ)         Adj. List        → Shortest   → Cycle detect
+                          → O(V+E) space   path         → Topo sort
+                          → O(degree) chk
+                          → Sparse graphs
+
+KEY FORMULAS:
+  Complete graph Kₙ: n(n-1)/2 edges
+  Spanning tree: N-1 edges
+  Sum of degrees = 2 × E
+  BFS/DFS time: O(V+E) with adj list
+```
+
+---
+
+# PART 2: GENERAL STUDIES
+## 🌿 Biology — Ginger, Yeast & Plant Biology Deep Dive
+
+---
+
+## 🔷 SECTION 1: Ginger — The Underground Champion
+
+### What is Ginger?
+**Ginger** (Zingiber officinale) is a flowering plant whose **underground stem (rhizome)** is widely used as a spice, medicine, and food.
+
+### Ginger's Botanical Classification:
+```
+Kingdom:    Plantae (Plants)
+Division:   Angiosperms (Flowering plants)
+Class:      Monocotyledons (Monocots)
+Order:      Zingiberales
+Family:     Zingiberaceae (Ginger family)
+Genus:      Zingiber
+Species:    Z. officinale
+
+What we eat: The RHIZOME (underground stem)
+             → The horizontal, underground, fleshy stem
+             → Also called: "Ginger root" (common misnomer)
+             → NOT actually a root — it's a MODIFIED STEM
+```
+
+### What is a Rhizome?
+```
+RHIZOME = A horizontally growing UNDERGROUND STEM
+
+How to identify it's a STEM (not a root):
+  1. Has NODES and INTERNODES (like any stem)
+  2. Has SCALE LEAVES at nodes
+  3. Has BUDS at nodes (can sprout new shoots upward and roots downward)
+  4. Grows HORIZONTALLY underground
+
+Compare: TRUE ROOT has no nodes, no buds, no scale leaves.
+
+Visual structure of ginger rhizome:
+         ↑ New shoot (grows above ground)
+   ─────●───────●───────●─────────
+        │node   │       │
+        ▼ Fibrous roots (grow downward from nodes)
+
+The ● symbols = NODES (where buds and roots arise)
+```
+
+### Ginger as Vegetative Propagation:
+```
+Ginger is propagated VEGETATIVELY — using rhizome pieces (not seeds!).
+
+How farmers grow ginger:
+  1. Take a piece of ginger rhizome with at least ONE NODE (eye/bud)
+  2. Plant it in moist soil
+  3. The bud at the node sprouts → new shoot grows upward
+  4. Roots grow downward from the node
+  5. New rhizome develops underground → harvest after 8-10 months
+
+This is ASEXUAL REPRODUCTION via vegetative propagation.
+Offspring = genetically IDENTICAL to parent.
+
+Other examples of RHIZOMES:
+  → Turmeric (Haldi) — Curcuma longa
+  → Lotus (Nelumbo) — aquatic plant, horizontal rhizome
+  → Ferns — many species have rhizomes
+  → Grass — some grasses spread via rhizomes
+```
+
+### Modified Stems — The Complete Picture:
+```
+UNDERGROUND MODIFIED STEMS:
+
+1. RHIZOME: Horizontal underground stem with nodes
+   Examples: GINGER, TURMERIC, FERN, LOTUS
+   ─────────●─────────●──── (horizontal)
+
+2. TUBER: Swollen tip of underground stem; no distinct nodes ring
+   Examples: POTATO (eyes = nodes!), Jimikand (yam)
+   Potato "eyes" are actually NODES with buds!
+         ●●●
+        ●   ●
+         ●●●   (rounded, swollen)
+
+3. BULB: Very short disc-like stem surrounded by fleshy scale leaves
+   Examples: ONION, GARLIC, LILY
+            ))))   (fleshy layers around central stem)
+
+4. CORM: Vertical underground stem; solid (not hollow like bulb)
+   Examples: Colocasia (Arbi/Taro), Crocus, Gladiolus
+   
+ABOVE GROUND MODIFIED STEMS:
+
+5. STOLON (Runner): Horizontal stem growing ON the surface
+   Examples: STRAWBERRY, Oxalis, Grass
+   Plant ──●── Plant ──●── Plant (horizontal above ground)
+
+6. TENDRIL: Modified stem for climbing
+   Examples: Cucumber, Pumpkin, Passion flower
+```
+
+### 🚨 PYQ TRAP #1: Ginger is a Rhizome (Stem, NOT Root)
+```
+Common questions:
+Q: "Ginger is a ___?" → Answer: Rhizome (underground stem/modified stem)
+Q: "Which part of ginger plant is used as spice?" → Answer: Rhizome
+Q: "Ginger reproduces by ___?" → Answer: Vegetative propagation (via rhizome)
+Q: "Ginger is a root/stem/leaf?" → Answer: STEM (specifically rhizome)
+
+TRAP: Many people call it "ginger root" — it is NOT a ROOT.
+It is an underground STEM (rhizome).
+
+Easy memory: "GINGER has GIRTH like a stem and NODES like a stem"
+```
+
+---
+
+## 🔷 SECTION 2: Turmeric (Haldi) — Ginger's Close Relative
+
+```
+Turmeric = Curcuma longa
+Underground part = RHIZOME (same as ginger)
+Family = Zingiberaceae (same as ginger!)
+Propagation = Vegetative (rhizome pieces)
+Active compound = CURCUMIN (gives yellow colour, anti-inflammatory)
+Uses: Spice, medicine, antiseptic, religious ceremonies (haldi in weddings)
+
+Both Ginger and Turmeric:
+  → Belong to family Zingiberaceae
+  → Have RHIZOMES (underground stems)
+  → Reproduced vegetatively
+  → Used as spices in Indian cuisine
+```
+
+---
+
+## 🔷 SECTION 3: Yeast — The Unicellular Fungus
+
+### What is Yeast?
+**Yeast** (Saccharomyces cerevisiae) is a unicellular (single-celled) **FUNGUS** belonging to the kingdom **Fungi**.
+
+### Yeast Classification:
+```
+Kingdom:    Fungi
+Division:   Ascomycota (Sac fungi)
+Class:      Saccharomycetes
+Genus:      Saccharomyces
+Species:    S. cerevisiae (baker's/brewer's yeast)
+
+Structure:
+  → Single-celled (unicellular)
+  → Has a nucleus (EUKARYOTE)
+  → Cell wall made of CHITIN (not cellulose like plants)
+  → Oval to round shape, 5-10 micrometres
+  → Can live with or without oxygen (facultative anaerobe)
+```
+
+### Yeast Reproduction — BUDDING:
+```
+Process of Budding in Yeast:
+  1. Parent yeast cell grows a small PROTRUSION (bud) on its surface
+  2. The NUCLEUS of parent divides (mitosis)
+  3. One nucleus moves into the BUD
+  4. The bud grows larger
+  5. A CELL WALL forms between parent and bud
+  6. The bud DETACHES (or may remain temporarily attached)
+  7. New yeast cell is born → identical to parent
+
+Visual:
+  Parent cell:   (○)
+  Bud appears:   (○)(·)
+  Bud grows:     (○)(○)
+  Bud detaches:  (○)  (○)   ← Two separate yeast cells
+
+RATE: Under ideal conditions, yeast can bud every 90-120 minutes!
+Result: EXPONENTIAL growth — one cell → 2 → 4 → 8 → 16...
+```
+
+### Yeast Fermentation — Most Important Exam Topic:
+```
+FERMENTATION = Yeast converts GLUCOSE (sugar) into:
+  → ETHANOL (alcohol) + CARBON DIOXIDE gas + Energy
+
+Equation:
+  C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂ + Energy
+  (Glucose) → (Ethanol/Alcohol) + (Carbon dioxide)
+
+This process is ANAEROBIC (without oxygen).
+Also called ANAEROBIC RESPIRATION.
+
+Applications of Yeast Fermentation:
+
+BAKING (bread making):
+  Yeast added to dough → ferments sugars → CO₂ produced
+  CO₂ bubbles get trapped in dough → dough RISES (becomes fluffy)
+  Ethanol evaporates during baking
+  RESULT: Light, airy bread with holes
+
+BREWING (beer/wine):
+  Yeast added to fruit juice/grain → ferments sugars
+  ETHANOL produced = alcohol in beer, wine
+  CO₂ produced = bubbles in beer (carbonation)
+
+IDLI/DOSA (Indian food):
+  Batter fermented by yeast and bacteria → dough rises → soft idli/dosa
+
+VINEGAR production (by bacteria, not yeast — common confusion!)
+  Acetic acid bacteria + ethanol → ACETIC ACID (vinegar)
+```
+
+### 🚨 PYQ TRAP #2: Yeast Key Facts
+```
+YEAST IS:
+  ✓ Unicellular FUNGUS (not bacteria, not plant)
+  ✓ Eukaryote (has nucleus)
+  ✓ Reproduces by BUDDING
+  ✓ Kingdom: FUNGI (not Monera/Protista)
+  ✓ Used in BREAD making (CO₂ raises dough)
+  ✓ Used in ALCOHOL fermentation (produces ethanol)
+  ✓ Cell wall: CHITIN
+
+YEAST IS NOT:
+  ✗ A bacterium (bacteria = prokaryotes; yeast = eukaryote)
+  ✗ A plant (no chlorophyll, no photosynthesis)
+  ✗ Reproducing by binary fission (that's bacteria/Amoeba)
+```
+
+---
+
+## 🔷 SECTION 4: Fermentation vs Respiration — Comparison
+
+```
+AEROBIC RESPIRATION:
+  Glucose + Oxygen → CO₂ + Water + LOTS of Energy (38 ATP)
+  C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + 38 ATP
+  Location: Mitochondria
+  Organisms: Most living things (humans, animals, plants)
+
+ANAEROBIC RESPIRATION (FERMENTATION in yeast):
+  Glucose (no oxygen) → Ethanol + CO₂ + LESS Energy (2 ATP)
+  C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂ + 2 ATP
+  Location: Cytoplasm (no mitochondria needed)
+  Organisms: Yeast, some bacteria, muscle cells (lactic acid)
+
+LACTIC ACID FERMENTATION (in muscle cells):
+  Glucose → Lactic Acid + Energy (2 ATP)
+  Occurs: During intense exercise when O₂ supply is insufficient
+  Result: Muscle cramps, burning sensation
+```
+
+---
+
+## 🔷 SECTION 5: Other Fungi — Brief Classification
+
+```
+KINGDOM FUNGI:
+  → Multicellular (mostly) or unicellular (yeast)
+  → HETEROTROPHIC (cannot make own food — no chlorophyll)
+  → Cell wall: CHITIN
+  → Reproduce by: SPORES (mostly)
+  → Mode of nutrition: Absorptive (secrete enzymes, absorb nutrients)
+
+Types of Fungi based on nutrition:
+  SAPROPHYTES: Feed on dead/decaying organic matter
+    Examples: Rhizopus (bread mould), Agaricus (mushroom)
+  PARASITES: Feed on living organisms (cause disease)
+    Examples: Puccinia (wheat rust), Ustilago (smut)
+  MUTUALISTS: Live in beneficial partnership
+    Examples: Mycorrhizae (fungi + plant roots), Lichen (fungi + algae)
+
+KEY FUNGI for BPSC exam:
+  Yeast (Saccharomyces) → budding, fermentation
+  Rhizopus → spore formation (bread mould)
+  Penicillium → produces PENICILLIN (antibiotic!) — discovered by Alexander Fleming
+  Agaricus → mushroom (edible, saprophyte)
+  Puccinia → wheat rust (parasite, causes crop disease)
+```
+
+### 🚨 PYQ TRAP #3: Penicillin from Fungus
+```
+PENICILLIN (first antibiotic) was discovered from PENICILLIUM fungus.
+Discovered by: Alexander Fleming (1928) — accidentally noticed mould killing bacteria.
+Used to treat: Bacterial infections (pneumonia, strep throat, syphilis)
+IMPORTANT: Penicillin is from a FUNGUS, not a bacterium.
+```
+
+---
+
+## 🔷 SECTION 6: Plant Reproduction Methods — Comprehensive Summary
+
+```
+PLANT REPRODUCTION:
+        |
+   ┌────┴────┐
+ASEXUAL    SEXUAL
+   |
+   ├── Vegetative Propagation
+   │     ├── Rhizome: Ginger, Turmeric, Lotus, Fern
+   │     ├── Tuber:   Potato, Jimikand
+   │     ├── Bulb:    Onion, Garlic
+   │     ├── Corm:    Colocasia (Arbi), Crocus
+   │     ├── Stolon:  Strawberry, Oxalis
+   │     └── Leaf:    Bryophyllum (leaf buds)
+   │
+   ├── Spore Formation
+   │     ├── Ferns, Mosses
+   │     ├── Rhizopus (bread mould)
+   │     └── Mucor
+   │
+   └── Fragmentation
+         └── Spirogyra, algae
+```
+
+---
+
+## 🔷 SECTION 7: Memory Tricks — Biology
+
+### Underground Modified Stems — "GRIT-BC":
+```
+G = Ginger → Rhizome
+R = Rhizome (Turmeric too!)
+I = (same)
+T = Tuber → Potato
+B = Bulb → Onion, Garlic
+C = Corm → Colocasia (Arbi)
+```
+
+### Yeast Memory Points — "FUBEK":
+```
+F = Fungi (kingdom)
+U = Unicellular
+B = Budding (reproduction)
+E = Eukaryote (has nucleus)
+K = chitin cell wall (Kitin)
+```
+
+### Fermentation Equation Memory:
+```
+Sugar → Alcohol + CO₂ (think: bread RISES with CO₂; beer has ALCOHOL)
+Glucose → Ethanol + Carbon Dioxide
+"Yeast eats sugar, breathes out CO₂, and makes alcohol as waste"
+```
+
+---
+
+# PART 3: PRACTICE QUESTIONS
+
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: Graph Basics, BFS, DFS, Representation, Applications
+
+---
+
+**Q1.** A graph G = (V, E) consists of which two components?
+(A) Vertices and Weights
+(B) Vertices and Edges
+(C) Nodes and Levels
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q3.** Consider the following statements about BFS:
-
-(i) BFS finds the shortest path in an UNWEIGHTED graph
-(ii) BFS uses QUEUE data structure
-(iii) BFS explores nodes level by level
-
-Which statements are CORRECT?
-
-(A) Only (i)
-(B) Only (i) and (ii)
-(C) Only (ii) and (iii)
-(D) More than one of the above (all three are correct)
+**Q2.** In an UNDIRECTED graph, if vertex A has degree 4, it means:
+(A) A has 4 paths to other vertices
+(B) A is connected to 4 other vertices
+(C) A has 4 levels below it
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q4.** Which of the following is/are GRAPH TRAVERSAL methods?
-
-(A) Greedy Algorithm
-(B) Dynamic Programming
-(C) Divide and Conquer
-(D) More than one of the above (BFS and DFS)
-(E) BFS and DFS — these are the traversal methods
+**Q3.** BFS traversal of a graph uses which data structure?
+(A) Stack
+(B) Priority Queue
+(C) Queue
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q5.** The space complexity of storing a graph using an ADJACENCY MATRIX for V vertices is:
+**Q4.** DFS traversal of a graph uses which data structure?
+(A) Queue
+(B) Stack or Recursion
+(C) Array
+(D) More than one of the above
+(E) None of the above
 
-(A) O(V)
-(B) O(V + E)
+---
+
+**Q5.** BFS gives the SHORTEST PATH in which type of graph?
+(A) Weighted directed graph
+(B) Unweighted graph (shortest in terms of number of edges)
+(C) Complete graph only
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q6.** The time complexity of BFS and DFS using an Adjacency List is:
+(A) O(V²)
+(B) O(E log V)
+(C) O(V + E)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q7.** What is the space complexity of an Adjacency Matrix for a graph with V vertices?
+(A) O(V + E)
+(B) O(V)
 (C) O(V²)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q6.** The space complexity of storing a graph using an ADJACENCY LIST for V vertices and E edges is:
-
-(A) O(V²)
-(B) O(V × E)
-(C) O(V + E)
+**Q8.** For a SPARSE graph (few edges), which representation is more memory-efficient?
+(A) Adjacency Matrix
+(B) Incidence Matrix
+(C) Adjacency List
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q7.** In a directed graph, vertex A has edges: A→B, A→C, D→A. What is the IN-DEGREE and OUT-DEGREE of vertex A?
-
-(A) In-degree = 2, Out-degree = 1
-(B) In-degree = 1, Out-degree = 2
-(C) In-degree = 2, Out-degree = 2
+**Q9.** In a directed graph (digraph), edges have:
+(A) No weight
+(B) Direction (arrows)
+(C) Both direction and weight always
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q8.** Topological sorting is applicable ONLY to which type of graph?
-
-(A) Undirected Connected Graph
-(B) Complete Graph
-(C) Directed Acyclic Graph (DAG)
+**Q10.** The sum of degrees of ALL vertices in an undirected graph with E edges is:
+(A) E
+(B) E/2
+(C) 2E
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q9.** Which of the following correctly describes an Adjacency Matrix representation?
-
-(A) matrix[i][j] = 1 if edge exists between i and j, else 0
-(B) It takes O(1) time to check if an edge between two vertices exists
-(C) For undirected graphs, the matrix is symmetric
-(D) More than one of the above (all three are correct)
-(E) None of the above
-
----
-
-**Q10.** Dijkstra's algorithm finds the shortest path in a weighted graph. However, it FAILS when:
-
-(A) The graph has many vertices
-(B) The graph has negative edge weights
-(C) The graph is undirected
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q11.** The time complexity of BFS and DFS on a graph with V vertices and E edges is:
-
-(A) O(V²)
-(B) O(V × E)
-(C) O(V + E)
-(D) More than one of the above (it varies)
-(E) None of the above
-
----
-
-**Q12.** Which algorithm should be used to find the SHORTEST PATH when edge weights can be NEGATIVE?
-
-(A) Dijkstra's Algorithm
-(B) Prim's Algorithm
-(C) Bellman-Ford Algorithm
-(D) More than one of the above
-(E) Kruskal's Algorithm
-
----
-
-**Q13.** In which application is BFS specifically better than DFS?
-
-(A) Cycle detection
-(B) Topological sorting
-(C) Finding shortest path in unweighted graph
-(D) More than one of the above (BFS is better for all these)
-(E) Detecting strongly connected components
-
----
-
-**Q14.** Consider a graph with 6 vertices (A,B,C,D,E,F). Starting BFS from A with adjacency: A:[B,C], B:[D,E], C:[F]. What is the BFS traversal order?
-
-(A) A→B→D→E→C→F
-(B) A→B→C→D→E→F
-(C) A→C→F→B→D→E
-(D) More than one of the above (multiple valid orders)
-(E) None of the above
-
----
-
-**Q15.** Which of the following is TRUE about a BIPARTITE GRAPH?
-
-(A) It contains no odd-length cycles
-(B) Its vertices can be divided into two disjoint sets
-(C) It can always be 2-coloured (coloured with 2 colours such that no two adjacent vertices share same colour)
-(D) More than one of the above (all three are correct)
-(E) None of the above
-
----
-
-**Q16.** In DFS, the order vertices are FINISHED (all neighbours explored) gives which result if reversed?
-
-(A) BFS order
+**Q11.** DFS is best suited for which of the following applications?
+(A) Finding shortest path in unweighted graph
 (B) Level-order traversal
-(C) Topological sort order (for a DAG)
+(C) Cycle detection and topological sorting
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q17.** Which algorithm paradigm does Kruskal's MST algorithm follow?
-
-(A) Dynamic Programming
-(B) Divide and Conquer
-(C) Greedy
-(D) More than one of the above
-(E) Backtracking
-
----
-
-**Q18.** An Eulerian Circuit exists in an undirected graph if and only if:
-
-(A) Every vertex has an even degree AND the graph is connected
-(B) Every vertex has an odd degree
-(C) The graph has no cycles
+**Q12.** Consider graph: A-B, A-C, B-D, C-D, D-E (undirected).
+BFS from A gives which order?
+(A) A, B, D, C, E
+(B) A, B, C, D, E
+(C) A, C, B, D, E
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q19.** In adjacency list representation, finding all NEIGHBOURS of a vertex v takes time proportional to:
-
-(A) O(V) in all cases
-(B) O(E) in all cases
-(C) O(degree of v)
-(D) More than one of the above
-(E) O(1) always
-
----
-
-**Q20.** Floyd-Warshall algorithm is used for:
-
-(A) Finding shortest path from single source
-(B) Finding minimum spanning tree
-(C) Finding shortest paths between ALL pairs of vertices
-(D) More than one of the above
-(E) Finding topological order
-
----
-
-**Q21.** In a connected undirected graph with V vertices and E edges, which of the following statements is/are TRUE?
-
-(i) E ≥ V - 1 (must have at least V-1 edges to be connected)
-(ii) If E = V - 1, it is a TREE
-(iii) E can be at most V(V-1)/2
-
-(A) Only (i)
-(B) Only (i) and (iii)
-(C) Only (ii) and (iii)
-(D) More than one of the above (all three are correct)
-(E) None of the above
-
----
-
-**Q22.** For a complete graph K5 (5 vertices, all pairs connected), how many edges does it have?
-
-(A) 5
-(B) 8
-(C) 10
-(D) More than one of the above
-(E) 20
-
----
-
-**Q23.** DFS is used internally in which of the following algorithms?
-
-(A) Topological Sort (Kahn's method)
-(B) Prim's MST
-(C) Kosaraju's Strongly Connected Components algorithm
+**Q13.** Which of the following is NOT a graph traversal algorithm?
+(A) BFS (Breadth First Search)
+(B) DFS (Depth First Search)
+(C) Divide and Conquer
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q24.** A graph in which every pair of distinct vertices is connected by a unique EDGE is called:
-
-(A) Bipartite Graph
-(B) Sparse Graph
-(C) Complete Graph
+**Q14.** In an undirected complete graph Kₙ, the number of edges is:
+(A) n²
+(B) n(n-1)
+(C) n(n-1)/2
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q25.** Which of the following statements about graph representations is/are CORRECT?
-
-(i) Adjacency Matrix is better for DENSE graphs
-(ii) Adjacency List is better for SPARSE graphs
-(iii) Adjacency Matrix allows O(1) edge existence check
-
-(A) Only (i)
-(B) Only (i) and (ii)
-(C) Only (i) and (iii)
-(D) More than one of the above (all three are correct)
+**Q15.** Which traversal visits nodes LEVEL BY LEVEL in a graph?
+(A) DFS
+(B) Topological Sort
+(C) BFS
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-## 🌿 SECTION II: GENERAL SCIENCE (BIOLOGY) QUESTIONS (Q26–Q50)
-### Topic: Fungi, Yeast, Ginger, Plant Kingdom, Algae, Bacteria, Plant Hormones, Ecology
+**Q16.** To check if an edge (u, v) exists in a graph, which representation is faster?
+(A) Adjacency List — O(1)
+(B) Adjacency Matrix — O(1)
+(C) Both are equally fast O(1)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q26.** Yeast is classified under which Kingdom?
+**Q17.** In a DIRECTED graph, the IN-DEGREE of a vertex is:
+(A) Number of edges going OUT from it
+(B) Number of edges coming IN to it
+(C) Total edges connected to it
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q18.** A DAG stands for:
+(A) Dense Adjacency Graph
+(B) Directed Acyclic Graph
+(C) Double Adjacency Graph
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q19.** DFS on a graph detects a CYCLE when:
+(A) A vertex is visited twice in different runs
+(B) A visited vertex is encountered that is already on the current DFS stack (back edge)
+(C) The queue becomes empty
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q20.** Dijkstra's Algorithm finds shortest path in:
+(A) Unweighted graphs (same as BFS)
+(B) Weighted graphs with non-negative weights
+(C) Graphs with negative edge weights
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q21.** BFS is used for "finding friends of friends" in a social network because:
+(A) It finds all vertices at equal distance (same level) first
+(B) It uses less memory than DFS
+(C) It detects cycles in social networks
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q22.** The adjacency list of a graph stores, for each vertex, its:
+(A) List of all vertices in the graph
+(B) List of adjacent (neighbouring) vertices
+(C) List of vertices sorted by degree
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q23.** For a graph with V = 5 vertices and E = 3 edges, the adjacency matrix size is:
+(A) 3 × 3
+(B) 5 × 3
+(C) 5 × 5
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q24.** Which algorithm is used for TOPOLOGICAL SORTING of a Directed Acyclic Graph (DAG)?
+(A) BFS only
+(B) Prim's Algorithm
+(C) DFS (produces topological order via finishing times)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q25.** In BFS, the visited array/set is necessary to:
+(A) Sort vertices alphabetically
+(B) Prevent visiting the same vertex more than once (avoid infinite loops in cyclic graphs)
+(C) Calculate edge weights
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+## 📝 GENERAL STUDIES — 25 MCQs
+### Biology — Ginger, Yeast, Fermentation, Plant Biology
+
+---
+
+**Q26.** The part of the ginger plant used as a spice is which type of plant structure?
+(A) Root
+(B) Rhizome (underground modified stem)
+(C) Bulb
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q27.** Ginger reproduces by which method?
+(A) Spore formation
+(B) Binary fission
+(C) Vegetative propagation (via rhizome)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q28.** A rhizome is distinguished from a root because a rhizome has:
+(A) Green colour and performs photosynthesis
+(B) Nodes, internodes, and scale leaves (stem characteristics)
+(C) Root hairs for water absorption
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q29.** Turmeric (Haldi) belongs to which plant family?
+(A) Solanaceae (Potato family)
+(B) Zingiberaceae (Ginger family)
+(C) Liliaceae (Lily family)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q30.** Yeast belongs to which kingdom?
 (A) Plantae
-(B) Protista
-(C) Monera
-(D) More than one of the above
-(E) Fungi
-
----
-
-**Q27.** Yeast reproduces by which method?
-
-(A) Binary Fission
-(B) Fragmentation
-(C) Budding
-(D) More than one of the above (budding and binary fission both)
-(E) Spore formation
-
----
-
-**Q28.** What is the underground part of GINGER that we commonly use called?
-
-(A) Taproot
-(B) Tuber
-(C) Rhizome (modified stem)
-(D) More than one of the above
-(E) Corm
-
----
-
-**Q29.** The key difference proving that GINGER's underground part is a STEM (not a root) is:
-
-(A) It stores water
-(B) It grows underground
-(C) It has NODES and INTERNODES (and scale leaves)
-(D) More than one of the above
-(E) It is edible
-
----
-
-**Q30.** Which antibiotic was derived from the fungus Penicillium, and who discovered it?
-
-(A) Streptomycin — discovered by Selman Waksman (1943)
-(B) Penicillin — discovered by Alexander Fleming (1928)
-(C) Tetracycline — discovered by Benjamin Duggar (1945)
+(B) Monera
+(C) Fungi
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q31.** LICHEN is a symbiotic association between which two organisms?
-
-(A) Algae and Bacteria
-(B) Fungi and Bacteria
-(C) Fungi and Algae
-(D) More than one of the above
-(E) Plants and Fungi
-
----
-
-**Q32.** The cell wall of FUNGI is made of:
-
-(A) Cellulose (like plants)
-(B) Chitin
-(C) Peptidoglycan (like bacteria)
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q33.** Which of the following BACTERIA is responsible for NITROGEN FIXATION in the ROOT NODULES of leguminous plants (like pea, bean, soybean)?
-
-(A) Lactobacillus
-(B) E. coli (Escherichia coli)
-(C) Rhizobium
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q34.** Blue-Green Algae (Cyanobacteria) belong to which Kingdom?
-
-(A) Plantae
-(B) Protista
-(C) Monera (Prokaryotes)
-(D) More than one of the above
-(E) Fungi
-
----
-
-**Q35.** AGAR, used as a culture medium in laboratories, is obtained from:
-
-(A) Green Algae
-(B) Brown Algae
-(C) Red Algae
-(D) More than one of the above
-(E) Blue-green Algae
-
----
-
-**Q36.** Which plant hormone is responsible for RIPENING OF FRUITS and is the ONLY GASEOUS hormone?
-
-(A) Auxin
-(B) Gibberellin
-(C) Cytokinin
-(D) More than one of the above
-(E) Ethylene
-
----
-
-**Q37.** Abscisic Acid (ABA) is called the "STRESS HORMONE" because:
-
-(A) It promotes fruit ripening under stress
-(B) It closes the STOMATA during drought/water stress, and promotes seed dormancy
-(C) It causes cell division under stress
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q38.** GIBBERELLIN plant hormone primarily:
-
-(A) Promotes closure of stomata
-(B) Causes leaf fall and fruit drop
-(C) Breaks seed dormancy and promotes stem elongation
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q39.** Which of the following statements about PHOTOSYNTHESIS is/are CORRECT?
-
-(i) It occurs in CHLOROPLASTS
-(ii) OXYGEN is released during the LIGHT REACTIONS (from splitting of water)
-(iii) GLUCOSE is produced in the DARK REACTIONS (Calvin Cycle)
-
-(A) Only (i)
-(B) Only (i) and (ii)
-(C) Only (ii) and (iii)
-(D) More than one of the above (all three are correct)
-(E) None of the above
-
----
-
-**Q40.** According to LINDEMANN'S 10% ENERGY RULE, if grass has 10,000 kcal of energy, how much energy is available to a FROG that feeds on grasshoppers (which feed on grass)?
-
-(A) 1000 kcal
-(B) 100 kcal
-(C) 10 kcal
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q41.** The scientific name of TURMERIC is:
-
-(A) Zingiber officinale
-(B) Ocimum sanctum
-(C) Curcuma longa
-(D) More than one of the above
-(E) Azadirachta indica
-
----
-
-**Q42.** Bacteria reproduce primarily by:
-
-(A) Budding
-(B) Binary Fission
+**Q31.** Yeast reproduces by which method of asexual reproduction?
+(A) Binary fission
+(B) Budding
 (C) Spore formation
-(D) More than one of the above (binary fission and spore formation)
-(E) Fragmentation
-
----
-
-**Q43.** Which of the following pairs is CORRECT regarding plant reproduction by modified stems?
-
-(A) Potato → Rhizome
-(B) Ginger → Tuber
-(C) Onion → Bulb (modified stem with fleshy leaves)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q44.** SPIRULINA is:
-
-(A) A type of algae used as a protein-rich food supplement
-(B) A fungus used to make penicillin
-(C) A bacterium used in nitrogen fixation
+**Q32.** Yeast is classified as a:
+(A) Prokaryote (no nucleus)
+(B) Eukaryote with nucleus and chitin cell wall
+(C) Photosynthetic organism
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q45.** ANABAENA found in AZOLLA (a water fern) is important in rice farming because:
-
-(A) It produces pesticides
-(B) It fixes atmospheric NITROGEN → acts as biofertilizer for rice
-(C) It prevents fungal diseases in rice
+**Q33.** During bread making, yeast causes the dough to RISE because:
+(A) Yeast produces oxygen that inflates the dough
+(B) Yeast ferments sugars and produces CO₂ gas that gets trapped in dough
+(C) Yeast produces ethanol that evaporates and creates bubbles
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q46.** Which of the following is TRUE about FUNGI?
-
-(i) Fungi are heterotrophs — they cannot make their own food
-(ii) Fungi body is made of thread-like HYPHAE; network called MYCELIUM
-(iii) Some fungi (like Lichen) live in symbiosis with algae
-
-(A) Only (i)
-(B) Only (i) and (ii)
-(C) Only (ii) and (iii)
-(D) More than one of the above (all three are correct)
-(E) None of the above
-
----
-
-**Q47.** Gram staining divides bacteria into two groups. Gram-POSITIVE bacteria:
-
-(A) Have thin peptidoglycan and stain pink/red
-(B) Have thick peptidoglycan and stain purple
-(C) Are always harmful to humans
+**Q34.** The products of yeast fermentation (anaerobic) are:
+(A) CO₂ and Water only
+(B) Glucose and Oxygen
+(C) Ethanol (alcohol) and CO₂
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q48.** The active compound GINGEROL found in Ginger is responsible for:
-
-(A) Its yellow colour
-(B) Its sweet taste
-(C) Its pungent (spicy/hot) taste and smell
+**Q35.** Which organism produces PENICILLIN — the first antibiotic?
+(A) Penicillium (a fungus)
+(B) Yeast (Saccharomyces)
+(C) Rhizopus (bread mould)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q49.** In a food chain: Grass → Grasshopper → Frog → Snake → Eagle. At which TROPHIC LEVEL does the FROG sit?
-
-(A) First trophic level
-(B) Second trophic level
-(C) Third trophic level
+**Q36.** Potato reproduces vegetatively through:
+(A) Rhizomes
+(B) Bulbs
+(C) Tubers
 (D) More than one of the above
-(E) Fourth trophic level
+(E) None of the above
 
 ---
 
-**Q50.** Which of the following is the CORRECT scientific name / kingdom grouping?
-
-(A) Yeast — Kingdom Plantae (unicellular plant)
-(B) Mushroom — Kingdom Fungi (Agaricus bisporus)
-(C) Amoeba — Kingdom Monera (prokaryote)
+**Q37.** Onion reproduces vegetatively through:
+(A) Tubers
+(B) Bulbs
+(C) Rhizomes
 (D) More than one of the above
-(E) All of the above are wrong
+(E) None of the above
 
 ---
 
-# ═══════════════════════════════════════════════════
-# ✅ ANSWER KEY — DAY 27
-# (Open ONLY after attempting ALL 50 questions!)
-# ═══════════════════════════════════════════════════
+**Q38.** Strawberry spreads vegetatively through:
+(A) Rhizomes (underground horizontal stems)
+(B) Tubers
+(C) Stolons/Runners (horizontal stems on soil surface)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## COMPUTER SCIENCE ANSWERS (Q1–Q25)
-
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| Q1  | **(C) Queue** | BFS uses QUEUE (FIFO) — visits level by level |
-| Q2  | **(C) Stack** | DFS uses STACK (LIFO) or recursive call stack |
-| Q3  | **(D) More than one** | ALL THREE statements about BFS are correct |
-| Q4  | **(E)** | BFS and DFS are traversal methods. Greedy/DP/D&C are paradigms NOT traversals — classic BPSC trap! |
-| Q5  | **(C) O(V²)** | Adjacency Matrix always uses V×V = V² space |
-| Q6  | **(C) O(V+E)** | Adjacency List: V lists + E total entries = O(V+E) |
-| Q7  | **(B)** | A has 1 edge coming IN (D→A) → In-degree=1; 2 edges going OUT (A→B, A→C) → Out-degree=2 |
-| Q8  | **(C) DAG** | Topological sort ONLY works on Directed Acyclic Graphs |
-| Q9  | **(D) More than one** | ALL THREE descriptions of Adjacency Matrix are correct |
-| Q10 | **(B)** | Dijkstra FAILS with negative edge weights — use Bellman-Ford instead |
-| Q11 | **(C) O(V+E)** | Both BFS and DFS: Time = O(V+E) for adjacency list |
-| Q12 | **(C) Bellman-Ford** | Only Bellman-Ford handles negative weights |
-| Q13 | **(C)** | BFS guarantees shortest path in unweighted graphs — DFS does NOT |
-| Q14 | **(B) A→B→C→D→E→F** | BFS visits level by level: A(level 0), B,C(level 1), D,E,F(level 2) |
-| Q15 | **(D) More than one** | ALL THREE properties of bipartite graphs are correct |
-| Q16 | **(C) Topological sort** | Reverse of DFS finish times = valid topological order for DAG |
-| Q17 | **(C) Greedy** | Kruskal's is a Greedy algorithm (always picks min weight edge) |
-| Q18 | **(A)** | Eulerian Circuit: all even degrees AND connected — both conditions required |
-| Q19 | **(C) O(degree of v)** | Adjacency list: each list has entries equal to degree of that vertex |
-| Q20 | **(C)** | Floyd-Warshall = ALL pairs shortest path — O(V³) DP algorithm |
-| Q21 | **(D) More than one** | ALL THREE statements about connected graphs are correct |
-| Q22 | **(C) 10** | K5: n(n-1)/2 = 5×4/2 = 10 edges |
-| Q23 | **(C) Kosaraju's** | Kosaraju's SCC algorithm uses DFS twice; Kahn's uses BFS/Queue |
-| Q24 | **(C) Complete Graph** | Complete graph = every pair of vertices connected by unique edge |
-| Q25 | **(D) More than one** | ALL THREE statements about graph representations are correct |
+**Q39.** What is the cell wall composition of fungi?
+(A) Cellulose (like plants)
+(B) Peptidoglycan (like bacteria)
+(C) Chitin
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## GENERAL SCIENCE (BIOLOGY) ANSWERS (Q26–Q50)
-
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| Q26 | **(E) Fungi** | Yeast = unicellular FUNGUS. NOT a plant or protist! |
-| Q27 | **(C) Budding** | Yeast reproduces by BUDDING — small bud grows off parent |
-| Q28 | **(C) Rhizome** | Ginger underground part = RHIZOME (modified horizontal stem) |
-| Q29 | **(C)** | Nodes + internodes + scale leaves = PROOF it is a stem, not a root |
-| Q30 | **(B)** | Penicillin from Penicillium, discovered by Alexander Fleming 1928 |
-| Q31 | **(C) Fungi + Algae** | Lichen = Fungi (body/structure) + Algae (food via photosynthesis) |
-| Q32 | **(B) Chitin** | Fungi cell wall = CHITIN. Plants = cellulose. Bacteria = peptidoglycan |
-| Q33 | **(C) Rhizobium** | Rhizobium in root nodules of legumes fixes atmospheric nitrogen |
-| Q34 | **(C) Monera** | Blue-green algae (Cyanobacteria) = PROKARYOTES → Kingdom Monera |
-| Q35 | **(C) Red Algae** | AGAR obtained from Red Algae (Gelidium, Gracilaria) |
-| Q36 | **(E) Ethylene** | Ethylene = fruit ripening + only GASEOUS plant hormone |
-| Q37 | **(B)** | ABA closes stomata during drought → water conservation; promotes dormancy |
-| Q38 | **(C)** | Gibberellin = breaks seed dormancy + stem elongation (OPPOSITE of ABA) |
-| Q39 | **(D) More than one** | ALL THREE photosynthesis statements are correct |
-| Q40 | **(B) 100 kcal** | 10,000 (grass) → 1,000 (grasshopper, 10%) → 100 (frog, 10%) |
-| Q41 | **(C) Curcuma longa** | Turmeric = Curcuma longa. Ginger = Zingiber officinale |
-| Q42 | **(B) Binary Fission** | Bacteria primarily reproduce by binary fission (cell splits into 2) |
-| Q43 | **(C) Onion → Bulb** | Potato=tuber, Ginger=rhizome, Onion=BULB (fleshy leaf bases around stem) |
-| Q44 | **(A)** | Spirulina = Blue-green alga (Cyanobacterium), protein-rich superfood |
-| Q45 | **(B)** | Anabaena in Azolla fixes N₂ → biofertilizer for rice paddy fields |
-| Q46 | **(D) More than one** | ALL THREE statements about Fungi are correct |
-| Q47 | **(B)** | Gram POSITIVE = thick peptidoglycan = stains PURPLE. Gram Negative = pink |
-| Q48 | **(C)** | Gingerol = responsible for ginger's pungent/spicy taste |
-| Q49 | **(C) Third trophic level** | Grass=1st, Grasshopper=2nd, Frog=3rd, Snake=4th, Eagle=5th |
-| Q50 | **(B)** | Mushroom (Agaricus bisporus) = Fungi ✓. Yeast=Fungi (not Plantae), Amoeba=Protista (not Monera) |
+**Q40.** Bryophyllum reproduces vegetatively from which part?
+(A) Roots
+(B) Leaves (buds form on leaf margins)
+(C) Underground stems
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📊 SCORE EVALUATION
+**Q41.** Alexander Fleming discovered penicillin when he noticed:
+(A) Yeast producing antibiotic compounds
+(B) A Penicillium mould killing surrounding bacteria on a culture plate
+(C) Bacteria becoming resistant to chemicals
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q42.** Rhizopus (bread mould) reproduces by:
+(A) Binary fission
+(B) Budding
+(C) Spore formation
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q43.** Lactic acid fermentation (in human muscle cells during intense exercise) produces:
+(A) Ethanol and CO₂
+(B) Lactic acid and a small amount of energy
+(C) Glucose and ATP
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q44.** Which of the following plants has a CORM as its underground modified stem?
+(A) Ginger (rhizome)
+(B) Potato (tuber)
+(C) Colocasia/Arbi (corm)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q45.** The process of fermentation in yeast is:
+(A) Aerobic (requires oxygen)
+(B) Anaerobic (does NOT require oxygen)
+(C) Can only happen in the presence of sunlight
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q46.** Colocasia (Arbi/Taro) is reproduced vegetatively using:
+(A) Rhizomes
+(B) Runners
+(C) Corms
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q47.** Which of the following pairs is CORRECTLY matched — organism to mode of reproduction?
+(A) Yeast → Binary fission; Amoeba → Budding
+(B) Amoeba → Binary fission; Yeast → Budding
+(C) Spirogyra → Budding; Rhizopus → Binary fission
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q48.** The fermentation equation for yeast is:
+C₆H₁₂O₆ → ?
+(A) 6CO₂ + 6H₂O
+(B) 2C₂H₅OH + 2CO₂
+(C) 2CH₃COOH (Lactic acid)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q49.** Which of the following is an example of a SAPROPHYTIC fungus?
+(A) Puccinia (wheat rust — parasite)
+(B) Agaricus (mushroom — decomposes dead matter)
+(C) Mycorrhizae (mutualist)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q50.** Ginger and Turmeric both belong to the same plant family. What is that family?
+(A) Solanaceae
+(B) Poaceae (Grass family)
+(C) Zingiberaceae
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+# ANSWER KEY
+
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
+
+---
+
+### CS Answers (Q1–Q25):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (B) | Graph = Vertices + Edges (G = (V,E)) |
+| 2 | (B) | Degree = number of connected vertices (edges) |
+| 3 | (C) | BFS uses QUEUE (FIFO) |
+| 4 | (B) | DFS uses STACK or Recursion (LIFO) |
+| 5 | (B) | BFS = shortest path by edge count in unweighted graphs |
+| 6 | (C) | BFS/DFS with adj list = O(V + E) |
+| 7 | (C) | Adjacency Matrix always = V × V = O(V²) |
+| 8 | (C) | Sparse graph → Adjacency List saves memory O(V+E) |
+| 9 | (B) | Directed = edges have direction (may or may not be weighted) |
+| 10 | (C) | Handshaking lemma: sum of degrees = 2E |
+| 11 | (C) | DFS: cycle detection, topological sort |
+| 12 | (B) | BFS explores level by level: A→B,C→D→E |
+| 13 | (C) | Divide and Conquer is an algorithmic paradigm, not graph traversal |
+| 14 | (C) | Complete graph Kₙ: n(n-1)/2 edges |
+| 15 | (C) | BFS = level by level traversal |
+| 16 | (B) | Adjacency Matrix: O(1) edge check (direct index lookup) |
+| 17 | (B) | In-degree = edges coming IN to vertex |
+| 18 | (B) | DAG = Directed Acyclic Graph |
+| 19 | (B) | Back edge to current stack path = cycle detected |
+| 20 | (B) | Dijkstra's = weighted, non-negative edge weights |
+| 21 | (A) | BFS explores same-distance nodes first = friends at same hop |
+| 22 | (B) | Adjacency list: for each vertex, stores its neighbour list |
+| 23 | (C) | Matrix is always V × V = 5 × 5, regardless of E |
+| 24 | (C) | DFS naturally produces topological order (reverse finishing time) |
+| 25 | (B) | Visited array prevents revisiting = avoids infinite loops in cycles |
+
+---
+
+### GS Answers (Q26–Q50):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (B) | Ginger = rhizome (underground modified STEM, not root) |
+| 27 | (C) | Ginger = vegetative propagation via rhizome pieces |
+| 28 | (B) | Rhizome has nodes, internodes, scale leaves = stem features |
+| 29 | (B) | Turmeric = Zingiberaceae (same as ginger) |
+| 30 | (C) | Yeast = Kingdom Fungi |
+| 31 | (B) | Yeast = BUDDING (not binary fission!) |
+| 32 | (B) | Yeast = eukaryote, nucleus present, chitin cell wall |
+| 33 | (B) | CO₂ from fermentation trapped in dough → rises |
+| 34 | (C) | Yeast fermentation: Glucose → Ethanol + CO₂ |
+| 35 | (A) | Penicillin from Penicillium fungus (Fleming, 1928) |
+| 36 | (C) | Potato = tubers (not rhizomes!) |
+| 37 | (B) | Onion = bulbs |
+| 38 | (C) | Strawberry = stolons/runners (above ground horizontal stems) |
+| 39 | (C) | Fungi cell wall = CHITIN (not cellulose, not peptidoglycan) |
+| 40 | (B) | Bryophyllum = leaf buds (buds on margins of leaves) |
+| 41 | (B) | Fleming: Penicillium mould killing bacteria on culture plate |
+| 42 | (C) | Rhizopus (bread mould) = spore formation |
+| 43 | (B) | Muscle lactic acid fermentation = Lactic acid + ATP |
+| 44 | (C) | Colocasia/Arbi = corm (vertical solid underground stem) |
+| 45 | (B) | Yeast fermentation = ANAEROBIC (no oxygen) |
+| 46 | (C) | Colocasia propagated by corms |
+| 47 | (B) | Correct: Amoeba→binary fission; Yeast→budding |
+| 48 | (B) | C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂ (yeast fermentation) |
+| 49 | (B) | Agaricus (mushroom) = saprophyte (decomposes dead matter) |
+| 50 | (C) | Both Ginger and Turmeric = Zingiberaceae family |
+
+---
+---
+
+# 🔁 DAY 27 — CRISP REVISION NOTES
+
+## ⚡ RAPID FIRE — Graph Basics, BFS & DFS
+
+### Graph Fundamentals:
 ```
-┌────────────────────────────────────────────┐
-│  CS Score  (Q1–25):   _____ / 25           │
-│  GS Score  (Q26–50):  _____ / 25           │
-│  TOTAL:               _____ / 50           │
-├────────────────────────────────────────────┤
-│  48–50: TOPPER LEVEL 🏆                   │
-│  43–47: Excellent — On Track ✅            │
-│  35–42: Good — Revise Weak Areas           │
-│  25–34: Re-read Concept Notes 📖           │
-│  Below 25: Full re-read before next test   │
-└────────────────────────────────────────────┘
+Graph = G(V, E): V = vertices, E = edges
+Undirected: A-B means both A→B and B→A
+Directed:   A→B means only one way
+Weighted:   Edges have numerical values
+Complete Kₙ: every vertex connects to every other; edges = n(n-1)/2
+Handshaking Lemma: Sum of all degrees = 2 × E
+DAG = Directed Acyclic Graph (no cycles, used for task scheduling)
+```
+
+### Graph Representations:
+```
+Adjacency Matrix: V×V array; O(V²) space; O(1) edge check; good for DENSE
+Adjacency List:   Array of lists; O(V+E) space; good for SPARSE (DEFAULT CHOICE)
+```
+
+### BFS — "B for Breadth, B for Ballot Box (Queue)":
+```
+Uses: QUEUE (FIFO)
+Pattern: Level by level (explore all at distance 1, then 2, then 3...)
+Time: O(V + E) with adj list
+Space: O(V)
+Finds: SHORTEST PATH (fewest edges) in unweighted graph
+Applications: Shortest path, web crawling, social network friends-of-friends
+```
+
+### DFS — "D for Depth, D for Down-the-stack":
+```
+Uses: STACK (LIFO) or Recursion
+Pattern: Go deep first, backtrack when stuck
+Time: O(V + E) with adj list
+Space: O(V)
+Finds: Cycles, topological order, connected components
+Applications: Cycle detection, topological sort, maze solving, puzzle solving
+```
+
+### BFS vs DFS — One-Table Summary:
+```
+Feature    | BFS           | DFS
+-----------|---------------|----------------
+Structure  | QUEUE         | STACK/Recursion
+Style      | Level-by-level| Deep first
+Shortest?  | YES (unweighted)| NO
+Cycle det? | Yes (indirect)| YES (primary)
+Topo sort? | No            | YES
+```
+
+### 4 CS PYQ Traps:
+```
+TRAP 1: BFS uses QUEUE; DFS uses STACK — never swap these!
+TRAP 2: Greedy/DP/Divide & Conquer = algorithmic PARADIGMS, NOT traversals
+TRAP 3: BFS finds shortest path only in UNWEIGHTED graphs (Dijkstra for weighted)
+TRAP 4: Adjacency Matrix always V×V regardless of number of edges
 ```
 
 ---
 
-## 🎯 TOPPER TIPS — DAY 27 TRAP ANALYSIS
+## ⚡ RAPID FIRE — Ginger, Yeast & Biology
 
-### CS Traps Today:
+### Underground Modified Stems (Most Tested):
 ```
-TRAP 1 (Q4): "Which are graph TRAVERSAL methods?"
-→ Greedy, DP, Divide & Conquer are PARADIGMS not traversals!
-→ BFS and DFS are traversals. Don't confuse!
-
-TRAP 2 (Q7): In-degree vs Out-degree
-→ IN-degree = edges ARRIVING at vertex (arrows pointing IN)
-→ OUT-degree = edges LEAVING vertex (arrows pointing OUT)
-→ Draw the diagram to be sure!
-
-TRAP 3 (Q10): Dijkstra's limitation
-→ "Dijkstra works on all weighted graphs" = WRONG
-→ Fails on NEGATIVE weights → Use Bellman-Ford
-
-TRAP 4 (Q14): BFS order
-→ BFS = level by level. A→(B,C)→(D,E,F)
-→ Not deep first like A→B→D→E→C→F (that's DFS)
+RHIZOME  → Ginger, Turmeric, Lotus, Fern (horizontal, has nodes)
+TUBER    → Potato (eyes = nodes), Jimikand
+BULB     → Onion, Garlic (fleshy scale leaves around central bud)
+CORM     → Colocasia/Arbi (solid, vertical)
+STOLON   → Strawberry (above ground runners)
+LEAF     → Bryophyllum (buds on leaf margins)
 ```
 
-### GS Traps Today:
+### Yeast — The 5 Key Facts:
 ```
-TRAP 1 (Q26, Q50): Yeast classification
-→ "Yeast is a plant" = WRONG
-→ Yeast is a FUNGUS (unicellular)
-
-TRAP 2 (Q28, Q29): Ginger's underground part
-→ "Ginger has a root underground" = WRONG
-→ It is a RHIZOME (modified stem) — proved by nodes/internodes
-
-TRAP 3 (Q34): Blue-green algae kingdom
-→ "Blue-green algae belong to Plantae" = WRONG
-→ They are PROKARYOTES → Kingdom MONERA
-
-TRAP 4 (Q43): Potato vs Sweet Potato
-→ Potato = TUBER (modified STEM) — eyes are nodes
-→ Sweet Potato = tuberous ROOT — different!
+1. Kingdom = FUNGI (not bacteria, not plant)
+2. Unicellular, Eukaryote, Chitin cell wall
+3. Reproduces by BUDDING (not binary fission!)
+4. Fermentation: Glucose → Ethanol + CO₂ (anaerobic)
+5. Uses: Bread (CO₂ raises dough), Beer/Wine (ethanol)
 ```
 
-### Option D Pattern (Today):
-Questions where "More than one of the above" was correct: Q3, Q9, Q15, Q21, Q25, Q39, Q46
+### Fermentation Formula:
+```
+C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂ + 2ATP
+(Glucose)  (Ethanol) (CO₂)
+= Anaerobic; Occurs in cytoplasm
+```
 
-**LESSON:** When you see 3 statements (i), (ii), (iii), always evaluate ALL before choosing. BPSC frequently makes ALL three correct to trap students who stop at first correct answer.
+### 4 Biology PYQ Traps:
+```
+TRAP 1: Ginger = RHIZOME (STEM, not root!) — "ginger root" is misleading
+TRAP 2: Yeast = BUDDING (not binary fission — that's Amoeba/Bacteria)
+TRAP 3: Penicillin from PENICILLIUM FUNGUS (not bacteria)
+TRAP 4: Potato has TUBERS (not rhizomes); Ginger has RHIZOMES (not tubers)
+```
+
+### Key Organism-Structure-Reproduction:
+```
+Amoeba      → Binary fission
+Yeast       → Budding + Kingdom Fungi
+Hydra       → Budding + Animal
+Ginger      → Rhizome + Vegetative propagation
+Potato      → Tuber + Vegetative propagation
+Onion       → Bulb + Vegetative propagation
+Spirogyra   → Fragmentation
+Rhizopus    → Spore formation (bread mould)
+Planaria    → Regeneration
+Strawberry  → Stolon/Runner
+Bryophyllum → Leaf buds
+```
 
 ---
 
-## 📝 NIGHT REVISION — Write from memory (5 things):
-
-1. BFS uses ______ | DFS uses ______
-2. Topological sort works only on ______
-3. Adjacency Matrix space = ______ | Adjacency List space = ______
-4. Yeast belongs to Kingdom ______ | reproduces by ______
-5. Ginger underground part = ______ (type: ______) | Lichen = ______ + ______
-
-**Answers:** 1. Queue, Stack | 2. DAG | 3. O(V²), O(V+E) | 4. Fungi, Budding | 5. Rhizome (modified stem), Fungi + Algae
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. BFS uses QUEUE → level-by-level → finds shortest path (unweighted); DFS uses STACK → deep first → cycle detection, topological sort
+2. BFS/DFS time = O(V+E) with adjacency list; Adj Matrix = O(V²) space; Adj List = O(V+E) space; use list for sparse, matrix for dense
+3. Greedy/DP/Divide & Conquer are algorithmic paradigms NOT graph traversals — only BFS and DFS are graph traversals
+4. Ginger = RHIZOME (underground STEM, not root!); Potato = TUBER; Onion = BULB; Strawberry = STOLON; Bryophyllum = LEAF BUDS
+5. Yeast = Fungi, unicellular, BUDDING (not binary fission!); Fermentation = Glucose→Ethanol+CO₂ (anaerobic); Penicillin from Penicillium fungus
 
 ---
 
-*Day 27 of 170 Complete — BPSC TRE 4.0 | Target: TOP RANK*
-*CS: Graphs, BFS, DFS, Representations, Dijkstra, Topological Sort*
-*GS: Fungi, Yeast, Ginger, Bacteria, Algae, Plant Hormones, Ecology*
+*Next: Day 28 — DBMS Introduction (Database concepts, ER model, Relational model, Keys) | GS: Indian History — Harappan & Vedic Civilisation*

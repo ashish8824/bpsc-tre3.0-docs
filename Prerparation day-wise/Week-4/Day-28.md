@@ -1,911 +1,844 @@
-# 📅 DAY 28 — BPSC TRE 4.0 COMPLETE REVISION + PRACTICE
-## CS MEGA REVISION: Linked Lists + Trees + BST + Red-Black + Graphs (Days 22–27)
-## GS MEGA REVISION: Biology + Physics Basics + Chemistry Basics (Science Revision)
-
-> **🔁 REVISION DAY — Phase 1 | Week 4 Complete**
-> **Day 28 of 170 | This is your MOST IMPORTANT day — Consolidate everything!**
-> **Format:** 25 CS MCQs + 25 GS MCQs | Full BPSC 5-option format | Answers at END ONLY
+# 📅 BPSC TRE 4.0 — DAY 28 COMPLETE REVISION MODULE
+### DSA Mega-Revision (Day 22–27) + GS Revision + 50 PYQ-Level MCQs
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-# ════════════════════════════════════════════════════════
-# PART A — CS MEGA REVISION
-# ALL Topics: Days 22–27 | Linked Lists | Trees | BST
-#             Red-Black Trees | Spanning Trees | Graphs
-# ════════════════════════════════════════════════════════
+> ⏰ **Today's Schedule**
+> - Morning (1 hr): CS Revision — Linked Lists + Trees + BST
+> - Mid-Morning (1 hr): CS Revision — Balanced Trees + Graphs + BFS/DFS
+> - Afternoon (45 min): GS Revision — Polity + Biology + Physics
+> - Evening (1 hr): Solve all 50 PYQ-level MCQs
+> - Night (30 min): "Last 1-hour before exam" ultra-crisp card review
 
 ---
 
-## 🔗 MODULE 1: LINKED LISTS — COMPLETE REVISION
-
-### Types of Linked Lists at a Glance:
-
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                   THREE TYPES OF LINKED LISTS                     │
-├──────────────────┬────────────────────────────────────────────────┤
-│ SINGLY (SLL)     │  [Data|Next] → [Data|Next] → [Data|NULL]      │
-│                  │  One direction only (forward)                   │
-│                  │  Each node: data + 1 pointer                   │
-├──────────────────┼────────────────────────────────────────────────┤
-│ DOUBLY (DLL)     │  NULL←[Prev|Data|Next]↔[Prev|Data|Next]→NULL  │
-│                  │  Two directions (forward + backward)            │
-│                  │  Each node: data + 2 pointers                  │
-├──────────────────┼────────────────────────────────────────────────┤
-│ CIRCULAR (CLL)   │  [Data|Next] → [Data|Next] → [Data|Next] ↩    │
-│                  │  Last node points BACK to first node            │
-│                  │  No NULL pointer at end                        │
-└──────────────────┴────────────────────────────────────────────────┘
-```
-
-### Operations Complexity Table (MEMORIZE!):
-
-```
-┌───────────────────────────┬────────────┬───────────┬────────────┐
-│ Operation                 │ SLL        │ DLL       │ Array      │
-├───────────────────────────┼────────────┼───────────┼────────────┤
-│ Access by index           │ O(n) ❌    │ O(n) ❌  │ O(1) ✅   │
-│ Insert at BEGINNING       │ O(1) ✅   │ O(1) ✅  │ O(n) ❌   │
-│ Insert at END             │ O(n)       │ O(n)      │ O(1)       │
-│ Insert at END (with tail) │ O(1)       │ O(1)      │ O(1)       │
-│ Delete from BEGINNING     │ O(1)       │ O(1)      │ O(n)       │
-│ Delete from END           │ O(n) ❌    │ O(1) ✅  │ O(1)       │
-│ Delete from MIDDLE        │ O(n)       │ O(n)      │ O(n)       │
-│ Search                    │ O(n)       │ O(n)      │ O(n)/O(lgn)│
-│ Memory per node           │ 1 pointer  │ 2 pointers│ None extra │
-└───────────────────────────┴────────────┴───────────┴────────────┘
-
-KEY INSIGHT: DLL can delete from END in O(1) because prev pointer
-             lets you directly access previous node!
-             SLL needs O(n) to find the second-to-last node.
-```
-
-### Linked List Key PYQ Facts:
-
-```
-╔══════════════════════════════════════════════════════════════════╗
-║  LINKED LIST — TOPPER MUST-KNOW FACTS                           ║
-╠══════════════════════════════════════════════════════════════════╣
-║ 1. NO random access in LL (unlike arrays)                       ║
-║ 2. SLL: insert at beginning = O(1), at end = O(n)              ║
-║ 3. DLL: HARDER to implement than SLL (more pointers)           ║
-║ 4. DLL: delete from end = O(1) (advantage over SLL)            ║
-║ 5. Circular LL: last node's next ≠ NULL (points to head)       ║
-║ 6. Deque best implemented using DLL (O(1) both ends)           ║
-║ 7. LL advantages over array: Dynamic size, easy insert/delete  ║
-║ 8. LL disadvantage: No random access, extra pointer memory     ║
-╚══════════════════════════════════════════════════════════════════╝
-```
+# PART 1: CS MEGA-REVISION
+## 📘 Day 22–27 — All DSA Topics at a Glance
 
 ---
 
-## 🌳 MODULE 2: TREES — COMPLETE REVISION
+## ⚡ BLOCK 1: LINKED LISTS (Day 22–23)
 
-### Tree Terminology Quick Reference:
+---
 
-```
-                    A          ← ROOT (level 0, depth 0)
-                   / \
-                  B   C        ← Level 1, depth 1
-                 / \    \
-                D   E    F     ← Level 2, depth 2 (LEAVES: D, E, F)
-               /
-              G                ← Level 3, depth 3 (LEAF)
-
-HEIGHT of tree = 3 (longest path from root to leaf = A→B→D→G)
-HEIGHT of node A = 3
-DEPTH of node G = 3
-DEGREE of B = 2 (two children: D and E)
-DEGREE of C = 1 (one child: F)
-DEGREE of D = 1 (one child: G)
-LEAF nodes: D(NO! has child G), E, F, G ← only E, F, G are leaves
-INTERNAL nodes: A, B, C, D
-```
-
-### Binary Tree Types:
+### 🔷 Singly Linked List (SLL) — Crisp Rules
 
 ```
-FULL BINARY TREE:          COMPLETE BINARY TREE:
-Every node has 0 or 2      All levels full except last,
-children (never 1)         last level filled LEFT to RIGHT
+STRUCTURE: HEAD → [data|next] → [data|next] → [data|NULL]
+           HEAD = pointer to first node
+           NULL = end of list
+           Memory: NON-CONTIGUOUS (nodes scattered in RAM)
 
-        1                           1
-       / \                         / \
-      2   3     ✅               2   3     ✅
-     / \   \                    / \ /
-    4   5   6   ❌            4  5 6
-              (node 3 has 1 child — violates Full BT)
-
-
-PERFECT BINARY TREE:       BALANCED BINARY TREE:
-All leaves at same level,  Height difference between left
-completely filled          and right subtree ≤ 1 (at every node)
-
-        1
-       / \
-      2   3      ✅ (Perfect)
-     / \ / \
-    4  5 6  7
+NODE: struct Node { int data; Node* next; };
 ```
 
-### Tree Traversals — MUST MASTER:
-
+**Complexity Quick-Fire:**
 ```
-TREE:            A
-                / \
-               B   C
-              / \
-             D   E
-
-PREORDER  (Root → Left → Right):  A B D E C
-INORDER   (Left → Root → Right):  D B E A C  ← BST: gives sorted order!
-POSTORDER (Left → Right → Root):  D E B C A
-LEVEL-ORDER (BFS):                A B C D E
-
-MEMORY TRICK:
-  PRE = ROOT comes first (PREFIX)
-  IN  = ROOT comes IN the middle
-  POST= ROOT comes last (POSTFIX/SUFFIX)
+Operation              | Time  | Reason
+-----------------------|-------|------------------------------------
+Access/Search          | O(n)  | Must traverse from HEAD (no random access)
+Insert at BEGINNING    | O(1)  | Only 2 pointer changes → NO traversal
+Insert at END (no tail)| O(n)  | Must traverse to find last node
+Insert at END (tail)   | O(1)  | Direct access via tail pointer
+Insert at MIDDLE       | O(n)  | Traverse to position k-1
+Delete at BEGINNING    | O(1)  | Advance HEAD (no traversal)
+Delete at END          | O(n)  | Traverse to second-to-last node
+Delete at MIDDLE       | O(n)  | Traverse to position k-1
+Traversal/Length       | O(n)  | Visit all n nodes
 ```
 
-### Number of Binary Trees:
+**Middle Insert — Critical Order:**
+```
+ALWAYS: newNode.next = curr.next  ← FIRST (connect new to rest)
+        curr.next = newNode       ← SECOND (connect prev to new)
+Wrong order → rest of list LOST permanently!
+```
+
+**Memory Overhead:** SLL: [data | next_ptr] = data + 1 pointer per node.
+
+---
+
+### 🔷 Doubly Linked List (DLL) — Crisp Rules
 
 ```
-UNLABELLED Binary Trees with n nodes = Catalan Number C(n)
-C(n) = (2n)! / ((n+1)! × n!)
+STRUCTURE: NULL ← [prev|data|next] ↔ [prev|data|next] → NULL
+           HEAD.prev = NULL (first node)
+           TAIL.next = NULL (last node)
+           NODE: prev + data + next (3 fields)
+```
 
-C(0) = 1   (empty tree)
-C(1) = 1
-C(2) = 2
-C(3) = 5
-C(4) = 14  ← MOST ASKED IN BPSC!
-C(5) = 42
+**DLL KEY ADVANTAGE over SLL:**
+```
+End deletion: O(1) in DLL (TAIL.prev gives second-to-last directly)
+              O(n) in SLL (must traverse to second-to-last)
 
-So: 4 nodes → 14 distinct binary trees/BSTs
+End deletion O(1) IS THE MOST TESTED DLL FACT.
+```
+
+**Middle Insert — 4 Pointer Updates:**
+```
+1. newNode.next = nextNode
+2. newNode.prev = prevNode
+3. prevNode.next = newNode
+4. nextNode.prev = newNode
+(4 updates in DLL vs 2 in SLL)
+```
+
+**Deque with DLL:** All 4 operations (insert/delete front/rear) = O(1).
+
+---
+
+### 🔷 Circular Linked List (CLL) — Crisp Rules
+
+```
+CSLL: HEAD → [d|→] → [d|→] → [d|→] ─── (last.next = HEAD, no NULL)
+CDLL: HEAD ↔ [←|d|→] ↔ [←|d|→] ↔ (circular + bidirectional)
+```
+
+**CLL Key Rules:**
+```
+→ Last node's NEXT = HEAD (not NULL) — no NULL pointer exists in any node
+→ Traversal ends when curr == HEAD (not curr == NULL)
+→ curr == NULL → INFINITE LOOP (most common CLL mistake!)
+→ Used for: Round-robin CPU scheduling, circular buffers
 ```
 
 ---
 
-## 🔍 MODULE 3: BST — COMPLETE REVISION
-
-### BST Property (Golden Rule):
+### 🔷 SLL vs DLL vs CLL — One Master Table
 
 ```
-FOR EVERY NODE in a BST:
-  ALL nodes in LEFT subtree  < current node
-  ALL nodes in RIGHT subtree > current node
-
-Example Valid BST:          Example INVALID BST:
-        8                           8
-       / \                         / \
-      3   10                      3   10
-     / \    \                    / \    \
-    1   6    14                 1   6    14
-       / \                         / \
-      4   7                       4  12  ← 12 > 8 but in left subtree!
-                                         This VIOLATES BST property
-```
-
-### BST Operations Complexity:
-
-```
-┌─────────────────┬───────────────────────────────────┐
-│ Operation       │ Time Complexity                    │
-├─────────────────┼───────────────────────────────────┤
-│ Search          │ O(log n) average | O(n) worst*     │
-│ Insert          │ O(log n) average | O(n) worst*     │
-│ Delete          │ O(log n) average | O(n) worst*     │
-│ Find Min/Max    │ O(h) where h = height              │
-│ Inorder traversal│ O(n) — gives sorted output!       │
-└─────────────────┴───────────────────────────────────┘
-*Worst case = skewed tree (like inserting 1,2,3,4,5 in order)
-```
-
-### BST Deletion — 3 Cases:
-
-```
-CASE 1: Delete LEAF node (no children)
-  → Simply remove it
-  Example: Delete 4 from BST → just remove 4
-
-CASE 2: Delete node with ONE child
-  → Replace node with its only child
-  Example: Delete node with only right child
-           → right child takes its place
-
-CASE 3: Delete node with TWO children
-  → Replace with INORDER SUCCESSOR (smallest node in right subtree)
-     OR INORDER PREDECESSOR (largest node in left subtree)
-  Example: Delete 3 from BST with children 1 and 6
-           → Replace 3 with inorder successor (4, smallest in right)
+Feature           | SLL              | DLL                | CLL (Singly)
+------------------|------------------|--------------------|------------------
+Pointers/node     | 1 (next)         | 2 (prev+next)      | 1 (next)
+NULL at end?      | YES              | YES (both ends)    | NO
+Backward travel   | ✗ NOT POSSIBLE   | ✓ YES              | ✗ NOT POSSIBLE
+End deletion      | O(n)             | O(1) ← KEY!        | O(n)
+Memory/node       | LEAST            | MOST               | LEAST (same as SLL)
+Insert begin      | O(1)             | O(1)               | O(1) with tail ptr
+Deque support     | POOR             | EXCELLENT ← KEY!   | POOR
+Use case          | Simple lists     | Music player, undo | Round-robin, buffer
+No cycle?         | YES (ends NULL)  | YES (ends NULL)    | NO (it IS a circle)
 ```
 
 ---
 
-## 🔴 MODULE 4: RED-BLACK TREE + AVL — COMPLETE REVISION
+## ⚡ BLOCK 2: TREES (Day 24)
 
-### Red-Black Tree — 5 Properties Flash Card:
+---
 
-```
-┌─────────────────────────────────────────────────────────┐
-│            RED-BLACK TREE: 5 RULES                       │
-│                                                         │
-│  Rule 1: Every node is RED or BLACK                     │
-│  Rule 2: ROOT is always BLACK                           │
-│  Rule 3: Every NIL (leaf) is BLACK                      │
-│  Rule 4: RED node → both children must be BLACK         │
-│           (No two consecutive RED nodes!)               │
-│  Rule 5: All paths root→NIL have SAME black count       │
-│           (Black Height is constant)                    │
-└─────────────────────────────────────────────────────────┘
-
-New node inserted → Coloured RED first, then fix violations
-Root always becomes BLACK (even if recoloured)
-```
-
-### AVL Tree Flash Card:
+### 🔷 Tree Terminology — One-Line Each
 
 ```
-Balance Factor (BF) = Height(Left) − Height(Right)
-Valid: BF = -1, 0, or +1
-Invalid: BF = -2 or +2 → Rotation needed!
-
-4 Types of Rotations:
-  LL Rotation → Right rotate
-  RR Rotation → Left rotate
-  LR Rotation → Left rotate then Right rotate
-  RL Rotation → Right rotate then Left rotate
+ROOT:      Topmost node, NO parent, exactly 1 per tree
+LEAF:      Node with NO children (degree = 0)
+EDGE:      Connection between parent and child
+DEGREE:    Number of CHILDREN of a node
+HEIGHT:    Edges from node DOWN to deepest leaf (height of leaf = 0)
+DEPTH:     Edges from ROOT DOWN to the node (depth of root = 0)
+LEVEL:     Same as depth (root at level 0 or 1 depending on convention)
+SUBTREE:   Any node + all its descendants
+SIBLINGS:  Nodes sharing the SAME parent
 ```
 
-### AVL vs Red-Black — Exam Summary:
-
+**Key Formulas:**
 ```
-┌────────────────┬──────────────────┬─────────────────────┐
-│                │ AVL Tree          │ Red-Black Tree       │
-├────────────────┼──────────────────┼─────────────────────┤
-│ Balance type   │ Strictly balanced │ Loosely balanced     │
-│ Search speed   │ Faster            │ Slightly slower      │
-│ Insert/Delete  │ More rotations    │ Fewer rotations      │
-│ Best for       │ Read-heavy        │ Write-heavy          │
-│ Used in        │ Databases         │ Linux kernel,        │
-│                │                   │ Java TreeMap/TreeSet  │
-│ Height max     │ 1.44 log(n)       │ 2 log(n+1)           │
-└────────────────┴──────────────────┴─────────────────────┘
+Edges in tree          = n - 1    (n = total nodes; ALWAYS TRUE)
+Max nodes at level k   = 2^k      (0-indexed; for Binary Tree)
+Perfect BT total nodes = 2^(h+1) - 1  (h = height)
+Perfect BT leaf nodes  = 2^h
+Full BT: Leaves        = Internal nodes + 1
+Left child of node i   = 2i + 1  (0-indexed array)
+Right child of node i  = 2i + 2  (0-indexed array)
+Parent of node i       = (i-1)/2
 ```
 
 ---
 
-## 🌐 MODULE 5: SPANNING TREE + HEAP — REVISION
-
-### Spanning Tree Formula:
+### 🔷 Binary Tree Types — 5 Rules in 5 Lines
 
 ```
-N vertices → EXACTLY N-1 edges (always!)
-
-Minimum Spanning Tree (MST) algorithms:
-  Kruskal's: Sort all edges → add min weight (avoid cycles) → O(E log E)
-  Prim's:    Grow from vertex → add nearest vertex → O(E log V)
-  Both are GREEDY algorithms!
-
-Cayley's Formula: Complete graph Kn has n^(n-2) spanning trees
-  K4 → 4^(4-2) = 16 spanning trees
+FULL:      Every node has 0 OR 2 children (NEVER 1). Leaves = Internal + 1.
+COMPLETE:  All levels filled EXCEPT possibly last; last fills LEFT→RIGHT.
+PERFECT:   All leaves at SAME level; all internal nodes have 2 children.
+           A perfect BT is BOTH full AND complete.
+BALANCED:  |Height(left) - Height(right)| ≤ 1 at EVERY node.
+SKEWED:    All nodes have only 1 child → degenerates to linked list → O(n).
 ```
 
-### Heap Revision:
+**Hierarchy:** Perfect ⊂ Complete; Perfect ⊂ Full.
+
+---
+
+### 🔷 Tree Traversals — The 4 Orders
+
+**Master Tree for Traversals:**
+```
+         A
+        / \
+       B   C
+      / \   \
+     D   E   F
+```
 
 ```
-HEAP = Complete Binary Tree + Heap Property
-  Max-Heap: Parent ≥ Children (root = maximum)
-  Min-Heap: Parent ≤ Children (root = minimum)
+PREORDER  (Root→L→R):  A, B, D, E, C, F   [Root FIRST]
+INORDER   (L→Root→R):  D, B, E, A, C, F   [Root MIDDLE]
+POSTORDER (L→R→Root):  D, E, B, F, C, A   [Root LAST]
+LEVEL-ORDER (BFS):     A, B, C, D, E, F   [Level by level]
+```
 
-Array representation (0-based index i):
-  Left child  = 2i + 1
-  Right child = 2i + 2
-  Parent      = (i-1)/2
+**Traversal Memory Tricks:**
+```
+PRE-order:   ROOT comes BEFORE (PRE) children
+IN-order:    ROOT comes IN the middle (left-ROOT-right)
+POST-order:  ROOT comes AFTER (POST) children / Root is ALWAYS LAST
+LEVEL-order: Uses QUEUE; visits level 0, then 1, then 2...
+```
 
-Get Max (Max-Heap) = O(1) — just return root!
-Insert/Delete     = O(log n)
-Build Heap        = O(n)  ← NOT O(n log n)!
-Heap Sort         = O(n log n)
+**Critical BST Rule:** INORDER of BST = SORTED ASCENDING ORDER.
+**BFS uses QUEUE; DFS (Pre/In/Post) uses STACK (recursion).**
+
+---
+
+## ⚡ BLOCK 3: BINARY SEARCH TREE (Day 25)
+
+---
+
+### 🔷 BST — 10 Essential Rules
+
+```
+RULE 1: ALL values in LEFT subtree < node value (GLOBAL, not just direct child)
+RULE 2: ALL values in RIGHT subtree > node value (GLOBAL, not just direct child)
+RULE 3: Inorder traversal → SORTED ASCENDING output (most tested BST fact)
+RULE 4: First element of Preorder = ROOT of BST
+RULE 5: Sorted insertion → SKEWED tree → O(n) worst case
+RULE 6: Balanced BST → O(log n) for search/insert/delete
+RULE 7: MINIMUM = leftmost node (keep going left until NULL)
+RULE 8: MAXIMUM = rightmost node (keep going right until NULL)
+RULE 9: Inorder Successor = smallest in RIGHT subtree = leftmost in right subtree
+RULE 10: Inorder Predecessor = largest in LEFT subtree = rightmost in left subtree
+```
+
+**Deletion Cases:**
+```
+CASE 1: Leaf node → simply remove
+CASE 2: One child → replace node with its child
+CASE 3: Two children → replace with INORDER SUCCESSOR (or predecessor)
+```
+
+**Complexity:**
+```
+             Balanced BST    Skewed BST
+Search:      O(log n)        O(n)
+Insert:      O(log n)        O(n)
+Delete:      O(log n)        O(n)
+Inorder:     O(n)            O(n)   (always O(n) — must visit all)
+```
+
+**Catalan Numbers (Number of distinct BSTs with n nodes):**
+```
+n:    1   2   3    4    5    6
+C(n): 1   2   5   14   42  132
+
+C(4) = 14 ← MEMORISE THIS FOR EXAM
+Formula: C(n) = (2n)! / [(n+1)! × n!]
 ```
 
 ---
 
-## 🔷 MODULE 6: GRAPH THEORY — REVISION
+## ⚡ BLOCK 4: BALANCED TREES & RED-BLACK (Day 26)
 
-### Graph Big Picture:
+---
 
-```
-GRAPH = Vertices (V) + Edges (E)
-
-Directed graph: edge (u,v) ≠ edge (v,u) — one way
-Undirected:     edge (u,v) = edge (v,u) — two way
-
-Max edges (undirected): n(n-1)/2
-Max edges (directed):   n(n-1)
-
-REPRESENTATIONS:
-  Adjacency Matrix: O(V²) space | O(1) edge check
-  Adjacency List:   O(V+E) space | O(deg) edge check
-
-TRAVERSALS:
-  BFS → QUEUE → Level by level → Shortest path (unweighted)
-  DFS → STACK → Depth first  → Cycle detection, Topo sort
-
-BOTH BFS and DFS: O(V+E) time, O(V) space
-```
-
-### Algorithm Paradigms vs Traversals (TRAP TOPIC):
+### 🔷 AVL Tree — 5 Rules
 
 ```
-TRAVERSAL METHODS (not paradigms):
-  ✅ BFS (Breadth First Search)
-  ✅ DFS (Depth First Search)
+RULE 1: AVL = BST + Balance Factor (BF) constraint
+RULE 2: BF = Height(left) - Height(right) at EVERY node
+RULE 3: Valid BF = -1, 0, or +1 (any BF of ±2 → violation)
+RULE 4: Violation → ROTATION to fix (4 types: LL, RR, LR, RL)
+RULE 5: All operations O(log n) ALWAYS (height ≤ 1.44 log₂n)
+```
 
-ALGORITHM DESIGN PARADIGMS (not traversals):
-  ✅ Greedy — Dijkstra, Kruskal, Prim
-  ✅ Dynamic Programming — Floyd-Warshall, Bellman-Ford
-  ✅ Divide & Conquer — Merge Sort, Quick Sort, Binary Search
-  ✅ Backtracking — N-Queens, Sudoku
+### 🔷 Red-Black Tree — 5 Properties (MEMORISE)
 
-DON'T MIX THESE UP IN EXAM!
+```
+P1: Every node is RED or BLACK
+P2: ROOT is always BLACK ← most tested
+P3: All NULL leaf pointers = BLACK
+P4: No two consecutive RED nodes (no R-R parent-child)
+P5: All paths from any node to NULL descendants have SAME number of BLACK nodes
+    (Black-Height = uniform across all paths)
+
+Max height ≤ 2 × log₂(n+1) → O(log n) guaranteed
+New inserted node = RED (then fix violations if any)
+Max 2 rotations per INSERT; max 3 rotations per DELETE
+```
+
+**AVL vs Red-Black:**
+```
+                AVL               Red-Black
+Balance:        STRICT (BF ≤ 1)  APPROXIMATE (2×black-height)
+Search:         FASTER            Slightly slower
+Insert/Delete:  SLOWER            FASTER (fewer rotations)
+Used in:        Read-heavy apps   Java TreeMap, C++ STL, Linux kernel
+Invented:       1962              1972
 ```
 
 ---
 
-## 📊 MASTER COMPLEXITY TABLE (Days 22–27 — Full Summary)
+### 🔷 Spanning Tree
 
 ```
-┌────────────────────────┬──────────────┬─────────────┬─────────────┐
-│ Data Structure/Algo    │ Search/Access│ Insert      │ Delete      │
-├────────────────────────┼──────────────┼─────────────┼─────────────┤
-│ Array (sorted)         │ O(log n)     │ O(n)        │ O(n)        │
-│ Singly Linked List     │ O(n)         │ O(1) front  │ O(n)        │
-│ Doubly Linked List     │ O(n)         │ O(1) front  │ O(1) both   │
-│ BST (average)          │ O(log n)     │ O(log n)    │ O(log n)    │
-│ BST (worst/skewed)     │ O(n)         │ O(n)        │ O(n)        │
-│ AVL Tree               │ O(log n)     │ O(log n)    │ O(log n)    │
-│ Red-Black Tree         │ O(log n)     │ O(log n)    │ O(log n)    │
-│ Min/Max Heap           │ O(n)         │ O(log n)    │ O(log n)    │
-│ Hash Table (average)   │ O(1)         │ O(1)        │ O(1)        │
-│ BFS / DFS (graph)      │ O(V+E)       │ —           │ —           │
-│ Dijkstra               │ O((V+E)logV) │ —           │ —           │
-└────────────────────────┴──────────────┴─────────────┴─────────────┘
+DEFINITION: Subgraph with ALL N vertices, EXACTLY N-1 edges, NO cycles, CONNECTED
+KEY FORMULA: Graph with N vertices → Spanning tree has N-1 edges
+Cayley's Formula: Complete graph Kₙ has n^(n-2) spanning trees
+
+MST = Minimum total weight spanning tree
+Kruskal's: Sort edges, add cheapest non-cycle edge → O(E log E) → SPARSE graphs
+Prim's:    Grow from vertex, add cheapest connecting edge → O(E log V) → DENSE graphs
+Both: GREEDY approach
+MST may NOT be unique (if edge weights are equal)
 ```
 
 ---
 
-## 🔑 CS QUICK REVISION — 30 MUST-KNOW FACTS
+## ⚡ BLOCK 5: GRAPHS + BFS + DFS (Day 27)
+
+---
+
+### 🔷 Graph Basics — Quick Reference
 
 ```
-╔══════════════════════════════════════════════════════════════════╗
-║        DAY 28 CS — 30 TOPPER FACTS (Revise All!)               ║
-╠══════════════════════════════════════════════════════════════════╣
-║ 1.  LL has NO random access (arrays do)                         ║
-║ 2.  DLL delete from end = O(1), SLL delete from end = O(n)     ║
-║ 4.  Circular LL: last node's next → HEAD (not NULL)            ║
-║ 5.  Deque best with DLL (O(1) both ends)                       ║
-║ 6.  Tree traversals: Pre, In, Post, Level-order (4 types)      ║
-║ 7.  Inorder of BST → sorted ascending output                   ║
-║ 8.  C(4) = 14 distinct BSTs from 4 keys (Catalan number)      ║
-║ 9.  BST property: Left < Root < Right (for ALL nodes)          ║
-║ 10. BST worst case: O(n) for skewed tree                       ║
-║ 11. RB Tree: root = BLACK, new node = RED                       ║
-║ 12. RB Tree: no two consecutive RED nodes                       ║
-║ 13. AVL: |BF| ≤ 1; violation at BF = ±2                       ║
-║ 14. AVL more strictly balanced than RB Tree                    ║
-║ 15. Spanning tree: N vertices → N-1 edges (always)             ║
-║ 16. K4 spanning trees: 4^(4-2) = 16                            ║
-║ 17. Heap: complete binary tree + heap property                 ║
-║ 18. Get max from Max-Heap = O(1) (just read root)              ║
-║ 19. Build Heap = O(n) NOT O(n log n)                           ║
-║ 20. BFS → QUEUE | DFS → STACK                                  ║
-║ 21. BFS = shortest path (unweighted graphs)                    ║
-║ 22. DFS = cycle detection, topological sort                    ║
-║ 23. Adj Matrix = O(V²) space | Adj List = O(V+E) space        ║
-║ 24. Greedy/DP/D&C = paradigms NOT traversals                   ║
-║ 25. Dijkstra: shortest path, +ve weights only, greedy         ║
-║ 26. Bellman-Ford: negative weights, DP approach                ║
-║ 27. Floyd-Warshall: ALL pairs shortest path, O(V³)             ║
-║ 28. Topological sort: only on DAG (Directed Acyclic Graph)     ║
-║ 29. Kruskal's + Prim's = Greedy MST algorithms                 ║
-║ 30. Eulerian circuit: all vertices must have EVEN degree       ║
-╚══════════════════════════════════════════════════════════════════╝
+Graph G = (V, E): V = vertices, E = edges
+Undirected: A-B means A→B and B→A
+Directed (Digraph): A→B means only one way
+Weighted: Edges have numerical values
+Complete Kₙ: n(n-1)/2 edges; n^(n-2) spanning trees
+Handshaking Lemma: Σ(all degrees) = 2E (sum of ALL vertex degrees = 2× edges)
+DAG = Directed Acyclic Graph (no cycles; used for task scheduling)
+Connected: path between every pair of vertices
+```
+
+**Representations:**
+```
+Adjacency Matrix: V×V array; O(V²) space; O(1) edge check; DENSE graphs
+Adjacency List:   O(V+E) space; O(degree) edge check; SPARSE graphs (DEFAULT)
 ```
 
 ---
 
-# ════════════════════════════════════════════════════════
-# PART B — GS MEGA REVISION
-# Science: Biology + Physics + Chemistry Basics
-# (Covering all GS science studied up to Day 27)
-# ════════════════════════════════════════════════════════
+### 🔷 BFS vs DFS — The Ultimate Comparison
+
+```
+Feature            | BFS                      | DFS
+-------------------|--------------------------|---------------------------
+Data Structure     | QUEUE (FIFO)             | STACK (LIFO) / Recursion
+Traversal          | Level by level           | Deep first, then backtrack
+Space              | O(V)                     | O(V)
+Time               | O(V+E)                   | O(V+E)
+Shortest path?     | YES (unweighted only)    | NO
+Cycle detection?   | Yes                      | YES (primary/natural)
+Topological sort?  | No                       | YES
+Backtracking?      | No                       | YES
+Best application   | Shortest path, crawling  | Cycle detect, topo sort
+Tree traversal     | Level-Order              | Pre/In/Postorder
+```
+
+**BFS Step-By-Step:** Enqueue start → While queue not empty: dequeue, process, enqueue unvisited neighbours.
+**DFS Step-By-Step:** Call DFS(u) → mark visited → for each unvisited neighbour v: call DFS(v).
 
 ---
 
-## ⚛️ MODULE 7: PHYSICS REVISION — HIGH-FREQUENCY TOPICS
-
-### Newton's Laws of Motion:
+### 🔷 Complexity Summary — All Data Structures
 
 ```
-┌────────────────────────────────────────────────────────────────┐
-│               NEWTON'S THREE LAWS                               │
-├────────────────┬───────────────────────────────────────────────┤
-│ FIRST LAW      │ Law of INERTIA                                │
-│ (Inertia)      │ "An object at rest stays at rest, an object   │
-│                │  in motion stays in motion, UNLESS acted upon │
-│                │  by an external force"                         │
-│                │ Example: Passenger jerks backward when bus    │
-│                │          suddenly starts                       │
-├────────────────┼───────────────────────────────────────────────┤
-│ SECOND LAW     │ F = ma  (Force = mass × acceleration)         │
-│ (F = ma)       │ "Force = rate of change of momentum"          │
-│                │ Unit of Force: NEWTON (N) = kg⋅m/s²           │
-│                │ Example: Heavy truck needs more force to stop  │
-├────────────────┼───────────────────────────────────────────────┤
-│ THIRD LAW      │ "Every action has an equal and opposite       │
-│ (Action-       │  reaction"                                     │
-│  Reaction)     │ Forces act on DIFFERENT objects               │
-│                │ Example: Rocket propulsion, gun recoil        │
-│                │          Swimming (push water back → go fwd)  │
-└────────────────┴───────────────────────────────────────────────┘
-```
-
-### Important Physics Laws & Principles:
-
-```
-BERNOULLI'S PRINCIPLE:
-  "Faster fluid flow → Lower pressure"
-  Applications: Aeroplane wings (lift), carburetor, Venturi meter,
-                atomizer/spray, curve ball in cricket
-
-ARCHIMEDES' PRINCIPLE:
-  "Upward buoyant force = weight of fluid displaced"
-  Explains: Why ships float, why balloons rise
-  Application: Designing ships, submarines, hydrometers
-
-PASCAL'S PRINCIPLE:
-  "Pressure applied to enclosed fluid transmits equally in all directions"
-  Application: HYDRAULIC MACHINES (brake, jack, press)
-  Example: Car brakes — small force → large force on wheels
-
-HOOKE'S LAW (Elasticity):
-  F = kx (Force = spring constant × extension)
-  Valid only within ELASTIC LIMIT
-
-OHMS LAW (Electricity):
-  V = IR (Voltage = Current × Resistance)
-  P = VI = I²R = V²/R (Power)
-
-UNIVERSAL LAW OF GRAVITATION:
-  F = G × M × m / r²
-  G = 6.67 × 10⁻¹¹ N m²/kg²
-  g = 9.8 m/s² (on Earth's surface)
-```
-
-### Sound & Light Quick Reference:
-
-```
-SOUND:
-  Speed in air: ~343 m/s (at 20°C)
-  Speed in water: ~1500 m/s (faster than air)
-  Speed in steel: ~5100 m/s (fastest in solid)
-  Sound travels FASTEST in SOLIDS, slowest in GASES
-  Ultrasound > 20,000 Hz (used in SONAR, medical imaging)
-  Infrasound < 20 Hz (elephants communicate via infrasound)
-  Doppler Effect: Source approaching → frequency increases (higher pitch)
-
-LIGHT:
-  Speed = 3 × 10⁸ m/s (in vacuum)
-  Reflection: Angle of incidence = Angle of reflection
-  Refraction: Bending of light when passing between media
-  Total Internal Reflection: Light stays in denser medium (fibre optics!)
-  Prism: Dispersion → VIBGYOR (Violet to Red)
-  Convex lens: Converges light (used in magnifying glass, camera)
-  Concave lens: Diverges light (used for myopia correction)
-```
-
-### Electricity Key Formulas:
-
-```
-OHM'S LAW:     V = IR
-POWER:         P = VI = I²R = V²/R
-SERIES:        R_total = R₁ + R₂ + R₃  (resistance ADDS UP)
-PARALLEL:      1/R_total = 1/R₁ + 1/R₂ + 1/R₃  (resistance REDUCES)
-
-REMEMBER:
-Series circuit:  Same CURRENT through all, voltage divides
-Parallel circuit: Same VOLTAGE across all, current divides
+Data Structure  | Access  | Search  | Insert (best) | Delete (best)
+----------------|---------|---------|---------------|---------------
+Array           | O(1)    | O(n)    | O(1) at end   | O(1) at end
+SLL             | O(n)    | O(n)    | O(1) at begin | O(1) at begin
+DLL             | O(n)    | O(n)    | O(1) at begin | O(1) at end!
+BST (balanced)  | O(log n)| O(log n)| O(log n)      | O(log n)
+AVL/RB Tree     | O(log n)| O(log n)| O(log n)      | O(log n)
+Graph (BFS/DFS) | O(V+E)  | O(V+E)  | O(1)          | O(V+E)
 ```
 
 ---
 
-## 🧪 MODULE 8: CHEMISTRY REVISION — HIGH-FREQUENCY TOPICS
+# PART 2: GS MEGA-REVISION
+## 🏛️ Day 22–27 — Polity + Science Complete Revision
 
-### Atomic Structure Timeline:
+---
 
-```
-DALTON (1808):    Atoms are indivisible solid spheres
-                  (Later proven wrong — atoms CAN be divided)
+## ⚡ BLOCK 6: FUNDAMENTAL RIGHTS (Day 22)
 
-THOMSON (1897):   "Plum Pudding Model"
-                  Discovered ELECTRON
-                  Atom = positive sphere with electrons embedded
+---
 
-RUTHERFORD (1911): "Nuclear Model" (Gold foil experiment)
-                   Most of atom is EMPTY SPACE
-                   Dense positive NUCLEUS at centre
-                   Discovered PROTON
-
-BOHR (1913):      Electrons orbit nucleus in FIXED ENERGY LEVELS
-                  Electrons emit/absorb energy when changing levels
-                  Works well for HYDROGEN atom
-```
-
-### Periodic Table Key Facts:
+### Quick Reference Table:
 
 ```
-MENDELEEV (1869): Arranged by ATOMIC MASS (left gaps for undiscovered)
-MODERN TABLE:     Arranged by ATOMIC NUMBER (protons)
+Part III, Articles 12–35 | Justiciable (courts enforce) | Borrowed from: US Bill of Rights
 
-PERIODS (Horizontal rows): 7 periods total
-GROUPS (Vertical columns): 18 groups total
-
-Group 1  = Alkali Metals (Li, Na, K, Rb, Cs, Fr) — highly reactive
-Group 2  = Alkaline Earth Metals (Be, Mg, Ca...)
-Group 17 = Halogens (F, Cl, Br, I) — most electronegative
-Group 18 = Noble Gases (He, Ne, Ar, Kr, Xe) — inert/unreactive
+RIGHT                      ARTICLES    KEY FACT
+---------------------------|-----------|----------------------------------------
+Right to Equality          | 14–18     | Art.17: Untouchability abolished (punishable)
+Right to Freedom           | 19–22     | Art.19: 6 freedoms (was 7; 19(1)(f) removed)
+Right against Exploitation | 23–24     | Art.24: No child labour below 14 in hazardous
+Right to Religion          | 25–28     | Art.25: Profess+Practise+Propagate religion
+Cultural & Educational     | 29–30     | Art.30: Minorities establish educational institutions
+Right to Const. Remedies   | Art.32    | "Heart and Soul" — Ambedkar
 ```
 
-### Acids, Bases and Salts:
-
+**Article 19 — 6 Freedoms (after removing 19(1)(f) by 44th Amendment):**
 ```
-ACIDS:         pH < 7  | Taste sour | Turns blue litmus RED
-  Strong acids: HCl (Hydrochloric), H₂SO₄ (Sulphuric), HNO₃ (Nitric)
-  Weak acids:   CH₃COOH (Acetic/Vinegar), H₂CO₃ (Carbonic in soda)
+19(1)(a): Freedom of SPEECH & EXPRESSION ← most tested
+19(1)(b): ASSEMBLE peacefully without arms
+19(1)(c): Form ASSOCIATIONS and UNIONS
+19(1)(d): MOVE freely throughout India
+19(1)(e): RESIDE and SETTLE anywhere in India
+19(1)(g): PRACTISE any profession/trade/business
 
-BASES:         pH > 7  | Taste bitter | Turns red litmus BLUE
-  Strong bases: NaOH (Caustic soda), Ca(OH)₂ (Slaked lime)
-  Weak bases:   NH₃ (Ammonia), Mg(OH)₂
-
-NEUTRAL:       pH = 7  | Pure water
-
-pH SCALE: 0 ─────────── 7 ─────────── 14
-          More Acid    Neutral    More Alkaline
+REMOVED: 19(1)(f) = Right to acquire/hold/dispose property (44th Amendment 1978)
 ```
 
-### Important Chemical Compounds (BPSC Favourites!):
-
+**5 Writs — "H M P C Q":**
 ```
-┌───────────────────────────────────────────────────────────────┐
-│ SUBSTANCE          │ CHEMICAL NAME / FORMULA   │ KEY USE      │
-├────────────────────┼───────────────────────────┼──────────────┤
-│ Common Salt        │ Sodium Chloride (NaCl)    │ Food         │
-│ Baking Soda        │ Sodium Bicarbonate        │ Baking, fire │
-│                    │ (NaHCO₃)                  │ extinguisher │
-│ Washing Soda       │ Sodium Carbonate (Na₂CO₃) │ Cleaning     │
-│ Bleaching Powder   │ CaOCl₂                    │ Disinfectant │
-│ Plaster of Paris   │ CaSO₄·½H₂O               │ Plastering   │
-│ Marble/Limestone   │ Calcium Carbonate (CaCO₃) │ Building     │
-│ Vinegar            │ Acetic Acid (CH₃COOH)     │ Preservation │
-│ Dry Ice            │ Solid CO₂                 │ Cooling      │
-│ Heavy Water        │ D₂O (Deuterium Oxide)     │ Nuclear      │
-│ Quartz             │ Silicon Dioxide (SiO₂)    │ Optics       │
-└────────────────────┴───────────────────────────┴──────────────┘
+H = Habeas Corpus  → Release illegally detained person
+M = Mandamus       → Direct public authority to perform duty
+P = Prohibition    → Stop inferior court from exceeding jurisdiction
+C = Certiorari     → Quash order of inferior court
+Q = Quo Warranto  → Challenge authority to hold public office
 ```
 
-### Carbon and its Allotropes:
-
+**Emergency Rules:**
 ```
-ALLOTROPES OF CARBON (same element, different structures):
+Articles 20 & 21 → CANNOT be suspended even during National Emergency (44th Amendment)
+Article 19 freedoms → CAN be suspended during National Emergency
+Article 32 → CAN be suspended under Article 359
+Article 226 (HC writs) → CANNOT be suspended
+```
 
-DIAMOND:
-  → Hardest natural substance
-  → Each C bonded to 4 others (tetrahedral)
-  → Does NOT conduct electricity (no free electrons)
-  → Used in: Cutting tools, jewellery
-
-GRAPHITE:
-  → Softest form of carbon
-  → Layers slide over each other → used as LUBRICANT
-  → CONDUCTS electricity (delocalized electrons between layers)
-  → Used in: Pencils, electrodes, dry cell
-
-FULLERENE (C₆₀ — Buckminsterfullerene):
-  → 60 carbon atoms in soccer-ball shape
-  → Discovered 1985 (Nobel Prize 1996)
-  → Used in: Nanotechnology, drug delivery
+**Critical Article Facts:**
+```
+Art.12:  Defines "State" (FRs protect against the State)
+Art.13:  Laws violating FRs = VOID (Judicial Review)
+Art.17:  Untouchability abolished — unique: applies to private persons too
+Art.20:  Ex-post facto law; Double Jeopardy; Self-incrimination — 3 protections
+Art.21:  Life & Personal Liberty (most expansive FR — includes privacy, livelihood)
+Art.21A: Free education 6-14 years (86th Amendment 2002 → RTE Act 2009)
+Art.22:  Arrested → inform grounds; lawyer; produce before magistrate within 24 hrs
+Art.44:  Uniform Civil Code (DPSP, not FR — very frequently confused!)
 ```
 
 ---
 
-## 🌿 MODULE 9: BIOLOGY MEGA REVISION
+## ⚡ BLOCK 7: DPSP (Day 23)
 
-### Five Kingdom Quick Reference:
-
-```
-MONERA:   Prokaryotes (no nucleus) → Bacteria, Cyanobacteria
-PROTISTA: Eukaryotes, unicellular → Amoeba, Paramecium, Spirogyra
-FUNGI:    Eukaryotes, heterotrophic → Yeast (budding), Mushroom, Penicillium
-PLANTAE:  Eukaryotes, autotrophic → all plants
-ANIMALIA: Eukaryotes, heterotrophic, no cell wall → all animals
-```
-
-### Human Biology Quick Revision:
+---
 
 ```
-DIGESTIVE SYSTEM:
-  Mouth → Oesophagus → Stomach → Small Intestine → Large Intestine
-  Enzymes:
-    Saliva:         Salivary Amylase (starch → maltose)
-    Stomach:        Pepsin (protein → peptides), HCl (acid)
-    Small Intestine: Lipase (fats), Trypsin (proteins), Amylase
-  Absorption: 90% in SMALL INTESTINE (villi increase surface area)
-  Liver: Produces BILE (emulsifies fats), detoxification, glycogen storage
+Part IV, Articles 36–51 | NON-Justiciable | Borrowed from: IRISH CONSTITUTION (1937)
+Goal: WELFARE STATE | Positive duties on the State | Harmony with FRs (Minerva Mills 1980)
 
-CIRCULATORY SYSTEM:
-  Heart: 4 chambers (2 auricles + 2 ventricles)
-  Left side: oxygenated blood (pulmonary vein → left atrium)
-  Right side: deoxygenated blood (vena cava → right atrium)
-  Blood components: RBC (oxygen), WBC (immunity), Platelets (clotting), Plasma
-  Blood groups: A, B, AB, O (Universal donor: O; Universal recipient: AB)
-  Rh factor: Rh+ positive, Rh- negative
-
-RESPIRATORY SYSTEM:
-  Breathing rate: 15-18 times/minute (normal adult)
-  O₂ enters, CO₂ leaves via diffusion in ALVEOLI
-  Diaphragm contracts → chest expands → air enters
-
-EXCRETORY SYSTEM:
-  Kidney → Ureter → Urinary Bladder → Urethra
-  Nephron: Basic functional unit of kidney
-  Urine: 95% water, 2% urea, 2% salts
-  Dialysis: artificial kidney for kidney failure patients
+TYPE          ARTICLES       KEY CONTENT
+--------------|--------------|-----------------------------------------------
+SOCIALIST     | 38,39,39A,   | Equal pay (39d), free legal aid (39A),
+              | 41,42,43,43A | living wage (43), workers in mgmt (43A)
+GANDHIAN      | 40,43,43B,   | Village Panchayats (40), cow protection (48),
+              | 46,47,48     | prohibition of liquor (47), SC/ST welfare (46)
+LIBERAL-INT   | 44,48A,49,   | UCC (44), environment (48A), nat. monuments (49),
+              | 50,51        | Judiciary-Executive separation (50), world peace (51)
 ```
 
-### Vitamins & Deficiency Diseases (BPSC High Priority!):
-
+**Must-Know DPSP Articles:**
 ```
-┌───────────┬─────────────────────────┬──────────────────────────┐
-│ VITAMIN   │ CHEMICAL NAME           │ DEFICIENCY DISEASE       │
-├───────────┼─────────────────────────┼──────────────────────────┤
-│ Vitamin A │ Retinol                 │ Night Blindness,         │
-│           │                         │ Xerophthalmia             │
-│ Vitamin B1│ Thiamine                │ BERI-BERI                │
-│ Vitamin B2│ Riboflavin              │ Cracked lips, sores      │
-│ Vitamin B3│ Niacin                  │ PELLAGRA                 │
-│ Vitamin B12│ Cyanocobalamin         │ Pernicious Anaemia       │
-│ Vitamin C │ Ascorbic Acid           │ SCURVY                   │
-│           │ (also called Cevitamic) │ (bleeding gums, joints)  │
-│ Vitamin D │ Calciferol              │ RICKETS (children)       │
-│           │                         │ Osteomalacia (adults)    │
-│ Vitamin E │ Tocopherol              │ Sterility, muscular dist.│
-│ Vitamin K │ Phylloquinone           │ Excessive BLEEDING       │
-│           │                         │ (slow blood clotting)    │
-└───────────┴─────────────────────────┴──────────────────────────┘
-
-Fat-soluble: A, D, E, K  (stored in liver)
-Water-soluble: B-complex, C (excreted in urine — need daily intake)
+Art.39(d): EQUAL PAY for equal work ← most tested DPSP
+Art.40:    Village PANCHAYATS ← most Gandhian principle
+Art.44:    UNIFORM CIVIL CODE (most controversial)
+Art.47:    Raise nutrition + PROHIBIT LIQUOR
+Art.48:    Protect COWS + modernise agriculture
+Art.48A:   ENVIRONMENT protection (added 42nd Amendment 1976)
+Art.50:    Separate JUDICIARY from EXECUTIVE
+Art.51:    INTERNATIONAL PEACE
 ```
 
-### Diseases and Causative Agents:
-
+**Amendment-DPSP Links:**
 ```
-┌──────────────────┬──────────────────────────────────────────────┐
-│ DISEASE          │ CAUSATIVE AGENT + KEY FACTS                  │
-├──────────────────┼──────────────────────────────────────────────┤
-│ Malaria          │ Plasmodium (Protozoan) via female Anopheles  │
-│                  │ mosquito. Multiple fission in RBCs           │
-│ Dengue           │ Virus (Flavivirus) via Aedes mosquito        │
-│ Typhoid          │ Salmonella typhi (Bacterium)                 │
-│ Cholera          │ Vibrio cholerae (Bacterium) — rice water stool│
-│ Tuberculosis     │ Mycobacterium tuberculosis (Koch's bacillus) │
-│ Leprosy          │ Mycobacterium leprae                         │
-│ Plague           │ Yersinia pestis (bacterium via rat fleas)    │
-│ Rabies           │ Rabies virus — Rhabdovirus                   │
-│ HIV/AIDS         │ HIV Virus — attacks CD4 T-lymphocytes        │
-│ Polio            │ Poliovirus — affects motor neurons            │
-│ COVID-19         │ SARS-CoV-2 (coronavirus)                     │
-│ Hepatitis B      │ Hepatitis B Virus — affects LIVER            │
-│ Tetanus          │ Clostridium tetani (bacteria, soil)           │
-└──────────────────┴──────────────────────────────────────────────┘
+42nd Amendment 1976: Added Art.39A (free legal aid), 43A (workers), 48A (environment)
+44th Amendment 1978: Added Art.38(2) — minimise inequality
+97th Amendment 2011: Added Art.43B — cooperative societies
 ```
 
-### Reproduction Quick Revision (Day 26 GS):
-
+**FR vs DPSP — One-Line:**
 ```
-Fertilization → Fallopian Tube
-Sex determination → Father's sperm (X=girl, Y=boy)
-Pregnancy test → HCG hormone
-Progesterone → "Hormone of pregnancy"
-Gestation (human) → 280 days (40 weeks)
-Ginger → RHIZOME (modified stem, not root!)
-Yeast → BUDDING (unicellular FUNGUS, not plant)
+FR = Justiciable, Negative duties, American origin, Part III, Art.12–35
+DPSP = Non-justiciable, Positive duties, Irish origin, Part IV, Art.36–51
 ```
 
 ---
 
-## 🔑 GS QUICK REVISION — 30 MUST-KNOW SCIENCE FACTS
+## ⚡ BLOCK 8: BIOLOGY REVISION (Day 26–27)
+
+---
+
+### Asexual Reproduction Methods:
 
 ```
-╔══════════════════════════════════════════════════════════════════╗
-║        DAY 28 GS — 30 TOPPER SCIENCE FACTS                     ║
-╠══════════════════════════════════════════════════════════════════╣
-║ 1.  Newton's 3rd Law: Action-Reaction (equal & opposite)        ║
-║ 2.  F = ma (Newton's 2nd Law)                                   ║
-║ 3.  Bernoulli: faster flow → lower pressure                     ║
-║ 4.  Archimedes: buoyant force = weight of fluid displaced       ║
-║ 5.  Pascal: pressure transmits equally in enclosed fluid        ║
-║ 6.  Sound: fastest in SOLIDS, slowest in GASES                  ║
-║ 7.  Ultrasound > 20,000 Hz | Infrasound < 20 Hz                ║
-║ 8.  Light speed = 3 × 10⁸ m/s                                  ║
-║ 9.  Diamond = hardest, does NOT conduct electricity             ║
-║ 10. Graphite = soft, CONDUCTS electricity (pencils, electrodes) ║
-║ 11. Baking Soda = NaHCO₃ | Washing Soda = Na₂CO₃              ║
-║ 12. pH < 7 = acid | pH > 7 = base | pH = 7 = neutral           ║
-║ 13. Universal Donor = O blood group                             ║
-║ 14. Universal Recipient = AB blood group                        ║
-║ 15. Malaria = Plasmodium (Protozoan), Anopheles mosquito        ║
-║ 16. Dengue = Virus, Aedes mosquito                              ║
-║ 17. TB = Mycobacterium tuberculosis                             ║
-║ 18. Vitamin C deficiency → SCURVY                               ║
-║ 19. Vitamin D deficiency → RICKETS (children)                   ║
-║ 20. Vitamin B1 deficiency → BERI-BERI                          ║
-║ 21. Vitamin K → blood CLOTTING                                  ║
-║ 22. Photosynthesis: 6CO₂ + 6H₂O + Light → Glucose + 6O₂      ║
-║ 23. O₂ released in LIGHT REACTIONS (photolysis of water)        ║
-║ 24. Calvin Cycle (Dark Rxn) → Glucose formed, CO₂ fixed       ║
-║ 25. Five Kingdoms: Monera, Protista, Fungi, Plantae, Animalia  ║
-║ 26. Yeast = FUNGUS, budding | Amoeba = Protista, binary fission ║
-║ 27. Lichen = Fungus + Algae symbiosis                           ║
-║ 28. 10% energy law (Lindemann) — only 10% transfers up chain   ║
-║ 29. Nephron = functional unit of kidney                         ║
-║ 30. Heart: 4 chambers — 2 auricles (atria) + 2 ventricles      ║
-╚══════════════════════════════════════════════════════════════════╝
+METHOD          | ORGANISM (Examples)         | Key Feature
+----------------|-----------------------------|---------------------------------
+Binary Fission  | AMOEBA, Bacteria            | Parent splits into 2 EQUAL halves
+Budding         | YEAST, HYDRA                | Outgrowth detaches from parent
+Fragmentation   | SPIROGYRA, Planaria         | Fragment grows into new organism
+Spore Formation | RHIZOPUS (bread mould)      | Spores dispersed, germinate
+Vegetative Prop.| Potato (tuber), Ginger      | Vegetative parts → new plants
+Regeneration    | PLANARIA, Starfish, Hydra   | Lost parts regrow completely
+```
+
+### Underground Modified Stems:
+```
+RHIZOME → Ginger, Turmeric (horizontal underground stem with nodes)
+TUBER   → Potato (swollen tip; "eyes" = nodes with buds)
+BULB    → Onion, Garlic (fleshy scale leaves around disc-like stem)
+CORM    → Colocasia/Arbi (solid vertical underground stem)
+STOLON  → Strawberry (horizontal ABOVE-GROUND runner)
+```
+
+**Ginger PYQ Rule:** Ginger = RHIZOME = underground STEM (NOT root). Most call it "ginger root" — this is WRONG.
+
+### Yeast Key Facts:
+```
+Kingdom: FUNGI | Unicellular | Eukaryote | Chitin cell wall
+Reproduction: BUDDING (not binary fission)
+Fermentation: C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂ (ANAEROBIC)
+Uses: Bread (CO₂ raises dough), Beer/Wine (ethanol produced)
+```
+
+### Human Reproduction Quick Facts:
+```
+Fertilisation: In FALLOPIAN TUBE (not uterus!) ← PYQ trap
+Implantation: Endometrium of UTERUS
+Gestation: ~9 months (38–40 weeks)
+Ovulation: ~Day 14 of menstrual cycle (triggered by LH surge)
+Gametes: Sperm(n) + Egg(n) → Zygote(2n)
+Meiosis produces gametes; Mitosis drives growth after fertilisation
+Placenta: Nourishes foetus + acts as barrier
 ```
 
 ---
 
-# ════════════════════════════════════════════════════════
-# PRACTICE QUESTIONS — DAY 28
-# ════════════════════════════════════════════════════════
-
-> ⚠️ **NON-NEGOTIABLE RULE:**
-> Solve ALL 50 questions before checking answers.
-> ANSWERS ARE ONLY AT THE VERY END — do NOT scroll down early!
-> Time yourself: Target 35 minutes for 50 questions (42 sec each)
+## ⚡ BLOCK 9: PHYSICS REVISION (Day 24–25)
 
 ---
 
-## 📘 SECTION I: CS QUESTIONS (Q1–Q25)
-### Revision: Linked Lists | Trees | BST | Red-Black | Graphs | Complexity
+### Bernoulli's Principle:
+```
+RULE: FAST FLUID → LOW PRESSURE | SLOW FLUID → HIGH PRESSURE
+Formula: P + ½ρv² + ρgh = constant (along a streamline)
+Simplified (horizontal): P + ½ρv² = constant
+Applies to: Ideal, incompressible, non-viscous, steady, laminar flow
+
+TOP APPLICATIONS:
+  Airplane wing:    Curved top → fast air → low pressure above → LIFT
+  Venturi meter:    Narrow section → fast flow → measure flow speed
+  Perfume spray:    Fast air → low pressure → sucks liquid up
+  Bunsen burner:    Fast gas → low pressure → draws in air
+  Roof in storm:    Fast wind above → low pressure → roof lifted off
+  Cricket swing:    Magnus Effect → spinning ball → curve
+
+TRAP: Hydraulic jack = PASCAL'S LAW (not Bernoulli!)
+      Torricelli's theorem (v=√2gh) = special case of Bernoulli
+```
+
+### Electrical Power:
+```
+THREE FORMULAS:
+  P = V × I    (given Voltage and Current)
+  P = I² × R   (given Current and Resistance) ← Heat/Joule heating
+  P = V² / R   (given Voltage and Resistance)
+
+UNITS: Power = Watt (W) | Energy = kWh (billing unit)
+1 kWh = 3.6 × 10⁶ J = 1 "UNIT" on electricity bill
+1 HP = 746 W
+
+SERIES vs PARALLEL — THE PYQ TRAP:
+  Series (same I):   40W bulb has HIGHER R → glows BRIGHTER (P=I²R, more R = more P)
+  Parallel (same V): 100W bulb has LOWER R → glows BRIGHTER (P=V²/R, less R = more P)
+
+TRANSMISSION: High voltage → Low current → Low I²R loss in wires
+Step-UP transformer: ↑V, ↓I | Step-DOWN: ↓V to 220V for homes
+
+KEY CALCULATIONS:
+  Find I: I = P/V
+  Find R: R = V²/P
+  Find energy: E(kWh) = P(kW) × t(hours)
+  Doubling V → 4× power (P∝V²)
+  Doubling I → 4× power (P∝I²)
+```
 
 ---
 
-**Q1.** Which of the following statements about Singly Linked Lists is/are CORRECT?
-
-(i) Insertion at the beginning takes O(1) time
-(ii) Random access by index takes O(1) time
-(iii) Insertion at the end takes O(n) time (without a tail pointer)
-
-(A) Only (i)
-(B) Only (i) and (iii)
-(C) Only (ii) and (iii)
-(D) More than one of the above (all three are correct)
-(E) None of the above
+# PART 3: VISUAL REVISION TABLES
 
 ---
 
-**Q2.** What is the main ADVANTAGE of a Doubly Linked List over a Singly Linked List?
+## 📊 TABLE 1: All Linked List Operations at a Glance
 
-(A) It uses less memory per node
-(B) It supports faster random access
-(C) It allows O(1) deletion from the END of the list (given a reference to the last node)
+```
+┌─────────────────────────┬─────────┬─────────┬──────────┐
+│ Operation               │   SLL   │   DLL   │  CSLL    │
+├─────────────────────────┼─────────┼─────────┼──────────┤
+│ Access by index         │  O(n)   │  O(n)   │  O(n)    │
+│ Search                  │  O(n)   │  O(n)   │  O(n)    │
+│ Insert at BEGINNING     │  O(1)   │  O(1)   │  O(1)*   │
+│ Insert at END (tail)    │  O(1)*  │  O(1)   │  O(1)*   │
+│ Insert at END (no tail) │  O(n)   │  O(n)   │  O(n)    │
+│ Insert at MIDDLE        │  O(n)   │  O(n)   │  O(n)    │
+│ Delete at BEGINNING     │  O(1)   │  O(1)   │  O(1)*   │
+│ Delete at END (tail)    │  O(n)   │ O(1)!!! │  O(n)    │
+│ Delete at MIDDLE        │  O(n)   │  O(n)   │  O(n)    │
+│ Backward traversal      │   ✗     │   ✓     │   ✗      │
+│ Pointers per node       │    1    │    2    │    1     │
+│ NULL in list?           │   YES   │  YES    │   NO     │
+└─────────────────────────┴─────────┴─────────┴──────────┘
+* = requires tail pointer
+DLL DELETE AT END = O(1) is the KEY ADVANTAGE
+```
+
+---
+
+## 📊 TABLE 2: Binary Tree Types Comparison
+
+```
+┌──────────────┬──────────────────────────────┬──────────────────────────────┐
+│ Type         │ Defining Condition            │ Key Property / Formula       │
+├──────────────┼──────────────────────────────┼──────────────────────────────┤
+│ Full         │ Every node: 0 or 2 children   │ Leaves = Internal nodes + 1  │
+│ Complete     │ All levels full except last;  │ Used by HEAP; array storage  │
+│              │ last filled left→right        │ efficient                    │
+│ Perfect      │ All leaves same level; all    │ Total nodes = 2^(h+1) - 1   │
+│              │ internal have 2 children      │ Leaves = 2^h                 │
+│ Balanced     │ |BF| ≤ 1 at EVERY node        │ O(log n) operations          │
+│ Skewed       │ All nodes have 1 child only   │ Height = n-1 → O(n) ops      │
+└──────────────┴──────────────────────────────┴──────────────────────────────┘
+```
+
+---
+
+## 📊 TABLE 3: Tree Traversal Output (Same Tree)
+
+```
+Tree:
+         A
+        / \
+       B   C
+      / \   \
+     D   E   F
+
+Traversal  | Output          | Data Structure | Key Use
+-----------|-----------------|----------------|----------------------------
+Preorder   | A,B,D,E,C,F     | Stack (recursion)| Copy tree; Root FIRST
+Inorder    | D,B,E,A,C,F     | Stack (recursion)| SORTED output from BST
+Postorder  | D,E,B,F,C,A     | Stack (recursion)| Delete tree; Root LAST
+Level-Order| A,B,C,D,E,F     | QUEUE          | BFS; level by level
+```
+
+---
+
+## 📊 TABLE 4: BST at a Glance
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ BST PROPERTY: Left subtree < Root < Right subtree (GLOBALLY!)   │
+│ INORDER of BST = SORTED ASCENDING (most tested!)                │
+│ Sorted insertion → SKEWED tree → O(n) worst case                │
+│ C(4) = 14 distinct BSTs with 4 nodes                            │
+├───────────────────────────────────────────────────────────────┬─┤
+│ Inorder Successor  = smallest in RIGHT subtree                 │ │
+│ Inorder Predecessor = largest in LEFT subtree                  │ │
+└───────────────────────────────────────────────────────────────┴─┘
+
+Deletion: Leaf→remove | 1 child→replace | 2 children→inorder successor
+```
+
+---
+
+## 📊 TABLE 5: Self-Balancing Trees
+
+```
+┌──────────────┬─────────────────┬────────────────┬────────────────────────┐
+│ Feature      │ Plain BST       │ AVL Tree       │ Red-Black Tree         │
+├──────────────┼─────────────────┼────────────────┼────────────────────────┤
+│ Balance      │ None            │ BF ≤ 1 strict  │ Black-height equal     │
+│ Height       │ O(n) worst      │ O(log n) always│ O(log n) always        │
+│ Search       │ O(n) worst      │ Faster (strict)│ Slightly slower        │
+│ Insert       │ O(n) worst      │ O(log n)       │ O(log n), ≤2 rotations │
+│ Delete       │ O(n) worst      │ O(log n)       │ O(log n), ≤3 rotations │
+│ Colour       │ No              │ No             │ RED or BLACK           │
+│ Root colour  │ N/A             │ N/A            │ Always BLACK           │
+│ Used in      │ Teaching        │ Read-heavy     │ Java TreeMap, STL, Linux│
+└──────────────┴─────────────────┴────────────────┴────────────────────────┘
+```
+
+---
+
+## 📊 TABLE 6: BFS vs DFS
+
+```
+┌──────────────┬──────────────────────────┬──────────────────────────────┐
+│ Feature      │ BFS                      │ DFS                          │
+├──────────────┼──────────────────────────┼──────────────────────────────┤
+│ Structure    │ QUEUE (FIFO)             │ STACK (LIFO) / Recursion     │
+│ Style        │ Level by level           │ Branch by branch (deep first)│
+│ Shortest path│ YES (unweighted graphs)  │ NO                           │
+│ Cycle detect │ Yes                      │ YES (primary use)            │
+│ Topo sort    │ No                       │ YES                          │
+│ Time         │ O(V+E)                   │ O(V+E)                       │
+│ Space        │ O(V)                     │ O(V)                         │
+│ Applications │ GPS, social network,     │ Maze, cycle detect,          │
+│              │ web crawl, bipartite     │ topo sort, puzzle solve      │
+└──────────────┴──────────────────────────┴──────────────────────────────┘
+```
+
+---
+
+## 📊 TABLE 7: GS Quick-Reference
+
+```
+┌────────────────────────┬──────────────────────────────────────────────────┐
+│ TOPIC                  │ KEY FACT (ONE LINE)                               │
+├────────────────────────┼──────────────────────────────────────────────────┤
+│ Fundamental Rights     │ Part III, 12–35, JUSTICIABLE, 6 rights           │
+│ Art.21 during Emergency│ Art.20 & 21 CANNOT be suspended                  │
+│ 5 Writs               │ H-M-P-C-Q (Habeas, Mandamus, Prohibit, Cert, QW) │
+│ Art.32                 │ "Heart & Soul" of Constitution (Ambedkar)        │
+│ DPSP                   │ Part IV, 36–51, NON-justiciable, Irish origin    │
+│ Art.39(d)              │ Equal pay for equal work (DPSP)                  │
+│ Art.44                 │ Uniform Civil Code (DPSP, not FR!)               │
+│ Art.48A                │ Environment (42nd Amendment 1976)                │
+│ Amoeba                 │ Binary fission                                   │
+│ Yeast                  │ Budding + Kingdom Fungi                          │
+│ Ginger                 │ Rhizome = underground STEM (not root!)           │
+│ Potato                 │ Tuber (not rhizome)                              │
+│ Yeast fermentation     │ Glucose → Ethanol + CO₂ (anaerobic)             │
+│ Penicillin             │ From Penicillium fungus (Alexander Fleming 1928) │
+│ Bernoulli              │ Fast fluid = LOW pressure                        │
+│ Airplane lift          │ Curved top → fast air → low pressure → lift     │
+│ Pascal's Law           │ Hydraulic jack (NOT Bernoulli)                   │
+│ Series bulbs           │ 40W brighter than 100W (higher R, same I)        │
+│ Parallel bulbs         │ 100W brighter than 40W (lower R, same V)         │
+│ Power transmission     │ High voltage → low current → low I²R loss       │
+└────────────────────────┴──────────────────────────────────────────────────┘
+```
+
+---
+
+# PART 4: 50 PYQ-LEVEL PRACTICE QUESTIONS
+
+## 📝 COMPUTER SCIENCE — 25 Mixed PYQ Questions (Day 22–27)
+
+---
+
+**Q1.** In a Singly Linked List, inserting a node at the BEGINNING has time complexity O(1) because:
+(A) The list is always sorted
+(B) Only pointer updates are needed — no traversal required
+(C) The first node is always empty (reserved)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q3.** In a Circular Linked List, the next pointer of the LAST node points to:
-
-(A) NULL
-(B) Itself (the last node)
-(C) The FIRST (HEAD) node
+**Q2.** Which of the following operations is O(1) in DLL but O(n) in SLL?
+(A) Insert at beginning
+(B) Search for a value
+(C) Delete from END (with tail pointer)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q4.** Given this Binary Tree, what is its INORDER traversal?
+**Q3.** What is the CORRECT termination condition when traversing a Circular Singly Linked List?
+(A) curr != NULL
+(B) curr.next != NULL
+(C) curr != HEAD (back to starting node)
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q4.** The formula for total nodes in a PERFECT Binary Tree of height h is:
+(A) 2^h
+(B) 2^(h+1)
+(C) 2^(h+1) - 1
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q5.** Consider the tree:
 ```
-        10
-       /  \
-      5    20
-     / \
-    3   7
+     5
+    / \
+   3   8
+  / \   \
+ 1   4   9
 ```
-
-(A) 10, 5, 3, 7, 20
-(B) 3, 5, 7, 10, 20
-(C) 3, 7, 5, 20, 10
-(D) More than one of the above (there are multiple valid inorder traversals)
-(E) None of the above
-
----
-
-**Q5.** For the same tree above, what is its PREORDER traversal?
-
-(A) 3, 5, 7, 10, 20
-(B) 3, 7, 5, 20, 10
-(C) 10, 5, 3, 7, 20
+What is the INORDER traversal?
+(A) 5, 3, 8, 1, 4, 9
+(B) 1, 3, 4, 5, 8, 9
+(C) 1, 4, 3, 5, 9, 8
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q6.** Which of the following is NOT a valid binary tree traversal method?
-
-(A) Inorder
-(B) Preorder
-(C) Randomized Order
-(D) More than one of the above (Inorder and Preorder are NOT valid)
-(E) None of the above (all four options list valid methods)
-
----
-
-**Q7.** The number of distinct Binary Search Trees (BSTs) that can be formed using the keys {1, 2, 3, 4} is:
-
-(A) 4
-(B) 8
-(C) 12
-(D) More than one of the above
-(E) 14
-
----
-
-**Q8.** Consider inserting the following keys into an initially empty BST in ORDER: 50, 30, 70, 20, 40. What is the INORDER traversal of the resulting BST?
-
-(A) 50, 30, 70, 20, 40
-(B) 20, 30, 40, 50, 70
-(C) 20, 40, 30, 70, 50
+**Q6.** The above tree (Q5) — is it a valid BST?
+(A) No, because 8 is greater than 5
+(B) No, because the tree is not perfectly balanced
+(C) Yes — all left subtree values < node < all right subtree values for every node
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q9.** In a Red-Black Tree, which of the following is ALWAYS true?
-
-(A) The root node is RED
-(B) All leaf (NIL) nodes are RED
-(C) A RED node's children must both be BLACK
-(D) More than one of the above (A and C are both always true)
+**Q7.** How many structurally distinct Binary Search Trees can be constructed using 4 distinct keys?
+(A) 5
+(B) 42
+(C) 14
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q10.** When a new node is inserted into a Red-Black Tree, it is initially coloured:
-
-(A) BLACK
-(B) WHITE
-(C) RED
-(D) More than one of the above (colour depends on position)
+**Q8.** Inserting elements in ASCENDING order into a BST results in:
+(A) A perfectly balanced BST
+(B) A right-skewed BST with O(n) search time
+(C) A complete BST
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q11.** Which of the following balanced tree types is MORE STRICTLY BALANCED and better suited for applications that are READ-HEAVY (many searches, few insertions)?
-
-(A) Red-Black Tree
+**Q9.** Which self-balancing BST requires at most 2 rotations per insertion?
+(A) AVL Tree
 (B) B-Tree
-(C) AVL Tree
+(C) Red-Black Tree
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q12.** A connected graph has 9 vertices. Its spanning tree will have exactly how many edges?
+**Q10.** In a Red-Black Tree, which of the following is ALWAYS true?
+(A) The root is RED
+(B) No two adjacent nodes can be BLACK
+(C) All paths from a node to NULL descendant leaves have the same number of BLACK nodes
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q11.** A spanning tree of a graph with 9 vertices has how many edges?
 (A) 9
 (B) 10
 (C) 8
@@ -914,566 +847,507 @@ Yeast → BUDDING (unicellular FUNGUS, not plant)
 
 ---
 
-**Q13.** In a MAX-HEAP stored as an array with 0-based indexing, what is the index of the LEFT CHILD of the element at index 3?
+**Q12.** Which algorithm finds the Minimum Spanning Tree by sorting edges and greedily adding the cheapest non-cycle edge?
+(A) Prim's Algorithm
+(B) Dijkstra's Algorithm
+(C) Kruskal's Algorithm
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q13.** BFS traversal uses a QUEUE because:
+(A) Queues are faster than stacks
+(B) FIFO order ensures all nodes at current level are processed before going deeper
+(C) Queues support random access
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q14.** DFS on a directed graph is primarily used for:
+(A) Finding shortest path
+(B) Level-order traversal
+(C) Cycle detection and topological sorting
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q15.** For a graph with V = 100 vertices stored as an Adjacency Matrix, the space required is:
+(A) O(V) = O(100)
+(B) O(V + E)
+(C) O(V²) = O(10,000)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q16.** The INORDER SUCCESSOR of the root node 8 in a BST (with right subtree containing 10, 9, 14) is:
+(A) 14 (largest in right)
+(B) 10 (root of right subtree)
+(C) 9 (smallest / leftmost in right subtree)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q17.** In POSTORDER traversal, which node is ALWAYS visited last?
+(A) The leftmost leaf
+(B) The rightmost node
+(C) The ROOT
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q18.** AVL Tree's balance factor is defined as:
+(A) Height(right) - Height(left)
+(B) Height(left) + Height(right)
+(C) Height(left) - Height(right)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q19.** Which of the following correctly states the HANDSHAKING LEMMA?
+(A) Every graph has an even number of vertices
+(B) The number of edges equals the number of vertices minus one
+(C) The sum of degrees of all vertices equals twice the number of edges
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q20.** In a Doubly Linked List, inserting at the MIDDLE requires how many pointer updates?
+(A) 2 (same as SLL)
+(B) 3
+(C) 4 (newNode.next, newNode.prev, prevNode.next, nextNode.prev)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q21.** Which of the following is NOT a standard binary tree traversal?
+(A) Inorder
+(B) Postorder
+(C) Randomized Order
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q22.** The time and space complexity of both BFS and DFS on a graph with V vertices and E edges (using adjacency list) is:
+(A) Time O(V²), Space O(V)
+(B) Time O(V+E), Space O(V)
+(C) Time O(V log V), Space O(E)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q23.** A Full Binary Tree has 7 internal nodes. How many leaf nodes does it have?
 (A) 6
-(B) 7
+(B) 14
 (C) 8
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q14.** Which of the following statements about BFS and DFS are CORRECT?
-
-(i) BFS uses a QUEUE; DFS uses a STACK (or recursion)
-(ii) Both have O(V+E) time complexity
-(iii) BFS guarantees shortest path in an UNWEIGHTED graph
-
-(A) Only (i)
-(B) Only (i) and (ii)
-(C) Only (ii) and (iii)
-(D) More than one of the above (all three are correct)
-(E) None of the above
-
----
-
-**Q15.** Greedy, Dynamic Programming, and Divide & Conquer are examples of:
-
-(A) Graph traversal methods
-(B) Data structure operations
-(C) Algorithm design paradigms
-(D) More than one of the above
-(E) Sorting algorithms
-
----
-
-**Q16.** Consider a graph. If we run DFS and a node is encountered that is ALREADY IN THE CURRENT DFS PATH (back edge), what does this indicate?
-
-(A) The graph is disconnected
-(B) The graph contains a CYCLE
-(C) The graph is bipartite
+**Q24.** The Red-Black Tree property that ENSURES approximate balance is:
+(A) Root is always Black
+(B) New nodes are inserted as Red
+(C) All paths from any node to NULL descendants have the same number of Black nodes
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q17.** In Adjacency Matrix representation for an undirected graph, if there are V vertices, which of the following is ALWAYS TRUE?
-
-(A) matrix[i][j] = matrix[j][i] (matrix is symmetric)
-(B) All diagonal elements matrix[i][i] = 0 (no self-loops)
-(C) Space required = O(V²)
-(D) More than one of the above (all three are correct for simple undirected graph)
-(E) None of the above
-
----
-
-**Q18.** What is the time complexity of the HEAPIFY operation (fixing heap property from root down) on a heap of n elements?
-
-(A) O(1)
-(B) O(n)
-(C) O(log n)
+**Q25.** Given: Preorder traversal = [10, 5, 2, 7, 15, 12, 20] of a BST.
+What is the ROOT of this BST?
+(A) 2
+(B) 5
+(C) 10
 (D) More than one of the above
 (E) None of the above
 
 ---
+---
 
-**Q19.** Which traversal of a BST gives keys in DESCENDING (reverse sorted) order?
+## 📝 GENERAL STUDIES — 25 Mixed PYQ Questions (Day 22–27)
 
-(A) Preorder
-(B) Postorder
-(C) Reverse Inorder (Right → Root → Left)
+---
+
+**Q26.** Which of the following Articles CANNOT be suspended even during a National Emergency under Article 352?
+(A) Articles 14 and 19
+(B) Articles 19 and 21
+(C) Articles 20 and 21
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q20.** The Kruskal's algorithm for finding Minimum Spanning Tree uses which underlying data structure to efficiently detect cycles?
-
-(A) Stack
-(B) Queue
-(C) Disjoint Set (Union-Find)
+**Q27.** Dr. B.R. Ambedkar described which Article as the "Heart and Soul" of the Constitution?
+(A) Article 21 (Right to Life)
+(B) Article 14 (Right to Equality)
+(C) Article 32 (Right to Constitutional Remedies)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q21.** A full binary tree with n INTERNAL nodes has how many LEAF nodes?
-
-(A) n
-(B) n-1
-(C) n+1
-(D) More than one of the above
-(E) 2n
-
----
-
-**Q22.** In a BST, which node is the INORDER SUCCESSOR of a given node X?
-
-(A) The parent of node X
-(B) The rightmost node in the left subtree of X
-(C) The leftmost (minimum) node in the right subtree of X
+**Q28.** The writ of HABEAS CORPUS is issued to:
+(A) Direct a public authority to perform a legal duty
+(B) Secure release of a person illegally detained
+(C) Quash an illegal order of an inferior court
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q23.** Java's TreeMap and TreeSet are internally implemented using:
-
-(A) AVL Tree
-(B) B+ Tree
-(C) Red-Black Tree
-(D) More than one of the above
-(E) Hash Table
-
----
-
-**Q24.** Which of the following correctly describes a COMPLETE BINARY TREE?
-
-(A) Every node has exactly 0 or 2 children
-(B) All levels are completely filled with no exceptions
-(C) All levels are filled except possibly the last, which is filled from LEFT to RIGHT
+**Q29.** Directive Principles of State Policy are described as "fundamental in governance" by which Article?
+(A) Article 36
+(B) Article 38
+(C) Article 37
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q25.** For a Doubly Linked List, which operations can be done in O(1) time?
-
-(i) Insert at beginning
-(ii) Delete from end (given reference to last node)
-(iii) Access element at position k (0-based)
-
-(A) Only (i)
-(B) Only (i) and (ii)
-(C) All three
-(D) More than one of the above (same as option B)
-(E) None of the above
-
----
-
-## 🌿 SECTION II: GS (SCIENCE REVISION) QUESTIONS (Q26–Q50)
-### Biology + Physics + Chemistry | All science studied so far
-
----
-
-**Q26.** Newton's First Law of Motion is also known as the Law of:
-
-(A) Gravitation
-(B) Conservation of Momentum
-(C) Inertia
+**Q30.** The Uniform Civil Code is mentioned in which Article of the Constitution?
+(A) Article 40 (Village Panchayats)
+(B) Article 51 (International Peace)
+(C) Article 44 (DPSP)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q27.** According to Bernoulli's Principle, when the velocity of a fluid INCREASES, its pressure:
-
-(A) Increases
-(B) Remains the same
-(C) Decreases
+**Q31.** Article 48A (Environment protection) was added to the Constitution by:
+(A) 44th Amendment, 1978
+(B) 86th Amendment, 2002
+(C) 42nd Amendment, 1976
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q28.** Which of the following is a correct application of ARCHIMEDES' PRINCIPLE?
-
-(A) A plane flying due to wing shape
-(B) A ship floating on water because displaced water's weight equals ship's weight
-(C) A hydraulic brake transferring force
+**Q32.** Which of the following is a GANDHIAN Directive Principle?
+(A) Equal pay for equal work (Art.39d)
+(B) International peace (Art.51)
+(C) Organisation of Village Panchayats (Art.40)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q29.** The speed of sound is MAXIMUM in which medium?
-
-(A) Air (gas)
-(B) Water (liquid)
-(C) Steel (solid)
-(D) More than one of the above
-(E) Speed of sound is same in all media
-
----
-
-**Q30.** Vitamin C deficiency causes which disease?
-
-(A) Rickets
-(B) Beri-Beri
-(C) Scurvy
-(D) More than one of the above
-(E) Pellagra
-
----
-
-**Q31.** Which Vitamin is essential for BLOOD CLOTTING?
-
-(A) Vitamin A
-(B) Vitamin C
-(C) Vitamin D
-(D) More than one of the above
-(E) Vitamin K
-
----
-
-**Q32.** The UNIVERSAL BLOOD DONOR is a person with blood group:
-
-(A) A
-(B) AB
-(C) O
-(D) More than one of the above
-(E) B
-
----
-
-**Q33.** Malaria is caused by which pathogen and transmitted by which vector?
-
-(A) Bacterium (Salmonella); Culex mosquito
-(B) Protozoan (Plasmodium); female Anopheles mosquito
-(C) Virus (Dengue virus); Aedes mosquito
+**Q33.** The Right to Property was removed as a Fundamental Right by which Amendment?
+(A) 42nd Constitutional Amendment, 1976
+(B) 44th Constitutional Amendment, 1978
+(C) 86th Constitutional Amendment, 2002
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q34.** Diamond and Graphite are both forms of Carbon. Which of the following is/are TRUE?
-
-(i) Diamond does NOT conduct electricity; Graphite DOES conduct electricity
-(ii) Diamond is the hardest natural substance; Graphite is soft
-(iii) Both are allotropes of Carbon
-
-(A) Only (i)
-(B) Only (i) and (ii)
-(C) Only (ii) and (iii)
-(D) More than one of the above (all three are correct)
-(E) None of the above
-
----
-
-**Q35.** Which of the following chemical compounds is Baking Soda?
-
-(A) Na₂CO₃ (Sodium Carbonate)
-(B) NaOH (Sodium Hydroxide)
-(C) NaHCO₃ (Sodium Bicarbonate)
+**Q34.** Which organism reproduces by BUDDING?
+(A) Amoeba
+(B) Spirogyra
+(C) Yeast and Hydra
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q36.** The functional unit of the KIDNEY is:
-
-(A) Alveolus
-(B) Neuron
-(C) Nephron
-(D) More than one of the above
-(E) Villus
-
----
-
-**Q37.** Which gas is released during PHOTOSYNTHESIS?
-
-(A) Carbon dioxide (CO₂)
-(B) Nitrogen (N₂)
-(C) Oxygen (O₂)
-(D) More than one of the above
-(E) Hydrogen (H₂)
-
----
-
-**Q38.** Tuberculosis (TB) is caused by:
-
-(A) A virus
-(B) A protozoan (Plasmodium)
-(C) A bacterium (Mycobacterium tuberculosis)
-(D) More than one of the above
-(E) A fungus
-
----
-
-**Q39.** According to LINDEMANN'S 10% LAW, if 1000 kcal of energy is present in GRASS, how much energy reaches SNAKES in the food chain: Grass → Grasshopper → Frog → Snake?
-
-(A) 100 kcal
-(B) 10 kcal
-(C) 1 kcal
+**Q35.** Ginger is classified as which type of plant structure?
+(A) Root (taproot)
+(B) Tuber (underground stem)
+(C) Rhizome (underground modified stem)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q40.** Which of the following is CORRECTLY paired?
-
-(A) Yeast — Kingdom Plantae — reproduces by spore formation
-(B) Amoeba — Kingdom Monera — binary fission
-(C) Lichen — Fungus + Algae symbiosis — pioneer organism
+**Q36.** Yeast is classified in which Kingdom?
+(A) Plantae
+(B) Monera (bacteria)
+(C) Fungi
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q41.** In the Periodic Table, which GROUP contains the NOBLE GASES (inert gases)?
-
-(A) Group 1
-(B) Group 17
-(C) Group 18
+**Q37.** The fermentation equation for yeast produces:
+(A) Glucose and water
+(B) Ethanol and carbon dioxide (anaerobic)
+(C) Lactic acid and water
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q42.** Rutherford's gold foil experiment (1911) led to the discovery of:
-
-(A) Electron
-(B) Neutron
-(C) The nucleus (dense positive centre of atom)
+**Q38.** In bread making, the dough RISES because yeast:
+(A) Produces oxygen that inflates the dough
+(B) Produces CO₂ that gets trapped in the dough during fermentation
+(C) Produces ethanol that creates hollow spaces
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q43.** Which of the following statements about VITAMINS is/are CORRECT?
-
-(i) Vitamins A, D, E, K are fat-soluble (stored in liver)
-(ii) Vitamins B-complex and C are water-soluble
-(iii) Vitamin D deficiency causes RICKETS in children
-
-(A) Only (i)
-(B) Only (i) and (ii)
-(C) Only (ii) and (iii)
-(D) More than one of the above (all three are correct)
-(E) None of the above
-
----
-
-**Q44.** Which of the following statements about the HEART is CORRECT?
-
-(A) The left side of the heart carries deoxygenated blood
-(B) The right ventricle pumps blood to the lungs (pulmonary circulation)
-(C) The heart has 2 chambers (1 atrium + 1 ventricle)
+**Q39.** Fertilisation in humans typically occurs in:
+(A) The uterus (womb)
+(B) The ovary
+(C) The fallopian tube (oviduct)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q45.** In the pH scale, which substance has the LOWEST pH (most acidic)?
-
-(A) Pure water (pH = 7)
-(B) Lemon juice (pH ≈ 2)
-(C) Battery acid / concentrated H₂SO₄ (pH ≈ 0-1)
+**Q40.** Bernoulli's Principle states that in fluid flow:
+(A) Pressure increases when fluid speed increases
+(B) Pressure decreases when fluid speed increases
+(C) Pressure and speed are independent of each other
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q46.** The Doppler Effect in SOUND occurs when:
-
-(A) Sound travels through water instead of air
-(B) A sound source approaches an observer → observed frequency is HIGHER than emitted frequency
-(C) Sound is reflected off a surface (echo)
+**Q41.** The lift force on an airplane wing is generated because:
+(A) The engine pushes air downward creating lift
+(B) Curved wing top creates faster airflow → lower pressure above; flat bottom creates higher pressure → net upward lift
+(C) The wing is heavier than air, creating vacuum
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q47.** Which of the following is the CHEMICAL NAME for Vitamin B12?
-
-(A) Thiamine
-(B) Riboflavin
-(C) Cyanocobalamin
-(D) More than one of the above
-(E) Ascorbic Acid
-
----
-
-**Q48.** Pascal's Law is the working principle behind which of the following?
-
-(A) Aeroplane wings (lift generation)
-(B) Hydraulic brakes / hydraulic jack
-(C) SONAR (underwater navigation)
+**Q42.** Two bulbs rated 40W and 100W are connected in SERIES to a power supply. Which glows BRIGHTER?
+(A) The 100W bulb (it has higher rated power)
+(B) The 40W bulb (it has higher resistance; same current flows → more P=I²R)
+(C) Both glow equally
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q49.** Which disease is caused by the DENGUE VIRUS and transmitted by which mosquito?
-
-(A) Plasmodium via female Anopheles
-(B) Flavivirus via Aedes mosquito
-(C) Rabies virus via dog bite
+**Q43.** The formula for electrical power in terms of voltage V and resistance R is:
+(A) P = V × R
+(B) P = V / R
+(C) P = V² / R
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q50.** In the human digestive system, where does MAXIMUM ABSORPTION of nutrients take place?
-
-(A) Stomach
-(B) Large Intestine
-(C) Small Intestine (due to villi and microvilli)
+**Q44.** Electricity is transmitted at HIGH VOLTAGE primarily to:
+(A) Make electricity travel faster through wires
+(B) Reduce current (I = P/V), thereby minimising I²R heat losses in transmission wires
+(C) Increase the energy content of electricity
 (D) More than one of the above
-(E) Mouth
+(E) None of the above
 
 ---
 
-# ════════════════════════════════════════════════════════
-# ✅ ANSWER KEY — DAY 28
-# OPEN ONLY AFTER ATTEMPTING ALL 50 QUESTIONS!
-# ════════════════════════════════════════════════════════
+**Q45.** Rhizopus (bread mould) reproduces asexually by:
+(A) Budding
+(B) Binary fission
+(C) Spore formation
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## CS ANSWERS (Q1–Q25)
-
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| Q1  | **(B) Only (i) and (iii)** | SLL: Insert at beginning=O(1) ✅, Random access=O(n) ❌ (ii is FALSE), Insert at end=O(n) ✅ |
-| Q2  | **(C)** | DLL's key advantage over SLL: O(1) deletion from END due to prev pointer |
-| Q3  | **(C) First (HEAD) node** | Circular LL: last node's next → HEAD. This makes it circular! |
-| Q4  | **(B) 3,5,7,10,20** | Inorder = Left→Root→Right. Traverse: 3,5,7,10,20 (always sorted for BST!) |
-| Q5  | **(C) 10,5,3,7,20** | Preorder = Root→Left→Right. Start with Root(10), then left subtree(5,3,7), then right(20) |
-| Q6  | **(C) Randomized Order** | "Randomized traversal" does NOT exist! Pre, In, Post, Level-order are valid |
-| Q7  | **(E) 14** | Catalan number C(4) = 14. Most asked BPSC fact! |
-| Q8  | **(B) 20,30,40,50,70** | Inorder of BST always gives SORTED output regardless of insertion order |
-| Q9  | **(C)** | RED node → both children must be BLACK (no consecutive reds). Root is always BLACK (not red as A says) |
-| Q10 | **(C) RED** | New node always inserted as RED first, then violations fixed |
-| Q11 | **(C) AVL Tree** | AVL is MORE strictly balanced → faster search. Better for read-heavy apps |
-| Q12 | **(C) 8 edges** | Spanning tree: N vertices → N-1 edges. 9 vertices → 8 edges |
-| Q13 | **(B) 7** | Left child of index i = 2i+1. Left child of index 3 = 2(3)+1 = 7 |
-| Q14 | **(D) More than one** | ALL THREE statements about BFS/DFS are correct |
-| Q15 | **(C) Algorithm design paradigms** | Greedy, DP, D&C are PARADIGMS. BFS/DFS are traversals — never confuse! |
-| Q16 | **(B) Cycle** | If DFS finds a back edge (already-visited node in current path) → CYCLE detected |
-| Q17 | **(D) More than one** | ALL THREE properties of adjacency matrix for undirected graph are correct |
-| Q18 | **(C) O(log n)** | Heapify (sift down) = O(height) = O(log n) for a heap |
-| Q19 | **(C) Reverse Inorder** | Right→Root→Left gives descending order for BST |
-| Q20 | **(C) Disjoint Set (Union-Find)** | Kruskal's uses Union-Find to detect if adding an edge creates a cycle |
-| Q21 | **(C) n+1** | Full binary tree: n internal nodes → n+1 leaf nodes (always!) |
-| Q22 | **(C)** | Inorder Successor = leftmost/minimum node in RIGHT subtree |
-| Q23 | **(C) Red-Black Tree** | Java's TreeMap/TreeSet = internally Red-Black Tree |
-| Q24 | **(C)** | Complete Binary Tree: all levels full except last, last filled L→R |
-| Q25 | **(B) Only (i) and (ii)** | DLL: O(1) insert at beginning ✅, O(1) delete from end ✅. Access by index = O(n) ❌ |
+**Q46.** The Article that prohibits the State from compelling payment of taxes for promotion of any religion is:
+(A) Article 25
+(B) Article 26
+(C) Article 27
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## GS (SCIENCE REVISION) ANSWERS (Q26–Q50)
-
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| Q26 | **(C) Inertia** | Newton's First Law = Law of Inertia |
-| Q27 | **(C) Decreases** | Bernoulli: velocity ↑ → pressure ↓ (they are inversely related) |
-| Q28 | **(B)** | Archimedes = floating objects. Ship floats because displaced water weight = ship weight |
-| Q29 | **(C) Steel (solid)** | Sound travels fastest in SOLIDS > LIQUIDS > GASES |
-| Q30 | **(C) Scurvy** | Vitamin C deficiency → SCURVY (bleeding gums, weak joints) |
-| Q31 | **(E) Vitamin K** | Vitamin K = blood clotting / coagulation |
-| Q32 | **(C) O** | Blood group O = Universal DONOR (can donate to all) |
-| Q33 | **(B)** | Malaria = Plasmodium (Protozoan) via female Anopheles mosquito |
-| Q34 | **(D) More than one** | ALL THREE statements about Diamond and Graphite are correct |
-| Q35 | **(C) NaHCO₃** | Baking Soda = Sodium Bicarbonate = NaHCO₃ |
-| Q36 | **(C) Nephron** | Nephron = functional unit of kidney. Alveolus = lungs. Villus = small intestine |
-| Q37 | **(C) Oxygen (O₂)** | Photosynthesis releases OXYGEN (from splitting water in light reactions) |
-| Q38 | **(C) Bacterium** | TB = Mycobacterium tuberculosis (bacteria, not virus or protozoan) |
-| Q39 | **(C) 1 kcal** | 1000 (grass)→100 (grasshopper, 10%)→10 (frog, 10%)→1 (snake, 10%) |
-| Q40 | **(C)** | Lichen=Fungus+Algae symbiosis ✅. Yeast=Fungi (not Plantae), Amoeba=Protista (not Monera) |
-| Q41 | **(C) Group 18** | Noble/Inert gases = Group 18 (He, Ne, Ar, Kr, Xe, Rn) |
-| Q42 | **(C) The nucleus** | Rutherford's gold foil experiment discovered the atomic nucleus in 1911 |
-| Q43 | **(D) More than one** | ALL THREE vitamin statements are correct |
-| Q44 | **(B)** | RIGHT ventricle → pumps deoxygenated blood to LUNGS. Left side carries oxygenated blood |
-| Q45 | **(C) Battery acid** | Battery acid/conc. H₂SO₄ ≈ pH 0-1 (most acidic, lowest pH) |
-| Q46 | **(B)** | Doppler: source approaching → frequency appears higher (pitch rises) |
-| Q47 | **(C) Cyanocobalamin** | B12 = Cyanocobalamin. B1=Thiamine, B2=Riboflavin, C=Ascorbic Acid |
-| Q48 | **(B)** | Pascal's Law → hydraulic machines (brakes, jack, press) |
-| Q49 | **(B)** | Dengue = Flavivirus via Aedes mosquito (not Anopheles!) |
-| Q50 | **(C) Small Intestine** | Maximum nutrient absorption in small intestine (villi increase surface area ~600x) |
+**Q47.** Which writ is used to challenge a person's right to hold a public office?
+(A) Mandamus
+(B) Certiorari
+(C) Quo Warranto
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📊 SCORE EVALUATION
+**Q48.** 1 kilowatt-hour (kWh) is equal to:
+(A) 1000 Joules
+(B) 3.6 × 10⁵ Joules
+(C) 3.6 × 10⁶ Joules
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q49.** Penicillin, the first antibiotic, was discovered from:
+(A) Yeast (Saccharomyces)
+(B) Penicillium (a mould/fungus), discovered by Alexander Fleming
+(C) Bacteria (E. coli)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q50.** The Hydraulic Jack (hydraulic press) works on the principle of:
+(A) Bernoulli's Principle
+(B) Archimedes' Principle
+(C) Pascal's Law
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+# ANSWER KEY
+
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
+
+---
+
+### CS Answers (Q1–Q25):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (B) | Insert at beginning = only 2 pointer changes, no traversal |
+| 2 | (C) | DLL end delete = O(1) via TAIL.prev; SLL = O(n) |
+| 3 | (C) | CLL traversal ends when curr == HEAD |
+| 4 | (C) | Perfect BT: 2^(h+1) - 1 total nodes |
+| 5 | (B) | BST inorder always sorted: 1,3,4,5,8,9 |
+| 6 | (C) | Yes — valid BST: left<root<right holds at every node |
+| 7 | (C) | C(4) = 14 Catalan number |
+| 8 | (B) | Ascending insertion → right-skewed → O(n) |
+| 9 | (C) | Red-Black Tree: ≤2 rotations per insert |
+| 10 | (C) | Black-height uniformity = Property 5 of RB Tree |
+| 11 | (C) | Spanning tree: 9 vertices → 9-1 = 8 edges |
+| 12 | (C) | Kruskal's = sort edges, add cheapest non-cycle |
+| 13 | (B) | FIFO Queue ensures level-by-level processing |
+| 14 | (C) | DFS: cycle detection + topological sorting |
+| 15 | (C) | Adjacency Matrix: always V² = 100² = 10,000 cells |
+| 16 | (C) | Inorder successor = smallest in right subtree = 9 |
+| 17 | (C) | Postorder: root is ALWAYS LAST |
+| 18 | (C) | BF = Height(left) - Height(right) |
+| 19 | (C) | Handshaking: Σ degrees = 2E |
+| 20 | (C) | DLL middle insert = 4 pointer updates |
+| 21 | (C) | "Randomized Order" = NOT a real traversal |
+| 22 | (B) | Both BFS and DFS: Time O(V+E), Space O(V) |
+| 23 | (C) | Full BT: Leaves = Internal + 1 = 7 + 1 = 8 |
+| 24 | (C) | Equal black-height ensures approximate balance |
+| 25 | (C) | First element of Preorder = ROOT = 10 |
+
+---
+
+### GS Answers (Q26–Q50):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (C) | Art.20 & 21 = cannot be suspended (44th Amendment) |
+| 27 | (C) | Art.32 = "Heart and Soul" (Ambedkar) |
+| 28 | (B) | Habeas Corpus = release of illegally detained |
+| 29 | (C) | Art.37 = DPSP fundamental in governance |
+| 30 | (C) | Art.44 = Uniform Civil Code (DPSP) |
+| 31 | (C) | 42nd Amendment 1976 added Art.48A |
+| 32 | (C) | Art.40 = Village Panchayats = most Gandhian |
+| 33 | (B) | 44th Amendment 1978 removed property as FR |
+| 34 | (C) | Yeast + Hydra → budding |
+| 35 | (C) | Ginger = RHIZOME (underground modified STEM) |
+| 36 | (C) | Yeast = Kingdom FUNGI |
+| 37 | (B) | Glucose → Ethanol + CO₂ (yeast anaerobic fermentation) |
+| 38 | (B) | CO₂ from fermentation trapped → dough rises |
+| 39 | (C) | Fertilisation in FALLOPIAN TUBE |
+| 40 | (B) | Bernoulli: speed↑ → pressure↓ |
+| 41 | (B) | Curved top → fast air → low pressure above → lift |
+| 42 | (B) | Series: same I; 40W has higher R → P=I²R more → brighter |
+| 43 | (C) | P = V²/R (from P=VI and I=V/R) |
+| 44 | (B) | High V → low I → low I²R transmission losses |
+| 45 | (C) | Rhizopus (bread mould) = spore formation |
+| 46 | (C) | Art.27 = no tax for religion promotion |
+| 47 | (C) | Quo Warranto = challenge to public office authority |
+| 48 | (C) | 1 kWh = 1000 W × 3600 s = 3.6 × 10⁶ J |
+| 49 | (B) | Penicillin from Penicillium fungus (Fleming 1928) |
+| 50 | (C) | Hydraulic jack = Pascal's Law (not Bernoulli!) |
+
+---
+---
+
+# 🎯 PART 5: LAST 1-HOUR BEFORE EXAM — ULTRA-CRISP REVISION CARD
+
+## ⚡ CS — 20 Must-Know Facts
 
 ```
-┌─────────────────────────────────────────────┐
-│  CS Score  (Q1–25):   _____ / 25            │
-│  GS Score  (Q26–50):  _____ / 25            │
-│  TOTAL:               _____ / 50            │
-├─────────────────────────────────────────────┤
-│  48–50: TOPPER LEVEL 🏆 — Outstanding!     │
-│  43–47: Excellent — On Track ✅             │
-│  38–42: Good — Target a few weak spots      │
-│  28–37: Needs focused re-revision 📖        │
-│  Below 28: Re-read full concept notes       │
-└─────────────────────────────────────────────┘
+1.  SLL insert BEGIN = O(1) | SLL delete END = O(n) | SLL insert/delete MIDDLE = O(n)
+2.  DLL delete END = O(1) (TAIL.prev) ← key DLL advantage over SLL
+3.  DLL middle insert = 4 pointer updates (SLL = 2)
+4.  CLL: last.next = HEAD (NO NULL); traversal ends at curr == HEAD
+5.  Tree edges = n - 1 (n = nodes; ALWAYS)
+6.  Perfect BT: 2^(h+1)-1 total nodes; 2^h leaves; Full BT: Leaves = Internal+1
+7.  Preorder: Root FIRST | Inorder: Root MIDDLE | Postorder: Root LAST (always!)
+8.  BFS uses QUEUE; Pre/In/Postorder use STACK; Level-order = BFS
+9.  BST: ALL left subtree < node < ALL right subtree (GLOBAL rule!)
+10. BST Inorder = SORTED ASCENDING ← #1 most tested BST fact
+11. BST worst case O(n) when sorted data inserted → use AVL or RB Tree
+12. C(4) = 14 distinct BSTs with 4 nodes (Catalan number)
+13. AVL: BF = -1/0/+1; RB: root=BLACK; no R-R pair; equal black-height
+14. RB Tree used in Java TreeMap, C++ STL, Linux kernel
+15. Spanning tree: N vertices → N-1 edges; Kruskal sparse; Prim dense; both greedy
+16. Graph: Σ(degrees) = 2E | Complete Kₙ: n(n-1)/2 edges
+17. BFS = shortest path (unweighted); DFS = cycle detection, topological sort
+18. Adj Matrix: O(V²) space, O(1) edge check; Adj List: O(V+E) space, default
+19. Greedy/DP/Divide & Conquer = algorithmic paradigms, NOT graph traversals
+20. BFS/DFS time = O(V+E) with adjacency list
+```
+
+## ⚡ GS — 20 Must-Know Facts
+
+```
+1.  FR: Part III (12–35); JUSTICIABLE; 6 rights; American origin
+2.  DPSP: Part IV (36–51); NON-justiciable; Irish origin; 42nd Amend added 39A,43A,48A
+3.  Art.20 & 21 = CANNOT be suspended even during Emergency (44th Amendment 1978)
+4.  Art.32 = "Heart & Soul" (Ambedkar); 5 writs: H-M-P-C-Q
+5.  Art.19: 6 freedoms (19(1)(f) removed by 44th Amend 1978)
+6.  Art.17: Untouchability ABOLISHED (unique: applies to private persons too)
+7.  Art.21A: Free education 6–14 years (86th Amendment 2002)
+8.  Art.44: UCC = DPSP (not FR!) ← most confused article
+9.  Art.39(d): Equal pay for equal work = DPSP (not FR!)
+10. Art.40: Village Panchayats = most Gandhian DPSP
+11. Art.48A: Environment (42nd Amendment 1976) = Liberal-Intellectual DPSP
+12. Amoeba = binary fission; Yeast = BUDDING (not binary fission!); Hydra = budding
+13. Ginger = RHIZOME (underground STEM, not root!); Potato = TUBER; Onion = BULB
+14. Yeast = Kingdom FUNGI; unicellular; chitin cell wall; eukaryote
+15. Fermentation: C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂ (anaerobic; bread + beer)
+16. Fertilisation in FALLOPIAN TUBE; Implantation in UTERUS (endometrium)
+17. Penicillin from Penicillium FUNGUS (Alexander Fleming, 1928)
+18. Bernoulli: FAST flow = LOW pressure; Hydraulic jack = PASCAL'S LAW (not Bernoulli!)
+19. Airplane wing: curved top = fast air = low pressure above = LIFT force
+20. Series bulbs: 40W brighter than 100W; Parallel bulbs: 100W brighter than 40W
+```
+
+## ⚡ COMMON TRAPS — NEVER GET THESE WRONG
+
+```
+TRAP 1:  CLL traversal — check curr == HEAD (NOT curr == NULL → infinite loop!)
+TRAP 2:  BST property is GLOBAL (all of left subtree, not just direct child)
+TRAP 3:  BFS uses QUEUE, DFS uses STACK (never swap!)
+TRAP 4:  Art.20 & 21 can't be suspended (not Art.19 & 21)
+TRAP 5:  Art.44 (UCC) is DPSP, not a Fundamental Right
+TRAP 6:  Yeast = BUDDING (not binary fission — Amoeba/bacteria = binary fission)
+TRAP 7:  Ginger = RHIZOME (STEM, not root; don't be fooled by "ginger root")
+TRAP 8:  Hydraulic jack = Pascal's Law (NOT Bernoulli's Principle)
+TRAP 9:  40W bulb brighter in SERIES; 100W brighter in PARALLEL
+TRAP 10: Randomized traversal = DOES NOT EXIST (not a real traversal type)
+TRAP 11: Catalan C(4) = 14 (NOT 5 or 42)
+TRAP 12: Fertilisation in FALLOPIAN TUBE (not uterus)
+TRAP 13: Penicillin from FUNGUS (Penicillium), not bacteria
+TRAP 14: DLL insert middle = 4 pointer updates (not 2!)
+TRAP 15: Sorted BST insertion → right-skewed → O(n), NOT O(log n)
 ```
 
 ---
 
-## 🎯 WEEK 4 COMPLETE — WHAT YOU NOW KNOW
-
-```
-╔══════════════════════════════════════════════════════════════════╗
-║              WEEK 4 MASTERY CHECKLIST                           ║
-╠══════════════════════════════════════════════════════════════════╣
-║ CS TOPICS (Days 22–28):                                         ║
-║  ✅ Singly, Doubly, Circular Linked Lists                       ║
-║  ✅ Binary Trees, Tree Traversals (Pre/In/Post/Level)           ║
-║  ✅ BST properties, operations, Catalan numbers                 ║
-║  ✅ Red-Black Trees (5 properties) + AVL Trees                  ║
-║  ✅ Spanning Trees (N-1 edges) + MST algorithms                 ║
-║  ✅ Heaps (Min/Max), array representation, complexity           ║
-║  ✅ Graphs: BFS (Queue) + DFS (Stack)                           ║
-║  ✅ Algorithm Paradigms vs Traversals                           ║
-║  ✅ Dijkstra, Bellman-Ford, Floyd-Warshall                      ║
-║                                                                  ║
-║ GS TOPICS (Week 3–4):                                           ║
-║  ✅ Physics: Newton's Laws, Bernoulli, Archimedes, Pascal       ║
-║  ✅ Physics: Sound, Light, Electricity formulae                 ║
-║  ✅ Chemistry: Atomic models, Periodic Table, Acids/Bases       ║
-║  ✅ Chemistry: Common compounds, Carbon allotropes              ║
-║  ✅ Biology: Five Kingdoms, Human Systems                       ║
-║  ✅ Biology: Vitamins & Deficiency Diseases                     ║
-║  ✅ Biology: Diseases & Causative Agents                        ║
-║  ✅ Biology: Reproduction, Plant Hormones, Ecology              ║
-╚══════════════════════════════════════════════════════════════════╝
-```
-
----
-
-## 🔥 TRAP ANALYSIS — MOST COMMON BPSC MISTAKES
-
-```
-CS TRAPS:
-1. "Random access in linked list = O(1)" → FALSE! It's O(n)
-2. "C(3) = 14" → FALSE! C(4) = 14, C(3) = 5
-3. "Build Heap = O(n log n)" → FALSE! Build Heap = O(n)
-4. "BFS uses Stack" → FALSE! BFS uses QUEUE, DFS uses STACK
-5. "Greedy is a graph traversal" → FALSE! It's an algorithm paradigm
-6. "AVL is less strictly balanced than RB Tree" → FALSE! AVL is MORE strict
-7. "Spanning tree with N vertices has N edges" → FALSE! It has N-1 edges
-8. "Inorder of any tree gives sorted output" → FALSE! Only for BST!
-
-GS TRAPS:
-1. "Yeast is in Kingdom Plantae" → FALSE! Yeast is FUNGI
-2. "Ginger grows from roots" → FALSE! Ginger = RHIZOME (stem)
-3. "Sound travels fastest in air" → FALSE! Fastest in SOLIDS
-4. "Universal recipient = O blood group" → FALSE! AB is universal recipient
-5. "Dengue is spread by Anopheles" → FALSE! Dengue = Aedes mosquito
-6. "Graphite doesn't conduct electricity" → FALSE! Graphite CONDUCTS
-7. "Vitamin D deficiency causes Beri-Beri" → FALSE! B1 deficiency = Beri-Beri
-8. "Pascal's Law = flight principle" → FALSE! Pascal = hydraulics; Bernoulli = flight
-```
-
----
-
-## 📝 NIGHT REVISION (Write from memory — 5 min):
-
-1. Traversal orders for this tree: Root=A, Left=B, Right=C → Pre: ___ | In: ___ | Post: ___
-2. C(4) = ___ | Spanning tree N vertices = ___ edges
-3. BFS uses ___ | DFS uses ___ | Both time = ___
-4. Vitamin C deficiency = ___ | Vitamin K role = ___ | Vitamin D deficiency = ___
-5. Blood group O = Universal ___ | Blood group AB = Universal ___
-
-**Answers:** 1. Pre:A,B,C | In:B,A,C | Post:B,C,A | 2. 14 | N-1 | 3. Queue, Stack, O(V+E) | 4. Scurvy, blood clotting, Rickets | 5. Donor, Recipient
-
----
-
-*Day 28 of 170 Complete — Week 4 Done! 🎉 | BPSC TRE 4.0*
-*CS Revision: Linked Lists + Trees + BST + RB Tree + Graphs*
-*GS Revision: Biology + Physics + Chemistry Science Topics*
-*Next: Day 29 — Big-O Notation & Time Complexity Analysis*
+*Next: Day 29 — DBMS Introduction (Database concepts, ER model, Keys, Normalisation basics) | GS: Indian History — Harappan & Vedic Civilisation*
