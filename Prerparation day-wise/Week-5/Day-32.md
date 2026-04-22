@@ -1,729 +1,1112 @@
-# 📅 DAY 32 — BPSC TRE 4.0 COMPLETE STUDY MATERIAL
-## 🎯 CS: Searching Algorithms (Linear, Binary, Jump) + Hashing
-## 🌍 GS: Nobel Prize Winners + Important National & International Awards
-
-> **Target:** Score 25/25 in CS + 25/25 in GS | **Exam Readiness: TOPPER MODE**
-> **Day 32 of 170 | Phase 1 — Foundation | Week 5 — Algorithms**
+# 📅 BPSC TRE 4.0 — DAY 32 COMPLETE STUDY MODULE
+### Searching Algorithms & Hashing + Current Affairs: Nobel Prize Winners
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-# ═══════════════════════════════════════════════════════
-# 🖥️ PART A: COMPUTER SCIENCE
-## SEARCHING ALGORITHMS + HASHING
-### Linear Search | Binary Search | Jump Search | Hashing & Hash Tables
-# ═══════════════════════════════════════════════════════
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): Searching Algorithms (Linear, Binary) + Hashing — Concepts, Dry Runs, Collision
+> - Afternoon (1 hr): Nobel Prize Winners — Fields, Indian Winners, Key Facts
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-## 📖 CS SECTION 1: WHY SEARCHING MATTERS
-
-Searching is the most fundamental operation in computing.
-Every database query, every website lookup, every autocomplete uses searching.
-
-```
-SEARCHING ALGORITHMS LANDSCAPE:
-
-  ┌────────────────────────────────────────────────────────┐
-  │              SEARCHING ALGORITHMS                      │
-  ├─────────────────────────┬──────────────────────────────┤
-  │  Sequential / Linear    │  Interval / Divide-Based     │
-  │  ─────────────────────  │  ──────────────────────────  │
-  │  • Linear Search O(n)   │  • Binary Search O(log n)    │
-  │    (works on unsorted)  │    (needs SORTED array)      │
-  │                         │  • Jump Search O(√n)         │
-  │                         │  • Interpolation Search      │
-  │                         │  • Exponential Search        │
-  ├─────────────────────────┴──────────────────────────────┤
-  │              HASHING — O(1) Average Case               │
-  │  (neither sequential nor interval — uses hash function)│
-  └────────────────────────────────────────────────────────┘
-
-WHEN TO USE WHAT:
-  Unsorted data             → Linear Search
-  Sorted array, one search  → Binary Search
-  Sorted array, many search → Binary Search
-  Frequent insert/delete/search → Hash Table
-```
+# PART 1: COMPUTER SCIENCE
+## 📘 Searching Algorithms & Hashing — Deep Conceptual Guide
 
 ---
 
-## 📖 CS SECTION 2: LINEAR SEARCH — COMPLETE ANALYSIS
+## 🔷 SECTION 1: What is Searching?
 
-### 💡 Core Idea
-> **"Check EACH element one by one from start to end until the target is found or all elements are checked."**
+### Real-Life Analogy — Finding a Friend in a City:
 
-### Step-by-Step Example
+**Scenario A — Random City (Unsorted):**
+Your friend could be at any of 1000 addresses, all randomly listed.
+You have no choice but to check address #1, then #2, then #3...
+→ This is **LINEAR SEARCH** — check every element until found.
 
-```
-Array: [64, 34, 25, 12, 22, 11, 90]   Target: 22
+**Scenario B — Phone Directory (Sorted alphabetically):**
+You open the directory to the MIDDLE.
+Last name starts with 'T' — you need 'R' → go to the LEFT half.
+Open THAT middle again → keep halving until found!
+→ This is **BINARY SEARCH** — eliminate half the search space each step.
 
-Step 1: Check arr[0] = 64  →  64 ≠ 22  → Continue
-Step 2: Check arr[1] = 34  →  34 ≠ 22  → Continue
-Step 3: Check arr[2] = 25  →  25 ≠ 22  → Continue
-Step 4: Check arr[3] = 12  →  12 ≠ 22  → Continue
-Step 5: Check arr[4] = 22  →  22 = 22  → FOUND! ✓ Return index 4
-
-If target was 99:
-  Check all 7 elements → NOT FOUND (return -1)
-```
-
-### Algorithm
-```
-LinearSearch(arr, n, target):
-  for i = 0 to n-1:
-    if arr[i] == target:
-      return i          ← found at index i
-  return -1             ← not found
-```
-
-### Complexity Analysis
-
-```
-┌────────────────┬───────────────────────────────────────────┐
-│ Case           │ Complexity                                │
-├────────────────┼───────────────────────────────────────────┤
-│ Best Case      │ O(1) — target is at FIRST position       │
-│ Average Case   │ O(n) — target somewhere in middle        │
-│ Worst Case     │ O(n) — target is LAST or NOT PRESENT     │
-│ Space          │ O(1) — no extra space needed             │
-├────────────────┼───────────────────────────────────────────┤
-│ Sorted needed? │ NO ✓ — works on ANY array                │
-│ Works on LL?   │ YES ✓ — sequential access                │
-└────────────────┴───────────────────────────────────────────┘
-```
-
-### When is Linear Search PREFERRED?
-```
-Use Linear Search when:
-  ✓ Array is small (n < 10–20)
-  ✓ Array is UNSORTED (can't use binary search)
-  ✓ Only ONE search needed (not worth sorting first)
-  ✓ Data structure doesn't support random access (linked list)
-  ✓ Searching for all occurrences (not just first)
-```
+**Scenario C — Library Index (Hash-based):**
+The library has an INDEX at the back.
+You look up "Tree" → Index says "Page 247".
+Go DIRECTLY to page 247 — no searching at all!
+→ This is **HASHING** — direct access via a computed address.
 
 ---
 
-## 📖 CS SECTION 3: BINARY SEARCH — DEEP DIVE
+## 🔷 SECTION 2: LINEAR SEARCH
 
-### 💡 Core Idea
-> **"Compare target with the MIDDLE element. If equal → found. If smaller → search LEFT half. If larger → search RIGHT half. Repeat until found or search space is empty."**
-
-### CRITICAL PREREQUISITE
-```
-⚠️  BINARY SEARCH REQUIRES SORTED ARRAY  ⚠️
-    This is the MOST ASKED BPSC TRE fact about Binary Search!
-```
-
-### Step-by-Step Example
+### Concept:
+Check each element of the array **one by one**, from the first to the last,
+until the target element is found or the entire array is scanned.
 
 ```
-Sorted Array: [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
-Indices:        0  1  2   3   4   5   6   7   8   9
-Target: 23
+NO PRECONDITION: Works on BOTH sorted and unsorted arrays.
+SIMPLE: Easiest search to implement.
+SEQUENTIAL: Always starts from the beginning.
+```
 
-PASS 1:
-  low=0, high=9
+### Algorithm:
+```
+linearSearch(arr, n, target):
+    for i = 0 to n-1:
+        if arr[i] == target:
+            return i          ← FOUND at index i
+    return -1                 ← NOT FOUND
+```
+
+### Step-by-Step Dry Run:
+```
+Array: [15, 3, 28, 1, 9, 22, 7]    n = 7
+Target: 22
+
+Index:   0   1   2   3  4   5   6
+Array: [15,  3, 28,  1, 9, 22,  7]
+
+Step 1: i=0 → arr[0]=15 ≠ 22 → CONTINUE
+Step 2: i=1 → arr[1]=3  ≠ 22 → CONTINUE
+Step 3: i=2 → arr[2]=28 ≠ 22 → CONTINUE
+Step 4: i=3 → arr[3]=1  ≠ 22 → CONTINUE
+Step 5: i=4 → arr[4]=9  ≠ 22 → CONTINUE
+Step 6: i=5 → arr[5]=22 = 22 → FOUND! Return index 5 ✅
+
+If target = 100:
+  Steps 1-7: All 7 comparisons made, none match → return -1
+
+Visual scan:
+[15 → 3 → 28 → 1 → 9 → 22✓]  ← stops here
+         or
+[15 → 3 → 28 → 1 → 9 → 22 → 7 → NOT FOUND]
+```
+
+### Complexity Analysis:
+```
+BEST CASE:    Target at FIRST position → 1 comparison → O(1)
+AVERAGE CASE: Target somewhere in middle → n/2 comparisons → O(n)
+WORST CASE:   Target at LAST position OR not in array → n comparisons → O(n)
+
+SPACE: O(1) — no extra memory needed
+
+KEY PROPERTIES:
+  → Works on unsorted AND sorted arrays
+  → Simple to implement
+  → Inefficient for large datasets
+  → Useful for small arrays or single searches
+```
+
+### 🚨 PYQ TRAP #1: Linear Search Best Case
+> Best case for Linear Search = O(1), NOT O(n)!
+> It occurs when the target is at the **very first position**.
+> Most people say "Linear Search is O(n)" — that's the worst/average case.
+> For a precise exam answer: Best = O(1), Worst = Average = O(n).
+
+---
+
+## 🔷 SECTION 3: BINARY SEARCH
+
+### Concept — The Bisection Method:
+
+**PRECONDITION: Array MUST be SORTED (ascending or descending).**
+
+In each step, compare target with the **MIDDLE element**:
+- If `target == middle` → FOUND!
+- If `target < middle` → Search LEFT half (eliminate right half)
+- If `target > middle` → Search RIGHT half (eliminate left half)
+
+Each step **eliminates HALF** the remaining elements.
+For n=1,000,000 elements: at most 20 steps! (log₂1,000,000 ≈ 20)
+
+### The Key Formula:
+```
+mid = (low + high) / 2
+
+where:
+  low  = starting index of current search range
+  high = ending index of current search range
+  mid  = middle index (integer division)
+
+ALTERNATIVE (avoids integer overflow):
+  mid = low + (high - low) / 2
+  (preferred in competitive programming to prevent overflow)
+```
+
+### Algorithm — Iterative Version:
+```
+binarySearch(arr, n, target):
+    low = 0
+    high = n - 1
+
+    while low <= high:
+        mid = (low + high) / 2
+
+        if arr[mid] == target:
+            return mid          ← FOUND
+
+        else if arr[mid] < target:
+            low = mid + 1       ← Search RIGHT half (eliminate left)
+
+        else:
+            high = mid - 1      ← Search LEFT half (eliminate right)
+
+    return -1                   ← NOT FOUND
+```
+
+### Algorithm — Recursive Version:
+```
+binarySearch(arr, low, high, target):
+    if low > high:
+        return -1               ← BASE CASE: search space empty
+
+    mid = (low + high) / 2
+
+    if arr[mid] == target:
+        return mid              ← FOUND
+
+    else if arr[mid] < target:
+        return binarySearch(arr, mid+1, high, target)  ← Right half
+
+    else:
+        return binarySearch(arr, low, mid-1, target)   ← Left half
+```
+
+### Complete Step-by-Step Dry Run:
+
+```
+Array (sorted): [2, 5, 8, 12, 16, 23, 38, 45, 56, 72]
+Indices:          0  1  2   3   4   5   6   7   8   9
+n = 10
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SEARCH 1: Find target = 23
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1: low=0, high=9
   mid = (0+9)/2 = 4
   arr[4] = 16
-  23 > 16 → Search RIGHT half
+  16 < 23 → target is in RIGHT half
   low = mid+1 = 5
 
-  [2, 5, 8, 12, 16, | 23, 38, 56, 72, 91]
-                      ↑──────────────────↑
-                     low=5              high=9
+  [2, 5, 8, 12, 16, 23, 38, 45, 56, 72]
+   0  1  2   3   4   5   6   7   8   9
+   ←——————————× ELIMINATED ×——→  ↑low
+   (left half eliminated)
 
-PASS 2:
-  low=5, high=9
+STEP 2: low=5, high=9
   mid = (5+9)/2 = 7
-  arr[7] = 56
-  23 < 56 → Search LEFT half
+  arr[7] = 45
+  45 > 23 → target is in LEFT half
   high = mid-1 = 6
 
-  [23, 38, 56, ...]
-   ↑────↑
-  low=5 high=6
+  [_, _, _, _, _, 23, 38, 45, 56, 72]
+                   5   6   7   8   9
+                  ↑low       ↑high×
+                            (right eliminated)
 
-PASS 3:
-  low=5, high=6
+STEP 3: low=5, high=6
   mid = (5+6)/2 = 5
   arr[5] = 23
-  23 = 23 → FOUND at index 5! ✓
+  23 == 23 → FOUND at index 5! ✅
 
-Total comparisons: 3 (for n=10, log₂(10) ≈ 3.3)
+Total comparisons: 3 (for n=10, log₂10 ≈ 3.3 → max 4 steps)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SEARCH 2: Find target = 10 (NOT in array)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1: low=0, high=9, mid=4, arr[4]=16
+  16 > 10 → go LEFT → high = 3
+
+STEP 2: low=0, high=3, mid=1, arr[1]=5
+  5 < 10 → go RIGHT → low = 2
+
+STEP 3: low=2, high=3, mid=2, arr[2]=8
+  8 < 10 → go RIGHT → low = 3
+
+STEP 4: low=3, high=3, mid=3, arr[3]=12
+  12 > 10 → go LEFT → high = 2
+
+STEP 5: low=3 > high=2 → STOP → return -1 (NOT FOUND) ✅
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BINARY SEARCH ELIMINATION VISUAL:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+n = 16 elements, target somewhere:
+
+Step 1: 16 elements → check mid → 8 elements remain
+Step 2:  8 elements → check mid → 4 elements remain
+Step 3:  4 elements → check mid → 2 elements remain
+Step 4:  2 elements → check mid → 1 element remains
+Step 5:  1 element  → check mid → FOUND or NOT FOUND
+
+Total steps = log₂16 = 4 (or 5 at most)
+Compare to Linear Search: up to 16 steps!
+
+GENERAL: n elements → at most ⌈log₂(n+1)⌉ comparisons
 ```
 
-### Algorithm — Iterative Version (Preferred)
-```
-BinarySearch_Iterative(arr, n, target):
-  low = 0
-  high = n - 1
-  while low <= high:
-    mid = (low + high) / 2      ← floor division
-    if arr[mid] == target:
-      return mid                 ← FOUND
-    else if arr[mid] < target:
-      low = mid + 1              ← search RIGHT
-    else:
-      high = mid - 1             ← search LEFT
-  return -1                      ← NOT FOUND
-```
-
-### Algorithm — Recursive Version
-```
-BinarySearch_Recursive(arr, low, high, target):
-  if low > high:
-    return -1                    ← base case: not found
-  mid = (low + high) / 2
-  if arr[mid] == target:
-    return mid
-  else if arr[mid] < target:
-    return BinarySearch_Recursive(arr, mid+1, high, target)
-  else:
-    return BinarySearch_Recursive(arr, low, mid-1, target)
-```
-
-### Complexity Analysis
+### Why O(log n)?
 
 ```
-┌────────────────┬────────────────────────────────────────────┐
-│ Case           │ Complexity                                 │
-├────────────────┼────────────────────────────────────────────┤
-│ Best Case      │ O(1) — target is at MIDDLE position       │
-│ Average Case   │ O(log n)                                   │
-│ Worst Case     │ O(log n) — target not present/at end      │
-│ Space (iter.)  │ O(1) — iterative version                  │
-│ Space (recur.) │ O(log n) — recursion stack depth          │
-├────────────────┼────────────────────────────────────────────┤
-│ Sorted needed? │ YES ⚠️ — MANDATORY prerequisite           │
-└────────────────┴────────────────────────────────────────────┘
+MATHEMATICAL PROOF:
+  After k steps, remaining elements = n / 2^k
+  Search ends when remaining elements = 1:
+    n / 2^k = 1
+    2^k = n
+    k = log₂n
+
+  Therefore: Binary Search ≈ log₂n steps = O(log n)
+
+CONCRETE NUMBERS:
+  n = 8:         log₂8    =  3 steps
+  n = 1024:      log₂1024 = 10 steps
+  n = 1,000,000: log₂10⁶ ≈ 20 steps
+  n = 1 BILLION: log₂10⁹ ≈ 30 steps  ← Only 30 comparisons!
 ```
 
-### Why O(log n)? — Visual Proof
-
+### Complexity Summary for Binary Search:
 ```
-Each step HALVES the search space:
-
-n elements → n/2 → n/4 → n/8 → ... → 1
-
-After k steps: n / 2^k = 1
-Therefore: k = log₂(n)
-
-For n = 1000: log₂(1000) ≈ 10 steps  (vs 1000 for linear!)
-For n = 1,000,000: log₂(10⁶) ≈ 20 steps (vs 1,000,000 for linear!)
+Best Case:    O(1)     — target is exactly at mid in first step
+Average Case: O(log n)
+Worst Case:   O(log n) — target at extreme end or not present
+Space (iterative): O(1) — only low, high, mid variables
+Space (recursive): O(log n) — recursion stack depth
 ```
 
-### 🔥 PYQ TRAPS on Binary Search
+### 🚨 PYQ TRAP #2: Binary Search on Unsorted Array
+> Binary Search **CANNOT** be applied to unsorted arrays.
+> If array is unsorted → either sort first (O(n log n)) then search O(log n),
+> OR use Linear Search directly O(n).
+> For a ONE-TIME search on unsorted data: Linear Search is BETTER (no sorting needed)!
+> For MULTIPLE searches: Sort once then use Binary Search repeatedly.
+
+---
+
+## 🔷 SECTION 4: LINEAR vs BINARY SEARCH — Master Comparison
 
 ```
-TRAP 1: "Binary search is O(1)" → WRONG. O(log n) worst case.
-TRAP 2: "Binary search works on any array" → WRONG. Needs SORTED.
-TRAP 3: "Recursive binary search uses O(1) space" → WRONG. O(log n) stack.
-TRAP 4: "Binary search beats hashing" → WRONG. Hash Table: O(1) avg.
-CORRECT: Binary search = O(log n), Hash Table = O(1) average for search.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Feature            | Linear Search    | Binary Search
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Input requirement  | Unsorted/Sorted  | MUST BE SORTED
+Best Case          | O(1)             | O(1)
+Average Case       | O(n)             | O(log n)
+Worst Case         | O(n)             | O(log n)
+Space              | O(1)             | O(1) iter / O(log n) recur
+Data Structure     | Array or LL      | Array only (random access)
+Implementation     | Very simple      | Moderate
+Suitable for       | Small/unsorted   | Large sorted datasets
+One-time search    | Preferred        | Sort first = overhead
+Repeated search    | Less efficient   | Highly efficient after sorting
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Growth Comparison:
+```
+n elements:        Linear Search    Binary Search
+n =         10:    10 comparisons   4 comparisons
+n =        100:   100 comparisons   7 comparisons
+n =      1,000: 1,000 comparisons  10 comparisons
+n =  1,000,000: 1,000,000 compare  20 comparisons
+n = 1,000,000,000: 1 BILLION       30 comparisons
+
+THE GAP IS ENORMOUS for large n — this is the power of O(log n)!
 ```
 
 ---
 
-## 📖 CS SECTION 4: JUMP SEARCH — EXAM BONUS TOPIC
+## 🔷 SECTION 5: HASHING — Direct Access Data Structure
 
-### 💡 Core Idea
-> **"Jump ahead by √n steps. Once you overshoot the target, do Linear Search backwards in that block."**
+### Concept — The Book Index Analogy:
 
-```
-Array (sorted): [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
-n = 12, √n ≈ 3 (block size = 3)
-Target: 55
-
-JUMP PHASE:
-  Check arr[0] = 0   → 0 < 55 → jump
-  Check arr[3] = 2   → 2 < 55 → jump
-  Check arr[6] = 8   → 8 < 55 → jump
-  Check arr[9] = 34  → 34 < 55 → jump
-  Check arr[12] → OUT OF BOUNDS → stop jumping
-
-LINEAR SEARCH PHASE:
-  Search from arr[9] to arr[11]:
-  arr[9]=34, arr[10]=55 → FOUND at index 10! ✓
-```
-
-### Complexity: O(√n)
-```
-√n < n but √n > log n
-O(log n) < O(√n) < O(n)
-Binary Search faster, but Jump Search works for some specific cases
-(e.g., when backward step is expensive)
-```
-
----
-
-## 📖 CS SECTION 5: HASHING — THE O(1) SEARCH TECHNIQUE
-
-### 💡 Core Idea
-> **"Use a HASH FUNCTION to convert a key into an array INDEX. Store the value at that index. To search, compute the same index and retrieve directly — no scanning needed!"**
-
-This gives **O(1) average** for Insert, Delete, Search — the FASTEST possible!
-
-### How Hashing Works
+Imagine a **textbook with 1000 pages** and an **index at the back**:
+- To find "Binary Tree" → check index → "Page 247" → go directly!
+- No need to scan 1000 pages one by one.
+- The INDEX is the **hash table**, and the page number is the **hash value**.
 
 ```
-HASH FUNCTION: h(key) = key % TABLE_SIZE
-
-Example: TABLE_SIZE = 7, Insert keys: [50, 700, 76, 85, 92, 73, 101]
-
-h(50)  = 50  % 7 = 1    → Store 50  at index 1
-h(700) = 700 % 7 = 0    → Store 700 at index 0
-h(76)  = 76  % 7 = 6    → Store 76  at index 6
-h(85)  = 85  % 7 = 1    → COLLISION! (1 already has 50)
-h(92)  = 92  % 7 = 1    → COLLISION! (1 already has 50)
-h(73)  = 73  % 7 = 3    → Store 73  at index 3
-h(101) = 101 % 7 = 3    → COLLISION! (3 already has 73)
-
-HASH TABLE (before collision handling):
-  Index: [0]    [1]    [2]   [3]    [4]   [5]   [6]
-  Value: [700]  [50]   [ ]  [73]    [ ]   [ ]   [76]
-                 ↑ where do 85 and 92 go? → COLLISION PROBLEM!
+Another Analogy — Locker System at a Gym:
+  100 lockers numbered 0-99
+  Each member has a locker number based on their ID:
+    locker = memberID % 100   ← This is the HASH FUNCTION!
+  
+  Member 1257 → 1257 % 100 = 57 → goes to Locker 57 DIRECTLY
+  Member 1357 → 1357 % 100 = 57 → SAME locker! → COLLISION!
+  
+  The locker system = HASH TABLE
+  The rule "ID % 100" = HASH FUNCTION
+  Two members wanting same locker = COLLISION
 ```
 
----
-
-## 📖 CS SECTION 6: HASH COLLISION — RESOLUTION TECHNIQUES
-
-A **collision** occurs when two different keys hash to the SAME index.
-
-### Technique 1: CHAINING (Separate Chaining)
+### Formal Definitions:
 
 ```
-IDEA: Each index holds a LINKED LIST of all keys that hash to it.
+HASH FUNCTION h(key):
+  A function that converts a KEY (data) into an INDEX (address)
+  in the hash table.
+  
+  Properties of a good hash function:
+    1. DETERMINISTIC: Same key always gives same hash value
+    2. UNIFORM: Distributes keys evenly across the table
+    3. FAST: O(1) to compute
+    4. MINIMIZE COLLISIONS: Rarely assigns same index to different keys
 
-TABLE_SIZE = 7, Keys: [50, 700, 76, 85, 92, 73, 101]
+HASH TABLE:
+  An array of SIZE m (called table size or bucket count)
+  Each slot/position is called a BUCKET
+  Elements stored at arr[h(key)]
 
-Index  |  Chain
-──────────────────────────────
-  0    →  [700] → NULL
-  1    →  [50] → [85] → [92] → NULL   (all hash to 1)
-  2    →  NULL
-  3    →  [73] → [101] → NULL         (both hash to 3)
-  4    →  NULL
-  5    →  NULL
-  6    →  [76] → NULL
-
-ADVANTAGE:
-  ✓ Simple to implement
-  ✓ Table never "full" (can always add to chain)
-  ✓ Deletion is easy
-
-DISADVANTAGE:
-  ✗ Extra memory for pointers in linked list
-  ✗ Cache performance poor (linked list not contiguous)
-  ✗ Worst case O(n) if all keys hash to same slot
+SIMPLE EXAMPLE:
+  Table size: m = 10 (buckets 0-9)
+  Hash function: h(key) = key % m = key % 10
+  
+  Insert keys: 15, 25, 37, 48, 72, 56
+  
+  h(15) = 15 % 10 = 5 → Store at bucket 5
+  h(25) = 25 % 10 = 5 → COLLISION with 15! (both map to 5)
+  h(37) = 37 % 10 = 7 → Store at bucket 7
+  h(48) = 48 % 10 = 8 → Store at bucket 8
+  h(72) = 72 % 10 = 2 → Store at bucket 2
+  h(56) = 56 % 10 = 6 → Store at bucket 6
+  
+  Hash Table:
+  Index: [0]  [1]  [2]  [3]  [4]  [5]  [6]  [7]  [8]  [9]
+  Value:  —    —   72    —    —   15   56   37   48    —
+                        (15 and 25 both want slot 5 → COLLISION!)
 ```
 
-### Technique 2: OPEN ADDRESSING (Linear Probing)
-
+### Hash Table Operations — Average Case O(1):
 ```
-IDEA: All elements stored IN the hash table itself.
-      If index is occupied, probe NEXT available slot.
+SEARCH (lookup):
+  1. Compute h(key)
+  2. Go to table[h(key)]
+  3. Check if element is there → O(1) average
 
-LINEAR PROBING: h(key, i) = (h(key) + i) % TABLE_SIZE
-                where i = probe number (0, 1, 2, ...)
+INSERT:
+  1. Compute h(key)
+  2. Go to table[h(key)]
+  3. Insert element → O(1) average
 
-TABLE_SIZE = 7, Insert: 50, 700, 76, 85, 92, 73, 101
+DELETE:
+  1. Compute h(key)
+  2. Go to table[h(key)]
+  3. Remove element → O(1) average
 
-h(50)  = 1 → Index 1 empty → store 50
-h(700) = 0 → Index 0 empty → store 700
-h(76)  = 6 → Index 6 empty → store 76
-h(85)  = 1 → Index 1 OCCUPIED (50)
-           → try (1+1)%7 = 2 → empty → store 85
-h(92)  = 1 → Index 1 OCCUPIED (50)
-           → try 2 → OCCUPIED (85)
-           → try 3 → empty → store 92
-h(73)  = 3 → Index 3 OCCUPIED (92)
-           → try 4 → empty → store 73
-h(101) = 3 → Index 3 OCCUPIED (92)
-           → try 4 OCCUPIED (73) → try 5 → store 101
-
-FINAL TABLE:
-  [0]=700, [1]=50, [2]=85, [3]=92, [4]=73, [5]=101, [6]=76
-
-PROBLEM: PRIMARY CLUSTERING — keys pile up in clusters
-         causing longer probe sequences
-```
-
-### Technique 3: QUADRATIC PROBING
-
-```
-h(key, i) = (h(key) + i²) % TABLE_SIZE
-
-Probes: +1², +2², +3², ... = +1, +4, +9, ...
-ADVANTAGE: Reduces primary clustering
-DISADVANTAGE: Secondary clustering still possible
-```
-
-### Technique 4: DOUBLE HASHING
-
-```
-h(key, i) = (h1(key) + i × h2(key)) % TABLE_SIZE
-
-Uses SECOND hash function as step size
-ADVANTAGE: Best uniform distribution, no clustering
-DISADVANTAGE: More computation needed
+WHY AVERAGE O(1)? Because hash function gives DIRECT address!
+No searching — just compute and go.
 ```
 
 ---
 
-## 📖 CS SECTION 7: LOAD FACTOR — THE CRITICAL METRIC
+## 🔷 SECTION 6: COLLISION — The Problem and Solutions
+
+### What is a Collision?
 
 ```
-LOAD FACTOR (α) = n / m
+COLLISION: When two DIFFERENT keys produce the SAME hash value.
 
-Where:
-  n = number of elements stored in hash table
-  m = total number of slots (table size)
+Example: h(key) = key % 10
+  h(15) = 5
+  h(25) = 5  ← COLLISION! 15 and 25 both hash to 5
 
-Examples:
-  n=7, m=10 → α = 0.7 (70% full)
-  n=10, m=10 → α = 1.0 (100% full — resize needed!)
-  n=15, m=10 → α = 1.5 (ONLY possible with chaining)
+COLLISION IS INEVITABLE (Pigeonhole Principle):
+  If you have MORE KEYS than BUCKETS, at least one bucket must hold multiple keys.
+  Even with a perfect hash function, collisions occur in practice.
 
-SIGNIFICANCE OF LOAD FACTOR:
-  α close to 0: Table mostly empty, waste of memory
-  α = 0.7:      Generally IDEAL for open addressing
-  α > 0.7:      Performance DEGRADES significantly
-  α > 1.0:      Only possible with CHAINING
-                (impossible with open addressing)
+Example: 100 possible keys, 10 buckets
+  At minimum, some buckets must hold ~10 keys each.
+  By Birthday Paradox: with just 23 elements in 365 buckets,
+  probability of collision exceeds 50%!
+```
+
+### Collision Resolution Method 1: CHAINING (Separate Chaining)
+
+```
+IDEA: Each bucket holds a LINKED LIST of all keys that hash to that bucket.
+      When collision occurs — just ADD to the linked list at that bucket.
+
+VISUAL EXAMPLE:
+  Hash function: h(key) = key % 7
+  Insert: 50, 700, 76, 85, 92, 73, 101
+
+  h(50)  = 50  % 7 = 1
+  h(700) = 700 % 7 = 0
+  h(76)  = 76  % 7 = 6
+  h(85)  = 85  % 7 = 1  ← COLLISION with 50! (both → bucket 1)
+  h(92)  = 92  % 7 = 1  ← COLLISION again! (→ bucket 1)
+  h(73)  = 73  % 7 = 3
+  h(101) = 101 % 7 = 3  ← COLLISION with 73! (both → bucket 3)
+
+  Hash Table with Chaining:
+  
+  Bucket 0: [700] → NULL
+  Bucket 1: [50] → [85] → [92] → NULL   ← Chain of 3 elements!
+  Bucket 2: NULL
+  Bucket 3: [73] → [101] → NULL         ← Chain of 2 elements!
+  Bucket 4: NULL
+  Bucket 5: NULL
+  Bucket 6: [76] → NULL
+
+SEARCH in chaining:
+  Find 92:
+    Compute h(92) = 1 → go to Bucket 1
+    Scan linked list: 50 ≠ 92, 85 ≠ 92, 92 = 92 → FOUND!
+    
+PROPERTIES of Chaining:
+  → Easy to implement
+  → No limit on number of elements (linked list grows)
+  → Search/Insert: O(1) average; O(n) worst case (all in one chain)
+  → Uses extra memory for pointers
+  → Java's HashMap uses chaining (with balanced BST/TreeMap for long chains)
+```
+
+### Collision Resolution Method 2: OPEN ADDRESSING
+
+```
+IDEA: All elements stored IN THE HASH TABLE ITSELF — no external lists.
+      On collision, PROBE for another empty slot in the table.
+      Three probing strategies:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2a. LINEAR PROBING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+If slot h(key) is occupied, try:
+  h(key)+1, h(key)+2, h(key)+3, ...
+  (wrap around using modulo)
+
+Probe sequence: (h(key) + i) % m   for i = 0, 1, 2, ...
+
+EXAMPLE: Table size = 10, h(key) = key % 10
+  Insert 15 → h(15)=5 → Slot 5 empty → store at 5
+  Insert 25 → h(25)=5 → Slot 5 OCCUPIED → try slot 6 → empty → store at 6
+  Insert 35 → h(35)=5 → Slot 5 OCCUPIED → try 6 (occupied) → try 7 → store at 7
+
+  Table: [_, _, _, _, _, 15, 25, 35, _, _]
+                          0   1   2
+                          (Linear probing filled slots 5,6,7)
+
+PROBLEM: PRIMARY CLUSTERING
+  Consecutive occupied slots grow into long "clusters"
+  Performance degrades as table fills up
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2b. QUADRATIC PROBING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Probe sequence: (h(key) + i²) % m   for i = 0, 1, 2, ...
+Try: h+0, h+1, h+4, h+9, h+16, ...
+
+Reduces primary clustering but may miss some slots (SECONDARY CLUSTERING)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2c. DOUBLE HASHING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Probe sequence: (h(key) + i × h₂(key)) % m
+Uses a SECOND hash function h₂(key) to compute step size
+
+Best among open addressing — minimizes both primary and secondary clustering
+Most complex to implement
+
+COMPARISON of Open Addressing Methods:
+  Linear Probing:    Simple; primary clustering problem
+  Quadratic Probing: Reduces clustering; may cycle back
+  Double Hashing:    Best; eliminates clustering; complex
+```
+
+---
+
+## 🔷 SECTION 7: LOAD FACTOR
+
+```
+LOAD FACTOR (λ or α) = n / m
+
+where:
+  n = number of elements currently in hash table
+  m = size (capacity) of hash table
+
+INTERPRETATION:
+  λ = 0.1 → Table is 10% full → very few collisions → fast
+  λ = 0.5 → Table is 50% full → moderate collisions → acceptable
+  λ = 0.75 → Table is 75% full → Java HashMap rehashes at this point!
+  λ = 1.0 → Table is 100% full → many collisions → slow
+  λ > 1.0 → Only possible with chaining (not open addressing)
+
+PERFORMANCE vs LOAD FACTOR:
+  Low λ  → Few collisions → O(1) average search (ideal)
+  High λ → Many collisions → approaches O(n) in worst case
 
 REHASHING:
-  When α exceeds threshold → create LARGER table
-  (typically 2× size) → re-insert all elements
-  Cost of rehashing: O(n)
+  When load factor exceeds threshold, create a NEW LARGER TABLE
+  and RE-INSERT all elements using new hash function.
+  Java HashMap: rehashes when λ > 0.75 (default)
+  New size: typically doubled (next prime above 2m)
+
+🎯 PYQ FACT: Java HashMap's default load factor is 0.75 (75%).
+             This balances time and space efficiency.
 ```
 
 ---
 
-## 📖 CS SECTION 8: HASH TABLE COMPLEXITY ANALYSIS
+## 🔷 SECTION 8: Hashing — Complexity Summary
 
 ```
-┌───────────────────┬────────────────┬────────────────────────┐
-│ Operation         │ Average Case   │ Worst Case             │
-├───────────────────┼────────────────┼────────────────────────┤
-│ Search            │ O(1)           │ O(n) — all at one slot │
-│ Insert            │ O(1)           │ O(n)                   │
-│ Delete            │ O(1)           │ O(n)                   │
-├───────────────────┼────────────────┼────────────────────────┤
-│ Space             │ O(n)           │ O(n)                   │
-└───────────────────┴────────────────┴────────────────────────┘
-
-WHY O(1) AVERAGE?
-  With a good hash function and low load factor (α ≤ 0.7),
-  expected number of collisions per operation is bounded by
-  a constant → O(1) expected time.
-
-WHY O(n) WORST CASE?
-  If ALL n keys hash to the same slot → chaining becomes
-  a list of n elements → O(n) to search through.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Operation      | Average Case | Worst Case | Condition
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Insert         | O(1)         | O(n)       | All keys in 1 bucket
+Search         | O(1)         | O(n)       | Chain traversal
+Delete         | O(1)         | O(n)       | Chain traversal
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Worst case only when ALL keys hash to SAME bucket!
+With good hash function → average case O(1) is reliable.
 ```
 
 ---
 
-## 📖 CS SECTION 9: HASH FUNCTIONS — PROPERTIES & EXAMPLES
-
-### Properties of a Good Hash Function
+## 🔷 SECTION 9: MASTER COMPARISON — Search Techniques
 
 ```
-IDEAL HASH FUNCTION:
-  1. DETERMINISTIC: Same key ALWAYS produces same hash
-  2. UNIFORM: Keys spread evenly across all indices
-  3. FAST: O(1) to compute
-  4. MINIMIZE COLLISIONS: Different keys → different indices
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Property          | Linear    | Binary    | Hash Table
+                  | Search    | Search    | (Hashing)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Best Case         | O(1)      | O(1)      | O(1)
+Average Case      | O(n)      | O(log n)  | O(1)  ← BEST!
+Worst Case        | O(n)      | O(log n)  | O(n)  (bad hash fn)
+Space             | O(1)      | O(1)      | O(n)  (for table)
+Sorted Required?  | NO        | YES       | NO
+Implementation    | Simple    | Moderate  | Complex
+Ordered output?   | YES       | YES       | NO (unordered)
+Works on LL?      | YES       | NO        | N/A
+Use for range     | YES       | YES       | NO
+  queries?
+Best for          | Small/    | Large     | Frequent
+                  | unsorted  | sorted    | lookups
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-COMMON HASH FUNCTIONS:
-  1. Division Method:    h(k) = k % m     ← most common
-  2. Multiplication:    h(k) = ⌊m(kA mod 1)⌋  (A ≈ 0.618)
-  3. Mid-Square:        Square the key, take middle digits
-  4. Folding:           Split key into parts, add them
-
-CHOOSING TABLE SIZE:
-  → Use PRIME numbers as table size
-  → Reduces clustering and improves uniformity
-  → Example: Use 7, 11, 13, 17, 19 (not 8, 10, 12)
+WHEN TO USE WHICH:
+→ Need simple search, small data, or single search → LINEAR SEARCH
+→ Data is sorted, large, multiple searches needed → BINARY SEARCH
+→ Need FASTEST possible search/insert/delete, order unimportant → HASHING
+→ Need to maintain sorted order → LINEAR or BINARY (not hashing)
+→ Range queries (find all elements between x and y) → BINARY SEARCH (not hashing)
 ```
 
----
+### 🚨 PYQ TRAP #3: Hashing vs Binary Search for "Fastest Search"
+> For average case: **Hash Table wins** with O(1) vs Binary Search's O(log n).
+> But Binary Search is **predictable** (always O(log n)), while Hash Table's worst case is O(n).
+> Hashing cannot support RANGE QUERIES or SORTED ORDER output.
+> **Exam answer: Hash Table provides the BEST average case O(1) for search.**
 
-## 📖 CS SECTION 10: SEARCH ALGORITHMS — MASTER COMPARISON TABLE
-
+### 🚨 PYQ TRAP #4: Applications of Each
 ```
-┌──────────────────┬──────────┬──────────┬──────────┬────────┬──────────────┐
-│ Algorithm        │ Best     │ Average  │ Worst    │ Space  │ Sorted?      │
-├──────────────────┼──────────┼──────────┼──────────┼────────┼──────────────┤
-│ Linear Search    │ O(1)     │ O(n)     │ O(n)     │ O(1)   │ NOT needed   │
-│ Binary Search    │ O(1)     │ O(log n) │ O(log n) │ O(1)   │ REQUIRED ⚠️ │
-│ Jump Search      │ O(1)     │ O(√n)    │ O(√n)    │ O(1)   │ REQUIRED ⚠️ │
-│ Hash Table       │ O(1)     │ O(1)     │ O(n)     │ O(n)   │ NOT needed   │
-├──────────────────┼──────────┼──────────┼──────────┼────────┼──────────────┤
-│ BST Search       │ O(log n) │ O(log n) │ O(n)     │ O(1)   │ BST property │
-│ Balanced BST     │ O(log n) │ O(log n) │ O(log n) │ O(1)   │ AVL/RB Tree  │
-└──────────────────┴──────────┴──────────┴──────────┴────────┴──────────────┘
+Use HASHING for:
+  → Database indexing (exact key lookups)
+  → Spell checkers (word exists? yes/no)
+  → Password storage (storing hashed passwords)
+  → Caching (key-value stores like memcached)
+  → Symbol tables in compilers
 
-EXAM RULE: "For FREQUENT insert/delete/search → Hash Table (O(1) avg)"
-           "For SORTED data with one search → Binary Search (O(log n))"
-           "For unsorted, small data → Linear Search"
-```
+Use BINARY SEARCH for:
+  → Sorted telephone directory lookup
+  → Finding insertion position in sorted array
+  → Searching in sorted database with range queries
+  → Version control (git bisect uses binary search!)
 
----
-
-## 📖 CS SECTION 11: REAL-WORLD APPLICATIONS OF HASHING
-
-```
-WHERE HASHING IS USED IN REAL LIFE:
-
-  1. DATABASES:
-     → Index lookup (find row by primary key in O(1))
-     → HashMap in Java, dict in Python
-
-  2. PASSWORD STORAGE:
-     → Passwords stored as HASHES (MD5, SHA-256)
-     → Never store plain passwords!
-     → Even server can't reverse the hash
-
-  3. COMPILERS:
-     → Symbol tables (variable name → memory address)
-
-  4. CACHES:
-     → CPU cache, DNS cache use hash tables
-
-  5. BLOCKCHAIN:
-     → SHA-256 hash for block verification
-
-  6. DUPLICATE DETECTION:
-     → Check if element already seen in O(1)
-
-  7. SPELL CHECKERS:
-     → Dictionary stored as hash set for O(1) lookup
-
-  8. PYTHON dict / JAVA HashMap:
-     → Underlying implementation = Hash Table
+Use LINEAR SEARCH for:
+  → Tiny arrays (n < 10)
+  → Unsorted data with single search
+  → Linked list traversal
 ```
 
 ---
 
-## 📖 CS SECTION 12: TRICKY PYQ PATTERNS
+# PART 2: GENERAL STUDIES
+## 🏆 Nobel Prize Winners — Comprehensive Guide
 
-### Pattern 1: Hash Table vs Binary Search
+---
+
+## 🔷 SECTION 1: What is the Nobel Prize?
+
 ```
-Q: "Which data structure gives O(1) average for search, insert, delete?"
-A: Hash Table (not Binary Search Tree, not array)
+NOBEL PRIZE:
+  Founded by: Alfred Nobel (Swedish inventor of dynamite)
+  Year established: 1895 (in Alfred Nobel's will)
+  First awarded: 1901
+  Administered by: Nobel Foundation, Stockholm, Sweden
 
-Q: "Binary Search is better than Hash Table for searching" → FALSE
-   Hash Table: O(1) avg | Binary Search: O(log n)
-   Exception: Hash Table has O(n) WORST case; BST O(log n) guaranteed
+ALFRED NOBEL:
+  Born: 21 October 1833, Stockholm, Sweden
+  Died: 10 December 1896
+  Invention: Dynamite (1867) — made him wealthy
+  Concern: That his invention caused destruction, he created the Nobel Peace Prize
+  Nobel Prizes are awarded annually on 10 December — his death anniversary
+
+SIX PRIZE CATEGORIES:
+  1. Physics
+  2. Chemistry
+  3. Physiology or Medicine
+  4. Literature
+  5. Peace
+  6. Economic Sciences (full name: Sveriges Riksbank Prize — NOT in original will!)
+  
+🎯 PYQ: Economics Prize was added in 1969 — it is NOT one of the original 5 prizes!
+         The original 5 prizes began in 1901. Economics was added much later.
+
+PRIZE DETAILS:
+  Awarded by:   Royal Swedish Academy of Sciences (Physics, Chemistry, Economics)
+                Nobel Assembly at Karolinska Institute (Medicine)
+                Swedish Academy (Literature)
+                Norwegian Nobel Committee (Peace — given in OSLO, Norway, not Stockholm!)
+  Prize amount: ~10 million Swedish Kronor (~₹8 crore) per prize
+  Maximum recipients per prize: 3 people in one year
 ```
 
-### Pattern 2: Collision Resolution Order
+### 🎯 PYQ FACT: Peace Prize is given in OSLO (Norway), all others in STOCKHOLM (Sweden).
+
+---
+
+## 🔷 SECTION 2: Indian Nobel Prize Winners
+
+### COMPLETE LIST — ALL INDIAN NOBEL LAUREATES:
+
 ```
-Q: "Which collision resolution technique keeps all data IN the table?"
-A: Open Addressing (Linear Probing, Quadratic Probing, Double Hashing)
-   Chaining uses EXTERNAL linked lists (outside the table)
-```
-
-### Pattern 3: Load Factor Threshold
-```
-Q: "When should a hash table be rehashed?"
-A: When load factor exceeds ~0.7 for open addressing
-   For chaining, higher load factors (>1) are tolerable
-```
-
-### Pattern 4: Linear Probing vs Chaining
-```
-Q: "Which collision resolution has PRIMARY CLUSTERING problem?"
-A: Linear Probing
-
-Q: "Which allows load factor > 1?"
-A: Chaining (not open addressing)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Name                | Year | Field        | Reason/Key Work
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Rabindranath Tagore | 1913 | Literature   | Gitanjali (Song Offerings)
+C.V. Raman          | 1930 | Physics      | Raman Effect (light scattering)
+Har Gobind Khorana  | 1968 | Medicine     | Genetic code interpretation
+Mother Teresa       | 1979 | Peace        | Work with the poor in Calcutta
+Subramanyan         |      |              |
+  Chandrasekhar     | 1983 | Physics      | Chandrasekhar Limit (white dwarfs)
+Amartya Sen         | 1998 | Economics    | Welfare economics, social choice
+V.S. Naipaul        | 2001 | Literature   | Born in Trinidad, Indian heritage
+Venkatraman         |      |              |
+  Ramakrishnan      | 2009 | Chemistry    | Structure of ribosome
+Kailash Satyarthi   | 2014 | Peace        | Children's rights, anti-child labour
+Abhijit Banerjee    | 2019 | Economics    | Experimental approach to poverty
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ---
 
-# ═══════════════════════════════════════════════════════
-# 📝 CS PRACTICE QUESTIONS — 25 MCQs
-## (Answers consolidated at END — attempt ALL before checking!)
-# ═══════════════════════════════════════════════════════
+## 🔷 SECTION 3: Detailed Profiles — Top Exam Priority
 
 ---
 
-**Q1.** What is the WORST-CASE time complexity of Binary Search?
+### 🌟 1. RABINDRANATH TAGORE (1913) — LITERATURE
 
-(A) O(1)
-(B) O(n)
-(C) O(log n)
-(D) More than one of the above
-(E) None of the above
+```
+Full Name:    Rabindranath Tagore
+Born:         7 May 1861, Calcutta (now Kolkata), Bengal
+Died:         7 August 1941
+Nobel Year:   1913
+Field:        Literature
 
----
+WHY AWARDED:
+  For "Gitanjali" (Song Offerings) — a collection of deeply spiritual poems
+  Translated into English by Tagore himself
+  Swedish Academy praised his "profoundly sensitive, fresh and beautiful verse"
 
-**Q2.** Binary Search can only be applied when the input array is:
+KEY FACTS:
+  ✅ FIRST ASIAN to win the Nobel Prize (in any field)
+  ✅ FIRST NON-EUROPEAN Nobel Prize winner in Literature
+  ✅ Indian National Anthem: "Jana Gana Mana" — written by Tagore
+  ✅ Bangladesh National Anthem: "Amar Sonar Bangla" — also written by Tagore!
+     (One person wrote national anthems of TWO countries!)
+  ✅ Called "Gurudev" — revered as a poet, philosopher, painter, musician
+  ✅ Founded Visva-Bharati University at Shantiniketan, West Bengal (1921)
+  ✅ Knighthood: Received from British (1915) but RETURNED it in 1919
+     (Protest against Jallianwala Bagh Massacre)
 
-(A) Stored in a linked list
-(B) Unsorted
-(C) Sorted
-(D) More than one of the above
-(E) None of the above
+MAJOR WORKS:
+  Gitanjali (1910 Bengali; 1912 English translation)
+  Gora, Ghare-Baire (The Home and the World)
+  Rabindra Sangeet — unique genre of ~2,230 songs
 
----
-
-**Q3.** What is the AVERAGE-CASE time complexity of searching in a Hash Table with a good hash function?
-
-(A) O(log n)
-(B) O(n)
-(C) O(1)
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q4.** In Linear Search, the WORST CASE occurs when:
-
-(A) The target is at the first position
-(B) The target is at the middle position
-(C) The target is at the last position OR not present in the array
-(D) More than one of the above
-(E) None of the above
+🎯 PYQ MOST TESTED: First Asian Nobel laureate; wrote national anthems
+                    of BOTH India AND Bangladesh.
+```
 
 ---
 
-**Q5.** Which searching algorithm does NOT require the input array to be sorted?
+### 🌟 2. C.V. RAMAN (1930) — PHYSICS
 
-(A) Binary Search
-(B) Jump Search
-(C) Linear Search
-(D) More than one of the above
-(E) None of the above
+```
+Full Name:    Sir Chandrasekhara Venkata Raman
+Born:         7 November 1888, Tiruchirapalli, Tamil Nadu
+Died:         21 November 1970
+Nobel Year:   1930
+Field:        Physics
 
----
+WHY AWARDED:
+  Discovery of the RAMAN EFFECT (1928)
+  When light passes through a transparent material,
+  some scattered light changes its WAVELENGTH (frequency).
+  This change in wavelength provides a "fingerprint" of the material.
 
-**Q6.** A HASH COLLISION occurs when:
+THE RAMAN EFFECT EXPLAINED:
+  Normal scattering: light bounces off molecule, wavelength unchanged (Rayleigh scattering)
+  Raman scattering: light interacts with molecule's vibrations → wavelength CHANGES
+  
+  This discovery was made using simple equipment — a mercury lamp and sunlight!
+  Announced on: 28 February 1928
 
-(A) Two identical keys are inserted
-(B) The hash table becomes full
-(C) Two DIFFERENT keys produce the SAME hash value (index)
-(D) More than one of the above
-(E) None of the above
+KEY FACTS:
+  ✅ FIRST INDIAN to win Nobel Prize in Science
+  ✅ FIRST ASIAN to win Nobel in Physics
+  ✅ 28 February celebrated as NATIONAL SCIENCE DAY (day of Raman Effect discovery)
+  ✅ Founded: Raman Research Institute, Bengaluru (1948)
+  ✅ Also founder of Indian Academy of Sciences (1934)
+  ✅ Awarded Bharat Ratna in 1954
+  ✅ Application: Raman spectroscopy used in medicine, chemistry, forensics today
 
----
+RAMAN EFFECT APPLICATIONS:
+  → Identifying chemical compounds
+  → Cancer detection (non-invasive)
+  → Authentication of precious gems
+  → Food quality testing
+  → Pharmaceutical drug analysis
 
-**Q7.** In the CHAINING method of collision resolution, each hash table slot contains:
-
-(A) A fixed-size array of overflow elements
-(B) A linked list of all elements hashing to that slot
-(C) Only one element and rejects further inserts
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q8.** What is the LOAD FACTOR of a hash table?
-
-(A) The ratio of successful searches to total searches
-(B) The ratio of number of elements (n) to table size (m): α = n/m
-(C) The number of collisions per insertion
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q9.** Binary Search on an array of n=1024 elements requires at most how many comparisons in the worst case?
-
-(A) 512
-(B) 1024
-(C) 10
-(D) More than one of the above
-(E) None of the above
+🎯 PYQ MOST TESTED: National Science Day = 28 February (Raman Effect discovery)
+                    First Indian to win Nobel in Science.
+```
 
 ---
 
-**Q10.** Which collision resolution technique stores ALL elements INSIDE the hash table (no external data structures)?
+### 🌟 3. MOTHER TERESA (1979) — PEACE
 
-(A) Chaining (Separate Chaining)
-(B) Open Addressing (Linear Probing / Quadratic Probing)
-(C) Bucket Hashing
-(D) More than one of the above
-(E) None of the above
+```
+Full Name:    Anjezë Gonxhe Bojaxhiu (Mother Teresa)
+Born:         26 August 1910, Skopje (now North Macedonia — then Ottoman Empire)
+Died:         5 September 1997, Calcutta
+Nobel Year:   1979
+Field:        Peace
 
----
+WHY AWARDED:
+  "For work undertaken in the struggle to overcome poverty and distress,
+  which also constitutes a threat to peace."
+  Decades of service to the poorest of the poor in Calcutta.
 
-**Q11.** Which of the following is TRUE about Linear Probing as a collision resolution technique?
+KEY FACTS:
+  ✅ Born in Skopje (now capital of North Macedonia) to Albanian parents
+     → NOT born in India! But spent most of her life in India
+  ✅ Came to India: 1929 (to teach at Loreto School, Calcutta)
+  ✅ Founded: Missionaries of Charity (1950) in Calcutta
+  ✅ The organisation runs orphanages, hospices, schools across 130+ countries
+  ✅ Indian citizenship: Became Indian citizen
+  ✅ Bharat Ratna: Awarded in 1980 (the year after Nobel)
+  ✅ Beatified: 2003 (by Pope John Paul II)
+  ✅ Canonised (made Saint): 4 September 2016 (by Pope Francis)
+     → Now officially "Saint Teresa of Calcutta"
+  ✅ NOTABLE: She REFUSED to invite media to visit her operations for first 20 years!
 
-(A) It eliminates all collisions completely
-(B) It uses linked lists to handle overflow
-(C) It suffers from PRIMARY CLUSTERING (consecutive occupied slots)
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q12.** For the hash function h(k) = k % 7 with table size 7, what is the hash value of key = 50?
-
-(A) 5
-(B) 7
-(C) 1
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q13.** The RECURSIVE version of Binary Search has which SPACE COMPLEXITY?
-
-(A) O(1) — same as iterative version
-(B) O(n) — stores all elements in stack
-(C) O(log n) — recursion call stack depth
-(D) More than one of the above
-(E) None of the above
+🎯 PYQ TRAP: Mother Teresa was born in Skopje (North Macedonia), NOT India!
+             She was Albanian by ethnicity, Indian by citizenship.
+             Missionaries of Charity founded in 1950.
+```
 
 ---
 
-**Q14.** Which data structure is MOST EFFICIENT for frequent INSERT, DELETE, and SEARCH operations (all three)?
+### 🌟 4. AMARTYA SEN (1998) — ECONOMICS
 
-(A) Sorted Array
-(B) Binary Search Tree (unbalanced)
-(C) Hash Table
-(D) More than one of the above
-(E) None of the above
+```
+Full Name:    Amartya Kumar Sen
+Born:         3 November 1933, Santiniketan, West Bengal
+Nobel Year:   1998
+Field:        Economic Sciences
+
+WHY AWARDED:
+  "For his contributions to welfare economics"
+  Specifically: Arrow's impossibility theorem extension,
+                Theory of social choice and collective welfare,
+                Famine analysis, Human Development Index (HDI)
+
+KEY CONTRIBUTIONS:
+  ✅ FAMINE ANALYSIS: Showed that famines are NOT caused by food shortage
+     but by DISTRIBUTION FAILURES (people lack entitlement/access to food)
+     Classic work: "Poverty and Famines" (1981)
+     Used Bengal Famine 1943 as case study: food was available, but poor couldn't afford it!
+  
+  ✅ HDI (Human Development Index):
+     Contributed to creation of UNDP's HDI (along with Mahbub ul Haq)
+     HDI measures: GDP per capita + Education + Life expectancy
+     (Goes beyond pure economic growth to measure human well-being)
+  
+  ✅ CAPABILITY APPROACH:
+     Development = freedom to lead lives people value
+     Poverty = deprivation of basic capabilities, not just income
+  
+  ✅ GENDER INEQUALITY research: "Missing Women" theory
+     Showed systematic discrimination causes fewer women in Asia than expected
+
+HONOURS:
+  Bharat Ratna (1999 — year after Nobel)
+  Lamont University Professor at Harvard University
+  Former Master, Trinity College, Cambridge
+  President: International Economic Association
+
+🎯 PYQ TESTED: Famine theory (distribution not shortage), HDI, Welfare Economics
+               "Poverty and Famines" is his most cited work.
+```
 
 ---
 
-**Q15.** Jump Search has a time complexity of:
+### 🌟 5. HAR GOBIND KHORANA (1968) — MEDICINE
 
-(A) O(n)
-(B) O(log n)
-(C) O(√n)
-(D) More than one of the above
-(E) None of the above
+```
+Full Name:    Har Gobind Khorana
+Born:         9 January 1922, Raipur (now in Pakistan — British India)
+Died:         9 November 2011
+Nobel Year:   1968
+Field:        Physiology or Medicine (shared with Robert Holley and Marshall Nirenberg)
 
----
+WHY AWARDED:
+  For interpretation of the GENETIC CODE and its function in protein synthesis
+  Showed how the sequence of nucleotides in DNA determines the amino acid
+  sequence in proteins (the code of life!)
+  
+KEY FACTS:
+  ✅ Born in Raipur, Punjab (now in Pakistan)
+  ✅ Became American citizen — worked at University of Wisconsin, then MIT
+  ✅ First person to chemically synthesise an oligonucleotide
+  ✅ Pioneered work on DNA and RNA structure
+  ✅ Shared Nobel with Holley and Nirenberg
 
-**Q16.** In Binary Search, the middle index is calculated as mid = (low + high) / 2. For low=3 and high=9, what is mid?
-
-(A) 5
-(B) 6
-(C) 4
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q17.** DOUBLE HASHING is a collision resolution technique where:
-
-(A) The table size is doubled on every collision
-(B) A second hash function determines the probe step size
-(C) Two hash tables are used simultaneously
-(D) More than one of the above
-(E) None of the above
+🎯 PYQ: Khorana won for MEDICINE (not Chemistry), for genetic code work.
+```
 
 ---
 
-**Q18.** What is the WORST-CASE time complexity of searching in a Hash Table?
+### 🌟 6. SUBRAHMANYAN CHANDRASEKHAR (1983) — PHYSICS
 
+```
+Full Name:    Subrahmanyan Chandrasekhar (Chandra)
+Born:         19 October 1910, Lahore (British India)
+Died:         21 August 1995
+Nobel Year:   1983
+Field:        Physics (shared with William Fowler)
+
+WHY AWARDED:
+  For theoretical studies of the physical processes important to stellar structure
+  and evolution — specifically the CHANDRASEKHAR LIMIT.
+
+CHANDRASEKHAR LIMIT:
+  Maximum mass a WHITE DWARF star can have = 1.4 solar masses
+  If a star's remnant exceeds this → it collapses into a NEUTRON STAR or BLACK HOLE
+  
+  Chandra calculated this at AGE 19 on a ship voyage to England (1930)!
+  Initially rejected by Sir Arthur Eddington → later proven correct.
+  Today, the limit is fundamental to understanding stellar evolution and supernovae.
+
+KEY FACTS:
+  ✅ Born in Lahore, now Pakistan
+  ✅ Nephew of C.V. Raman (both Indian Nobel laureates!)
+  ✅ NASA's Chandra X-ray Observatory named in his honour
+  ✅ Worked at University of Chicago from 1937 until death
+
+🎯 PYQ: Chandrasekhar Limit = 1.4 solar masses; nephew of C.V. Raman.
+```
+
+---
+
+### 🌟 7. V.S. NAIPAUL (2001) — LITERATURE
+
+```
+Full Name:    Sir Vidiadhar Surajprasad Naipaul
+Born:         17 August 1932, Chaguanas, Trinidad
+Died:         11 August 2018
+Nobel Year:   2001
+Field:        Literature
+
+WHY AWARDED:
+  "For having united perceptive narrative and incorruptible scrutiny in
+  works that compel us to see the presence of suppressed histories."
+
+KEY FACTS:
+  Born in TRINIDAD (not India) — of Indian descent (his grandfather emigrated from UP)
+  British citizen
+  Major works: A House for Mr. Biswas, A Bend in the River, India: A Wounded Civilisation
+
+🎯 PYQ: Naipaul is of Indian origin but NOT an Indian citizen — born in Trinidad.
+```
+
+---
+
+### 🌟 8. VENKATRAMAN RAMAKRISHNAN (2009) — CHEMISTRY
+
+```
+Full Name:    Venkatraman "Venki" Ramakrishnan
+Born:         1952, Chidambaram, Tamil Nadu
+Nobel Year:   2009
+Field:        Chemistry (shared with Thomas Steitz and Ada Yonath)
+
+WHY AWARDED:
+  For studies of the STRUCTURE AND FUNCTION OF THE RIBOSOME
+  (Ribosomes are the cell's protein factories — decode RNA to make proteins)
+  Used X-ray crystallography to map ribosome at atomic detail.
+
+KEY FACTS:
+  ✅ Born in Tamil Nadu but works in UK (MRC Laboratory of Molecular Biology, Cambridge)
+  ✅ British and American citizen
+  ✅ President of the Royal Society (2015-2020)
+  ✅ Knighted in 2012 (Sir Venki Ramakrishnan)
+
+🎯 PYQ: Ramakrishnan won Nobel in CHEMISTRY (not Medicine), for ribosome structure.
+```
+
+---
+
+### 🌟 9. KAILASH SATYARTHI (2014) — PEACE
+
+```
+Full Name:    Kailash Satyarthi
+Born:         11 January 1954, Vidisha, Madhya Pradesh
+Nobel Year:   2014
+Field:        Peace (shared with Malala Yousafzai from Pakistan)
+
+WHY AWARDED:
+  For their struggle against the suppression of children and young people
+  and for the right of all children to education.
+
+KEY FACTS:
+  ✅ BACHPAN BACHAO ANDOLAN (BBA): Movement he founded in 1980
+     ("Save Childhood Movement" — rescues children from bonded labour)
+  ✅ Has freed over 85,000 children from exploitation and trafficking
+  ✅ RUGMARK (now GoodWeave): Label certifying carpets made without child labour
+  ✅ Received Nobel jointly with Malala Yousafzai (youngest-ever Nobel laureate)
+  ✅ First Indian RESIDENT to receive Nobel Prize since Mother Teresa (1979)
+     (Others like Amartya Sen, Khorana, Chandrasekhar were based abroad)
+
+NOTABLE: The 2014 Nobel Peace Prize was shared between an INDIAN (Satyarthi)
+         and a PAKISTANI (Malala Yousafzai) — a powerful symbolic gesture.
+
+🎯 PYQ: Bachpan Bachao Andolan; shared Nobel with Malala Yousafzai.
+```
+
+---
+
+### 🌟 10. ABHIJIT BANERJEE (2019) — ECONOMICS
+
+```
+Full Name:    Abhijit Vinayak Banerjee
+Born:         21 February 1961, Mumbai (raised in Calcutta)
+Nobel Year:   2019
+Field:        Economic Sciences (shared with Esther Duflo and Michael Kremer)
+
+WHY AWARDED:
+  "For their experimental approach to alleviating global poverty"
+  Used RANDOMISED CONTROL TRIALS (RCTs) — like medical trials — to test
+  what actually works in fighting poverty.
+
+KEY FACTS:
+  ✅ Married to Esther Duflo (they shared the Nobel together!)
+     Esther Duflo = only second woman to win Nobel in Economics
+  ✅ Professor at MIT (Massachusetts Institute of Technology)
+  ✅ Co-founded J-PAL (Abdul Latif Jameel Poverty Action Lab) at MIT
+  ✅ Book: "Poor Economics" (with Esther Duflo) — explains their approach
+  ✅ American citizen (of Indian origin)
+
+FAMOUS WORK:
+  Used RCTs in villages of India and Africa to test:
+  → Do free textbooks improve learning? (often no — teacher quality matters more!)
+  → Do deworming tablets improve school attendance? (yes, significantly)
+  → What's the best way to distribute aid?
+
+🎯 PYQ: Experimental approach to poverty (RCTs); co-recipient = wife Esther Duflo;
+         Founded J-PAL at MIT.
+```
+
+---
+
+## 🔷 SECTION 4: Recent Nobel Prize Winners (2020-2024) — Brief Reference
+
+```
+YEAR | FIELD     | WINNER(S)                            | REASON
+2020 | Peace     | World Food Programme (WFP)           | Efforts to combat hunger
+2020 | Literature| Louise Glück (USA)                   | Poetry
+2021 | Peace     | Maria Ressa + Dmitry Muratov         | Freedom of press
+2021 | Economics | Card, Angrist, Imbens                | Empirical labour economics
+2022 | Peace     | Memorial (Russia), Ukraine orgs +    | Civil society, human rights
+                   Ales Bialiatski (Belarus)
+2022 | Physics   | Aspect, Clauser, Zeilinger           | Quantum entanglement
+2023 | Medicine  | Katalin Karikó + Drew Weissman       | mRNA vaccine development (COVID!)
+2023 | Literature| Jon Fosse (Norway)                   | Plays and prose
+2023 | Economics | Claudia Goldin (USA)                 | Women's labour market outcomes
+2024 | Physics   | Hopfield + Hinton                    | Artificial Neural Networks (AI!)
+2024 | Chemistry | Baker, Hassabis, Jumper (DeepMind)  | Protein structure prediction (AlphaFold!)
+2024 | Peace     | Nihon Hidankyo (Japan)               | Atomic bomb survivors' group
+2024 | Economics | Acemoglu, Johnson, Robinson          | Institutions and prosperity
+
+🎯 PYQ 2024 HIGHLIGHT: Nobel Physics 2024 for AI/Neural Networks (Hinton = "Godfather of AI")
+                        Nobel Chemistry 2024 for protein structure (AlphaFold by Google DeepMind)
+```
+
+---
+
+## 🔷 SECTION 5: Nobel Prize — Quick Reference by Fields
+
+```
+PHYSICS NOTABLE:
+  Albert Einstein (1921): Photoelectric effect
+  Marie Curie (1903): Radioactivity (also Chemistry 1911)
+  C.V. Raman (1930): Raman Effect
+  Chandrasekhar (1983): Chandrasekhar Limit
+
+CHEMISTRY NOTABLE:
+  Ramakrishnan (2009): Ribosome structure
+
+MEDICINE NOTABLE:
+  Har Gobind Khorana (1968): Genetic code
+
+LITERATURE NOTABLE:
+  Tagore (1913): Gitanjali
+  V.S. Naipaul (2001): Narrative works
+
+PEACE NOTABLE:
+  Mother Teresa (1979): Work with poor
+  Kailash Satyarthi (2014): Child rights
+
+ECONOMICS NOTABLE:
+  Amartya Sen (1998): Welfare economics
+  Abhijit Banerjee (2019): Poverty experiments
+```
+
+### Memory Trick — Indian Nobel Winners Timeline:
+```
+"Tagore Really Handled Medicine Carefully And Said Values Reach Beyond Acceptance"
+
+T = Tagore (1913) — Literature
+R = Raman (1930) — Physics
+H = Har Gobind Khorana (1968) — Medicine
+M = Mother Teresa (1979) — Peace
+C = Chandrasekhar (1983) — Physics
+A = Amartya Sen (1998) — Economics
+S = Satyarthi Kailash (wait — V.S.) Naipaul (2001) — Literature
+V = Venkatraman Ramakrishnan (2009) — Chemistry
+R = (note: repeated V = now use "Reach") Kailash Satyarthi (2014) — Peace
+B = Banerjee Abhijit (2019) — Economics
+A = (completion)
+```
+
+**Simpler trick — Just remember YEARS: 1913, 1930, 1968, 1979, 1983, 1998, 2001, 2009, 2014, 2019**
+
+---
+
+# PART 3: PRACTICE QUESTIONS
+
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: Linear Search, Binary Search, Hashing, Collision Resolution
+
+---
+
+**Q1.** What is the WORST CASE time complexity of Linear Search?
 (A) O(1)
 (B) O(log n)
 (C) O(n)
@@ -732,860 +1115,620 @@ A: Chaining (not open addressing)
 
 ---
 
-**Q19.** For which of the following data sizes would Linear Search and Binary Search perform MOST SIMILARLY?
-
-(A) n = 1,000,000
-(B) n = 10,000
-(C) n = 5 (very small array)
+**Q2.** Binary Search can ONLY be applied when:
+(A) The array contains only integers
+(B) The array is sorted (ascending or descending)
+(C) The array has no duplicate elements
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q20.** Which of the following searching techniques has time complexity O(log n) in AVERAGE case?
-
-(A) Linear Search
-(B) Jump Search
-(C) Binary Search
+**Q3.** For Binary Search on a sorted array of 1024 elements, the MAXIMUM number of comparisons needed is:
+(A) 1024
+(B) 512
+(C) 10
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q21.** REHASHING in hash tables means:
-
-(A) Changing the hash function completely
-(B) Creating a larger table and re-inserting all elements
-(C) Deleting all elements and restarting
+**Q4.** What is the formula for finding the MIDDLE index in Binary Search?
+(A) mid = (low × high) / 2
+(B) mid = (low + high) / 2
+(C) mid = high - low
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q22.** In Open Addressing, the LOAD FACTOR can EXCEED 1.0.
-
-(A) TRUE — open addressing can exceed load factor 1.0
-(B) FALSE — load factor > 1 is impossible in open addressing
-(C) Only possible with prime table sizes
+**Q5.** In Binary Search, if `arr[mid] < target`, the next step is:
+(A) Search the LEFT half: high = mid - 1
+(B) Search the RIGHT half: low = mid + 1
+(C) Search entire array again
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q23.** Binary Search is preferred over Linear Search when:
-
-(A) Array is unsorted and insertion is frequent
-(B) Array is sorted and repeated searches are performed on large data
-(C) Only one element needs to be found in an unsorted array
+**Q6.** What is the BEST CASE time complexity of Binary Search?
+(A) O(log n)
+(B) O(n)
+(C) O(1)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q24.** Which property makes a good hash function?
-
-(A) It should map all keys to the same index (for easy lookup)
-(B) It should be slow to compute to increase security
-(C) It should distribute keys uniformly across the hash table
+**Q7.** A hash function h(key) = key % 10 is applied to keys 23, 33, 43, 53. How many COLLISIONS occur?
+(A) 0 (no collisions)
+(B) 2 collisions (3 keys in same bucket)
+(C) 3 collisions (all four keys hash to same bucket — 4 keys, 3 "extra" = 3 collisions)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q25.** TRICKY PYQ: You have a SORTED array and need to search for a value 1 million times. Which is the BEST approach?
-
-(A) Linear Search 1 million times — O(n) per search
-(B) Binary Search 1 million times — O(log n) per search
-(C) Build a Hash Table first, then search — O(1) per search after O(n) build
+**Q8.** What is the AVERAGE CASE time complexity of searching in a HASH TABLE with a good hash function?
+(A) O(n)
+(B) O(log n)
+(C) O(1)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-# ═══════════════════════════════════════════════════════
-# 🌍 PART B: GENERAL STUDIES
-## NOBEL PRIZE WINNERS + NATIONAL & INTERNATIONAL AWARDS
-# ═══════════════════════════════════════════════════════
+**Q9.** In CHAINING collision resolution, what data structure is typically used at each bucket?
+(A) Stack
+(B) Binary Search Tree
+(C) Linked List
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📖 GS SECTION 1: NOBEL PRIZE — COMPLETE OVERVIEW
-
-### What is Nobel Prize?
-
-```
-NOBEL PRIZE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Founded by: Alfred Nobel (Swedish chemist/inventor of dynamite)
-Will signed: November 27, 1895
-First awarded: 1901
-Administered by: Nobel Foundation, Stockholm, Sweden
-
-6 CATEGORIES:
-  1. Physics
-  2. Chemistry
-  3. Physiology or Medicine
-  4. Literature
-  5. Peace
-  6. Economic Sciences (added 1969 — NOT in original Nobel's will)
-     Full name: Sveriges Riksbank Prize in Economic Sciences
-               in Memory of Alfred Nobel
-
-AWARDING BODIES:
-  Physics:      Royal Swedish Academy of Sciences
-  Chemistry:    Royal Swedish Academy of Sciences
-  Medicine:     Karolinska Institute, Stockholm
-  Literature:   Swedish Academy
-  Peace:        Norwegian Nobel Committee (OSLO — different city!)
-  Economics:    Royal Swedish Academy of Sciences
-
-NOTE: Peace Prize is awarded in OSLO, Norway (NOT Stockholm)
-      All others are in Stockholm, Sweden
-```
+**Q10.** LOAD FACTOR of a hash table is defined as:
+(A) Table size / Number of elements (m / n)
+(B) Number of elements / Table size (n / m)
+(C) Number of collisions / Table size
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📖 GS SECTION 2: INDIANS WHO WON NOBEL PRIZE
-
-```
-INDIANS / INDIAN-ORIGIN NOBEL LAUREATES:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-1. RABINDRANATH TAGORE (1913)
-   Category: Literature
-   First ASIAN to win Nobel Prize
-   Work: "Gitanjali" (Song Offerings)
-   Note: Also composed national anthems of India AND Bangladesh
-
-2. C.V. RAMAN (1930)
-   Category: Physics
-   Discovery: Raman Effect (scattering of light)
-   First ASIAN to win Nobel Prize in SCIENCE
-   Anniversary: Feb 28 = National Science Day (India)
-
-3. HARGOBIND KHORANA (1968)
-   Category: Physiology/Medicine
-   Nationality: Indian-born, US citizen
-   Work: Genetic code interpretation
-
-4. MOTHER TERESA (1979)
-   Category: Peace
-   Nationality: Albanian-born, worked in India (India citizen)
-   Work: Charity work in Kolkata (Missionaries of Charity)
-
-5. AMARTYA SEN (1998)
-   Category: Economic Sciences
-   Work: Welfare economics, poverty, famine theory
-   "Development as Freedom" — famous book
-
-6. V.S. NAIPAUL (2001)
-   Category: Literature
-   Nationality: Trinidad-born, Indian-origin
-   Work: "A House for Mr Biswas"
-
-7. SUBRAHMANYAN CHANDRASEKHAR (posthumous fame)
-   Category: Physics (1983)
-   Indian-born, US citizen
-   Discovery: Chandrasekhar Limit (stellar evolution)
-   NASA's Chandra X-ray Observatory named after him
-
-8. ABHIJIT BANERJEE (2019)
-   Category: Economic Sciences
-   Nationality: Indian-born; Bengali from West Bengal
-   Work: Experimental approach to alleviating global poverty
-   Co-winner: Esther Duflo (wife), Michael Kremer
-   NOTE: Most recent Indian-origin Nobel winner
-```
+**Q11.** The WORST CASE time complexity of hash table search occurs when:
+(A) The table is completely empty
+(B) All keys hash to the SAME bucket (one long chain)
+(C) The load factor is 0
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📖 GS SECTION 3: RECENT NOBEL PRIZES (2023 & 2024)
-
-### Nobel Prize 2023
-
-```
-PHYSICS 2023:
-  Pierre Agostini, Ferenc Krausz, Anne L'Huillier
-  For: Attosecond pulses of light (studying electron motion)
-
-CHEMISTRY 2023:
-  Moungi Bawendi, Louis Brus, Alexei Ekimov
-  For: Discovery of quantum dots (used in LED displays, medical imaging)
-
-MEDICINE 2023:
-  Katalin Karikó & Drew Weissman
-  For: mRNA modifications enabling COVID-19 vaccines (Pfizer-BioNTech, Moderna)
-
-LITERATURE 2023:
-  Jon Fosse (Norway)
-
-PEACE 2023:
-  Narges Mohammadi (Iran)
-  For: Fight against oppression of women in Iran
-  (received prize from prison!)
-
-ECONOMICS 2023:
-  Claudia Goldin (USA, Harvard)
-  For: Women's labour market outcomes and gender pay gap research
-  First woman to win solo Economics Nobel
-```
-
-### Nobel Prize 2024
-
-```
-PHYSICS 2024:
-  John Hopfield & Geoffrey Hinton
-  For: Foundational discoveries enabling machine learning (neural networks)
-  NOTE: Geoffrey Hinton = "Godfather of AI"
-
-CHEMISTRY 2024:
-  David Baker, Demis Hassabis, John Jumper
-  For: Computational protein design (AlphaFold AI — predicting protein structure)
-  NOTE: Demis Hassabis = CEO of Google DeepMind
-
-MEDICINE 2024:
-  Victor Ambros & Gary Ruvkun
-  For: Discovery of microRNA (gene regulation)
-
-LITERATURE 2024:
-  Han Kang (South Korea)
-  First South Korean and first Asian woman to win Literature Nobel
-
-PEACE 2024:
-  Nihon Hidankyo (Japan)
-  Atomic bomb survivors' organisation from Hiroshima & Nagasaki
-
-ECONOMICS 2024:
-  Daron Acemoglu, Simon Johnson, James A. Robinson
-  For: Studies on institutions and prosperity (Why Nations Fail concept)
-```
+**Q12.** Which collision resolution technique can suffer from PRIMARY CLUSTERING?
+(A) Chaining
+(B) Double Hashing
+(C) Linear Probing
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📖 GS SECTION 4: BHARAT RATNA — INDIA'S HIGHEST CIVILIAN AWARD
-
-```
-BHARAT RATNA:
-━━━━━━━━━━━━━
-Established: 1954
-Highest civilian honour in India
-Given for: Exceptional service to nation in any field
-Awarded by: President of India
-Max per year: 3 (but not mandatory to give each year)
-NOT necessarily an Indian citizen (can be foreign)
-
-SHAPE: Pipal leaf with sun + state emblem
-
-RECENT RECIPIENTS:
-  2024: Lal Krishna Advani (BJP leader)
-        Karpoori Thakur (posthumous) — Bihar's former CM!
-        M.S. Swaminathan (posthumous) — Father of Green Revolution
-        Chaudhary Charan Singh (posthumous)
-        P.V. Narasimha Rao (posthumous)
-
-NOTABLE RECIPIENTS (Historical):
-  → C. Rajagopalachari (1954) — first recipient
-  → S. Radhakrishnan (1954) — philosopher, President
-  → C.V. Raman (1954) — Nobel laureate
-  → Jawaharlal Nehru (1955)
-  → Indira Gandhi (1971)
-  → Mother Teresa (1980)
-  → M.G. Ramachandran (MGR) (1988) — film actor/politician
-  → Dr. B.R. Ambedkar (1990, posthumous)
-  → Nelson Mandela (1990) — foreign national
-  → Atal Bihari Vajpayee (2015)
-  → Madan Mohan Malaviya (2015, posthumous)
-
-BIHAR CONNECTION: Karpoori Thakur (Jan Nayak) — Bihar's
-  beloved CM who championed OBC reservations, received
-  Bharat Ratna in 2024 (posthumous).
-```
+**Q13.** In LINEAR PROBING, if h(key) = 5 and slots 5, 6, 7 are occupied, the next probe is:
+(A) Slot 4 (go backward)
+(B) Slot 8 (continue forward)
+(C) Slot 10 (jump by 5)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📖 GS SECTION 5: PADMA AWARDS
-
-```
-PADMA AWARDS (Three Categories):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-PADMA VIBHUSHAN (2nd highest civilian award)
-  → Exceptional and distinguished service
-  → One step below Bharat Ratna
-
-PADMA BHUSHAN (3rd highest civilian award)
-  → Distinguished service of high order
-
-PADMA SHRI (4th highest civilian award)
-  → Distinguished service in any field
-
-COMMON FACTS:
-  → Announced on Republic Day (January 26)
-  → Awarded in different fields: Art, Education, Literature,
-     Science, Sports, Social Work, etc.
-  → Any Indian citizen (or foreigner with India connection)
-  → NRIs, PIOs can also receive
-  → Posthumous awards allowed
-
-IMPORTANT: Padma awards can be declined.
-           M.S. Dhoni declined Padma Vibhushan initially.
-```
+**Q14.** Which searching method is MOST EFFICIENT for a one-time search on an UNSORTED array of 10,000 elements?
+(A) Binary Search
+(B) Linear Search
+(C) Hash-based search
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📖 GS SECTION 6: GALLANTRY AWARDS (MILITARY)
-
-```
-MILITARY AWARDS (Wartime):
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-PARAM VIR CHAKRA (PVC) — HIGHEST MILITARY HONOUR
-  → "For most conspicuous bravery in presence of enemy"
-  → Only given in WAR conditions
-  → Total awarded: 21 (most posthumous)
-  → Design: Vajra (Indra's weapon), Hindu/Buddhist motif
-  → First recipient: Major Somnath Sharma (1947, posthumous)
-  → Most famous: Abdul Hamid (1965 war, single-handedly
-                 destroyed multiple Pakistani tanks)
-
-MAHA VIR CHAKRA (MVC) — 2nd highest wartime award
-
-VIR CHAKRA (VC) — 3rd highest wartime award
-
-PEACETIME GALLANTRY:
-  ASHOKA CHAKRA → Highest peacetime gallantry
-  KIRTI CHAKRA → 2nd highest peacetime
-  SHAURYA CHAKRA → 3rd highest peacetime
-
-MEMORY: Wartime = Param, Maha, Vir Chakra
-        Peacetime = Ashoka, Kirti, Shaurya Chakra
-```
+**Q15.** Binary Search on a sorted array of n=100 elements requires at most how many comparisons?
+(A) 7 (since log₂128 = 7)
+(B) 10
+(C) 50
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📖 GS SECTION 7: OTHER IMPORTANT AWARDS
-
-### Jnanpith Award
-```
-JNANPITH AWARD:
-  → India's HIGHEST LITERARY AWARD
-  → Given for outstanding contribution to INDIAN literature
-  → Given in one of the 22 Scheduled Languages
-  → Established: 1961, first given: 1965
-  → Award: ₹11 lakh + Vagdevi statuette
-  → NOT for English works (must be in Indian language)
-
-Notable recipients:
-  → Mahadevi Verma (Hindi)
-  → Ramdhari Singh Dinkar (Hindi) — Bihar's POET!
-  → Nirala (Hindi)
-  → Faiz Ahmed Faiz, Amrita Pritam, etc.
-```
-
-### Sahitya Akademi Award
-```
-SAHITYA AKADEMI:
-  → National Academy of Letters
-  → Founded: 1954
-  → Annual awards for 24 languages (22 scheduled + English + Rajasthani)
-  → For "most outstanding books of literary merit"
-```
-
-### Dada Saheb Phalke Award
-```
-DADA SAHEB PHALKE AWARD:
-  → Highest award in Indian CINEMA
-  → Given by Ministry of Information & Broadcasting
-  → Dadasaheb Phalke = Father of Indian Cinema
-  → Annual Filmfare-style but government award
-  → Recent: Waheeda Rehman (2023), Mithun Chakraborty (2024)
-```
+**Q16.** Which of the following CANNOT be efficiently implemented using a hash table?
+(A) Finding if a key exists (membership test)
+(B) Finding all elements in the range [x, y] (range query)
+(C) Counting occurrences of elements
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📖 GS SECTION 8: INTERNATIONAL AWARDS
-
-```
-OSCAR (Academy Award):
-  → Given by: Academy of Motion Picture Arts and Sciences (USA)
-  → India's international submissions: Films for Foreign Film category
-  → Indian wins:
-    Bhanu Athaiya — 1983 (Costume Design, Gandhi film)
-    AR Rahman — 2009 (Slumdog Millionaire: Original Score + Song)
-    Resul Pookutty — 2009 (Slumdog: Sound Mixing)
-    Guneet Monga — 2023 (The Elephant Whisperers — Documentary Short)
-    Kartiki Gonsalves — 2023 (The Elephant Whisperers)
-
-MAN BOOKER PRIZE:
-  → For best novel written in English, published in UK
-  → Indian winners:
-    Salman Rushdie — 1981 (Midnight's Children)
-    Arundhati Roy — 1997 (The God of Small Things)
-    Kiran Desai — 2006 (The Inheritance of Loss)
-    Aravind Adiga — 2008 (The White Tiger)
-
-GRAMMY AWARD:
-  → Music awards (USA), given by Recording Academy
-  → AR Rahman: No Grammy win but Oscar winner
-
-PULITZER PRIZE:
-  → For journalism, literature, music (USA)
-  → Gobind Behari Lal: First Indian-origin Pulitzer winner (1937)
-```
+**Q17.** The SPACE COMPLEXITY of a hash table with n elements and m buckets is:
+(A) O(1)
+(B) O(log n)
+(C) O(n + m) which simplifies to O(n) when m = O(n)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📖 GS SECTION 9: SPORTS AWARDS (INDIA)
-
-```
-KHEL RATNA (formerly Rajiv Gandhi Khel Ratna):
-  → India's HIGHEST SPORTS HONOUR
-  → Renamed to Major Dhyan Chand Khel Ratna in 2021
-  → First recipient: Viswanathan Anand (Chess, 1991-92)
-
-ARJUNA AWARD:
-  → For outstanding performance in sports (last 4 years)
-  → Given since 1961
-
-DRONACHARYA AWARD:
-  → For outstanding COACHES
-  → Given since 1985
-
-DHYAN CHAND AWARD:
-  → For lifetime contribution to sports
-  → Named after legendary hockey player Major Dhyan Chand
-  → Given since 2002
-
-RASHTRIYA KHEL PROTSAHAN PURASKAR:
-  → For corporates/NGOs promoting sports
-
-TENZING NORGAY NATIONAL ADVENTURE AWARD:
-  → For adventure sports achievement
-```
+**Q18.** Java's HashMap rehashes when the load factor exceeds:
+(A) 0.50 (50%)
+(B) 1.00 (100%)
+(C) 0.75 (75%)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📖 GS SECTION 10: BIHAR GK — AWARDS CONNECTION
-
-```
-BIHAR'S NOTABLE AWARD WINNERS:
-
-BHARAT RATNA:
-  → Karpoori Thakur (2024, posthumous) — Bihar's "Jan Nayak" CM
-  → Dr. Rajendra Prasad — first President of India (from Bihar)
-     Received Bharat Ratna 1962
-
-JNANPITH AWARD (Bihar connection):
-  → Ramdhari Singh Dinkar — "Rashmirathi", "Urvashi"
-     National Poet of India; from Begusarai, Bihar
-  → Phaniswarnath Renu — author of "Maila Aanchal" (Bihar's rural life)
-     Did NOT win Jnanpith but Padma Shri
-
-PARAM VIR CHAKRA (Bihar connection):
-  → Captain Manoj Kumar Pandey (1999, Kargil, posthumous)
-     From Sitapur, but honorary mention in Bihar Army tradition
-
-SCIENCE AWARDS:
-  → Aryabhata — ancient Bihar mathematician/astronomer
-     No modern Nobel but pioneered zero and algebra concepts
-
-SPORTS:
-  → Bihar has produced several Arjuna Award winners
-     in archery (Jharkhand was part of Bihar until 2000)
-```
+**Q19.** Binary Search has a RECURSIVE version and an ITERATIVE version. The SPACE complexity difference is:
+(A) Both O(1) — no difference
+(B) Iterative: O(1); Recursive: O(log n) due to call stack
+(C) Iterative: O(n); Recursive: O(1)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-# ═══════════════════════════════════════════════════════
-# 📝 GS PRACTICE QUESTIONS — 25 MCQs
-## (Answers consolidated at END — attempt ALL before checking!)
-# ═══════════════════════════════════════════════════════
+**Q20.** Which searching technique does NOT require the data to be sorted?
+(A) Binary Search (iterative)
+(B) Binary Search (recursive)
+(C) Linear Search
+(D) More than one of the above (Both A and B require sorted data, so only C doesn't)
+(E) None of the above
+
+---
+
+**Q21.** In DOUBLE HASHING (open addressing), the probe sequence uses:
+(A) A fixed step of 1 (linear increment)
+(B) A quadratic increment (i²)
+(C) A second hash function to compute the step size
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q22.** What is the MINIMUM number of comparisons needed to determine that a target is NOT PRESENT in a sorted array of 8 elements using Binary Search?
+(A) 8 (must check all)
+(B) 1 (can determine in one step)
+(C) 3 (log₂8 = 3, though may need 4)
+(D) More than one of the above (3 or 4 comparisons needed in worst case)
+(E) None of the above
+
+---
+
+**Q23.** The BIRTHDAY PARADOX in the context of hashing means:
+(A) Hash tables were invented on someone's birthday
+(B) Collisions are more likely than intuitively expected — even with few elements relative to table size
+(C) Hash functions must use prime numbers for good distribution
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q24.** Which property is ESSENTIAL for a hash function to be useful?
+(A) It must use prime numbers
+(B) The same key must ALWAYS produce the same hash value (deterministic)
+(C) It must never produce collisions
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q25.** For large datasets requiring FREQUENT insertions, deletions, and exact-key lookups (no range queries), which data structure provides the BEST AVERAGE CASE performance?
+(A) Sorted Array (Binary Search)
+(B) Unsorted Linked List
+(C) Hash Table
+(D) More than one of the above
+(E) None of the above
+
+---
+
+## 📝 GENERAL STUDIES — 25 MCQs
+### Topics: Nobel Prize Winners — Indian Laureates and General Facts
 
 ---
 
 **Q26.** The Nobel Prize was established based on the will of:
-
-(A) Alexander Graham Bell
-(B) Albert Einstein
-(C) Alfred Nobel (inventor of dynamite)
+(A) Albert Einstein
+(B) Alfred Nobel
+(C) Charles Darwin
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q27.** The Nobel Peace Prize is awarded in which city?
-
-(A) Stockholm, Sweden
-(B) Copenhagen, Denmark
-(C) Oslo, Norway
+**Q27.** Rabindranath Tagore won the Nobel Prize in Literature in which year?
+(A) 1901
+(B) 1913
+(C) 1930
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q28.** Who was the FIRST ASIAN to win the Nobel Prize?
-
-(A) C.V. Raman
-(B) Rabindranath Tagore
-(C) Amartya Sen
+**Q28.** Tagore won the Nobel Prize for which work?
+(A) Ghare-Baire (The Home and the World)
+(B) Gitanjali (Song Offerings)
+(C) Gora
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q29.** C.V. Raman won the Nobel Prize in Physics in 1930 for the discovery of:
-
-(A) Nuclear fission
-(B) Raman Effect (scattering of light)
-(C) Theory of relativity
+**Q29.** Rabindranath Tagore is UNIQUE because:
+(A) He was the first Nobel Prize winner ever
+(B) He wrote the national anthems of both India AND Bangladesh
+(C) He declined the Nobel Prize
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q30.** February 28 is celebrated as National Science Day in India to commemorate which event?
-
-(A) Launch of India's first satellite Aryabhata
-(B) C.V. Raman's announcement of the Raman Effect in 1928
-(C) Birth anniversary of Homi J. Bhabha
+**Q30.** C.V. Raman won the Nobel Prize in Physics in 1930 for:
+(A) Discovery of the neutron
+(B) Photoelectric effect
+(C) Raman Effect (scattering of light)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q31.** Amartya Sen won the Nobel Prize in Economic Sciences in 1998. His work was primarily on:
-
-(A) Game theory and Nash equilibrium
-(B) Welfare economics, poverty, famine, and social choice theory
-(C) Monetary policy and central banking
+**Q31.** India celebrates National Science Day on 28 February because:
+(A) It is the birthday of C.V. Raman
+(B) It is the day the Raman Effect was discovered (1928)
+(C) It is India's first satellite launch date
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q32.** The 2024 Nobel Prize in Physics was awarded for contributions to:
-
-(A) Discovery of quantum dots
-(B) Attosecond light pulses
-(C) Foundational discoveries enabling machine learning (neural networks)
+**Q32.** Mother Teresa was born in:
+(A) Calcutta, India
+(B) Dhaka, Bangladesh
+(C) Skopje (present-day North Macedonia)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q33.** India's HIGHEST CIVILIAN AWARD is:
-
-(A) Padma Vibhushan
-(B) Padma Shri
-(C) Bharat Ratna
+**Q33.** Mother Teresa founded which organisation in Calcutta?
+(A) Ramakrishna Mission
+(B) Missionaries of Charity
+(C) Salvation Army
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q34.** Bharat Ratna was conferred (posthumously) in 2024 to Bihar's former Chief Minister. Who was he?
-
-(A) Jagannath Mishra
-(B) Karpoori Thakur ("Jan Nayak")
-(C) Laloo Prasad Yadav
+**Q34.** The Nobel Peace Prize is awarded in which city (NOT Stockholm)?
+(A) Copenhagen, Denmark
+(B) Oslo, Norway
+(C) Helsinki, Finland
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q35.** The PARAM VIR CHAKRA is India's:
-
-(A) Highest civilian award
-(B) Highest peacetime gallantry award
-(C) Highest wartime military gallantry award
+**Q35.** Amartya Sen was awarded the Nobel Prize in Economics in 1998 primarily for his contributions to:
+(A) Monetary policy and inflation control
+(B) Welfare economics, social choice theory, and famine analysis
+(C) International trade and globalisation theory
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q36.** India's HIGHEST LITERARY AWARD is:
-
-(A) Sahitya Akademi Award
-(B) Jnanpith Award
-(C) Booker Prize
+**Q36.** According to Amartya Sen's famine research, what is the PRIMARY cause of famines?
+(A) Absolute shortage of food production
+(B) Natural disasters like floods or droughts
+(C) Failure of food distribution and entitlement (people unable to access food)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q37.** The Nobel Prize in Economic Sciences was NOT part of Alfred Nobel's original will. It was added later in which year?
-
-(A) 1945
-(B) 1969
-(C) 1985
+**Q37.** The Nobel Prize in Economics (Economic Sciences) was first awarded in:
+(A) 1901 (along with other Nobel Prizes)
+(B) 1969 (it was added later — NOT in Nobel's original will)
+(C) 1950
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q38.** Abhijit Banerjee (Indian-origin) won the Nobel Prize in Economic Sciences in 2019. He is affiliated with which university?
-
-(A) Harvard University, USA
-(B) Massachusetts Institute of Technology (MIT), USA
-(C) Oxford University, UK
+**Q38.** Subrahmanyan Chandrasekhar and C.V. Raman share which connection?
+(A) Both worked at the same university
+(B) Chandrasekhar is C.V. Raman's nephew
+(C) Both won Nobel Prize in the same year
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q39.** The "Dada Saheb Phalke Award" is India's highest award in which field?
-
-(A) Literature
-(B) Sports
-(C) Cinema
+**Q39.** The Chandrasekhar Limit (1.4 solar masses) is important because it determines:
+(A) The speed of light in dense matter
+(B) The maximum mass a white dwarf can have before collapsing into a neutron star or black hole
+(C) The minimum temperature for nuclear fusion
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q40.** The Nobel Prize in Medicine 2023 was awarded to Katalin Karikó and Drew Weissman for:
-
-(A) Discovery of CRISPR gene editing
-(B) mRNA modifications enabling COVID-19 vaccine development
-(C) Discovery of cancer immunotherapy
+**Q40.** Kailash Satyarthi won the 2014 Nobel Peace Prize. What was the name of his movement?
+(A) Narmada Bachao Andolan
+(B) Chipko Movement
+(C) Bachpan Bachao Andolan
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q41.** India's highest SPORTS honour (formerly Rajiv Gandhi Khel Ratna) was renamed in 2021 after which sports legend?
-
-(A) Sachin Tendulkar
-(B) Major Dhyan Chand (hockey)
-(C) P.T. Usha
+**Q41.** Who shared the 2014 Nobel Peace Prize with Kailash Satyarthi?
+(A) Wangari Maathai
+(B) Malala Yousafzai (from Pakistan)
+(C) Aung San Suu Kyi
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q42.** Who was the first recipient of the Rajiv Gandhi Khel Ratna Award (now Major Dhyan Chand Khel Ratna)?
-
-(A) Sachin Tendulkar
-(B) Prakash Padukone
-(C) Viswanathan Anand (Chess)
+**Q42.** Abhijit Banerjee won the 2019 Nobel Prize in Economics along with his wife. What is her name?
+(A) Esther Duflo
+(B) Carmen Reinhart
+(C) Claudia Goldin
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q43.** Ramdhari Singh Dinkar, the famous Hindi poet from Bihar who wrote "Urvashi" and "Rashmirathi," received which prestigious award?
-
-(A) Dada Saheb Phalke Award
-(B) Jnanpith Award
-(C) Bharat Ratna
+**Q43.** Har Gobind Khorana won the Nobel Prize in 1968 in which field?
+(A) Chemistry
+(B) Physics
+(C) Physiology or Medicine
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q44.** The Nobel Peace Prize 2023 was awarded to Narges Mohammadi from which country?
-
-(A) Afghanistan
-(B) Iraq
-(C) Iran
+**Q44.** Venkatraman Ramakrishnan won the 2009 Nobel Prize in Chemistry for studying:
+(A) DNA double helix structure
+(B) Structure and function of the ribosome
+(C) Synthesis of ATP in mitochondria
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q45.** Booker Prize winner Arundhati Roy (1997) wrote which novel that won her the prize?
+**Q45.** Which of the following Indian Nobel laureates was born OUTSIDE present-day India?
+(A) Rabindranath Tagore
+(B) Amartya Sen
+(C) Subrahmanyan Chandrasekhar (born in Lahore, now Pakistan)
+(D) More than one of the above (Chandrasekhar born in Lahore; Khorana born in Raipur, now Pakistan; Mother Teresa born in Skopje)
+(E) None of the above
 
-(A) Midnight's Children
-(B) The God of Small Things
-(C) The White Tiger
+---
+
+**Q46.** The Nobel Prize ceremony is held annually on which date?
+(A) 21 October (Alfred Nobel's birthday)
+(B) 10 December (Alfred Nobel's death anniversary)
+(C) 1 January (New Year's Day)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q46.** The 2024 Nobel Prize in Chemistry was related to which AI-powered technology?
-
-(A) Quantum computing and qubit design
-(B) Battery technology and lithium-ion
-(C) Protein structure prediction (AlphaFold)
+**Q47.** Rabindranath Tagore returned his knighthood (given by British) in protest against which event?
+(A) Partition of Bengal (1905)
+(B) Jallianwala Bagh Massacre (1919)
+(C) Simon Commission (1928)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q47.** Which Indian films won the Oscar (Academy Award) for India?
-
-(A) Lagaan (2002) — Best Foreign Film
-(B) The Elephant Whisperers (2023) — Best Documentary Short
-(C) RRR (2022) — Best Original Song (Naatu Naatu)
+**Q48.** The 2024 Nobel Prize in Physics was awarded for work related to:
+(A) Quantum entanglement experiments
+(B) Artificial Neural Networks and Machine Learning (AI foundations)
+(C) Gravitational wave detection
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q48.** The ASHOKA CHAKRA is India's highest award for gallantry in which context?
-
-(A) Wartime operations
-(B) Peacetime gallantry / devotion to duty
-(C) International peacekeeping missions
+**Q49.** J-PAL (Abdul Latif Jameel Poverty Action Lab), which uses randomised controlled trials to fight poverty, was co-founded by which Nobel laureate?
+(A) Amartya Sen
+(B) Kailash Satyarthi
+(C) Abhijit Banerjee
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q49.** AR Rahman won two Academy Awards (Oscars) in 2009 for which film?
-
-(A) Jai Ho
-(B) Rang De Basanti
-(C) Slumdog Millionaire
+**Q50.** Which statement is CORRECT about the Nobel Prize?
+(A) A Nobel Prize can be awarded to a maximum of 5 individuals in any field in one year
+(B) The Economics Nobel Prize is part of the original 5 prizes established by Alfred Nobel's will
+(C) The Nobel Peace Prize is awarded in Oslo, Norway — unlike other prizes given in Stockholm
 (D) More than one of the above
 (E) None of the above
 
 ---
+---
 
-**Q50.** BPSC SPECIAL — Bihar's Dr. Rajendra Prasad, India's first President, received Bharat Ratna in:
+# ANSWER KEY
 
-(A) 1954 (the first year it was given)
-(B) 1960
-(C) 1962
-(D) More than one of the above
-(E) None of the above
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
 
 ---
 
-# ═══════════════════════════════════════════════════════
-# 🔑 COMPLETE ANSWER KEY — DAY 32
-## ATTEMPT ALL QUESTIONS FIRST!
-# ═══════════════════════════════════════════════════════
+### CS Answers (Q1–Q25):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (C) | Linear Search worst = O(n) — target at end or not found |
+| 2 | (B) | Binary Search ONLY works on sorted arrays — fundamental precondition |
+| 3 | (C) | log₂1024 = 10 comparisons maximum |
+| 4 | (B) | mid = (low + high) / 2 — standard formula |
+| 5 | (B) | arr[mid] < target means target is in RIGHT half → low = mid + 1 |
+| 6 | (C) | Best case: target found at MIDDLE on first comparison → O(1) |
+| 7 | (C) | All four keys (23,33,43,53) → % 10 = 3, so all go to bucket 3. First is free, next 3 cause collisions → 3 collisions |
+| 8 | (C) | Hash table average case search = O(1) — direct address computation |
+| 9 | (C) | Each bucket in chaining holds a linked list of colliding elements |
+| 10 | (B) | Load factor = n/m (elements/buckets) — measures fullness |
+| 11 | (B) | Worst case: all keys in one bucket → linear scan of that chain → O(n) |
+| 12 | (C) | Linear Probing: consecutive occupied slots form clusters → primary clustering |
+| 13 | (B) | Linear Probing: try next slot = 8 (linear progression: 5,6,7 occupied → try 8) |
+| 14 | (B) | For UNSORTED + ONE-TIME search: Linear Search avoids sorting overhead |
+| 15 | (A) | log₂100 ≈ 6.6, so at most 7 comparisons (log₂128 = 7 is the ceiling) |
+| 16 | (B) | Hash tables cannot efficiently answer range queries [x,y] — no ordering |
+| 17 | (C) | Space = O(n+m); when m = O(n), simplifies to O(n) |
+| 18 | (C) | Java HashMap default load factor = 0.75; rehashes when exceeded |
+| 19 | (B) | Iterative: O(1) space; Recursive: O(log n) call stack |
+| 20 | (C) | Only Linear Search works on unsorted data — Binary Search needs sorted array |
+| 21 | (C) | Double Hashing uses second hash function h₂(key) as step size |
+| 22 | (D) | For n=8, log₂8=3 levels, but finding "not present" needs 3 or 4 comparisons |
+| 23 | (B) | Birthday Paradox: collisions happen much sooner than people expect |
+| 24 | (B) | Determinism is ESSENTIAL — same key must always give same hash value |
+| 25 | (C) | Hash Table: O(1) average for all three operations (insert, delete, search) |
 
 ---
 
-## ✅ CS ANSWERS (Q1–Q25)
+### GS Answers (Q26–Q50):
 
-| Q | Ans | Explanation |
-|---|-----|-------------|
-| **Q1** | **(C)** | Binary Search worst case = O(log n). Occurs when target is not present or at extreme end. NOT O(n) like linear search, NOT O(1) like hash table. |
-| **Q2** | **(C)** | Binary Search REQUIRES sorted array — this is its fundamental prerequisite. Without sorting, the halving logic breaks down completely. |
-| **Q3** | **(C)** | Hash Table average case = O(1) for search (also insert and delete). This assumes a good hash function and low load factor. |
-| **Q4** | **(C)** | Linear Search worst case: target is at LAST index (checks all n elements) OR target is NOT present (checks all n elements and fails). Both give O(n). |
-| **Q5** | **(C)** | Linear Search works on UNSORTED arrays. Binary Search and Jump Search REQUIRE sorted input. |
-| **Q6** | **(C)** | Hash collision = two DIFFERENT keys produce the SAME hash index. NOT identical keys (those are duplicates, a different issue). |
-| **Q7** | **(B)** | Chaining: each slot has a linked list. All keys that hash to the same index are stored in that slot's linked list. |
-| **Q8** | **(B)** | Load Factor α = n/m where n = elements stored, m = table size. It measures how "full" the table is. |
-| **Q9** | **(C)** | For n=1024: log₂(1024) = log₂(2¹⁰) = 10. Maximum 10 comparisons. Binary search is incredibly efficient for large n. |
-| **Q10** | **(B)** | Open Addressing stores ALL elements in the hash table array itself (no external structures). Chaining uses external linked lists. |
-| **Q11** | **(C)** | Linear Probing: when collision occurs, probe next consecutive slot. This creates PRIMARY CLUSTERING — long runs of occupied consecutive slots, degrading performance. |
-| **Q12** | **(C)** | h(50) = 50 % 7 = 7×7=49, 50-49=1. So 50%7 = 1. |
-| **Q13** | **(C)** | Recursive Binary Search: each recursive call adds to the call stack. Max recursion depth = log n (number of times we halve). So O(log n) space. |
-| **Q14** | **(C)** | Hash Table: Insert O(1), Delete O(1), Search O(1) average. Sorted array: Insert O(n). BST unbalanced: O(n) worst. Hash Table wins for all three operations combined. |
-| **Q15** | **(C)** | Jump Search time complexity = O(√n). It jumps in blocks of size √n. Slower than Binary Search O(log n) but faster than Linear O(n). |
-| **Q16** | **(B)** | mid = (low + high) / 2 = (3 + 9) / 2 = 12 / 2 = 6. Integer division: 6. |
-| **Q17** | **(B)** | Double Hashing: uses a SECOND hash function to determine the step size for probing. h(k,i) = (h1(k) + i×h2(k)) % m. Reduces clustering better than linear/quadratic. |
-| **Q18** | **(C)** | Hash Table WORST case = O(n). Happens when ALL n elements hash to the same slot (pathological hash function or adversarial input). The chain has all n elements → O(n) search. |
-| **Q19** | **(C)** | For n=5 (very small): Binary search does ≤ 3 comparisons; Linear does ≤ 5. Difference is trivial. For n=1,000,000 the difference is enormous (20 vs 1,000,000). |
-| **Q20** | **(C)** | Binary Search = O(log n) in average and worst case. Linear = O(n). Jump = O(√n). Binary Search is the O(log n) one. |
-| **Q21** | **(B)** | Rehashing: when load factor exceeds threshold, create a NEW larger table (usually 2× size), then RE-INSERT all existing elements using the new table's hash function. |
-| **Q22** | **(B)** | FALSE. In Open Addressing, load factor CANNOT exceed 1.0 because there is a fixed number of slots and each slot holds exactly one element. When all m slots are full, no more inserts possible. Only Chaining allows α > 1. |
-| **Q23** | **(B)** | Binary Search is preferred when: array is SORTED + searches are REPEATED on large data (O(log n) per search vs O(n) linear). Not beneficial for one-time search on small data. |
-| **Q24** | **(C)** | Good hash function distributes keys UNIFORMLY across all slots — minimizing collisions and maintaining O(1) average performance. Should be fast O(1) to compute. |
-| **Q25** | **(C)** | Best approach for 1 million searches: Build Hash Table first (O(n) one-time cost), then each of the 1 million searches is O(1). Total: O(n) + 1,000,000×O(1). Binary Search would be O(n log n) total (1M × log n). Hash Table wins for very frequent searches. |
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (B) | Alfred Nobel — Swedish inventor of dynamite; prize named after him |
+| 27 | (B) | Tagore won in 1913 — first Asian Nobel laureate |
+| 28 | (B) | Gitanjali (Song Offerings) — English translation of Bengali poetry collection |
+| 29 | (B) | Tagore wrote national anthems of BOTH India (Jana Gana Mana) and Bangladesh |
+| 30 | (C) | Raman Effect = inelastic scattering of light (wavelength change) |
+| 31 | (B) | 28 February 1928 = day Raman Effect was announced → National Science Day |
+| 32 | (C) | Born in Skopje (now capital of North Macedonia) to Albanian parents |
+| 33 | (B) | Missionaries of Charity — founded 1950 in Calcutta |
+| 34 | (B) | Nobel Peace Prize given in OSLO, Norway — all others in Stockholm, Sweden |
+| 35 | (B) | Welfare economics, social choice, and groundbreaking famine analysis |
+| 36 | (C) | Sen showed famines stem from distribution failures, not food shortages |
+| 37 | (B) | Economics Nobel started 1969 — NOT in Alfred Nobel's original 1895 will |
+| 38 | (B) | Chandrasekhar is C.V. Raman's nephew — both Indian physics Nobel laureates |
+| 39 | (B) | Above 1.4 solar masses → white dwarf collapses to neutron star/black hole |
+| 40 | (C) | Bachpan Bachao Andolan (Save Childhood Movement) — founded 1980 |
+| 41 | (B) | Malala Yousafzai (Pakistan) — youngest Nobel laureate ever |
+| 42 | (A) | Esther Duflo — French-American economist; husband-wife Nobel duo |
+| 43 | (C) | Khorana won Physiology or Medicine for genetic code interpretation |
+| 44 | (B) | Ribosome structure using X-ray crystallography |
+| 45 | (D) | Chandrasekhar (Lahore, now Pakistan), Khorana (Raipur, now Pakistan), Mother Teresa (Skopje, North Macedonia) — all three born outside present India |
+| 46 | (B) | 10 December — Alfred Nobel's death anniversary (died 1896) |
+| 47 | (B) | Jallianwala Bagh Massacre, April 1919 — Tagore returned knighthood in protest |
+| 48 | (B) | 2024 Nobel Physics: John Hopfield + Geoffrey Hinton for neural networks/AI |
+| 49 | (C) | Abhijit Banerjee co-founded J-PAL at MIT with Esther Duflo |
+| 50 | (C) | Peace Prize in Oslo is the KEY distinguishing fact (max 3 per prize, Economics not original) |
+
+---
+---
+
+# 🔁 DAY 32 — CRISP REVISION NOTES
+
+## ⚡ RAPID FIRE — Searching Algorithms & Hashing
+
+### Search Algorithm Complexity (Memorise All):
+```
+Algorithm      | Best   | Average  | Worst  | Precondition
+---------------|--------|----------|--------|-------------
+Linear Search  | O(1)   | O(n)     | O(n)   | None — works on unsorted
+Binary Search  | O(1)   | O(log n) | O(log n)| SORTED array required!
+Hash Search    | O(1)   | O(1)     | O(n)   | Hash table set up
+```
+
+### Binary Search — 5 Iron Rules:
+```
+Rule 1: Array MUST be sorted — ABSOLUTE REQUIREMENT
+Rule 2: Formula: mid = (low + high) / 2
+Rule 3: arr[mid] < target → LOW = mid + 1  (go RIGHT)
+Rule 4: arr[mid] > target → HIGH = mid - 1 (go LEFT)
+Rule 5: low > high → return -1 (not found)
+Max comparisons for n elements = ⌈log₂n⌉ + 1
+```
+
+### Hashing — Key One-Liners:
+```
+Hash function:    Converts key → index (address) in O(1)
+Collision:        Two keys → same hash value (inevitable!)
+Chaining:         Each bucket = linked list of colliding elements
+Linear Probing:   On collision, try next slot (primary clustering risk!)
+Double Hashing:   Second hash function determines step (best open addressing)
+Load Factor λ:    n/m = elements/buckets; Java HashMap rehashes at λ > 0.75
+Hash Table ops:   O(1) average for search, insert, delete
+Hash Table limit: CANNOT do range queries; NO ordering maintained
+```
+
+### Common Exam Traps:
+```
+TRAP 1: "Binary Search is O(n) worst case" → WRONG! It's O(log n)
+TRAP 2: "Hash table is ALWAYS O(1)" → WRONG! Worst case = O(n)
+TRAP 3: "Linear Search is always O(n)" → WRONG! Best case = O(1)
+TRAP 4: "Binary Search works on unsorted arrays" → WRONG! Must be sorted
+TRAP 5: "Load factor > 1 is impossible" → WRONG! Only impossible in open addressing,
+         not chaining (chain can grow beyond 1 per bucket)
+TRAP 6: For ONE-TIME search on unsorted data → use LINEAR SEARCH (not binary)
+         Sorting first would cost O(n log n) — worse than O(n) linear!
+```
 
 ---
 
-## ✅ GS ANSWERS (Q26–Q50)
+## ⚡ RAPID FIRE — Nobel Prize Winners
 
-| Q | Ans | Explanation |
-|---|-----|-------------|
-| **Q26** | **(C)** | Alfred Nobel — Swedish chemist who invented dynamite (patented 1867). His will (1895) established the prizes to counteract the destructive legacy of his inventions. |
-| **Q27** | **(C)** | Nobel Peace Prize = Oslo, Norway. All other Nobel prizes (Physics, Chemistry, Medicine, Literature, Economics) = Stockholm, Sweden. This is a very frequent BPSC exam trap! |
-| **Q28** | **(B)** | Rabindranath Tagore won Nobel Prize in Literature in 1913 — first Asian to win any Nobel Prize. C.V. Raman won in 1930 — first Asian in science category. |
-| **Q29** | **(B)** | Raman Effect: when light passes through a transparent material, scattered light has different wavelengths. Used in Raman spectroscopy for identifying materials. |
-| **Q30** | **(B)** | February 28, 1928: C.V. Raman announced the Raman Effect. National Science Day observed on Feb 28 since 1987 to honour this discovery. |
-| **Q31** | **(B)** | Amartya Sen's work: welfare economics (how to measure social welfare), poverty measurement, capability approach, famine analysis (famines caused by distribution failure, not food shortage). |
-| **Q32** | **(C)** | 2024 Physics Nobel: John Hopfield & Geoffrey Hinton for foundational discoveries enabling machine learning with artificial neural networks. Hinton = "Godfather of AI." |
-| **Q33** | **(C)** | Bharat Ratna is India's highest civilian honour. Padma Vibhushan is 2nd, Padma Bhushan is 3rd, Padma Shri is 4th. |
-| **Q34** | **(B)** | Karpoori Thakur ("Jan Nayak") — Bihar's beloved socialist CM who championed OBC/EBC reservation. Received posthumous Bharat Ratna in 2024. BIHAR EXAM FAVOURITE! |
-| **Q35** | **(C)** | Param Vir Chakra = highest wartime military gallantry (facing enemy). Ashoka Chakra = highest peacetime gallantry. Bharat Ratna = highest civilian. |
-| **Q36** | **(B)** | Jnanpith Award = India's highest literary award (for Indian language literature). Sahitya Akademi is prestigious but lower. Booker is international. |
-| **Q37** | **(B)** | Nobel Economics Prize added in 1969 by the Swedish central bank (Sveriges Riksbank). Alfred Nobel's 1895 will only mentioned 5 prizes. |
-| **Q38** | **(B)** | Abhijit Banerjee is Ford Foundation International Professor of Economics at MIT (Massachusetts Institute of Technology), Cambridge, USA. |
-| **Q39** | **(C)** | Dada Saheb Phalke Award = India's highest recognition in CINEMA. Dadasaheb Phalke (1870-1944) directed India's first full-length feature film "Raja Harishchandra" (1913). |
-| **Q40** | **(B)** | 2023 Medicine Nobel: mRNA modifications (specifically nucleoside modification) that enabled stable mRNA vaccines used in Pfizer-BioNTech and Moderna COVID-19 vaccines. |
-| **Q41** | **(B)** | Renamed to "Major Dhyan Chand Khel Ratna" in August 2021 after Major Dhyan Chand — legendary Indian hockey player (The Wizard), won three Olympic gold medals. |
-| **Q42** | **(C)** | Viswanathan Anand (Chess) was the first recipient of Rajiv Gandhi Khel Ratna in 1991-92. He later won it a 2nd time as well. |
-| **Q43** | **(B)** | Ramdhari Singh Dinkar won the Jnanpith Award in 1972 for "Urvashi." He is Bihar's most celebrated Hindi poet. Also received Padma Bhushan and Sahitya Akademi Award. |
-| **Q44** | **(C)** | Narges Mohammadi, Iranian human rights activist and women's rights leader, won Nobel Peace Prize 2023 while imprisoned in Iran for her activism. |
-| **Q45** | **(B)** | Arundhati Roy's "The God of Small Things" (1997) won the Booker Prize. Midnight's Children = Salman Rushdie (1981). The White Tiger = Aravind Adiga (2008). |
-| **Q46** | **(C)** | 2024 Chemistry Nobel: David Baker (protein design) + Demis Hassabis & John Jumper (AlphaFold AI for protein structure prediction). AlphaFold solved the 50-year-old protein folding problem. |
-| **Q47** | **(D)** | BOTH B and C are correct: The Elephant Whisperers won Oscar 2023 (Documentary Short), AND Naatu Naatu from RRR won Oscar 2023 (Best Original Song). D = More than one of the above. NOTE: Lagaan (2002) was NOMINATED but did NOT win. |
-| **Q48** | **(B)** | Ashoka Chakra = highest peacetime gallantry award. Given for acts of bravery/sacrifice not in face of enemy (accidents, disaster rescue, devotion to duty, etc.). |
-| **Q49** | **(C)** | AR Rahman won TWO Oscars for Slumdog Millionaire (2009): Best Original Score + Best Original Song (Jai Ho). Resul Pookutty won Best Sound Mixing for the same film. |
-| **Q50** | **(C)** | Dr. Rajendra Prasad received Bharat Ratna in 1962 — the year he left the Presidency. NOT in 1954 (though Bharat Ratna started in 1954, Rajendra Prasad got it in 1962). |
+### Indian Nobel Laureates — The Complete List (By Year):
+```
+1913 — TAGORE     — Literature   — Gitanjali — First Asian Nobel
+1930 — RAMAN      — Physics      — Raman Effect — First Indian Nobel in Science
+1968 — KHORANA    — Medicine     — Genetic code
+1979 — TERESA     — Peace        — Missionaries of Charity
+1983 — CHANDRASEKHAR — Physics   — Chandrasekhar Limit (1.4 solar masses)
+1998 — AMARTYA SEN — Economics  — Welfare economics, famine theory
+2001 — NAIPAUL    — Literature   — Born in Trinidad (Indian origin)
+2009 — RAMAKRISHNAN — Chemistry — Ribosome structure
+2014 — SATYARTHI  — Peace       — Bachpan Bachao Andolan; shared w/Malala
+2019 — BANERJEE   — Economics   — Poverty RCTs; co-winner = wife Esther Duflo
+```
 
----
-
-# ═══════════════════════════════════════════════════════
-# 🏆 DAY 32 — TOPPER'S QUICK REVISION CARD
-# ═══════════════════════════════════════════════════════
-
-## ⚡ CS — 12 MUST-REMEMBER FACTS
-
-1. **Binary Search:** O(log n) | REQUIRES sorted array | O(1) space iterative, O(log n) recursive
-2. **Linear Search:** O(n) worst | O(1) space | works on ANY array (sorted or unsorted)
-3. **Jump Search:** O(√n) | needs sorted | jumps √n steps then linear
-4. **Hash Table:** O(1) AVERAGE for search/insert/delete | O(n) worst case
-5. **Hash Collision:** two DIFFERENT keys → same index
-6. **Chaining:** external linked lists | allows load factor > 1
-7. **Open Addressing (Linear Probing):** in-table, no external | load factor CANNOT > 1 | primary clustering
-8. **Quadratic Probing:** reduces primary clustering
-9. **Double Hashing:** BEST for uniform distribution | two hash functions
-10. **Load Factor α = n/m** | Ideal ≤ 0.7 for open addressing
-11. **Rehashing:** when α too high → double table size → re-insert all
-12. **Best for frequent insert/delete/search:** Hash Table (O(1) avg)
-
-## ⚡ GS — 12 MUST-REMEMBER FACTS
-
-1. **Nobel Prize:** Founded Alfred Nobel | First given 1901 | ALL in Stockholm EXCEPT Peace = Oslo (Norway)
-2. **Economics Nobel:** Added 1969, NOT in original will
-3. **Tagore:** 1913 Literature | First ASIAN Nobel | Gitanjali
-4. **C.V. Raman:** 1930 Physics | Raman Effect | Feb 28 = National Science Day
-5. **Amartya Sen:** 1998 Economics | welfare, poverty, famine
-6. **Abhijit Banerjee:** 2019 Economics | MIT | poverty research
-7. **Bharat Ratna 2024:** Karpoori Thakur (Bihar!) + Narasimha Rao + Charan Singh + Swaminathan + Advani
-8. **Param Vir Chakra:** Highest WARTIME gallantry | Ashoka Chakra = highest PEACETIME
-9. **Jnanpith:** Highest LITERARY award in India | Indian languages only
-10. **Nobel Peace = Oslo (Norway)**, not Stockholm
-11. **Slumdog Millionaire 2009:** AR Rahman — 2 Oscars (Score + Song)
-12. **Ramdhari Singh Dinkar:** Bihar poet | Jnanpith winner | "Urvashi", "Rashmirathi"
+### Critical PYQ Facts:
+```
+✅ First ASIAN Nobel: Tagore (1913) — Literature
+✅ First INDIAN Nobel in SCIENCE: C.V. Raman (1930) — Physics
+✅ National Science Day: 28 February (Raman Effect announcement, 1928)
+✅ Tagore wrote anthems of INDIA + BANGLADESH (unique!)
+✅ Mother Teresa born in SKOPJE (North Macedonia) — NOT India!
+✅ Peace Prize in OSLO (Norway) — ALL others in STOCKHOLM (Sweden)
+✅ Economics Nobel since 1969 — NOT in original 5 prizes (Nobel's will = 1895)
+✅ Chandrasekhar = C.V. Raman's nephew
+✅ Max 3 winners per prize per year
+✅ Nobel ceremonies on 10 DECEMBER (Nobel's death anniversary)
+✅ Economics Nobel: full name = "Sveriges Riksbank Prize in Economic Sciences"
+✅ 2024 Nobel Physics = Hinton + Hopfield for Artificial Neural Networks (AI!)
+```
 
 ---
 
-## 📊 Day 32 Self-Assessment
-
-| Category | Questions | My Score | Target |
-|----------|-----------|----------|--------|
-| CS Search Algorithms (Q1-Q13) | 13 | /13 | 12+ |
-| CS Hashing (Q14-Q25) | 12 | /12 | 11+ |
-| GS Nobel Prize (Q26-Q46) | 21 | /21 | 19+ |
-| GS Indian Awards (Q47-Q50) | 4 | /4 | 4 |
-| **TOTAL** | **50** | **/50** | **46+** |
-
-> **Score 46+/50 = TOPPER ZONE** 🏆
-> **Score 39-45 = Good — review wrong answers tonight**
-> **Score below 39 = Re-read concept sections carefully**
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. **Binary Search**: sorted array ONLY; mid = (low+high)/2; O(log n) worst case; O(1) best; n=1024 → max 10 comparisons
+2. **Hashing**: O(1) average search/insert/delete; collision = two keys → same bucket; chaining = linked list per bucket; load factor = n/m; rehash when λ > 0.75
+3. **Search hierarchy**: Hash O(1) avg > Binary O(log n) > Linear O(n); but hash can't do range queries and needs extra space
+4. **Indian Nobel firsts**: Tagore 1913 (first Asian); Raman 1930 (first Indian in Science; 28 Feb = National Science Day); Mother Teresa born in Skopje NOT India
+5. **Nobel structure**: 6 fields; Economics added 1969 (NOT original); Peace Prize in Oslo; others in Stockholm; ceremony on 10 December; max 3 winners/prize
 
 ---
 
-## 📝 Tonight's 5-Bullet Summary (Write from Memory!)
-
-1. Binary Search needs ______; worst case = ______; iterative space = ______
-2. Hash Table: average = ______; worst = ______; collision methods = ______, ______
-3. Load Factor formula = ______; threshold for open addressing = ______
-4. Nobel Peace Prize city = ______ (NOT Stockholm); Peace 2023 winner = ______
-5. Karpoori Thakur = Bihar's ______; received ______ in 2024; C.V. Raman = Feb 28 = ______
+## 📅 DAY 33 PREVIEW — What's Coming Next:
+**CS**: Stack Data Structure — Definition, LIFO principle, push/pop operations, applications (expression evaluation, function calls, recursion), array and linked list implementation
+**GS**: Indian Constitution — Parliament: Lok Sabha, Rajya Sabha, Powers, Bills, Sessions, Parliamentary Procedures
 
 ---
 
-*Day 32 Complete ✅ | Tomorrow: Day 33 — NP Completeness, Greedy & DP + Bihar GK*
-*32/170 steps done — Phase 1 is taking shape! Keep going!* 🎯
+*🚀 Day 32 of 170 complete — Search smarter, not harder. Binary Search in 10 steps. Hash tables in 1 step. Nobel facts in memory!*

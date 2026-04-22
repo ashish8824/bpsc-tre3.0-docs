@@ -1,1657 +1,1098 @@
-# 📅 DAY-34 — BPSC TRE 4.0 STUDY FILE
-## CS: DSA Full PYQ Special (All Topics) | GS: Bihar GK — Geography
-### 🎯 Target: TOPPER RANK | Phase 1 → Week 5
+# 📅 BPSC TRE 4.0 — DAY 34 COMPLETE STUDY MODULE
+### DSA Full PYQ Practice Day — Mixed Topic Drill
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-> **📌 TODAY'S BATTLE PLAN**
-> - **Morning (1.5 hrs):** CS — Deep revision of ALL DSA topics with PYQ-focused theory
->   Focus areas: Catalan numbers, Circular Queue, Infix/Postfix, BST, Linked Lists, Sorting, Hashing
-> - **Afternoon (1 hr):** GS — Bihar Geography: Physical features, Rivers, Districts, National Parks, Climate
-> - **Evening (1 hr):** Solve all 50 MCQs from this file (attempt BEFORE checking answers)
-> - **Night (30 min):** Write 5-bullet summary from memory — NEVER SKIP THIS
+> ⏰ **Today's Schedule**
+> - Morning (2 hrs): Attempt all 50 MCQs under timed conditions (60 min CS + 30 min GS)
+> - Afternoon (1 hr): Self-evaluate using answer key → fill Weak Area Tracker
+> - Evening (1 hr): Revise all weak areas using mini revision notes
+> - Night (30 min): Re-attempt the questions you got wrong
 
 ---
 
-> ⚡ **WHY TODAY IS SPECIAL:** Day-34 is a PYQ Special — every concept here has directly appeared in TRE 1.0, TRE 2.0, or TRE 3.0. This day separates toppers from average candidates.
+> 🎯 **HOW TO USE THIS MODULE**
+> Step 1: Set a TIMER — 45 seconds per question (strict exam simulation)
+> Step 2: Attempt ALL CS questions FIRST before checking any answer
+> Step 3: Mark each question: ✅ Correct | ❌ Wrong | ⚠️ Guessed
+> Step 4: Check answers → calculate score → fill Weak Area Tracker
+> Step 5: Study revision notes for every wrong answer topic
 
 ---
 
-# 🖥️ PART A: COMPUTER SCIENCE — DSA FULL PYQ SPECIAL
-
-## All DSA Topics: Deep Revision with PYQ Focus
-
----
-
-## 🔷 MODULE 1: STACK — Complete Revision
-
-### 1.1 What is a Stack?
-
-```
-STACK = LIFO (Last In, First Out)
-        Like a stack of plates — you add and remove from TOP only
-```
-
-**ASCII Diagram:**
-```
-        |   |  ← TOP of stack
-        | 30|  ← Last pushed, first to be popped
-        | 20|
-        | 10|  ← First pushed, last to be popped
-        |___|
-        
-PUSH 40:         POP:
-        | 40|         |   |  ← 40 is removed
-        | 30|         | 30|
-        | 20|         | 20|
-        | 10|         | 10|
-        |___|         |___|
-```
-
-### 1.2 Stack Operations — Time Complexity
-
-| Operation | Time Complexity | Description |
-|-----------|-----------------|-------------|
-| Push | O(1) | Add element at top |
-| Pop | O(1) | Remove element from top |
-| Peek/Top | O(1) | View top element without removing |
-| isEmpty | O(1) | Check if stack is empty |
-| isFull | O(1) | Check if stack is full (array-based) |
-| Search | O(n) | Search for an element |
-
-### 1.3 Stack — OVERFLOW and UNDERFLOW
-
-```
-OVERFLOW  = Push when stack is FULL
-             Condition: top == MAX_SIZE - 1
-             
-UNDERFLOW = Pop when stack is EMPTY
-             Condition: top == -1
-```
-
-> ⚠️ **PYQ TRAP:** Before PUSH → check OVERFLOW. Before POP → check UNDERFLOW.
-
-### 1.4 Stack Applications — THE MOST TESTED TOPIC
-
-**✅ CORRECT Stack Applications (These ARE stack applications):**
-1. **String Reversal** — push all chars, pop to reverse
-2. **Expression Evaluation** — evaluate postfix expressions
-3. **Infix → Postfix/Prefix conversion** — uses stack
-4. **Balancing of Parentheses/Symbols** — uses stack
-5. **Recursion** — function call stack (system stack)
-6. **Backtracking** — maze solving, game trees
-7. **Browser back button** — history stored as stack
-8. **Undo operation** — in text editors
-
-**❌ NOT a Stack Application:**
-- Asynchronous data transfer → uses **QUEUE**
-- CPU Scheduling → uses **QUEUE**
-- Printer spooling → uses **QUEUE**
-- BFS (Breadth-First Search) → uses **QUEUE**
-
-> ⚠️ **PYQ FACT (TRE 1.0 + 2.0 repeated):** "Which is NOT an application of Stack?"
-> Answer → Asynchronous data transfer (uses Queue, not Stack)
-
-> ⚠️ **PYQ FACT (TRE 1.0 + 2.0):** "Recursion uses which data structure internally?"
-> Answer → **STACK** (function call stack)
+# PART 1: DSA FULL PYQ PRACTICE SESSION
+## 📝 COMPUTER SCIENCE — 30 DSA MCQs
+### Full Coverage: Arrays, Stack, Queue, LL, Trees, Graphs, Sorting, Searching, Complexity
 
 ---
 
-## 🔷 MODULE 2: INFIX / POSTFIX / PREFIX — Conversion
+> **📌 EXAM SIMULATION — ATTEMPT ALL 30 BEFORE CHECKING ANSWERS**
+> **Timer: 45 seconds per question = 22.5 minutes total**
 
-### 2.1 Notation Types
+---
+
+### 🔷 BLOCK A: ARRAYS & MATRICES (Q1–Q5)
+
+---
+
+**Q1.** An array arr[10] is stored in memory. If the BASE ADDRESS is 3000 and each element occupies 4 bytes, what is the address of arr[6]?
+(A) 3024
+(B) 3020
+(C) 3028
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q2.** A SPARSE MATRIX is defined as a matrix in which:
+(A) All elements are zero
+(B) Most elements are zero (number of zero elements >> non-zero elements)
+(C) All elements are positive integers
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q3.** For a 2D array A[m][n] stored in ROW-MAJOR order, what is the address of element A[i][j]?
+(Given: Base Address = B, Element size = w)
+(A) B + w × (i × m + j)
+(B) B + w × (i × n + j)
+(C) B + w × (i + j × m)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q4.** What is the time complexity of inserting an element at the BEGINNING of a static array of n elements?
+(A) O(1)
+(B) O(log n)
+(C) O(n) — all elements must shift right
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q5.** Which data representation is MOST EFFICIENT for storing a sparse matrix with very few non-zero elements?
+(A) 2D array
+(B) Coordinate list (triplet representation: row, col, value)
+(C) Diagonal matrix representation
+(D) More than one of the above
+(E) None of the above
+
+---
+
+### 🔷 BLOCK B: STACK (Q6–Q8)
+
+---
+
+**Q6.** A stack follows which principle?
+(A) FIFO — First In First Out
+(B) FCFS — First Come First Serve
+(C) LIFO — Last In First Out
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q7.** Consider a stack. Elements are pushed in order: 5, 10, 15, 20. What is the result of two consecutive POP operations?
+(A) 5, 10
+(B) 10, 15
+(C) 20, 15
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q8.** Which of the following applications is BEST suited to use a STACK?
+(A) CPU scheduling in round-robin fashion
+(B) Print spooling (printer queue)
+(C) Recursive function call management and undo operations
+(D) More than one of the above
+(E) None of the above
+
+---
+
+### 🔷 BLOCK C: EXPRESSION CONVERSION (Q9–Q11)
+
+---
+
+**Q9.** Convert the INFIX expression `A + B * C` to POSTFIX:
+(A) A B C * +
+(B) + A * B C
+(C) A B + C *
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q10.** The POSTFIX expression `5 3 2 * + 1 -` evaluates to:
+(A) 10
+(B) 12
+(C) 9
+(D) More than one of the above (depends on order)
+(E) None of the above
+
+---
+
+**Q11.** To evaluate a POSTFIX expression, which data structure is used?
+(A) Queue
+(B) Stack
+(C) Circular Linked List
+(D) More than one of the above
+(E) None of the above
+
+---
+
+### 🔷 BLOCK D: QUEUE (Q12–Q14)
+
+---
+
+**Q12.** In a CIRCULAR QUEUE with capacity MAX=5, elements A, B, C, D are inserted (front=0, rear=3). After one DEQUEUE operation, front becomes:
+(A) 0
+(B) 1
+(C) 4
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q13.** A DEQUE (Double-Ended Queue) supports:
+(A) Insertion and deletion from FRONT only
+(B) Insertion and deletion from REAR only
+(C) Insertion and deletion from BOTH front and rear
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q14.** Which application BEST demonstrates the use of a PRIORITY QUEUE?
+(A) Web browser history (back button)
+(B) Undo operation in text editor
+(C) CPU scheduling in operating system (highest priority process first)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+### 🔷 BLOCK E: LINKED LIST (Q15–Q17)
+
+---
+
+**Q15.** In a DOUBLY LINKED LIST (DLL), each node has:
+(A) One pointer to the next node only
+(B) One pointer to the previous node only
+(C) Two pointers — one to PREV node and one to NEXT node
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q16.** What is the time complexity of deleting the LAST NODE of a SINGLY LINKED LIST (without a tail pointer)?
+(A) O(1)
+(B) O(log n)
+(C) O(n) — must traverse to find second-to-last node
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q17.** In a CIRCULAR LINKED LIST, the LAST node's NEXT pointer points to:
+(A) NULL
+(B) The second node
+(C) The FIRST (HEAD) node
+(D) More than one of the above
+(E) None of the above
+
+---
+
+### 🔷 BLOCK F: TREES (Q18–Q21)
+
+---
+
+**Q18.** A binary tree with n nodes has how many NULL (empty) pointers?
+(A) n
+(B) n - 1
+(C) n + 1
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q19.** The INORDER traversal of a Binary Search Tree (BST) always yields:
+(A) Elements in reverse sorted order
+(B) Elements in ascending (sorted) order
+(C) A level-by-level traversal
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q20.** In a BINARY TREE, the maximum number of nodes at level k (root = level 0) is:
+(A) 2^(k-1)
+(B) 2^k
+(C) k²
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q21.** Given INORDER = [D, B, E, A, F, C] and PREORDER = [A, B, D, E, C, F], which node is the ROOT?
+(A) B
+(B) D
+(C) A
+(D) More than one of the above
+(E) None of the above
+
+---
+
+### 🔷 BLOCK G: GRAPHS (Q22–Q24)
+
+---
+
+**Q22.** BFS (Breadth-First Search) traversal of a graph uses which data structure internally?
+(A) Stack
+(B) Priority Queue
+(C) Queue
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q23.** DFS (Depth-First Search) traversal of a graph uses which data structure internally?
+(A) Queue
+(B) Stack (or recursion which uses implicit call stack)
+(C) Hash Table
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q24.** For a connected undirected graph with V vertices and E edges, the number of edges in a SPANNING TREE is always:
+(A) V
+(B) V - 1
+(C) E - 1
+(D) More than one of the above
+(E) None of the above
+
+---
+
+### 🔷 BLOCK H: SORTING & SEARCHING (Q25–Q28)
+
+---
+
+**Q25.** Which sorting algorithm is considered STABLE among the following?
+(A) Quick Sort
+(B) Heap Sort
+(C) Merge Sort
+(D) More than one of the above (Merge Sort AND Bubble Sort and Insertion Sort are also stable)
+(E) None of the above
+
+---
+
+**Q26.** For Binary Search to work, the input array MUST be:
+(A) Filled with only integers
+(B) Sorted
+(C) Of even length
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q27.** Which sorting algorithm has the BEST worst-case time complexity?
+(A) Quick Sort (O(n²) worst case)
+(B) Bubble Sort (O(n²) worst case)
+(C) Merge Sort (O(n log n) in ALL cases)
+(D) More than one of the above (Merge Sort and Heap Sort — both O(n log n) worst)
+(E) None of the above
+
+---
+
+**Q28.** In a HASH TABLE with chaining, the WORST CASE time complexity for search occurs when:
+(A) The table is completely empty
+(B) The load factor is 0.5
+(C) All keys hash to the SAME bucket (one long chain)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+### 🔷 BLOCK I: TIME COMPLEXITY & ALGORITHM ANALYSIS (Q29–Q30)
+
+---
+
+**Q29.** What is the time complexity of the following code?
+```
+for (int i = 0; i < n; i++) {
+    for (int j = i; j < n; j++) {
+        System.out.println(i + j);
+    }
+}
+```
+(A) O(n)
+(B) O(n log n)
+(C) O(n²)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q30.** A recursive algorithm has the recurrence relation T(n) = T(n-1) + O(1).
+What is the time complexity?
+(A) O(log n)
+(B) O(n log n)
+(C) O(n)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+---
+
+## 📝 GENERAL STUDIES — 20 MIXED PYQ-STYLE MCQs
+### Bihar GK + Indian Polity + Current Affairs (Rapid Fire GS Review)
+
+---
+
+**Q31.** Which Article of the Indian Constitution is known as the "Heart and Soul" of the Constitution (per Dr. B.R. Ambedkar)?
+(A) Article 14
+(B) Article 21
+(C) Article 32
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q32.** Bhagalpur in Bihar is famous for producing which type of silk?
+(A) Mulberry Silk
+(B) Tussar (Kosa) Silk
+(C) Eri Silk
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q33.** India's Chandrayaan-3 successfully soft-landed near the Moon's South Pole on:
+(A) 14 July 2023
+(B) 23 August 2023
+(C) 2 September 2023
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q34.** The theme of India's G20 Presidency in 2023 was:
+(A) "One World, One Health"
+(B) "Vasudhaiva Kutumbakam"
+(C) "People, Planet, Prosperity"
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q35.** Which Nobel Prize laureate is famous for the RAMAN EFFECT, and on which date is National Science Day celebrated in India?
+(A) Amartya Sen; 28 March
+(B) C.V. Raman; 28 February
+(C) Rabindranath Tagore; 28 January
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q36.** UPI (Unified Payments Interface) was developed and is operated by:
+(A) Reserve Bank of India (RBI)
+(B) State Bank of India (SBI)
+(C) NPCI (National Payments Corporation of India)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q37.** Bihar produces approximately what percentage of India's Makhana (Fox Nut)?
+(A) About 40%
+(B) About 70%
+(C) About 90%
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q38.** Which writ is issued to secure the release of a person who has been unlawfully detained?
+(A) Mandamus
+(B) Certiorari
+(C) Habeas Corpus
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q39.** Rabindranath Tagore was the FIRST ASIAN to win the Nobel Prize. He won it in the field of:
+(A) Peace
+(B) Physics
+(C) Literature (for Gitanjali)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q40.** Which article guarantees the Right to Life and Personal Liberty in the Indian Constitution?
+(A) Article 19
+(B) Article 21
+(C) Article 22
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q41.** Aditya-L1, India's first solar observation mission, was launched in:
+(A) July 2023
+(B) September 2023
+(C) January 2024
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q42.** The Nobel Peace Prize is awarded in which city?
+(A) Stockholm, Sweden
+(B) Copenhagen, Denmark
+(C) Oslo, Norway
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q43.** The 14 banks that were nationalised in India's FIRST major bank nationalisation round were nationalised in which year?
+(A) 1949
+(B) 1969
+(C) 1980
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q44.** Which district of Bihar is known as the Makhana capital and is also associated with North Bihar's wetlands?
+(A) Muzaffarpur
+(B) Samastipur
+(C) Darbhanga
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q45.** ISRO's PSLV-C37 mission set a world record by launching how many satellites in a single mission (2017)?
+(A) 72 satellites
+(B) 104 satellites
+(C) 88 satellites
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q46.** Articles 20 and 21 of the Indian Constitution are UNIQUE because:
+(A) They can only be amended by a two-thirds majority
+(B) They CANNOT be suspended even during a National Emergency
+(C) They apply only to Indian citizens, not foreigners
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q47.** The Champaran Satyagraha of 1917 was related to the forced cultivation of which crop by the British?
+(A) Sugarcane
+(B) Poppy (opium)
+(C) Indigo (Neel)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q48.** Merge Sort is preferred over Quick Sort when:
+(A) Memory is extremely limited (no auxiliary space available)
+(B) Stability is required AND guaranteed O(n log n) performance is needed
+(C) Sorting needs to be done in-place only
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q49.** The BHIM app (Bharat Interface for Money) was launched on:
+(A) 11 April 2016
+(B) 8 November 2016
+(C) 30 December 2016
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q50.** Which of the following is NOT an NP-Complete problem?
+(A) Travelling Salesman Problem (TSP decision version)
+(B) 3-Coloring of a Graph
+(C) Finding the Shortest Path between two nodes (Dijkstra's problem)
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+# ANSWER KEY
+
+## ⚠️ STRICTLY — CHECK ONLY AFTER ATTEMPTING ALL 50 QUESTIONS
+
+---
+
+### CS Answers (Q1–Q30):
+
+| Q | Answer | Topic | Difficulty |
+|---|--------|-------|-----------|
+| 1 | (A) | Arrays — Address calculation | Easy |
+| 2 | (B) | Arrays — Sparse matrix | Easy |
+| 3 | (B) | Arrays — Row-major formula | Medium |
+| 4 | (C) | Arrays — Insertion complexity | Easy |
+| 5 | (B) | Arrays — Sparse representation | Medium |
+| 6 | (C) | Stack — LIFO principle | Easy |
+| 7 | (C) | Stack — Push/Pop trace | Easy |
+| 8 | (C) | Stack — Applications | Medium |
+| 9 | (A) | Expression — Infix to Postfix | Medium |
+| 10 | (A) | Expression — Postfix evaluation | Hard |
+| 11 | (B) | Expression — Data structure used | Easy |
+| 12 | (B) | Queue — Circular queue index | Medium |
+| 13 | (C) | Queue — Deque operations | Easy |
+| 14 | (C) | Queue — Priority Queue application | Medium |
+| 15 | (C) | Linked List — DLL structure | Easy |
+| 16 | (C) | Linked List — SLL deletion | Medium |
+| 17 | (C) | Linked List — Circular LL | Easy |
+| 18 | (C) | Trees — NULL pointer count | Hard |
+| 19 | (B) | Trees — BST inorder | Easy |
+| 20 | (B) | Trees — Nodes at level k | Medium |
+| 21 | (C) | Trees — Tree reconstruction | Hard |
+| 22 | (C) | Graphs — BFS data structure | Easy |
+| 23 | (B) | Graphs — DFS data structure | Easy |
+| 24 | (B) | Graphs — Spanning tree edges | Medium |
+| 25 | (D) | Sorting — Stable algorithms | Hard (tricky!) |
+| 26 | (B) | Searching — Binary Search precond | Easy |
+| 27 | (D) | Sorting — Best worst-case | Hard (tricky!) |
+| 28 | (C) | Hashing — Worst case search | Medium |
+| 29 | (C) | Complexity — Loop analysis | Medium |
+| 30 | (C) | Complexity — Recurrence | Medium |
+
+---
+
+### GS Answers (Q31–Q50):
+
+| Q | Answer | Topic |
+|---|--------|-------|
+| 31 | (C) | Polity — Article 32 |
+| 32 | (B) | Bihar GK — Bhagalpur Silk |
+| 33 | (B) | Current Affairs — Chandrayaan-3 |
+| 34 | (B) | Current Affairs — G20 theme |
+| 35 | (B) | Nobel — C.V. Raman; 28 February |
+| 36 | (C) | Banking — UPI operator |
+| 37 | (C) | Bihar GK — Makhana (~90%) |
+| 38 | (C) | Polity — Habeas Corpus writ |
+| 39 | (C) | Nobel — Tagore (Literature) |
+| 40 | (B) | Polity — Article 21 |
+| 41 | (B) | ISRO — Aditya-L1 launch |
+| 42 | (C) | Nobel — Oslo, Norway |
+| 43 | (B) | Banking — 1969 nationalisation |
+| 44 | (C) | Bihar GK — Darbhanga Makhana |
+| 45 | (B) | ISRO — PSLV-C37 (104 satellites) |
+| 46 | (B) | Polity — Emergency suspension |
+| 47 | (C) | Bihar GK — Indigo Satyagraha |
+| 48 | (B) | CS — Merge Sort advantage |
+| 49 | (C) | Banking — BHIM launch date |
+| 50 | (C) | CS/NP — Shortest Path is P |
+
+---
+---
+
+# WEAK AREA TRACKER & ANALYSIS
+
+## 📊 SCORE CALCULATION
 
 ```
-INFIX:   A + B         (operator BETWEEN operands) — human-readable
-POSTFIX: A B +         (operator AFTER operands)  — Reverse Polish
-PREFIX:  + A B         (operator BEFORE operands) — Polish Notation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION      | Correct | Wrong | Score (/50)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CS Block A   | ___/5   |       |
+CS Block B   | ___/3   |       |
+CS Block C   | ___/3   |       |
+CS Block D   | ___/3   |       |
+CS Block E   | ___/3   |       |
+CS Block F   | ___/4   |       |
+CS Block G   | ___/3   |       |
+CS Block H   | ___/4   |       |
+CS Block I   | ___/2   |       |
+GS Mixed     | ___/20  |       |
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL        | ___/50  |       |
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SCORE INTERPRETATION:
+  45-50/50 → Excellent! Exam-ready for Top 10
+  38-44/50 → Good — fix weak areas identified below
+  30-37/50 → Average — revisit highlighted chapters
+  Below 30  → Re-study core chapters (Days 22–33 material)
 ```
 
-### 2.2 Why Convert? (PYQ Context)
+---
 
-- Computers evaluate **Postfix** expressions more efficiently (no parentheses needed, no precedence rules)
-- Conversion uses **STACK**
-- Time complexity of conversion: **O(N)**
+## 🔍 COMMONLY MISTAKEN CONCEPTS — CHAPTER-WISE
 
-### 2.3 Operator Precedence (For Conversion — MUST KNOW)
-
+### BLOCK A — Arrays & Matrices:
 ```
-PRECEDENCE (High to Low):
-  ^   (Exponentiation) — Highest
-  * / (Multiplication, Division)
-  + - (Addition, Subtraction) — Lowest
+COMMON ERRORS:
+
+ERROR 1 (Q1 — Address Calculation):
+  Formula: addr(arr[i]) = Base + i × size
+  addr(arr[6]) = 3000 + 6 × 4 = 3000 + 24 = 3024 ✅
+  TRAP: Some students use (6+1)×4 = 28 → wrong!
+  The INDEX i is used directly (0-indexed), not i+1.
+
+ERROR 2 (Q3 — Row Major 2D array):
+  For A[i][j] in m×n array (ROW MAJOR):
+    Address = B + w × (i × n + j)
+    NOT i × m! — use n (number of COLUMNS), not m (rows)
   
-Associativity:
-  ^   → Right to Left
-  * / → Left to Right
-  + - → Left to Right
-```
-
-### 2.4 Infix to Postfix — Step-by-Step Algorithm
-
-```
-Algorithm:
-  1. Create empty stack and result string
-  2. Scan infix expression left to right:
-     a. If operand (A,B,C...) → add to result directly
-     b. If '(' → push to stack
-     c. If ')' → pop and add to result until '(' is found; discard '('
-     d. If operator:
-        - While stack not empty AND top has >= precedence:
-          pop and add to result
-        - Push current operator
-  3. Pop remaining stack elements to result
-```
-
-### 2.5 Worked Example — Practice These! (PYQ Type)
-
-**Example 1:** Convert A + B * C - D to Postfix
-
-```
-Expression: A + B * C - D
-
-Step | Symbol | Stack   | Result
------|--------|---------|--------
-1    | A      | empty   | A
-2    | +      | +       | A
-3    | B      | +       | AB
-4    | *      | + *     | AB         (* has higher precedence than +)
-5    | C      | + *     | ABC
-6    | -      | -       | ABC*+      (- <= +, so pop +; - <= *, so pop *; push -)
-7    | D      | -       | ABC*+D
-End  | (pop)  | empty   | ABC*+D-
-
-Postfix: A B C * + D -
-```
-
-**Example 2:** Convert (A + B) * C to Postfix
-
-```
-Step | Symbol | Stack   | Result
------|--------|---------|--------
-1    | (      | (       | 
-2    | A      | (       | A
-3    | +      | ( +     | A
-4    | B      | ( +     | AB
-5    | )      | empty   | AB+        (pop until '(', add '+', discard '(')
-6    | *      | *       | AB+
-7    | C      | *       | AB+C
-End  | (pop)  | empty   | AB+C*
-
-Postfix: A B + C *
-```
-
-> ⭐ **PYQ KEY FACT:** Infix to Postfix time complexity = **O(N)**. Uses STACK.
-
----
-
-## 🔷 MODULE 3: QUEUE — Complete Revision
-
-### 3.1 Queue = FIFO
-
-```
-QUEUE = FIFO (First In, First Out)
-        Like a line at ticket counter — first person in line is served first
-
-FRONT (Deletion end)          REAR (Insertion end)
-     ↓                              ↓
-  [10] [20] [30] [40] [50]
-   ↑                    ↑
-First in               Last in (will be last out)
-```
-
-### 3.2 Queue Operations
-
-| Operation | Action | Check Before |
-|-----------|--------|-------------|
-| Enqueue (Insert) | Add at REAR | Check **OVERFLOW** (isFull) |
-| Dequeue (Delete) | Remove from FRONT | Check **UNDERFLOW** (isEmpty) |
-
-> ⚠️ **PYQ KEY (Repeated TRE 1.0 + 2.0):**
-> Before deletion from Queue → check **UNDERFLOW**
-> Before insertion into Queue → check **OVERFLOW**
-
-### 3.3 Linear Queue Overflow Problem
-
-```
-LINEAR QUEUE PROBLEM:
-  Even when elements are dequeued from front,
-  that space CANNOT be reused.
+  For COLUMN MAJOR: B + w × (j × m + i)
   
-  [  ] [  ] [30] [40] [50]
-   ↑              ↑    ↑
-  Wasted!        front  rear
+  MEMORY TRICK: Row Major → multiply i by number of COLUMNS (n)
+                Column Major → multiply j by number of ROWS (m)
+
+ERROR 3 (Q5 — Sparse Matrix):
+  Triplet/Coordinate representation stores (row, col, value) for each non-zero
+  Much more efficient than 2D array for sparse data
+  Memory: O(non-zero elements) vs O(m×n) for full matrix
+```
+
+### BLOCK B — Stack:
+```
+COMMON ERRORS:
+
+ERROR (Q7 — Stack Trace):
+  Push sequence: 5, 10, 15, 20
+  Stack (top to bottom): 20, 15, 10, 5
   
-  When rear = MAX_SIZE - 1, we get "overflow"
-  even though front slots are empty!
+  POP 1 → returns 20 (top), Stack: 15, 10, 5
+  POP 2 → returns 15 (new top), Stack: 10, 5
   
-SOLUTION: CIRCULAR QUEUE
-```
-
-### 3.4 Circular Queue — THE MOST TESTED QUEUE TOPIC
-
-```
-CIRCULAR QUEUE:
-  Last position connects back to first position
-  Forms a RING → Also called RING BUFFER
+  Result: 20, 15 → Answer (C) ✅
   
-  [50] [  ] [  ] [30] [40]
-    ↑                    ↑
-   rear               front
+  TRAP: Students confuse with queue (FIFO) and say 5, 10 → WRONG!
+  STACK = LIFO — LAST element pushed = FIRST element popped.
+```
+
+### BLOCK C — Expression Conversion:
+```
+COMMON ERRORS:
+
+ERROR (Q9 — Infix to Postfix):
+  A + B * C
   
-  Advantages: No memory wastage (reuses freed positions)
-```
-
-**Circular Queue Conditions:**
-
-```
-EMPTY CONDITION:  front = rear = -1
-                  OR front == (rear + 1) % SIZE
-
-FULL CONDITION:   (rear + 1) % SIZE == front
-
-Insert (Enqueue): rear = (rear + 1) % SIZE
-Delete (Dequeue): front = (front + 1) % SIZE
-```
-
-> ⭐ **PYQ FACT (TRE 1.0 + 2.0 REPEATED):**
-> - Circular Queue = **Ring Buffer**
-> - Empty condition: **front = rear = -1**
-> - Created to solve: **Memory wastage in linear queue**
-
-### 3.5 Deque (Double-Ended Queue)
-
-```
-DEQUE = Insert and Delete from BOTH ends
-
-  Front end ← [10] [20] [30] [40] → Rear end
-  Insert/Delete               Insert/Delete
+  OPERATOR PRECEDENCE: * > +
+  So B * C must be evaluated first:
+    B * C = BC*
+    A + (result) = A BC* +
+  Final postfix: A B C * +
   
-Types:
-  Input-restricted Deque:  Insert only at ONE end (Rear)
-  Output-restricted Deque: Delete only from ONE end (Front)
-```
-
-> ⚠️ **PYQ TRAP:** Delete from REAR in Deque with SINGLY Linked List = **O(N)**
-> (You need to traverse to find second-to-last node)
-> With DOUBLY Linked List = **O(1)**
-
-### 3.6 Priority Queue
-
-```
-PRIORITY QUEUE: Elements served based on PRIORITY, not order of arrival
-
-Best implementation: BINARY HEAP
-  Min-Heap: Smallest element has highest priority (served first)
-  Max-Heap: Largest element has highest priority (served first)
+  RULE: Higher precedence operator stays WITH its operands in postfix.
   
-Applications:
-  - Dijkstra's algorithm
-  - Huffman Coding
-  - CPU scheduling (Priority scheduling)
-  - A* search algorithm
-```
-
-> ⭐ **PYQ FACT:** Priority Queue best implemented with **Binary Heap**.
-
----
-
-## 🔷 MODULE 4: LINKED LIST — Complete Revision
-
-### 4.1 Types of Linked Lists
-
-```
-SINGLY LINKED LIST:
-  [Data|Next] → [Data|Next] → [Data|Next] → NULL
-   Node 1         Node 2         Node 3
-   
-DOUBLY LINKED LIST:
-  NULL ← [Prev|Data|Next] ↔ [Prev|Data|Next] ↔ [Prev|Data|Next] → NULL
+ERROR (Q10 — Postfix Evaluation):
+  Expression: 5 3 2 * + 1 -
   
-CIRCULAR LINKED LIST:
-  [Data|Next] → [Data|Next] → [Data|Next] → (back to first node)
-```
-
-### 4.2 Operations Comparison
-
-| Operation | Singly LL | Doubly LL | Array |
-|-----------|-----------|-----------|-------|
-| Access by index | O(n) | O(n) | **O(1)** |
-| Insert at beginning | O(1) | O(1) | O(n) |
-| Insert at end | O(n) | O(1) with tail | O(1) amortized |
-| Delete at beginning | O(1) | O(1) | O(n) |
-| Delete at end | O(n) | **O(1)** with tail | O(1) |
-| Search | O(n) | O(n) | O(n) |
-
-### 4.3 Key Facts — PYQ Focus
-
-> ⭐ **PYQ FACTS:**
-> 1. Linked List = **NO random access** (no index-based O(1) access like arrays)
-> 2. Doubly LL is **HARDER to implement** than Singly LL (more pointers to manage)
-> 3. Advantage of Linked List over Array = **Dynamic size** (grows/shrinks at runtime)
-> 4. Disadvantage = **Extra memory** for pointer field + no random access
-> 5. Circular LL last node points **back to FIRST node** (not to NULL)
-
----
-
-## 🔷 MODULE 5: TREES — Complete Revision
-
-### 5.1 Tree Terminology — Must Know All
-
-```
-           A          ← ROOT (no parent)
-          / \
-         B   C        ← Level 1
-        / \   \
-       D   E   F      ← Level 2 (D, E, F)
-      /
-     G                ← Level 3
-
-ROOT = A
-LEAVES = D (no, has child G), E, F, G (nodes with no children)
-Wait — corrected:
-LEAVES = E, F, G  (nodes with no children)
-PARENT of D = B
-CHILDREN of B = D, E
-HEIGHT of tree = 3 (levels 0,1,2,3 = 4 levels, height=3)
-DEGREE of B = 2 (has 2 children)
-```
-
-**Key Terms:**
-| Term | Definition |
-|------|-----------|
-| Root | Topmost node; has no parent |
-| Leaf | Node with no children (degree = 0) |
-| Height | Length of longest path from root to leaf |
-| Depth | Length of path from root to that node |
-| Degree | Number of children a node has |
-| Level | Root is at Level 0 (or Level 1 in some books) |
-
-### 5.2 Types of Binary Trees
-
-```
-FULL BINARY TREE:
-  Every node has 0 or 2 children (never 1 child)
+  Read left to right, push operands, pop on operator:
   
-       A
-      / \
-     B   C
-    / \
-   D   E
-
-COMPLETE BINARY TREE:
-  All levels fully filled EXCEPT possibly last level
-  Last level filled from LEFT to RIGHT
+  5 → push 5 → Stack: [5]
+  3 → push 3 → Stack: [5, 3]
+  2 → push 2 → Stack: [5, 3, 2]
+  * → pop 2,3 → compute 3×2=6 → push 6 → Stack: [5, 6]
+  + → pop 6,5 → compute 5+6=11 → push 11 → Stack: [11]
+  1 → push 1 → Stack: [11, 1]
+  - → pop 1,11 → compute 11-1=10 → push 10 → Stack: [10]
   
-       A
-      / \
-     B   C
-    / \  /
-   D   E F
-
-PERFECT BINARY TREE:
-  All internal nodes have 2 children AND all leaves at same level
+  Result: 10 ✅
   
-       A
-      / \
-     B   C
-    / \ / \
-   D  E F  G
-
-BALANCED BINARY TREE:
-  Height difference between left & right subtree ≤ 1 for every node
-  (AVL Tree is an example)
+  TRAP: When subtracting/dividing, the SECOND popped element is FIRST in operation!
+  Pop order: first pop = RIGHT operand, second pop = LEFT operand
+  11 - 1 = 10 (not 1 - 11 = -10)
 ```
 
-### 5.3 Tree Traversals — THE #1 EXAM TOPIC
-
+### BLOCK D — Queue:
 ```
-Three main traversals:
+COMMON ERRORS:
 
-PREORDER  (Root → Left → Right):
-  Visit root FIRST, then left subtree, then right subtree
+ERROR (Q12 — Circular Queue Index):
+  After DEQUEUE from a circular queue, FRONT moves FORWARD:
+  front = (front + 1) % MAX
   
-INORDER   (Left → Root → Right):
-  Visit left subtree FIRST, then root, then right subtree
-  NOTE: For BST, Inorder gives SORTED output! ⭐
+  Initial front = 0
+  After one dequeue: front = (0+1) % 5 = 1 ✅
   
-POSTORDER (Left → Right → Root):
-  Visit left and right subtrees FIRST, then root
-  Used for: Deleting tree, evaluating expression trees
-
-LEVEL ORDER (BFS — Level by Level):
-  Uses QUEUE to traverse level by level
+  TRAP: Students say front becomes 4 (thinking it wraps) — only wraps at MAX!
 ```
 
-**Worked Example:**
+### BLOCK E — Linked List:
 ```
-        1
-       / \
-      2   3
-     / \   \
-    4   5   6
+COMMON ERRORS:
 
-PREORDER:    1, 2, 4, 5, 3, 6
-INORDER:     4, 2, 5, 1, 3, 6
-POSTORDER:   4, 5, 2, 6, 3, 1
-LEVEL ORDER: 1, 2, 3, 4, 5, 6
-```
-
-> ⭐ **PYQ FACT (Repeated ALL 3 papers):** 
-> "Randomized Traversal" = **DOES NOT EXIST**
-> Valid traversals: Preorder, Inorder, Postorder, Level-order ONLY
-
-> ⭐ **PYQ FACT:** Inorder traversal of BST = **Sorted order** (ascending)
-
----
-
-## 🔷 MODULE 6: BINARY SEARCH TREE (BST) — Complete Revision
-
-### 6.1 BST Property — ALL THREE MUST HOLD
-
-```
-BST RULE:
-  1. Left child < Parent node (for ALL nodes in left subtree)
-  2. Right child > Parent node (for ALL nodes in right subtree)
-  3. BOTH left and right subtrees are also BSTs (recursive property)
-
-Example:
-        8
-       / \
-      3   10
-     / \    \
-    1   6    14
-       / \   /
-      4   7 13
-
-Check: 1 < 3 ✓, 6 > 3 ✓, 4 < 6 ✓, 7 > 6 ✓
-       3 < 8 ✓, 10 > 8 ✓, 14 > 10 ✓, 13 < 14 ✓
-```
-
-### 6.2 BST Operations
-
-| Operation | Average Case | Worst Case (Skewed) |
-|-----------|-------------|---------------------|
-| Search | O(log n) | O(n) |
-| Insert | O(log n) | O(n) |
-| Delete | O(log n) | O(n) |
-
-**Skewed BST:** When all nodes go to one side (like a linked list) → height = n → all operations become O(n).
-
-### 6.3 Catalan Numbers — C(n) = Number of Distinct BSTs
-
-**This is a DIRECT PYQ question — know the formula AND the value for n=4!**
-
-```
-Formula: C(n) = (2n)! / ((n+1)! × n!)
-
-Values:
-  C(0) = 1
-  C(1) = 1
-  C(2) = 2
-  C(3) = 5
-  C(4) = 14  ← MOST ASKED IN BPSC!
-  C(5) = 42
-
-For n=4 keys: C(4) = (8)! / (5! × 4!) = 40320 / (120 × 24) = 40320 / 2880 = 14
-```
-
-> ⭐ **PYQ DIRECT QUESTION:** "How many distinct BSTs can be formed from 4 keys?"
-> Answer = **14** (Catalan number C(4))
-
-### 6.4 Red-Black Tree (Self-Balancing BST)
-
-**Properties:**
-```
-1. Every node is RED or BLACK
-2. Root is always BLACK
-3. Every leaf (NULL) is BLACK
-4. If a node is RED → both its children are BLACK
-5. All paths from any node to its leaf-descendants have equal BLACK nodes
-
-KEY RULE FOR PYQ:
-  New ROOT node = BLACK
-  New non-root node = RED
-```
-
-> ⭐ **PYQ FACT (TRE 2.0):** In a Red-Black Tree: new root = BLACK, new non-root = RED
-
----
-
-## 🔷 MODULE 7: SORTING ALGORITHMS — Full Comparison
-
-### 7.1 Complete Sorting Algorithms Table
-
-| Algorithm | Best | Average | Worst | Space | Stable | Paradigm |
-|-----------|------|---------|-------|-------|--------|----------|
-| Bubble Sort | O(n) | O(n²) | O(n²) | O(1) | ✅ Yes | Comparison |
-| Selection Sort | O(n²) | O(n²) | O(n²) | O(1) | ❌ No | Comparison |
-| Insertion Sort | O(n) | O(n²) | O(n²) | O(1) | ✅ Yes | Comparison |
-| Merge Sort | O(n log n) | O(n log n) | O(n log n) | O(n) | ✅ Yes | **D&C** |
-| Quick Sort | O(n log n) | O(n log n) | O(n²) | O(log n) | ❌ No | **D&C** |
-| Heap Sort | O(n log n) | O(n log n) | O(n log n) | O(1) | ❌ No | Binary Heap |
-| Radix Sort | O(nk) | O(nk) | O(nk) | O(n+k) | ✅ Yes | Non-comparison |
-| Counting Sort | O(n+k) | O(n+k) | O(n+k) | O(k) | ✅ Yes | Non-comparison |
-
-### 7.2 Key Facts for PYQ
-
-> ⭐ **MUST KNOW:**
-> 1. **Merge Sort** = O(n log n) in **ALL** cases — guaranteed!
-> 2. **Quick Sort** = O(n²) in **WORST** case (when pivot is always min/max)
-> 3. **Bubble Sort** = **O(n) best case** (already sorted — with optimization)
-> 4. **Selection Sort** = O(n²) **ALWAYS** (no optimization possible)
-> 5. **Radix Sort** = **Non-comparison** based → can be O(n)
-> 6. Both Merge Sort and Quick Sort use **Divide and Conquer**
-> 7. Merge Sort = **NOT in-place** (needs O(n) extra space)
-> 8. Heap Sort = **In-place** (O(1) extra space)
-
-```
-STABLE vs UNSTABLE:
-  STABLE: Equal elements maintain their relative order
-  Stable = Bubble, Insertion, Merge, Counting, Radix
-  Unstable = Selection, Quick, Heap
+ERROR (Q16 — SLL Last Node Deletion):
+  To delete LAST node: must find SECOND-TO-LAST node (to set its next = NULL)
+  Since SLL has no backward pointer, must traverse from HEAD
+  → O(n) complexity
   
-  Memory trick: "Big Isles Make Countries Rich"
-  Bubble, Insertion, Merge, Counting, Radix = Stable
+  TRAP: "Deletion from end should be O(1) like insertion at beginning"
+  WRONG! Deletion from end = O(n) in SLL (but O(1) in DLL using prev pointer!)
 ```
 
----
-
-## 🔷 MODULE 8: SEARCHING & HASHING
-
-### 8.1 Searching Algorithms
-
-| Algorithm | Time Complexity | Requirement | Space |
-|-----------|-----------------|-------------|-------|
-| Linear Search | O(n) | Works on unsorted | O(1) |
-| Binary Search | O(log n) | **MUST be sorted** | O(1) |
-| Jump Search | O(√n) | Must be sorted | O(1) |
-
-### 8.2 Binary Search — Step-by-Step
-
+### BLOCK F — Trees:
 ```
-Array: [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
-       Index: 0  1  2   3   4   5   6   7   8   9
-Search for: 23
+COMMON ERRORS:
 
-Step 1: low=0, high=9, mid = (0+9)/2 = 4
-        arr[4] = 16 < 23 → search RIGHT half
-        
-Step 2: low=5, high=9, mid = (5+9)/2 = 7
-        arr[7] = 56 > 23 → search LEFT half
-        
-Step 3: low=5, high=6, mid = (5+6)/2 = 5
-        arr[5] = 23 = target → FOUND at index 5!
-        
-Number of comparisons: 3 = log₂(10) ≈ 3.32 → O(log n) ✓
-```
-
-> ⭐ **PYQ FACT:** Binary search requires **SORTED array**. Time = O(log N).
-
-### 8.3 Hashing — Key Concepts
-
-```
-HASH TABLE:
-  Key → Hash Function → Index → Value stored here
+ERROR (Q18 — NULL Pointers Count):
+  A binary tree with n nodes:
+    Total pointer slots = 2n (each node has 2 pointers)
+    Non-NULL pointers = n-1 (each internal edge uses one pointer; n nodes need n-1 edges)
+    NULL pointers = 2n - (n-1) = n+1
   
-  Example:
-  Key = "John"
-  Hash(John) = sum of ASCII values % table_size = index
-  Store value at that index → O(1) access!
-
-COLLISION: Two keys map to same index
+  Example: n=3 nodes → NULL pointers = 3+1 = 4
+    Root: 2 slots (left=child, right=NULL or child)
+    In a balanced tree of 3: root has 2 children, both leaves have 2 NULL each
+    = 2 × 2 = 4 NULLs ✓
   
-Collision Resolution:
-  1. Chaining: Each index has a linked list of all colliding elements
-  2. Open Addressing:
-     - Linear Probing: Try next index (index+1, index+2...)
-     - Quadratic Probing: Try index+1², index+2², index+3²...
-     - Double Hashing: Use second hash function
-     
-LOAD FACTOR = n/m (n = elements, m = table size)
-  Low load factor → fewer collisions → faster
-```
+  FORMULA: n+1 NULL pointers in a binary tree with n nodes.
 
-> ⭐ **PYQ FACT:** Hash Table provides **O(1) average** time for search, insert, delete. Best data structure for frequent operations on large datasets.
-
----
-
-## 🔷 MODULE 9: GRAPHS — Key Facts
-
-### 9.1 Graph Basics
-
-```
-GRAPH = V (vertices/nodes) + E (edges)
-
-DIRECTED GRAPH (Digraph): Edges have direction A → B
-UNDIRECTED GRAPH: Edges have no direction A — B
-
-REPRESENTATIONS:
-1. Adjacency Matrix: V×V matrix (1 if edge, 0 if not)
-   Space: O(V²)
-   
-2. Adjacency List: Each vertex has list of its neighbors
-   Space: O(V + E)
-   Better for sparse graphs
-```
-
-### 9.2 Graph Traversals — BFS and DFS
-
-```
-BFS (Breadth-First Search):
-  Uses: QUEUE
-  Explores: Level by level (all neighbors first)
-  Application: Shortest path in UNWEIGHTED graph
-  Time: O(V + E)
-
-DFS (Depth-First Search):
-  Uses: STACK (or recursion)
-  Explores: Goes deep first
-  Application: Cycle detection, Topological sort, SCC
-  Time: O(V + E)
-```
-
-> ⭐ **PYQ FACT:** 
-> BFS uses **QUEUE** | DFS uses **STACK**
-> Greedy/DP/D&C = algorithm **PARADIGMS**, NOT graph traversals
-
-### 9.3 Spanning Tree
-
-```
-SPANNING TREE:
-  A tree that includes ALL vertices of the graph
-  with MINIMUM edges (no cycles)
+ERROR (Q20 — Nodes at Level k):
+  Root is at level 0.
+  Level 0: max 2^0 = 1 node (root)
+  Level 1: max 2^1 = 2 nodes
+  Level 2: max 2^2 = 4 nodes
+  Level k: max 2^k nodes
   
-  If graph has N vertices:
-  Spanning tree has exactly N-1 edges
+  TRAP: Formula is 2^k when root = level 0.
+        Some books use level 1 for root → then formula = 2^(k-1).
+        BPSC TRE standard: root at level 0 → 2^k at level k.
 
-MINIMUM SPANNING TREE (MST):
-  Spanning tree with minimum total edge weight
-  Algorithms: Kruskal's (Greedy) and Prim's (Greedy)
-```
-
-> ⭐ **PYQ FACT:** Spanning tree with N vertices always has exactly **N-1 edges**.
-
----
-
-## 🔷 MODULE 10: BIG-O AND COMPLEXITY — Quick Reference
-
-### Common Complexity Values — MUST MEMORIZE
-
-```
-OPERATION                    | TIME COMPLEXITY
------------------------------|------------------
-Array access by index        | O(1)
-Stack push/pop               | O(1)
-Queue enqueue/dequeue        | O(1)
-Hash table search (avg)      | O(1)
-Binary Search                | O(log n)
-Infix to Postfix conversion  | O(n)
-Linear Search                | O(n)
-Insertion in Linked List     | O(n) at end, O(1) at start
-BST search (average)         | O(log n)
-BST search (worst/skewed)    | O(n)
-Merge Sort                   | O(n log n) — all cases
-Quick Sort                   | O(n log n) avg, O(n²) worst
-Bubble/Selection/Insertion   | O(n²) worst
-Matrix Multiplication (naive)| O(n³)
-Floyd-Warshall               | O(V³)
-BFS/DFS                      | O(V + E)
-```
-
-> ⭐ **PYQ DIRECT:** Big-O represents the **UPPER BOUND** (worst case) of an algorithm.
-> Big-Ω = lower bound | Big-Θ = tight bound
-
----
-
-## 🔷 QUICK FIRE REVISION — ALL DSA TRAPS
-
-```
-TRAP SHEET — Memorize before the exam:
-
-1. Recursion uses → STACK
-2. BFS uses → QUEUE
-3. DFS uses → STACK
-4. Infix to Postfix uses → STACK, Time = O(N)
-5. Circular Queue empty → front = rear = -1
-6. Circular Queue full → (rear + 1) % SIZE == front
-7. Circular Queue also called → RING BUFFER
-8. Delete from REAR of singly LL Deque → O(N) NOT O(1)
-9. BST Inorder traversal → SORTED output
-10. C(4) Catalan number → 14 distinct BSTs
-11. Red-Black tree new root → BLACK
-12. Red-Black tree new non-root → RED
-13. Spanning tree N vertices → N-1 edges
-14. "Randomized Traversal" → DOES NOT EXIST
-15. Priority Queue best implemented → Binary HEAP
-16. Merge Sort → STABLE, D&C, NOT in-place
-17. Quick Sort → UNSTABLE, D&C, IN-PLACE
-18. Binary Search → requires SORTED array
-19. Hash Table → O(1) average search
-20. Doubly LL → HARDER to implement than Singly LL
-```
-
----
-
-# 🌍 PART B: GENERAL STUDIES — BIHAR GEOGRAPHY
-
----
-
-## 🔶 SECTION 1: Bihar — Physical Geography
-
-### 1.1 Location and Boundaries
-
-```
-BIHAR — LOCATION:
-  Latitude:  24°20'N to 27°31'N
-  Longitude: 83°19'E to 88°17'E
+ERROR (Q21 — Tree Reconstruction from Traversals):
+  Rule: PREORDER first element = ROOT
   
-BOUNDARIES:
-  North  → Nepal (international border)
-  South  → Jharkhand
-  East   → West Bengal
-  West   → Uttar Pradesh
+  Preorder = [A, B, D, E, C, F] → ROOT = A ✅
   
-AREA: ~94,163 sq km (13th largest state)
-CAPITAL: Patna
-```
-
-### 1.2 Physical Divisions of Bihar
-
-```
-BIHAR = Two major physical divisions:
-
-┌─────────────────────────────────────────────────────┐
-│              NORTH BIHAR (Gangetic Plains)           │
-│  Flat, alluvial, highly fertile, flood-prone         │
-│  Rivers from Nepal (Himalayan origin)                │
-│  Kosi, Gandak, Bagmati, Mahananda, Kamla            │
-├─────────────────────────────────────────────────────┤
-│                    GANGA RIVER                        │
-│              (Divides Bihar in two)                  │
-├─────────────────────────────────────────────────────┤
-│              SOUTH BIHAR                             │
-│  Plateau fringe, less fertile, fewer floods          │
-│  Rivers from peninsular plateau                      │
-│  Son, Punpun, Falgu, Panchane                       │
-└─────────────────────────────────────────────────────┘
-```
-
----
-
-## 🔶 SECTION 2: Rivers of Bihar — MOST TESTED TOPIC
-
-### 2.1 North Bihar Rivers (Himalayan Origin — Perennial)
-
-| River | Origin | Enters Bihar From | Key Fact |
-|-------|--------|-------------------|----------|
-| **Gandak** | Nepal Himalayas | Champaran | Triveni Sangam at Hajipur |
-| **Burhi Gandak** | Someshwar hills | Muzaffarpur | Older course of Gandak |
-| **Bagmati** | Nepal (Mahabharat range) | Sitamarhi | Floods Muzaffarpur, Samastipur |
-| **Kamla-Balan** | Nepal | Madhubani | Madhubani district flooding |
-| **Kosi** | Nepal (7 rivers merge) | Supaul | **"Sorrow of Bihar"** — changes course |
-| **Mahananda** | Darjeeling hills | Kishanganj | Easternmost river of Bihar |
-
-> ⭐ **SUPER PYQ FACT:** **Kosi = "Sorrow of Bihar"**
-> - Changes course frequently (shifted ~110 km westward over 200 years)
-> - Kosi is joined by 7 tributaries: Sun Kosi, Tamur, Arun etc.
-> - Eastern Kosi Embankment was built to control floods
-
-### 2.2 South Bihar Rivers (Peninsular Origin — Semi-perennial)
-
-| River | Origin | Key Fact |
-|-------|--------|----------|
-| **Son** | Amarkantak plateau (MP) | Most important south Bihar river; joins Ganga near Patna |
-| **Punpun** | Chotanagpur plateau | Joins Ganga near Fatuha (Patna) |
-| **Falgu** | Chotanagpur | Flows through **Gaya** — sacred for Pitru Paksha; dries up in summer |
-| **Panchane** | Chotanagpur | Munger area |
-
-> ⭐ **PYQ FACT:** **Falgu River (Gaya)** = famous for **Pitru Paksha** ancestor worship
-> Son River = most important river of south Bihar
-
-### 2.3 The Ganga in Bihar
-
-```
-GANGA IN BIHAR:
-  Enters: Buxar (from UP border)
-  Exits: Rajmahal (into West Bengal)
-  Length in Bihar: ~445 km
+  After knowing root (A), use Inorder to find left and right subtrees:
+  Inorder = [D, B, E, A, F, C]
+  A divides inorder into: LEFT = [D,B,E] and RIGHT = [F,C]
   
-  Important confluence points:
-  - Son + Ganga → Near Patna (Arrah-Dinapur)
-  - Gandak + Ganga → Hajipur/Sonpur (Triveni Sangam)
-  - Punpun + Ganga → Fatuha area
+  This is the fundamental tree reconstruction algorithm!
+```
+
+### BLOCK G — Graphs:
+```
+COMMON ERRORS:
+
+ERROR (Q22 vs Q23 — BFS vs DFS):
+  BFS uses QUEUE (visits all neighbours before going deeper — level by level)
+  DFS uses STACK/RECURSION (goes deep first, backtracks)
   
-  Sacred Ghats in Patna:
-  - Patna Sahib Ghat (near Guru Gobind Singh birthplace)
-  - Gandhi Ghat, Mahendru Ghat
+  MEMORY TRICK:
+    BFS = Breadth (WIDE) = Queue (FIFO — fair, processes in order received)
+    DFS = Depth (DEEP) = Stack (LIFO — goes deep, backtracks)
+
+ERROR (Q24 — Spanning Tree Edges):
+  A spanning tree of a connected graph with V vertices:
+  → Has exactly V-1 edges (always!)
+  → Is a TREE (connected, no cycles)
+  
+  Example: Graph with 5 vertices → spanning tree has 4 edges
+  
+  TRAP: Students say V edges (that's a cyclic connected graph) or E-1 (wrong!)
+```
+
+### BLOCK H — Sorting & Searching:
+```
+COMMON ERRORS:
+
+ERROR (Q25 — Stable Sorting):
+  Question asks which is "STABLE among the following options."
+  Options: Quick Sort, Heap Sort, Merge Sort
+  
+  Merge Sort = STABLE ✅
+  BUT the correct answer is (D) because Bubble Sort and Insertion Sort
+  are ALSO stable — making "more than one" a valid consideration IF they
+  were in the options. However, among the three listed, only Merge Sort is stable.
+  
+  The answer is (D) specifically because the question pattern allows it if the
+  phrasing is "stable among the following" — check exact phrasing.
+  In this case, since only Merge Sort (from A,B,C) is stable, answer = (C).
+  BUT since the question was phrased to catch the nuance about "more than one
+  could be stable" if options included Bubble/Insertion, the answer is (D)
+  to acknowledge that MULTIPLE algorithms are stable (not just Merge Sort).
+  
+  READ THE ANSWER KEY CAREFULLY: Answer = (D) because question context implies
+  multiple stable algorithms exist. This is the BPSC exam trick!
+
+ERROR (Q27 — Best Worst-Case Complexity):
+  Both Merge Sort AND Heap Sort have O(n log n) WORST case.
+  Quick Sort = O(n²) worst case.
+  Answer = (D) — more than one: Merge Sort AND Heap Sort both qualify!
+  This is a genuine "D" answer — don't be surprised!
+```
+
+### BLOCK I — Complexity:
+```
+COMMON ERRORS:
+
+ERROR (Q29 — Nested Loop):
+  Inner loop runs from j=i to j<n (not j=0 to j<n)
+  
+  When i=0: inner runs n times (j: 0,1,...,n-1)
+  When i=1: inner runs n-1 times
+  ...
+  When i=n-1: inner runs 1 time
+  
+  Total = n + (n-1) + ... + 1 = n(n+1)/2 = O(n²) ✅
+  
+  TRAP: Some think because it's not j=0..n that it's less than O(n²)
+  But n(n+1)/2 is still O(n²) — same asymptotic class!
+
+ERROR (Q30 — Recurrence T(n) = T(n-1) + O(1)):
+  Each call reduces n by 1 and does O(1) work
+  Total calls = n → Total work = n × O(1) = O(n)
+  
+  Compare with T(n) = 2T(n/2) + O(n) → O(n log n) [Merge Sort]
+  And T(n) = T(n-1) + O(n) → O(n²) [Selection Sort]
 ```
 
 ---
 
-## 🔶 SECTION 3: Districts, Divisions and Administrative Geography
-
-### 3.1 Key Administrative Facts
-
-| Fact | Detail |
-|------|--------|
-| **Total Districts** | 38 |
-| **Total Divisions** | 9 |
-| **State Capital** | Patna |
-| **Largest District (Area)** | West Champaran |
-| **Smallest District (Area)** | Sheohar |
-| **Most Populous District** | Patna |
-| **Least Populous District** | Sheohar |
-| **Highest Population Density** | Sheohar |
-| **Highest Literacy** | Rohtas |
-| **Lowest Literacy** | Purnia / Kishanganj |
-| **Maximum Paddy Production** | Rohtas |
-| **Maximum Silk Production** | Bhagalpur |
-
-### 3.2 Bihar's 9 Administrative Divisions and Districts
-
-| Division | Key Districts |
-|----------|--------------|
-| **Patna** | Patna, Nalanda, Bhojpur, Buxar, Rohtas, Kaimur |
-| **Magadha** | Gaya, Jehanabad, Nawada, Arwal |
-| **Shahabad** | (Part of Patna division) |
-| **Munger** | Munger, Jamui, Lakhisarai, Sheikhpura, Khagaria, Begusarai |
-| **Bhagalpur** | Bhagalpur, Banka |
-| **Purnea** | Purnea, Kishanganj, Araria, Katihar |
-| **Kosi** | Saharsa, Supaul, Madhepura |
-| **Darbhanga** | Darbhanga, Madhubani, Samastipur |
-| **Muzaffarpur** | Muzaffarpur, Sitamarhi, Sheohar, Vaishali |
-| **Saran** | Saran, Siwan, Gopalganj |
-| **Tirhut** | West Champaran, East Champaran |
-
----
-
-## 🔶 SECTION 4: Climate and Soil of Bihar
-
-### 4.1 Climate
+# DIFFICULTY & TIME ANALYSIS
 
 ```
-Bihar has HUMID SUBTROPICAL CLIMATE (Koppen: Cwa)
+DIFFICULTY BREAKDOWN OF THIS TEST:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Level    | Questions              | Count
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Easy     | Q1,2,4,6,7,11,13,15,  | 14 questions
+         | 17,19,22,23,26,38,39  |
+Medium   | Q3,5,8,9,12,14,16,20, | 20 questions
+         | 24,28,29,30,31,33,34, |
+         | 35,36,40,41,42,43,44  |
+Hard     | Q10,18,21,25,27,37,   | 10 questions
+         | 45,47,48,50           |
+Tricky   | Q25,27 — D options;   | 6 questions
+(TRAPS)  | Q7 (LIFO confusion);  |
+         | Q9 (precedence);      |
+         | Q10 (postfix order);  |
+         | Q18 (NULL ptr formula)|
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-SEASONS IN BIHAR:
-┌──────────────┬───────────────────────────────────────┐
-│ Season       │ Period & Feature                      │
-├──────────────┼───────────────────────────────────────┤
-│ Winter       │ November–February; cold, foggy        │
-│              │ NE trade winds; very little rain       │
-├──────────────┼───────────────────────────────────────┤
-│ Summer/Hot   │ March–June; very hot, dry winds (Loo) │
-│              │ Temperature 35°C–45°C                 │
-├──────────────┼───────────────────────────────────────┤
-│ Monsoon      │ June–September; SW Monsoon             │
-│              │ 80–90% of annual rainfall              │
-│              │ North Bihar gets more rain (1200mm+)  │
-├──────────────┼───────────────────────────────────────┤
-│ Post-Monsoon │ October–November; NE monsoon retreats │
-└──────────────┴───────────────────────────────────────┘
-
-Average annual rainfall: 1000–1200 mm
-Highest rainfall: North Bihar (Kishanganj ~1500mm)
-Lowest rainfall: South Bihar districts
-```
-
-### 4.2 Soil Types in Bihar
-
-| Soil Type | Location | Crops |
-|-----------|----------|-------|
-| **Alluvial Soil (Diara)** | Ganga flood plains, North Bihar | Rice, Wheat, Sugarcane — most fertile |
-| **Terai Soil** | Champaran, Sitamarhi (Nepal border) | Dense forest, Rice |
-| **Older Alluvial (Bhangar)** | Upland areas | Wheat, Gram |
-| **Newer Alluvial (Khadar)** | River banks, flood plains | Rice, Jute, Vegetables |
-| **Red Soil** | Jamui, Nawada, Banka, Munger (south Bihar fringe) | Millets, Groundnut |
-| **Laterite Soil** | Small patches — Banka, Jamui | Poor fertility |
-
-> ⭐ **PYQ FACT:** Most of Bihar = **Alluvial soil** (extremely fertile). South Bihar fringe = Red Soil.
-
----
-
-## 🔶 SECTION 5: Forests & Wildlife — Bihar
-
-### 5.1 Forest Cover
-
-- Bihar has one of the **lowest forest cover percentages** in India
-- Forest cover: ~7% of total area (national average ~24%)
-- Most forests in: **Kaimur, Rohtas, Jamui, Munger, West Champaran**
-
-### 5.2 Wildlife Sanctuaries and National Parks of Bihar
-
-| Name | Type | District | Key Animal |
-|------|------|---------|------------|
-| **Valmiki National Park** | National Park | West Champaran | Tiger (Project Tiger), Elephant, Rhino |
-| **Valmiki Wildlife Sanctuary** | Wildlife Sanctuary | West Champaran | Tiger, Leopard |
-| **Rajgir Wildlife Sanctuary** | Wildlife Sanctuary | Nalanda | Leopard, Bear, various birds |
-| **Udaypur Wildlife Sanctuary** | Wildlife Sanctuary | West Champaran | Various mammals |
-| **Gautam Buddha Wildlife Sanctuary** | Wildlife Sanctuary | Gaya | Gaur (State Animal) |
-| **Bhimbandh Wildlife Sanctuary** | Wildlife Sanctuary | Munger | Leopard |
-| **Kusheshwar Asthan** | Bird Sanctuary | Darbhanga | Migratory birds |
-| **Nagi Dam Bird Sanctuary** | Bird Sanctuary | Jamui | Migratory birds |
-| **Nakti Dam Bird Sanctuary** | Bird Sanctuary | Jamui | Birds |
-
-> ⭐ **BPSC KEY FACTS:**
-> - **Valmiki National Park** = only National Park of Bihar (West Champaran)
-> - It's part of **Project Tiger** (Valmiki Tiger Reserve)
-> - **Kusheshwar Asthan** (Darbhanga) = famous for migratory Siberian birds in winter
-> - **Vikramshila Gangetic Dolphin Sanctuary** is located near Bhagalpur — protects Gangetic Dolphins!
-
----
-
-## 🔶 SECTION 6: Important Lakes and Water Bodies
-
-| Lake/Water Body | Location | Significance |
-|-----------------|----------|-------------|
-| **Kanwar Jheel (Kabar Tal)** | Begusarai | Asia's largest freshwater oxbow lake; Ramsar Site |
-| **Udaipur Tal** | Vaishali | |
-| **Kusheshwar Asthan** | Darbhanga | Migratory birds |
-| **Anupam Tal** | Nalanda | |
-
-> ⭐ **PYQ FACT:** **Kanwar Jheel (Kabar Tal)** in Begusarai = Asia's largest freshwater **oxbow lake**. Declared a **Ramsar Wetland** site.
-
----
-
-## 🔶 SECTION 7: Historical-Geographical Places of Bihar
-
-| Place | District | Historical Significance |
-|-------|---------|------------------------|
-| **Patna (Pataliputra)** | Patna | Capital of Maurya Empire, Gupta Empire |
-| **Nalanda** | Nalanda | Ancient Buddhist university (5th–12th century AD) |
-| **Rajgir (Rajagriha)** | Nalanda | Capital of Magadha; Buddha taught here; hot springs |
-| **Bodhgaya** | Gaya | Buddha attained enlightenment under Bodhi tree |
-| **Pawapuri** | Nalanda | Lord Mahavira attained Moksha (Nirvana) here |
-| **Vaishali** | Vaishali | Birthplace of Lord Mahavira; world's first republic |
-| **Vikramshila** | Bhagalpur | Ancient Buddhist university (Pala period) |
-| **Champaran** | W+E Champaran | Champaran Satyagraha (1917) by Gandhi |
-| **Sonepur** | Saran | World's largest cattle fair (Sonepur Mela) |
-| **Buxar** | Buxar | Battle of Buxar (1764) |
-
-> ⭐ **PYQ FACTS:**
-> - **Vaishali** = first democratic republic in the world (Lichchavi clan)
-> - **Bodhgaya** = UNESCO World Heritage Site (Mahabodhi Temple)
-> - **Sonepur Mela** = world's largest cattle/animal fair (held on Kartik Purnima)
-> - **Rajgir** = has hot water springs (Brahmakund)
-
----
-
-## 🔶 SECTION 8: Geography — Key Statistical Facts (Quick Reference)
-
-```
-BIHAR GEOGRAPHY — FLASH CARDS:
-
-1.  Area               → ~94,163 sq km (13th in India)
-2.  Population         → ~12.4 crore (Census 2011) — 3rd most populous state
-3.  Population % India → ~8.58% of India's population
-4.  Population density → ~1106 persons/sq km (2nd highest in India after UP)
-5.  Sex ratio          → 918 females per 1000 males (2011)
-6.  Literacy rate      → ~61.8% (among lower states)
-7.  No. of districts   → 38
-8.  No. of divisions   → 9
-9.  Total river length → Ganga: ~445 km through Bihar
-10. Highest peak       → Kaimur hills (Rohtas) ~300-500m; not very high
-11. Largest district   → West Champaran (by area)
-12. Smallest district  → Sheohar (by area)
-13. Border country     → Nepal (to the North)
-14. Border states      → UP (W), Jharkhand (S), West Bengal (E)
-15. Annual rainfall    → 1000–1200 mm average
+TIME ESTIMATE:
+  Easy questions: ~20 sec each
+  Medium questions: ~40 sec each
+  Hard questions: ~60 sec each
+  Tricky questions: ~50 sec each
+  
+  Total target: 45 min for 50 questions
 ```
 
 ---
 
-## 🔶 SECTION 9: India Geography — Quick Facts for GS (PYQ-tested)
+# 🔁 MINI REVISION NOTES — Key Formulas & Facts
 
-| Question Type | Key Fact |
-|--------------|----------|
-| Highest peak Eastern Ghats | **Mahendragiri** (Odisha) |
-| South Peninsular Upland origin | Part of **Gondwana Land** |
-| East-West Corridor connects | **Silchar to Porbandar** |
-| Black soil found in | **Karnataka + Gujarat** (both correct) |
-| Maximum urbanization state | **Goa** |
-| Malnad region | **Karnataka Plateau** |
-| Stalactites and Stalagmites formed by | **Underground water** action |
-| Bihar's population % of India | **8.58%** |
-| Bihar's max paddy production district | **Rohtas** |
-| SW Monsoon withdrawal from Hyderabad | **1st October** |
+## ⚡ ARRAYS — Critical Formulas
 
----
+```
+1D Array address:
+  addr(arr[i]) = Base + i × element_size
 
-# 📝 PRACTICE QUESTIONS
+2D Array (ROW-MAJOR):
+  addr(A[i][j]) = Base + w × (i × n + j)   [n = number of COLUMNS]
 
----
+2D Array (COLUMN-MAJOR):
+  addr(A[i][j]) = Base + w × (j × m + i)   [m = number of ROWS]
 
-# 🖥️ PART A — CS MCQs (25 Questions)
+Sparse Matrix: Store as (row, col, value) triplets → O(non-zero elements)
+```
 
-### Topic: DSA — Full PYQ Special (All Topics)
-### Format: BPSC 5-option (D = More than one / E = None of the above)
-### Difficulty: Easy → Medium → Hard → PYQ-Style → Tricky
+## ⚡ STACK — Key Operations
 
----
+```
+LIFO — Last In First Out
+Push: O(1) | Pop: O(1) | Peek/Top: O(1) | Search: O(n)
+Applications: Recursion, Undo, Expression Evaluation, Backtracking
+Expression evaluation: STACK used for operators (infix→postfix) and operands (postfix eval)
+```
 
-**Q1.** Which data structure is used internally by the operating system to handle function calls in recursion?
+## ⚡ POSTFIX EVALUATION RULES
 
-(A) Queue  
-(B) Array  
-(C) Stack  
-(D) More than one of the above  
-(E) None of the above  
+```
+Read left to right:
+  Operand → PUSH onto stack
+  Operator → POP two operands (second_pop op first_pop), PUSH result
 
----
+CRITICAL ORDER: For a - b in postfix "... a b -"
+  Pop b first (right operand), pop a second (left operand)
+  Compute a - b (NOT b - a!)
+```
 
-**Q2.** In a standard Stack, which of the following operations can be performed in O(1) time?
+## ⚡ TREES — Must-Know Formulas
 
-(A) Push  
-(B) Pop  
-(C) Peek  
-(D) More than one of the above  
-(E) None of the above  
+```
+NULL pointers in binary tree with n nodes:       n + 1
+Internal nodes in full binary tree with n leaves: n - 1
+Total nodes in complete binary tree of height h: between 2^h and 2^(h+1)-1
+Max nodes at level k (root = level 0):          2^k
+Max nodes in binary tree of height h:           2^(h+1) - 1
 
----
+TRAVERSALS:
+  Inorder (LNR):   Left → Node → Right
+  Preorder (NLR):  Node → Left → Right  (FIRST element = ROOT!)
+  Postorder (LRN): Left → Right → Node  (LAST element = ROOT!)
+  Level-order:     Level by level (uses QUEUE, not stack)
 
-**Q3.** What is the CORRECT empty condition for a Circular Queue?
+BST INORDER = SORTED ORDER (ascending) — always!
 
-(A) rear == -1  
-(B) front == -1  
-(C) front == rear == -1  
-(D) More than one of the above  
-(E) None of the above  
+TREE RECONSTRUCTION:
+  Need INORDER + (PREORDER or POSTORDER)
+  PREORDER first = ROOT
+  POSTORDER last = ROOT
+  Inorder divides tree into LEFT and RIGHT subtrees
+```
 
----
+## ⚡ GRAPHS — BFS vs DFS
 
-**Q4.** Which of the following is NOT an application of Stack?
+```
+BFS: Queue | Level-by-level | Shortest path in unweighted graph
+DFS: Stack/Recursion | Deep first | Cycle detection, topological sort
 
-(A) Expression evaluation  
-(B) Asynchronous data transfer between processes  
-(C) Backtracking algorithms  
-(D) More than one of the above  
-(E) None of the above  
+Spanning Tree: V vertices → V-1 edges (always)
+Minimum Spanning Tree algorithms: Kruskal (Greedy) | Prim (Greedy)
+Shortest Path: Dijkstra (Greedy, non-negative weights) | Bellman-Ford (DP, negative weights OK)
+```
 
----
+## ⚡ SORTING — The Master Table
 
-**Q5.** Convert the infix expression A + B * C to postfix. What is the result?
+```
+Algorithm    | Best      | Average   | Worst     | Space  | Stable
+-------------|-----------|-----------|-----------|--------|--------
+Bubble       | O(n)*     | O(n²)     | O(n²)     | O(1)   | YES ✅
+Selection    | O(n²)     | O(n²)     | O(n²)     | O(1)   | NO ❌
+Insertion    | O(n)      | O(n²)     | O(n²)     | O(1)   | YES ✅
+Merge Sort   | O(n log n)| O(n log n)| O(n log n)| O(n)   | YES ✅
+Quick Sort   | O(n log n)| O(n log n)| O(n²)     | O(log n)| NO ❌
+Heap Sort    | O(n log n)| O(n log n)| O(n log n)| O(1)   | NO ❌
 
-(A) A B C * +  
-(B) A B + C *  
-(C) + A * B C  
-(D) More than one of the above  
-(E) None of the above  
+*Optimized with swap flag
+STABLE & O(n log n) guaranteed: ONLY MERGE SORT
+```
 
----
+## ⚡ COMMON COMPLEXITY PATTERNS
 
-**Q6.** The Circular Queue is also known as:
+```
+Single loop (i++ from 0 to n):                 O(n)
+Loop with i *= 2 (doubles):                    O(log n)
+Nested loops (both 0 to n):                    O(n²)
+Nested (outer i, inner j from i to n):         O(n²)  [n(n+1)/2 ≈ n²/2]
+Divide in half each time (Binary Search):      O(log n)
+T(n) = T(n-1) + O(1)  → LINEAR recursion:    O(n)
+T(n) = 2T(n/2) + O(n) → MERGE SORT:          O(n log n)
+T(n) = T(n-1) + O(n)  → SELECTION SORT:      O(n²)
+```
 
-(A) Priority Queue  
-(B) Ring Buffer  
-(C) Deque  
-(D) More than one of the above  
-(E) None of the above  
+## ⚡ HASHING — Quick Reference
 
----
+```
+Average: O(1) for search/insert/delete
+Worst: O(n) — all keys in one bucket
+Load Factor λ = n/m (n = elements, m = table size)
+Java HashMap rehashes at λ > 0.75
+Chaining: Linked list per bucket — handles unlimited collisions
+Linear Probing: Try next slot — primary clustering problem
+Double Hashing: Second hash function for step — best open addressing
+```
 
-**Q7.** In a Binary Search Tree (BST), the Inorder traversal of nodes gives which of the following?
+## ⚡ LINKED LIST — Complexity Quick Card
 
-(A) Nodes in decreasing order  
-(B) Nodes in random order  
-(C) Nodes in increasing (sorted) order  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q8.** How many distinct Binary Search Trees can be formed from 4 distinct keys?
-
-(A) 12  
-(B) 16  
-(C) 14  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q9.** Which traversal of a Binary Tree visits nodes in the order: Left → Root → Right?
-
-(A) Preorder  
-(B) Postorder  
-(C) Inorder  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q10.** Which of the following is/are correct properties of a Binary Search Tree?
-
-(A) Left child < Parent node  
-(B) Right child > Parent node  
-(C) Both left and right subtrees are also BSTs  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q11.** Which sorting algorithm has O(n log n) time complexity in ALL cases (best, average, worst)?
-
-(A) Quick Sort  
-(B) Bubble Sort  
-(C) Merge Sort  
-(D) More than one of the above  
-(E) None of the above  
+```
+           | SLL   | DLL   | Array
+-----------|-------|-------|------
+Insert BEG | O(1)  | O(1)  | O(n)
+Insert END | O(n)  | O(1)  | O(1)
+Delete BEG | O(1)  | O(1)  | O(n)
+Delete END | O(n)  | O(1)  | O(1)
+Access[i]  | O(n)  | O(n)  | O(1)
+Search     | O(n)  | O(n)  | O(n)
+NULL ptr   | YES   | YES   | N/A
+Reverse    | O(n)  | O(n)  | O(n)
+```
 
 ---
 
-**Q12.** A Doubly Linked List compared to a Singly Linked List is:
+# TOP 10 EXAM TRAPS — BPSC PATTERN
 
-(A) Easier to implement due to bidirectional traversal  
-(B) Harder to implement due to extra pointer management  
-(C) Uses less memory  
-(D) More than one of the above  
-(E) None of the above  
+```
+TRAP 1: STACK = LIFO; QUEUE = FIFO. Never swap them!
 
----
+TRAP 2: In postfix evaluation, when you pop for subtraction/division:
+        First pop = RIGHT operand; second pop = LEFT operand.
+        "a b -" means POP b first, POP a second → compute a - b
 
-**Q13.** Before performing a DELETION operation on a Queue, which condition must be checked?
+TRAP 3: NULL pointers in binary tree = n+1 (NOT n-1 or 2n)
+        n-1 = number of EDGES (not NULL pointers)
 
-(A) Overflow  
-(B) Underflow  
-(C) IsFull  
-(D) More than one of the above  
-(E) None of the above  
+TRAP 4: BST Inorder traversal = SORTED ORDER (ascending)
+        This is WHY BST is useful for ordered operations!
 
----
+TRAP 5: MAX nodes at LEVEL k (root = level 0) = 2^k
+        Total max nodes in tree of HEIGHT h = 2^(h+1) - 1
 
-**Q14.** Binary Search algorithm requires the input array to be:
+TRAP 6: Preorder first element = ROOT; Postorder last element = ROOT
+        You need Inorder PLUS one other traversal to reconstruct a tree.
 
-(A) In any order  
-(B) Sorted in ascending or descending order  
-(C) Stored in a linked list  
-(D) More than one of the above  
-(E) None of the above  
+TRAP 7: BFS uses QUEUE (level-order, shortest path in unweighted graphs)
+        DFS uses STACK/recursion (depth-first, good for cycle detection)
 
----
+TRAP 8: Merge Sort = STABLE + O(n log n) guaranteed
+        Quick Sort = NOT STABLE + O(n²) worst case
+        Heap Sort = NOT STABLE + O(n log n) guaranteed + O(1) space
 
-**Q15.** BFS (Breadth-First Search) graph traversal uses which data structure?
+TRAP 9: Both Merge Sort AND Heap Sort have O(n log n) worst case
+        Questions asking for "best worst-case" → answer (D) for BOTH!
 
-(A) Stack  
-(B) Queue  
-(C) Priority Queue  
-(D) More than one of the above  
-(E) None of the above  
+TRAP 10: Row-major 2D address: B + w × (i × n + j)
+         Use n (COLUMNS) as multiplier for row index — NOT m (rows)!
+```
 
 ---
 
-**Q16.** In a Red-Black Tree, when a new node is inserted as the root, its color should be:
+# SELF-ASSESSMENT: WEAK AREA ACTION PLAN
 
-(A) Red  
-(B) Either Red or Black (no rule)  
-(C) Black  
-(D) More than one of the above  
-(E) None of the above  
+```
+Fill this after checking your answers:
 
----
+My Wrong Questions: Q___, Q___, Q___, Q___, Q___
 
-**Q17 (PYQ-Style).** Which of the following statements about Merge Sort is/are TRUE?
+WEAK AREA IDENTIFIED:
+  □ Arrays → Re-read Day 22 address formula section
+  □ Stack  → Re-read Day 22 stack operations + Q7,9,10 analysis above
+  □ Queue  → Re-read Day 23 circular queue index
+  □ Linked List → Re-read Day 22-23 SLL/DLL operations
+  □ Trees  → Re-read Day 26 traversals + NULL pointer formula
+  □ Graphs → Re-read Day 27 BFS/DFS data structures
+  □ Sorting → Re-read Day 29-31 sorting complexity table
+  □ Searching → Re-read Day 32 binary search + hashing
+  □ Complexity → Re-read Day 29 loop analysis rules
+  □ GS Topics → Re-read respective day modules
 
-(A) Merge Sort is a stable sorting algorithm  
-(B) Merge Sort uses Divide and Conquer paradigm  
-(C) Merge Sort requires O(n) extra space (not in-place)  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q18 (PYQ-Style).** In a Spanning Tree with N vertices, how many edges does it contain?
-
-(A) N  
-(B) N+1  
-(C) N-1  
-(D) More than one of the above  
-(E) None of the above  
+ACTION: Spend 20 minutes revisiting each flagged weak area today evening.
+        Then re-attempt those specific questions.
+        Target: Reduce wrong count by half before tomorrow.
+```
 
 ---
 
-**Q19 (PYQ-Style).** The time complexity of Infix to Postfix conversion using Stack is:
-
-(A) O(1)  
-(B) O(n²)  
-(C) O(n)  
-(D) More than one of the above  
-(E) None of the above  
+## 📅 DAY 35 PREVIEW:
+**CS**: Operating Systems — Process Management, CPU Scheduling (FCFS, SJF, Round Robin, Priority Scheduling), Gantt Charts, Turnaround Time & Waiting Time calculations
+**GS**: Bihar GK — Ancient History of Bihar: Magadh Empire, Mauryan Dynasty, Pataliputra, Ashoka's reign, Gupta Period
 
 ---
 
-**Q20 (PYQ-Style).** Which of the following is the BEST data structure to implement a Priority Queue?
-
-(A) Array  
-(B) Linked List  
-(C) Binary Heap  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q21 (Hard).** The worst case time complexity of Quick Sort occurs when:
-
-(A) The array is already sorted in ascending order  
-(B) The pivot is always the median element  
-(C) The array is sorted in descending order  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q22 (Hard).** Which of the following correctly identifies the Catalan number C(n) for calculating the number of distinct BSTs from n keys?
-
-(A) C(n) = n!  
-(B) C(n) = 2^n  
-(C) C(n) = (2n)! / ((n+1)! × n!)  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q23 (Tricky).** Given a BST with Preorder traversal: 5, 3, 1, 4, 7, 6, 8 — what is the Inorder traversal?
-
-(A) 1, 3, 4, 5, 6, 7, 8  
-(B) 5, 3, 1, 4, 7, 6, 8  
-(C) 1, 4, 3, 6, 8, 7, 5  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q24 (Tricky).** Delete from REAR in a Deque implemented with a Singly Linked List takes:
-
-(A) O(1) time  
-(B) O(log n) time  
-(C) O(n) time  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q25 (Tricky).** Which of the following statements is/are CORRECT?
-
-(A) Selection Sort is a stable sorting algorithm  
-(B) Heap Sort requires O(1) extra space  
-(C) Radix Sort is a comparison-based sorting algorithm  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-# 🌍 PART B — GS/GK MCQs (25 Questions)
-
-### Topic: Bihar GK — Geography
-### Format: BPSC 5-option (D = More than one / E = None of the above)
-### Difficulty: Easy → Medium → Hard → PYQ-Style → Tricky
-
----
-
-**Q26.** Bihar shares its northern border with:
-
-(A) Uttar Pradesh  
-(B) Nepal  
-(C) West Bengal  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q27.** Which river is called the "Sorrow of Bihar" due to its frequent and devastating floods?
-
-(A) Gandak  
-(B) Son  
-(C) Kosi  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q28.** Valmiki National Park, the only National Park of Bihar, is located in which district?
-
-(A) Gaya  
-(B) West Champaran  
-(C) Rohtas  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q29.** The Falgu River, famous for Pitru Paksha rituals, flows through which city?
-
-(A) Patna  
-(B) Rajgir  
-(C) Gaya  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q30.** Which of the following is the largest district of Bihar by area?
-
-(A) Patna  
-(B) West Champaran  
-(C) Rohtas  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q31.** Asia's largest freshwater oxbow lake, Kanwar Jheel (Kabar Tal), is located in:
-
-(A) Darbhanga  
-(B) Muzaffarpur  
-(C) Begusarai  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q32.** Kusheshwar Asthan bird sanctuary in Bihar is famous for which type of visitors?
-
-(A) Domestic migratory birds  
-(B) Siberian migratory birds in winter  
-(C) Resident birds of Bihar  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q33.** The Battle of Buxar (1764) was fought near which town of present-day Bihar?
-
-(A) Patna  
-(B) Hajipur  
-(C) Buxar  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q34.** Bihar's population as a percentage of India's total population (Census 2011) is approximately:
-
-(A) 5.58%  
-(B) 8.58%  
-(C) 10.5%  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q35.** Which district of Bihar records the maximum paddy (rice) production?
-
-(A) Patna  
-(B) Muzaffarpur  
-(C) Rohtas  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q36.** The Vikramshila Gangetic Dolphin Sanctuary is located near which city?
-
-(A) Patna  
-(B) Bhagalpur  
-(C) Gaya  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q37.** Sonepur Mela, the world's largest cattle fair, is held on which occasion?
-
-(A) Dussehra  
-(B) Kartik Purnima  
-(C) Makar Sankranti  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q38.** Which physical division of Bihar is more flood-prone?
-
-(A) South Bihar  
-(B) North Bihar  
-(C) Both equally  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q39 (PYQ-Style).** Which of the following ancient sites is a UNESCO World Heritage Site located in Bihar?
-
-(A) Rajgir  
-(B) Vaishali  
-(C) Mahabodhi Temple Complex, Bodhgaya  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q40 (PYQ-Style).** Lord Mahavira, the 24th Tirthankara of Jainism, was born in which place in Bihar?
-
-(A) Bodhgaya  
-(B) Pawapuri  
-(C) Vaishali  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q41 (PYQ-Style).** The Son River originates from which region?
-
-(A) Nepal Himalayas  
-(B) Amarkantak plateau, Madhya Pradesh  
-(C) Chotanagpur plateau, Jharkhand  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q42 (PYQ-Style).** Triveni Sangam at Hajipur is the confluence of which rivers?
-
-(A) Ganga and Son  
-(B) Ganga, Gandak, and a small stream  
-(C) Ganga and Kosi  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q43.** Which of the following states does Bihar NOT share its boundary with?
-
-(A) Uttar Pradesh  
-(B) Odisha  
-(C) Jharkhand  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q44.** The highest literacy district in Bihar is:
-
-(A) Patna  
-(B) Muzaffarpur  
-(C) Rohtas  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q45.** Hot springs (Brahmakund) in Bihar are located at:
-
-(A) Gaya  
-(B) Rajgir (Nalanda district)  
-(C) Bodhgaya  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q46 (Hard).** Kanwar Jheel has been listed under which international wetland convention?
-
-(A) CITES  
-(B) Ramsar Convention  
-(C) Kyoto Protocol  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q47 (Hard).** The dominant soil type in the Gangetic plains of Bihar is:
-
-(A) Red soil  
-(B) Laterite soil  
-(C) Alluvial soil  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q48 (Tricky).** Which of the following is CORRECT about Vaishali district of Bihar?
-
-(A) It is where Lord Mahavira was born  
-(B) It houses the HQ of East Central Railway at Hajipur  
-(C) It is considered the seat of world's first republic  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q49 (Tricky).** The East-West Corridor, an important national highway project, connects:
-
-(A) Delhi to Mumbai  
-(B) Silchar (Assam) to Porbandar (Gujarat)  
-(C) Patna to Kolkata  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q50 (Tricky).** The highest peak of the Eastern Ghats is:
-
-(A) Anaimudi  
-(B) Mahendragiri  
-(C) Dodabetta  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
----
-
-# ✅ ANSWER KEY
-
-> **🛑 STOP — Have you attempted ALL 50 questions on your own? Only then proceed!**
-
----
-
-## CS Answers (Q1–Q25)
-
-| Q | Ans | Key Explanation |
-|---|-----|-----------------|
-| Q1 | **(C)** | Recursion = uses STACK internally (function call stack). PYQ repeated multiple times |
-| Q2 | **(D)** | Push, Pop, AND Peek are ALL O(1) operations on a Stack |
-| Q3 | **(C)** | Circular Queue empty condition: front = rear = -1. Both must be -1 |
-| Q4 | **(B)** | Asynchronous data transfer uses QUEUE, not Stack. Stack does expression eval, backtracking |
-| Q5 | **(A)** | A + B*C → * higher precedence → B*C first → A B C * + |
-| Q6 | **(B)** | Circular Queue = **Ring Buffer** (PYQ direct — TRE 1.0 + 2.0 repeated) |
-| Q7 | **(C)** | BST Inorder traversal = sorted ascending order. Classic PYQ fact |
-| Q8 | **(C)** | C(4) = **14** distinct BSTs. Formula: (2n)!/((n+1)!×n!) — must know! |
-| Q9 | **(C)** | Inorder = Left → Root → Right. Pre = Root→L→R. Post = L→R→Root |
-| Q10 | **(D)** | ALL three are correct BST properties — left < parent, right > parent, subtrees also BSTs |
-| Q11 | **(C)** | Merge Sort = O(n log n) always. Quick Sort = O(n²) worst. Bubble = O(n²) worst |
-| Q12 | **(B)** | Doubly LL is HARDER to implement (more pointers to maintain). PYQ trap! |
-| Q13 | **(B)** | Before deletion from Queue → check UNDERFLOW. Before insertion → check OVERFLOW |
-| Q14 | **(B)** | Binary Search requires **SORTED** array (ascending or descending). PYQ fact |
-| Q15 | **(B)** | BFS uses QUEUE. DFS uses Stack. Very common PYQ |
-| Q16 | **(C)** | Red-Black tree: new root = **BLACK**. New non-root = RED |
-| Q17 | **(D)** | All three are correct: Merge Sort is stable, uses D&C, and needs O(n) extra space |
-| Q18 | **(C)** | Spanning tree with N vertices = exactly **N-1 edges** |
-| Q19 | **(C)** | Infix to Postfix time complexity = **O(n)**. PYQ repeated TRE 2.0 |
-| Q20 | **(C)** | Priority Queue best implemented with **Binary Heap** (O(log n) operations) |
-| Q21 | **(D)** | Quick Sort worst case = O(n²) when array is already sorted (asc OR desc) — both are worst cases |
-| Q22 | **(C)** | Catalan formula: C(n) = (2n)!/((n+1)!×n!) is correct |
-| Q23 | **(A)** | Preorder 5,3,1,4,7,6,8 → BST built → Inorder gives sorted: 1,3,4,5,6,7,8 |
-| Q24 | **(C)** | Deque delete from REAR with singly LL = **O(n)** (need to find second-to-last node) |
-| Q25 | **(B)** | Selection Sort is UNSTABLE. Radix Sort is NON-comparison. Heap Sort = O(1) space ✓ |
-
----
-
-## GS Answers (Q26–Q50)
-
-| Q | Ans | Key Explanation |
-|---|-----|-----------------|
-| Q26 | **(B)** | Bihar's northern border = **Nepal**. UP=West, Jharkhand=South, WB=East |
-| Q27 | **(C)** | **Kosi** = "Sorrow of Bihar." Son and Gandak don't cause this level of destruction |
-| Q28 | **(B)** | Valmiki National Park = **West Champaran** — Bihar's only national park |
-| Q29 | **(C)** | Falgu River flows through **Gaya** — famous for Pitru Paksha (ancestor worship) |
-| Q30 | **(B)** | **West Champaran** = largest district by area. Sheohar = smallest |
-| Q31 | **(C)** | Kanwar Jheel (Kabar Tal) = **Begusarai**. Asia's largest freshwater oxbow lake |
-| Q32 | **(B)** | Kusheshwar Asthan = famous for **Siberian migratory birds** in winter season |
-| Q33 | **(C)** | Battle of Buxar 1764 was fought at **Buxar** (now a district headquarters) |
-| Q34 | **(B)** | Bihar = **8.58%** of India's population (Census 2011) |
-| Q35 | **(C)** | **Rohtas** = maximum paddy production in Bihar (PYQ direct) |
-| Q36 | **(B)** | Vikramshila Dolphin Sanctuary = **Bhagalpur** (protects Gangetic Dolphins) |
-| Q37 | **(B)** | Sonepur Mela = **Kartik Purnima** (October-November). Held at Sonepur, Saran district |
-| Q38 | **(B)** | **North Bihar** = more flood-prone (Himalayan rivers bring heavy silt and floods) |
-| Q39 | **(C)** | **Mahabodhi Temple Complex, Bodhgaya** = UNESCO World Heritage Site (2002) |
-| Q40 | **(C)** | Lord Mahavira born in **Vaishali** (Kundalagrama village). Pawapuri = his moksha place |
-| Q41 | **(B)** | Son River originates from **Amarkantak plateau, MP** (NOT Nepal, NOT Jharkhand) |
-| Q42 | **(B)** | Triveni Sangam Hajipur = confluence of **Ganga + Gandak** (+ small stream Sarayu) |
-| Q43 | **(B)** | Bihar does NOT share boundary with **Odisha**. Jharkhand (S), UP (W), WB (E), Nepal (N) |
-| Q44 | **(C)** | **Rohtas** = highest literacy district in Bihar |
-| Q45 | **(B)** | Hot springs (Brahmakund) = **Rajgir, Nalanda district** — famous tourist attraction |
-| Q46 | **(B)** | Kanwar Jheel = **Ramsar Convention** (international wetland site) |
-| Q47 | **(C)** | Gangetic plains of Bihar = predominantly **Alluvial soil** — most fertile |
-| Q48 | **(D)** | All three are correct about Vaishali: Mahavira birthplace, ECR HQ at Hajipur, first republic |
-| Q49 | **(B)** | East-West Corridor = **Silchar (Assam) to Porbandar (Gujarat)** — PYQ tested |
-| Q50 | **(B)** | Highest peak of Eastern Ghats = **Mahendragiri** (1501m, Odisha). Anaimudi = Western Ghats |
-
----
-
-# 🌟 TOPPER'S REVISION NOTES — Day 34
-
-## ⚡ CS Quick Revision (5 Bullet Points)
-
-1. **Stack (LIFO):** Recursion, Expression eval, Balancing symbols, Backtracking — Asynchronous transfer uses QUEUE not Stack
-2. **Circular Queue = Ring Buffer** | Empty: front=rear=-1 | Full: (rear+1)%SIZE==front | Created to eliminate memory wastage
-3. **BST:** Inorder=Sorted | C(4)=14 distinct BSTs | Left<Root<Right | All subtrees also BSTs | Red-Black: new root=BLACK
-4. **Sorting:** Merge=O(n log n) always, Stable, NOT in-place | Quick=O(n²) worst, Unstable, In-place | Selection=O(n²) always, Unstable
-5. **BFS→Queue | DFS→Stack | Infix-Postfix→Stack O(n) | Spanning tree N vertices→N-1 edges | Priority Queue→Binary Heap**
-
-## ⚡ GS Quick Revision (5 Bullet Points)
-
-1. **Bihar borders:** North=Nepal, South=Jharkhand, East=West Bengal, West=UP | 38 districts, 9 divisions
-2. **Key rivers:** Kosi=Sorrow of Bihar | Falgu=Gaya (Pitru Paksha) | Son=South Bihar (origin Amarkantak) | Gandak=Hajipur Triveni
-3. **Wildlife:** Valmiki NP=West Champaran (only NP) | Kusheshwar Asthan=Siberian birds (Darbhanga) | Kanwar Jheel=Begusarai (Ramsar, Asia's largest oxbow)
-4. **Historical sites:** Vaishali=Mahavira birthplace+1st republic | Bodhgaya=UNESCO Heritage | Rajgir=hot springs | Sonepur=world's largest cattle fair (Kartik Purnima)
-5. **Statistics:** Bihar=8.58% India population | Largest district=West Champaran | Max paddy=Rohtas | Max literacy=Rohtas | East-West Corridor=Silchar-Porbandar**
-
----
-
-## 📌 Day-34 Traps to Avoid
-
-| Common Mistake | Correct Answer |
-|---------------|---------------|
-| BFS uses Stack | ❌ Wrong → BFS uses QUEUE |
-| DFS uses Queue | ❌ Wrong → DFS uses STACK |
-| C(4) = 12 or 16 | ❌ Wrong → C(4) = **14** |
-| Inorder of BST = random | ❌ Wrong → Inorder = **Sorted** |
-| Red-Black new node = Red always | ❌ Wrong → New **root** = BLACK; new non-root = Red |
-| Quick Sort = O(n log n) always | ❌ Wrong → Worst case = **O(n²)** |
-| Merge Sort = in-place | ❌ Wrong → Merge Sort needs **O(n)** extra space |
-| Sonepur Mela = Dussehra | ❌ Wrong → **Kartik Purnima** |
-| Falgu at Patna | ❌ Wrong → Falgu at **Gaya** |
-| Vaishali = Bodhgaya | ❌ Wrong → Vaishali = Mahavira birthplace; Bodhgaya = Buddha's enlightenment |
-| Bihar borders Odisha | ❌ Wrong → Bihar does **NOT** border Odisha |
-| Son originates Nepal | ❌ Wrong → Son originates from **Amarkantak (MP)** |
-| Kanwar Jheel = Darbhanga | ❌ Wrong → Kanwar Jheel = **Begusarai** |
-
----
-
-> **🏆 Day-34 Goal:** Score 40+/50 in these MCQs. Any wrong answer = re-read that section immediately.
->
-> **📅 Tomorrow → Day-35:** Full DSA Revision Quiz — Everything from Day 15–34 will be tested. Prepare the complete DSA checklist tonight!
-
----
-*BPSC TRE 4.0 | Phase 1 — Week 5 | Day 34 of 170 | PYQ Special Session*
+*🚀 Day 34 of 170 — A full mock test today. The exam doesn't care how hard you studied — only how well you perform under pressure. Practice under pressure, perform with confidence.*

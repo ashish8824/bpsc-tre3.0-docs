@@ -1,535 +1,1201 @@
-# 📅 BPSC TRE 4.0 — DAY 39
-## CS Topic: Database Normalization (1NF, 2NF, 3NF, BCNF)
-## GS Topic: India's Climate — Seasons, Monsoon, Rainfall Zones
-
-> **Target:** 130+/150 | Top 50 Rank
-> **Day Structure:** CS Concepts → GS Concepts → 25 CS MCQs → 25 GS MCQs → Answer Key at End
+# 📅 BPSC TRE 4.0 — DAY 39 COMPLETE STUDY MODULE
+### Normalization (1NF, 2NF, 3NF, BCNF) + India's Climate Zones (Geography)
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-# ═══════════════════════════════════════════════
-# 📘 PART 1: COMPUTER SCIENCE — NORMALIZATION
-# ═══════════════════════════════════════════════
-
-## 🎯 Why Normalization? The Core Problem
-
-Imagine a poorly designed table storing student-course data:
-
-```
-┌──────────┬────────────┬──────────────┬─────────────────┬──────────┐
-│ Stud_ID  │ Stud_Name  │ Course_ID    │ Course_Name     │ Teacher  │
-├──────────┼────────────┼──────────────┼─────────────────┼──────────┤
-│ 101      │ Rohan      │ CS101        │ C++ Basics      │ Mr. Sinha│
-│ 101      │ Rohan      │ CS102        │ Data Structures │ Mr. Kumar│
-│ 102      │ Priya      │ CS101        │ C++ Basics      │ Mr. Sinha│
-└──────────┴────────────┴──────────────┴─────────────────┴──────────┘
-```
-
-**Problems with this design:**
-
-| Anomaly | What Happens | Example |
-|---------|-------------|---------|
-| **Insert Anomaly** | Cannot insert data without other data | Can't add a course unless a student enrols |
-| **Delete Anomaly** | Deleting one fact accidentally deletes another | Deleting Priya's record deletes CS101 info |
-| **Update Anomaly** | Updating one fact requires updating many rows | If Mr. Sinha changes name → update ALL rows |
-
-**Normalization = Process of organizing a database to reduce these anomalies and remove redundancy.**
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): Normalization — Functional Dependencies, Anomalies, 1NF to BCNF
+> - Afternoon (1 hr): Geography — India's Climate Zones, Monsoon, Seasons, Factors
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-## 📐 Functional Dependency — The Foundation
+# PART 1: COMPUTER SCIENCE
+## 📘 Normalization in DBMS — Deep Conceptual Guide
 
-**Definition:** If knowing the value of attribute A allows you to determine attribute B, we say **A → B** (A functionally determines B).
+---
 
-```
-A → B  means:  "For every value of A, there is exactly ONE value of B"
-```
+## 🔷 SECTION 1: What is Normalization?
 
-**Examples:**
-```
-Stud_ID → Stud_Name         (Each student ID maps to ONE name)
-Course_ID → Course_Name     (Each course ID maps to ONE course name)
-Stud_ID, Course_ID → Grade  (Both together determine the grade)
-```
+### Real-Life Analogy — The Messy School Register:
 
-**Types of Functional Dependencies:**
+Imagine a school teacher maintains ONE giant register with all information:
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  FULL FD:     A,B → C  (C depends on BOTH A and B)             │
-│  PARTIAL FD:  A,B → C  but also A → C alone (B is redundant)   │
-│  TRANSITIVE:  A → B and B → C  therefore  A → C               │
-└─────────────────────────────────────────────────────────────────┘
+MESSY REGISTER (unnormalized):
+┌────┬──────┬────────────┬────────────────┬──────────┬────────┬────────┐
+│Roll│ Name │  Courses   │    Teachers    │ TeacherPh│ Marks  │ Grade  │
+├────┼──────┼────────────┼────────────────┼──────────┼────────┼────────┤
+│101 │ Ravi │CS101,Math1 │Dr.Rao,Dr.Jha   │9876,9877 │85,90   │A,A+    │
+│102 │Priya │CS101,Phys1 │Dr.Rao,Dr.Gupta │9876,9878 │90,88   │A+,A    │
+│101 │ Ravi │CS101       │Dr.Rao          │9876      │85      │A       │
+└────┴──────┴────────────┴────────────────┴──────────┴────────┴────────┘
+
+PROBLEMS:
+→ Multiple values in one cell (CS101, Math1 in Courses column)
+→ Ravi appears TWICE (duplicate data!)
+→ If Dr.Rao changes his phone: must update EVERY row where CS101 appears!
+→ If we delete Ravi: we LOSE Dr.Rao's phone number too!
+→ Cannot add a new teacher until a student is enrolled in their course!
+```
+
+**Normalization is the process of REORGANISING this messy data into clean, structured tables — eliminating redundancy and preventing anomalies.**
+
+### Formal Definition:
+> **Normalization is the process of organising a database to reduce data redundancy and improve data integrity by decomposing tables into smaller, well-structured tables while preserving data.**
+
+### Who Proposed Normalization?
+```
+PROPOSED BY: E.F. Codd (Edgar Frank Codd) — same person who proposed Relational Model
+YEAR: 1970 (1NF, 2NF, 3NF); BCNF added later by Codd & Boyce
 ```
 
 ---
 
-## 📊 Normal Forms — The Ladder
+## 🔷 SECTION 2: Why Normalization? — The Three Anomalies
 
+Before learning normal forms, understand WHY we need them — the three database anomalies:
+
+### Original Unnormalized Table:
 ```
-        HIGHEST ──► BCNF  (Boyce-Codd Normal Form)  ← Strictest
-                      │
-                     3NF  ← Adequate for most real systems ★
-                      │
-                     2NF
-                      │
-        LOWEST  ──► 1NF  ← Starting point
-                      │
-                  Unnormalized (with repeating groups)
-```
-
----
-
-## 🔵 First Normal Form (1NF)
-
-### Rule: Every cell must contain an ATOMIC (indivisible) value. No repeating groups.
-
-**Violation Example:**
-```
-┌──────────┬────────────────────────────────────┐
-│ Stud_ID  │ Courses                            │
-├──────────┼────────────────────────────────────┤
-│ 101      │ CS101, CS102, CS103               │  ← VIOLATION! Multi-valued
-│ 102      │ CS101                              │
-└──────────┴────────────────────────────────────┘
+STUDENT_COURSE table (bad design):
+┌────────┬──────────┬──────────┬─────────────┬───────────────┬────────────┐
+│ StdID  │ StdName  │CourseID  │ CourseName  │ InstructorID  │  Marks     │
+├────────┼──────────┼──────────┼─────────────┼───────────────┼────────────┤
+│  101   │  Ravi    │  CS101   │ Data Structs│    I01        │   85       │
+│  101   │  Ravi    │  CS201   │ Algorithms  │    I02        │   90       │
+│  102   │  Priya   │  CS101   │ Data Structs│    I01        │   78       │
+│  103   │  Aman    │  CS201   │ Algorithms  │    I02        │   92       │
+└────────┴──────────┴──────────┴─────────────┴───────────────┴────────────┘
 ```
 
-**Fixed (1NF):**
+### ANOMALY 1: UPDATE ANOMALY
 ```
-┌──────────┬───────────┐
-│ Stud_ID  │ Course_ID │
-├──────────┼───────────┤
-│ 101      │ CS101     │
-│ 101      │ CS102     │
-│ 101      │ CS103     │
-│ 102      │ CS101     │
-└──────────┴───────────┘
-```
+PROBLEM: "Data Structures" course is renamed to "DSA".
+→ Must update EVERY row where CS101 appears!
+→ Row 1: CS101 → "DSA"
+→ Row 3: CS101 → "DSA"
+→ If ONE row is missed → INCONSISTENCY!
 
-### 1NF Requirements Checklist:
-- ✅ Each column has atomic values (no comma-separated lists)
-- ✅ Each row is unique (has a primary key)
-- ✅ No repeating groups or arrays in a column
-- ✅ Column values are of the same domain/type
+TABLE AFTER PARTIAL UPDATE (INCONSISTENT STATE):
+│  101   │  Ravi    │  CS101   │ DSA         │    I01        │   85  ← updated
+│  101   │  Ravi    │  CS201   │ Algorithms  │    I02        │   90
+│  102   │  Priya   │  CS101   │ Data Structs│    I01        │   78  ← NOT updated!
+│  103   │  Aman    │  CS201   │ Algorithms  │    I02        │   92
 
-> **🔔 Exam Trap:** A table with `{Phone1, Phone2, Phone3}` columns violates 1NF (repeating groups). Splitting into one row per phone fixes it.
-
----
-
-## 🟡 Second Normal Form (2NF)
-
-### Rule: Must be in 1NF + No PARTIAL DEPENDENCIES (every non-key attribute must depend on the WHOLE primary key)
-
-**This applies ONLY when Primary Key is COMPOSITE (multiple columns).**
-
-**Violation Example:**
-
-Table: `Enrollment(Stud_ID, Course_ID, Stud_Name, Course_Name, Grade)`
-Primary Key = (Stud_ID, Course_ID) — composite key
-
-```
-Stud_ID, Course_ID → Grade      ✅ Full dependency (OK)
-Stud_ID → Stud_Name             ❌ PARTIAL dependency! (violation)
-Course_ID → Course_Name         ❌ PARTIAL dependency! (violation)
+→ CS101 now has TWO different names — DATA INCONSISTENCY!
+This is the UPDATE ANOMALY.
 ```
 
-**Why?** `Stud_Name` depends only on `Stud_ID`, not on the FULL composite key. This is a partial dependency.
-
-**Fix — Decompose into 3 tables:**
+### ANOMALY 2: INSERT ANOMALY
 ```
-Student(Stud_ID, Stud_Name)           ← Stud_Name fully depends on Stud_ID
-Course(Course_ID, Course_Name)         ← Course_Name fully depends on Course_ID
-Enrollment(Stud_ID, Course_ID, Grade) ← Grade depends on FULL composite key
-```
+PROBLEM: A new course "OS" (CS301) is created, but NO student is enrolled yet.
+→ We CANNOT add it to this table!
+→ StdID would be NULL (no student)
+→ But StdID is part of the primary key → PRIMARY KEY CANNOT BE NULL!
+→ We are BLOCKED from inserting the new course.
 
-```
-DIAGRAM: Partial vs Full Dependency
+Trying to insert:
+│  NULL  │  NULL    │  CS301   │ Oper. Sys   │    I03        │  NULL │
+                ↑
+         REJECTED! Primary key cannot be NULL.
 
-Composite PK = (A, B)
-
-         A ──────────────► X   ← PARTIAL (only A, not B) ❌
-         │
-         B ──────────────► Y   ← PARTIAL (only B, not A) ❌
-         │
-        A,B ─────────────► Z   ← FULL dependency ✅
+This is the INSERT ANOMALY — can't add data without unrelated data.
 ```
 
-> **🔔 Key PYQ Fact:** 2NF violation occurs ONLY when PK is composite. If PK is a single column, 1NF table is automatically in 2NF.
-
----
-
-## 🟢 Third Normal Form (3NF)
-
-### Rule: Must be in 2NF + No TRANSITIVE DEPENDENCIES (non-key attribute should NOT depend on another non-key attribute)
-
-**Violation Example:**
-
-Table: `Employee(Emp_ID, Emp_Name, Dept_ID, Dept_Name, Dept_Location)`
-Primary Key = Emp_ID
-
+### ANOMALY 3: DELETE ANOMALY
 ```
-Emp_ID → Emp_Name      ✅ Direct dependency (OK)
-Emp_ID → Dept_ID       ✅ Direct dependency (OK)
-Dept_ID → Dept_Name    ← Dept_Name depends on Dept_ID (non-key)
-Dept_ID → Dept_Location ← Dept_Location depends on Dept_ID (non-key)
+PROBLEM: Student Aman (103) drops out and we delete his record.
+→ Aman is the ONLY student in CS201.
+→ When we delete Aman's row → we ALSO LOSE CS201's information!
+→ We lose: CourseName "Algorithms", InstructorID I02
+
+After deleting Aman (103):
+│  101   │  Ravi    │  CS101   │ Data Structs│    I01        │   85
+│  101   │  Ravi    │  CS201   │ Algorithms  │    I02        │   90
+│  102   │  Priya   │  CS101   │ Data Structs│    I01        │   78
+← CS201's "Algorithms" information still exists above (Ravi is in it)
+← But if we delete ALL CS201 rows... that course data is GONE.
+
+This is the DELETE ANOMALY — deleting one thing accidentally deletes another.
 ```
 
-So: `Emp_ID → Dept_ID → Dept_Name` = **Transitive Dependency** ❌
-
-**The chain:**
+### Summary of Anomalies:
 ```
-Emp_ID ──► Dept_ID ──► Dept_Name
-    │                    │
-    └────────────────────┘
-         TRANSITIVE! (Dept_Name depends on PK only via Dept_ID)
-```
+┌─────────────────┬───────────────────────────────────────────────────────┐
+│    ANOMALY      │                     MEANING                           │
+├─────────────────┼───────────────────────────────────────────────────────┤
+│ Update Anomaly  │ Updating data in one place leaves other copies        │
+│                 │ inconsistent (must update all copies, miss one = bad)  │
+├─────────────────┼───────────────────────────────────────────────────────┤
+│ Insert Anomaly  │ Cannot insert new data without including unrelated    │
+│                 │ data (blocked by primary key constraints)             │
+├─────────────────┼───────────────────────────────────────────────────────┤
+│ Delete Anomaly  │ Deleting one piece of data accidentally deletes       │
+│                 │ another unrelated piece of information                │
+└─────────────────┴───────────────────────────────────────────────────────┘
 
-**Fix — Decompose:**
-```
-Employee(Emp_ID, Emp_Name, Dept_ID)
-Department(Dept_ID, Dept_Name, Dept_Location)
-```
-
-### 3NF — The Star Form for Real Databases
-- 3NF is considered **adequate** for most real-world RDBMS designs
-- Balances redundancy removal with query performance
-- BCNF is stricter but can sometimes lose information (lossy decomposition possible)
-
-> **🔔 Exam Trap:** "Which normal form is adequate for normal RDBMS design?" → Answer = **3NF**
-
----
-
-## 🔴 Boyce-Codd Normal Form (BCNF)
-
-### Rule: Must be in 3NF + For every functional dependency X → Y, X must be a SUPER KEY
-
-**3NF allows non-key attributes to determine other non-key attributes in some cases. BCNF removes even that.**
-
-**Violation Example (passes 3NF but fails BCNF):**
-
-Table: `Exam(Student, Subject, Teacher)`
-- Each teacher teaches only one subject
-- Each student has one teacher per subject
-
-FDs:
-```
-Student, Subject → Teacher   (PK = Student, Subject)
-Teacher → Subject             ← Teacher is NOT a super key! ❌ BCNF violation
-```
-
-Even though this is in 3NF, it violates BCNF because `Teacher → Subject` has Teacher as a non-super-key determinant.
-
-**Fix:**
-```
-Teacher_Subject(Teacher, Subject)
-Student_Teacher(Student, Teacher)
+NORMALIZATION SOLVES ALL THREE by separating data into focused tables.
 ```
 
 ---
 
-## 📊 Normalization Quick Comparison Table
+## 🔷 SECTION 3: Functional Dependency — The Foundation
 
+### Definition:
+> **A Functional Dependency A → B means: if we know the value of A, we can determine the value of B uniquely. A is called the DETERMINANT; B is the DEPENDENT.**
+
+### Reading A → B:
 ```
-┌────────┬─────────────────────────────────────────────────────────────┐
-│  Form  │  What It Eliminates                                         │
-├────────┼─────────────────────────────────────────────────────────────┤
-│  1NF   │  Repeating groups, multi-valued attributes (non-atomic)     │
-│  2NF   │  Partial dependencies (on part of composite PK)            │
-│  3NF   │  Transitive dependencies (non-key → non-key)               │
-│  BCNF  │  Any FD where LHS is not a super key                       │
-└────────┴─────────────────────────────────────────────────────────────┘
+A → B is read as:
+  "A determines B"
+  OR "B is functionally dependent on A"
+  OR "Knowing A tells us B"
+
+ANALOGY: 
+  Aadhaar Number → Person's Name
+  (Knowing the Aadhaar number, you can find exactly one person's name)
+  
+  Name → Aadhaar Number? 
+  NOT necessarily! Two people can have the same name.
+  So Name does NOT determine Aadhaar Number.
 ```
 
----
-
-## 🧠 Memory Tricks
-
-| Normal Form | Remember As |
-|-------------|-------------|
-| **1NF** | "**1 value per cell**" — No lists, no repeating groups |
-| **2NF** | "**2 keys? Full dependency!**" — No partial deps on composite PK |
-| **3NF** | "**3rd degree = no middlemen**" — No transitive deps |
-| **BCNF** | "**Boss rules**" — Determinant must be a superkey, period |
-
-**The Story Method:** Think of normalization as tidying a messy house:
-- **1NF** = Put each item in its own box (atomic)
-- **2NF** = Put each item in the RIGHT room (no partial deps)
-- **3NF** = Don't let one item depend on another random item (no transitive)
-- **BCNF** = Only the master key controls everything
-
----
-
-## 🔥 PYQ High-Frequency Facts for Normalization
-
-| Fact | Answer |
-|------|--------|
-| Normal form removing partial dependencies | 2NF |
-| Normal form removing transitive dependencies | 3NF |
-| Normal form adequate for RDBMS design | 3NF |
-| If PK is single column, which NF is automatic? | 2NF (since no composite PK to have partial deps) |
-| Storing same data in two places causes | Wasted space AND data inconsistency (BOTH) |
-| A → B means | A functionally determines B |
-| Stronger than 3NF | BCNF |
-| BCNF is stricter than | 3NF |
-| Decomposition goal | Lossless join + dependency preservation |
-
----
-
-## 📝 Denormalization
-
-After normalizing, sometimes we deliberately **denormalize** (join tables back) for **performance** reasons — fewer JOINs = faster queries.
-
-- Used in **data warehouses** and **OLAP** systems
-- Trade-off: redundancy vs query speed
-
----
-
-# ═══════════════════════════════════════════════
-# 🌍 PART 2: GS — INDIA'S CLIMATE
-# ═══════════════════════════════════════════════
-
-## 🌡️ Why India Has Unique Climate — The Basics
-
-India's climate is classified as **Tropical Monsoon Climate** — influenced by:
-1. **Latitudinal position** — Tropic of Cancer (23.5°N) passes through middle of India
-2. **Himalayan barrier** — blocks cold Central Asian winds
-3. **Indian Ocean, Arabian Sea, Bay of Bengal** — moisture sources
-4. **Land-sea differential heating** — causes seasonal wind reversal (monsoon)
-
----
-
-## 📅 India's Four Seasons
-
+### Examples from a Table:
 ```
-┌────────────────────┬─────────────────┬──────────────────────────────────────────┐
-│   Season           │   Months        │   Key Features                           │
-├────────────────────┼─────────────────┼──────────────────────────────────────────┤
-│ Cold Weather       │ December–Feb    │ NE trade winds, low temp, fog in north   │
-│ (Winter)           │                 │ Tamil Nadu gets rainfall (retreating)    │
-├────────────────────┼─────────────────┼──────────────────────────────────────────┤
-│ Hot Weather        │ March–May       │ Rising temp, Loo winds (hot dry N/NW)   │
-│ (Pre-monsoon)      │                 │ Norwesters/Kalbaisakhi in Bengal/NE     │
-├────────────────────┼─────────────────┼──────────────────────────────────────────┤
-│ SW Monsoon         │ June–September  │ Main rainy season, 75–90% of rainfall   │
-│ (Advancing)        │                 │ Two branches: Arabian Sea + Bay of Bengal│
-├────────────────────┼─────────────────┼──────────────────────────────────────────┤
-│ NE Monsoon         │ October–Nov     │ Retreating monsoon, SE India gets rain  │
-│ (Retreating)       │                 │ Cyclones in Bay of Bengal               │
-└────────────────────┴─────────────────┴──────────────────────────────────────────┘
+STUDENT table:
+┌────────┬──────────┬────────┬─────────────┬────────┐
+│ StdID  │ StdName  │  City  │ CourseID    │ Marks  │
+├────────┼──────────┼────────┼─────────────┼────────┤
+│  101   │  Ravi    │ Patna  │   CS101     │   85   │
+│  101   │  Ravi    │ Patna  │   Math101   │   90   │
+│  102   │  Priya   │ Delhi  │   CS101     │   78   │
+└────────┴──────────┴────────┴─────────────┴────────┘
+
+Functional Dependencies:
+  StdID → StdName     ✓ (knowing 101 → always "Ravi")
+  StdID → City        ✓ (knowing 101 → always "Patna")
+  CourseID → CourseName ✓ (CS101 → always "Data Structures")
+  {StdID, CourseID} → Marks ✓ (knowing both → exactly one mark)
+  
+  StdName → StdID     ✗ (two students could have same name)
+  City → StdID        ✗ (many students from same city)
+  Marks → StdID       ✗ (many students could score same marks)
 ```
 
 ---
 
-## 🌊 The Monsoon Mechanism
-
-**What is Monsoon?** From Arabic word **"Mausim"** = Season. It refers to the seasonal reversal of wind direction.
+### TYPE 1: FULL FUNCTIONAL DEPENDENCY
 
 ```
-SUMMER (SW Monsoon — June to Sept):
-Ocean ──────────────────────────────► Land
-(Cool, Moist)     Winds blow FROM SEA TO LAND (Rain!)
+DEFINITION: Attribute B is FULLY functionally dependent on A if:
+  → B depends on ALL attributes of A (the entire key)
+  → Removing ANY attribute from A destroys the dependency
 
-WINTER (NE Monsoon — Oct to Feb):
-Land ──────────────────────────────► Ocean
-(Cool, Dry)       Winds blow FROM LAND TO SEA (Dry!)
+EXAMPLE with Composite Key {StdID, CourseID}:
+
+  {StdID, CourseID} → Marks  ← FULL dependency
+  
+  WHY FULL?
+  → Marks depends on BOTH StdID AND CourseID together.
+  → StdID alone → can't determine Marks (one student has DIFFERENT marks in different courses)
+  → CourseID alone → can't determine Marks (different students score differently)
+  → ONLY {StdID + CourseID} TOGETHER → uniquely determines Marks
+  → Therefore: FULL dependency ✓
 ```
 
-### Why SW Monsoon Occurs:
-1. In summer, the Thar Desert (Rajasthan) creates a **low pressure zone**
-2. This pulls moisture-laden winds from the Indian Ocean northward
-3. **Inter-Tropical Convergence Zone (ITCZ)** shifts northward
-4. Winds deflect due to **Coriolis Effect** → become SW winds
-
-### Two Branches of SW Monsoon:
-```
-           ARABIAN SEA BRANCH               BAY OF BENGAL BRANCH
-           ─────────────────               ──────────────────────
-Start:     Arabian Sea                     Bay of Bengal
-Entry:     Kerala coast (June 1)           NE India, Assam first
-Reaches:   Western Ghats, then Gujarat,   Then moves westward across
-           Maharashtra, central India      Gangetic plains
-Rain area: West coast, W. Ghats, Mumbai  Northeast India, Bengal,
-           (heavy) Gujarat (light)         Bihar, eastern UP
-```
-
-> **🔔 Exam Fact:** Monsoon arrives in **Kerala by June 1** — this is the official onset date used by IMD (India Meteorological Department).
-
----
-
-## ☔ Rainfall Distribution in India
+### TYPE 2: PARTIAL FUNCTIONAL DEPENDENCY
 
 ```
-HIGHEST RAINFALL:
-━━━━━━━━━━━━━━━━
-Mawsynram (Meghalaya) — Wettest place in the world
-                        (~11,871 mm annual rainfall)
-Cherrapunji (Meghalaya) — Second wettest
-                          (~11,430 mm annual rainfall)
-Both located in southern slopes of Khasi Hills
-— Bay of Bengal branch funnels into hills (orographic rain)
+DEFINITION: Attribute B is PARTIALLY functionally dependent on composite key A if:
+  → B depends on ONLY PART of the composite key (not the whole key)
+  → B can be determined by a PROPER SUBSET of the composite key
 
-LOWEST RAINFALL:
-━━━━━━━━━━━━━━━
-Leh (Ladakh/J&K) — lies in rain shadow of Himalayas
-Jaisalmer (Rajasthan) — Thar Desert, very low (~100 mm)
-Runn of Kutch — arid region
+EXAMPLE with Composite Key {StdID, CourseID}:
+
+  {StdID, CourseID} → StdName  ← PARTIAL dependency!
+  
+  WHY PARTIAL?
+  → StdName depends on ONLY StdID (not CourseID)!
+  → Ravi's name is "Ravi" regardless of which course he's in.
+  → StdID ALONE → determines StdName
+  → The CourseID part is UNNECESSARY for determining StdName
+  → Therefore: PARTIAL dependency (depends on only PART of the key)
+  
+  {StdID, CourseID} → CourseName  ← ALSO PARTIAL!
+  → CourseID ALONE → determines CourseName (CS101 → always "Data Structures")
+  → StdID is unnecessary for determining CourseName
+
+RESULT: Partial dependencies CAUSE 2NF violations.
+        Eliminating partial dependencies = achieving 2NF.
 ```
 
----
-
-## 🌡️ Special Local Winds of India
-
-| Wind Name | Region | Season | Nature |
-|-----------|--------|---------|--------|
-| **Loo** | Punjab, Rajasthan, UP, Haryana | May–June | Hot, dry westerly — causes heat strokes |
-| **Kalbaisakhi / Norwesters** | West Bengal, Assam | Pre-monsoon (April–May) | Violent, dusty thunderstorms |
-| **Mango Showers** | Karnataka, Kerala | Pre-monsoon | Light rain helps mango ripening |
-| **Cherry Blossom Showers** | Karnataka (coffee region) | Pre-monsoon | Helps coffee flowering |
-| **Andhis** | Rajasthan | Summer | Hot dusty whirlwinds |
-
----
-
-## 🗺️ Climatic Regions of India (Koeppen Classification)
-
-India has **6 major climatic regions** based on temperature and rainfall:
+### TYPE 3: TRANSITIVE FUNCTIONAL DEPENDENCY
 
 ```
-1. TROPICAL RAINFOREST (Af)
-   Location: Western coast (Konkan, Malabar), NE India
-   Features: High rainfall (>200 cm), no dry season, hot all year
+DEFINITION: A → B → C is a transitive dependency if:
+  → A determines B
+  → B determines C
+  → But B is NOT a candidate key (B is not a primary identifier)
+  → Therefore A "indirectly" determines C through B
 
-2. TROPICAL SAVANNA / MONSOON (Aw)
-   Location: Most of Peninsula (Deccan plateau, south India)
-   Features: Distinct wet and dry season, moderate rainfall
+  FORMAL: If A → B and B → C, then A → C (transitively)
 
-3. TROPICAL SEMI-ARID STEPPE (BS)
-   Location: Rain shadow areas — Deccan (leeward of W. Ghats),
-             interior Tamil Nadu, S. Karnataka
-   Features: Low rainfall (<50 cm), hot summers
+EXAMPLE:
+  STUDENT table: StdID → DeptID → DeptHeadName
+  
+  StdID → DeptID      (student belongs to a department — direct)
+  DeptID → DeptHeadName  (department has a head — direct)
+  
+  Therefore: StdID → DeptHeadName (TRANSITIVE — through DeptID)
+  
+  DeptHeadName depends on DeptID (not directly on StdID).
+  But it "transitively" depends on StdID.
+  
+  WHY IS THIS A PROBLEM?
+  → Many students in CS dept → DeptHeadName "Dr. Rao" stored MANY TIMES
+  → If Dr. Rao changes → update all student rows (UPDATE ANOMALY!)
+  → DeptHeadName should be in DEPARTMENT table, NOT STUDENT table!
 
-4. TROPICAL HOT DESERT (BW)
-   Location: Western Rajasthan, Rann of Kutch
-   Features: Very low rainfall (<25 cm), extreme temperatures
+RESULT: Transitive dependencies CAUSE 3NF violations.
+        Eliminating transitive dependencies = achieving 3NF.
+```
 
-5. HUMID SUBTROPICAL (Cwa)
-   Location: Gangetic Plains, northern India
-   Features: Hot summers, cool winters, moderate rainfall
-   This is the most extensive climate zone in India
-
-6. MOUNTAIN / HIGHLAND CLIMATE (H)
-   Location: Himalayas, J&K, Himachal Pradesh, Uttarakhand
-   Features: Temperature varies with altitude, heavy snowfall
+### Dependency Types — Summary:
+```
+┌──────────────────┬──────────────────────────────────────────────────────┐
+│  DEPENDENCY TYPE │                DEFINITION                             │
+├──────────────────┼──────────────────────────────────────────────────────┤
+│ Full             │ B depends on the ENTIRE composite key                │
+│                  │ {StdID, CourseID} → Marks                            │
+├──────────────────┼──────────────────────────────────────────────────────┤
+│ Partial          │ B depends on PART of the composite key only          │
+│                  │ {StdID, CourseID} → StdName (only needs StdID)       │
+│                  │ ← Violation of 2NF!                                  │
+├──────────────────┼──────────────────────────────────────────────────────┤
+│ Transitive       │ A → B → C where B is not a candidate key            │
+│                  │ StdID → DeptID → DeptHeadName                        │
+│                  │ ← Violation of 3NF!                                  │
+└──────────────────┴──────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🌧️ Types of Rainfall in India
+## 🔷 SECTION 4: FIRST NORMAL FORM (1NF)
+
+### Rule of 1NF:
+> **A table is in 1NF if and only if:**
+> 1. All attribute values are ATOMIC (indivisible — no multi-valued cells)
+> 2. No repeating groups (each column stores ONE value per row)
+> 3. Each column has a SINGLE DATA TYPE
+> 4. Each row is UNIQUE (has a primary key)
+
+### What Violates 1NF?
 
 ```
-┌──────────────────┬────────────────────────────────────────────────────┐
-│ Type             │ Explanation & Example                              │
-├──────────────────┼────────────────────────────────────────────────────┤
-│ OROGRAPHIC/       │ Moist winds strike a mountain → forced upward →   │
-│ RELIEF RAIN       │ cools → condenses → rains on WINDWARD side        │
-│                  │ Example: Western Ghats get heavy rain,             │
-│                  │ Deccan Plateau (leeward) stays dry                 │
-├──────────────────┼────────────────────────────────────────────────────┤
-│ CONVECTIONAL      │ Intense heating of land → hot air rises →         │
-│ RAIN              │ cools rapidly → thunder and lightning + rain      │
-│                  │ Example: Interior peninsular India in summer       │
-├──────────────────┼────────────────────────────────────────────────────┤
-│ CYCLONIC /        │ Cyclone brings heavy rain along its path          │
-│ FRONTAL RAIN      │ Example: Cyclones in Bay of Bengal hit            │
-│                  │ Odisha, Andhra Pradesh, Tamil Nadu                 │
-└──────────────────┴────────────────────────────────────────────────────┘
+VIOLATION 1: Multi-valued attributes in one cell
+┌────────┬──────────┬─────────────────────┬────────────────┐
+│ StdID  │ StdName  │      Courses        │   Phones       │
+├────────┼──────────┼─────────────────────┼────────────────┤
+│  101   │  Ravi    │  CS101, Math101     │ 9876, 0612-234 │  ← VIOLATION!
+│  102   │  Priya   │  CS101              │ 9877           │
+└────────┴──────────┴─────────────────────┴────────────────┘
+"CS101, Math101" in one cell = NOT atomic = NOT 1NF!
+
+VIOLATION 2: Repeating groups (separate columns for same type of data)
+┌────────┬──────────┬──────────┬──────────┬──────────┐
+│ StdID  │ StdName  │ Course1  │ Course2  │ Course3  │
+├────────┼──────────┼──────────┼──────────┼──────────┤
+│  101   │  Ravi    │  CS101   │  Math101 │  NULL    │  ← VIOLATION!
+│  102   │  Priya   │  CS101   │  NULL    │  NULL    │
+└────────┴──────────┴──────────┴──────────┴──────────┘
+Course1, Course2, Course3 = repeating groups = NOT 1NF!
+```
+
+### Converting to 1NF:
+
+```
+BEFORE (not 1NF):
+┌────────┬──────────┬─────────────────────┬────────┐
+│ StdID  │ StdName  │      Courses        │ Marks  │
+├────────┼──────────┼─────────────────────┼────────┤
+│  101   │  Ravi    │  CS101, Math101     │ 85,90  │
+│  102   │  Priya   │  CS101              │ 78     │
+└────────┴──────────┴─────────────────────┴────────┘
+
+AFTER converting to 1NF (separate row for each value):
+┌────────┬──────────┬──────────┬────────┐
+│ StdID  │ StdName  │ CourseID │ Marks  │
+├────────┼──────────┼──────────┼────────┤
+│  101   │  Ravi    │  CS101   │   85   │  ← One row, one course, one mark
+│  101   │  Ravi    │  Math101 │   90   │  ← Separate row for second course
+│  102   │  Priya   │  CS101   │   78   │
+└────────┴──────────┴──────────┴────────┘
+Primary Key = {StdID, CourseID} (composite)
+All cells now have ATOMIC values ✓
+
+Key changes:
+✅ Each cell has exactly ONE value (atomic)
+✅ No multi-valued cells
+✅ No repeating column groups
+✅ Composite Primary Key: {StdID, CourseID}
+```
+
+### 🎯 PYQ FACT: 1NF requires ATOMIC values in every cell. No lists, no sets, no repeating groups in columns.
+
+---
+
+## 🔷 SECTION 5: SECOND NORMAL FORM (2NF)
+
+### Rule of 2NF:
+> **A table is in 2NF if and only if:**
+> 1. It is already in 1NF
+> 2. There are NO PARTIAL DEPENDENCIES — every non-key attribute must depend on the ENTIRE primary key (not just part of it)
+
+### Note: 2NF is only relevant when there is a COMPOSITE primary key!
+```
+If a table has a SINGLE-ATTRIBUTE primary key → it is automatically in 2NF
+(There's no "part" of a single key to have a partial dependency on)
+2NF issues arise ONLY with COMPOSITE primary keys.
+```
+
+### Identifying Partial Dependencies in our 1NF Table:
+
+```
+1NF table (from above):
+┌────────┬──────────┬──────────┬──────────────┬─────────────┬────────┐
+│ StdID  │ StdName  │ CourseID │  CourseName  │   Teacher   │ Marks  │
+├────────┼──────────┼──────────┼──────────────┼─────────────┼────────┤
+│  101   │  Ravi    │  CS101   │ Data Structs │  Dr. Rao    │   85   │
+│  101   │  Ravi    │  Math101 │ Mathematics  │  Dr. Jha    │   90   │
+│  102   │  Priya   │  CS101   │ Data Structs │  Dr. Rao    │   78   │
+│  103   │  Aman    │  Math101 │ Mathematics  │  Dr. Jha    │   92   │
+└────────┴──────────┴──────────┴──────────────┴─────────────┴────────┘
+
+Primary Key = {StdID, CourseID}
+
+Analyzing each non-key attribute:
+  StdName:    depends on StdID alone → PARTIAL DEPENDENCY! ✗
+  CourseName: depends on CourseID alone → PARTIAL DEPENDENCY! ✗
+  Teacher:    depends on CourseID alone → PARTIAL DEPENDENCY! ✗
+  Marks:      depends on {StdID + CourseID} TOGETHER → FULL DEPENDENCY ✓
+```
+
+### Converting to 2NF (Remove Partial Dependencies):
+
+**Strategy:** Move partially dependent attributes to their own table based on what they depend on.
+
+```
+STEP: Identify groups of partial dependencies:
+  Group 1: StdID → StdName  (student info)
+  Group 2: CourseID → CourseName, Teacher  (course info)
+  Group 3: {StdID, CourseID} → Marks  (enrollment info — keep this)
+
+RESULT: Split into 3 tables:
+
+TABLE 1: STUDENT (StdID determines StdName)
+┌────────┬──────────┐
+│ StdID  │ StdName  │
+│  [PK]  │          │
+├────────┼──────────┤
+│  101   │  Ravi    │
+│  102   │  Priya   │
+│  103   │  Aman    │
+└────────┴──────────┘
+
+TABLE 2: COURSE (CourseID determines CourseName, Teacher)
+┌──────────┬──────────────┬─────────────┐
+│ CourseID │  CourseName  │   Teacher   │
+│   [PK]   │              │             │
+├──────────┼──────────────┼─────────────┤
+│  CS101   │ Data Structs │  Dr. Rao    │
+│  Math101 │ Mathematics  │  Dr. Jha    │
+└──────────┴──────────────┴─────────────┘
+
+TABLE 3: ENROLLMENT ({StdID, CourseID} determines Marks)
+┌────────┬──────────┬────────┐
+│ StdID  │ CourseID │ Marks  │
+│  [FK]  │   [FK]   │        │
+│  ════════════════ Composite PK
+├────────┼──────────┼────────┤
+│  101   │  CS101   │   85   │
+│  101   │  Math101 │   90   │
+│  102   │  CS101   │   78   │
+│  103   │  Math101 │   92   │
+└────────┴──────────┴────────┘
+
+✅ No partial dependencies remain!
+✅ All non-key attributes depend on the FULL primary key.
+```
+
+### Benefits Achieved:
+```
+BEFORE 2NF (updating "Data Structs" to "DSA"):
+→ Had to update every row where CS101 appears → UPDATE ANOMALY risk
+
+AFTER 2NF:
+→ CourseName only in COURSE table, one row per course
+→ Change "Data Structs" to "DSA" in ONE place → done!
+→ UPDATE ANOMALY eliminated!
+```
+
+### 🎯 PYQ FACT: 2NF removes PARTIAL DEPENDENCIES. It only applies when there is a composite primary key.
+
+---
+
+## 🔷 SECTION 6: THIRD NORMAL FORM (3NF)
+
+### Rule of 3NF:
+> **A table is in 3NF if and only if:**
+> 1. It is already in 2NF
+> 2. There are NO TRANSITIVE DEPENDENCIES — no non-key attribute should determine another non-key attribute
+
+### Finding Transitive Dependency in 2NF Tables:
+
+```
+Let's expand our STUDENT table with more attributes:
+
+STUDENT table after 2NF:
+┌────────┬──────────┬────────┬───────────┬──────────────────┐
+│ StdID  │ StdName  │ DeptID │ DeptName  │ DeptHeadPhone    │
+│  [PK]  │          │        │           │                  │
+├────────┼──────────┼────────┼───────────┼──────────────────┤
+│  101   │  Ravi    │  CS    │ Comp.Sci  │ 9876543210       │
+│  102   │  Priya   │  Math  │Mathematics│ 9876543211       │
+│  103   │  Aman    │  CS    │ Comp.Sci  │ 9876543210       │
+│  104   │  Kavya   │  CS    │ Comp.Sci  │ 9876543210       │
+└────────┴──────────┴────────┴───────────┴──────────────────┘
+
+In 2NF? YES — DeptID, DeptName, DeptHeadPhone all depend on full key (StdID).
+         (StdID is a single attribute PK — so no partial dependency possible)
+
+TRANSITIVE DEPENDENCY present?
+  StdID → DeptID       (student is in a department — direct)
+  DeptID → DeptName    (department has a name — direct)
+  DeptID → DeptHeadPhone (department has a head phone — direct)
+  
+  Therefore: StdID → DeptID → DeptName  (TRANSITIVE!)
+             StdID → DeptID → DeptHeadPhone (TRANSITIVE!)
+  
+  DeptName and DeptHeadPhone depend on DeptID, not directly on StdID.
+  They are transitively dependent on StdID through DeptID.
+  
+  PROBLEMS:
+  → "Comp.Sci" and "9876543210" stored MULTIPLE TIMES (rows 101, 103, 104)
+  → UPDATE ANOMALY: CS department phone changes → update 3 rows!
+  → DELETE ANOMALY: Delete all CS students → lose CS dept info!
+```
+
+### Converting to 3NF (Remove Transitive Dependencies):
+
+**Strategy:** Move transitively dependent attributes to their own table.
+
+```
+STEP: The culprit is DeptID → DeptName, DeptHeadPhone
+      Move department info to its own table!
+
+TABLE 1: STUDENT (no more dept details)
+┌────────┬──────────┬────────┐
+│ StdID  │ StdName  │ DeptID │
+│  [PK]  │          │  [FK]  │
+├────────┼──────────┼────────┤
+│  101   │  Ravi    │  CS    │
+│  102   │  Priya   │  Math  │
+│  103   │  Aman    │  CS    │
+│  104   │  Kavya   │  CS    │
+└────────┴──────────┴────────┘
+DeptID is now a FOREIGN KEY (not carrying dept details)
+
+TABLE 2: DEPARTMENT (dept details here — no redundancy)
+┌────────┬───────────┬──────────────────┐
+│ DeptID │ DeptName  │ DeptHeadPhone    │
+│  [PK]  │           │                  │
+├────────┼───────────┼──────────────────┤
+│  CS    │ Comp.Sci  │ 9876543210       │  ← stored ONCE!
+│  Math  │ Maths     │ 9876543211       │  ← stored ONCE!
+└────────┴───────────┴──────────────────┘
+
+✅ No transitive dependencies!
+✅ DeptName and DeptHeadPhone now depend DIRECTLY on DeptID (their PK)
+✅ CS dept phone: stored ONCE → easy to update!
+```
+
+### Benefits Achieved:
+```
+BEFORE 3NF:
+→ CS dept info in every CS student row → UPDATE ANOMALY
+→ Deleting last CS student → DELETE ANOMALY
+
+AFTER 3NF:
+→ CS dept info stored ONCE in DEPARTMENT table
+→ Update phone number → change 1 row → done!
+→ Deleting all CS students → dept info SAFE in DEPARTMENT table
+```
+
+### 🎯 PYQ FACT: 3NF removes TRANSITIVE DEPENDENCIES. A → B → C where B is not a candidate key = transitive dependency.
+
+---
+
+## 🔷 SECTION 7: BOYCE-CODD NORMAL FORM (BCNF)
+
+### Rule of BCNF:
+> **A table is in BCNF if and only if:**
+> For every functional dependency A → B in the table:
+> A must be a SUPER KEY (specifically, a candidate key or superset of it)
+
+### BCNF vs 3NF:
+```
+3NF RULE:  For A → B, either:
+           (a) B is part of the primary key (prime attribute), OR
+           (b) A is a super key
+           
+BCNF RULE: For A → B:
+           (a) A MUST be a super key — NO EXCEPTIONS
+           
+BCNF is STRICTER than 3NF.
+Every BCNF table is in 3NF, but NOT every 3NF table is in BCNF.
+```
+
+### BCNF Violation Example:
+```
+TEACHING table:
+┌─────────┬─────────┬────────────┐
+│ Student │ Subject │  Teacher   │
+├─────────┼─────────┼────────────┤
+│  Ravi   │  Math   │  Dr. Jha   │
+│  Ravi   │  CS     │  Dr. Rao   │
+│  Priya  │  Math   │  Dr. Jha   │
+│  Aman   │  Math   │  Dr. Kumar │  ← Different teacher for same subject!
+└─────────┴─────────┴────────────┘
+
+Assumptions:
+  → Each student takes each subject from ONE teacher
+  → Each teacher teaches only ONE subject
+  → Multiple teachers can teach the same subject
+  
+FUNCTIONAL DEPENDENCIES:
+  {Student, Subject} → Teacher  (PK is composite)
+  Teacher → Subject              ← PROBLEM!
+  
+BCNF CHECK for Teacher → Subject:
+  Is "Teacher" a super key? NO! (teacher doesn't uniquely identify a row)
+  → Dr. Jha appears for both Ravi and Priya
+  → Teacher → Subject means "knowing the teacher determines the subject"
+  → But Teacher is NOT a super key!
+  → THIS VIOLATES BCNF!
+  
+Does it violate 3NF?
+  Teacher (non-prime) → Subject (prime attribute = part of PK)
+  3NF says: if B is prime attribute, A → B is allowed even if A is not a super key.
+  → Teacher → Subject: Subject IS prime → 3NF says OK!
+  → But BCNF says: A must ALWAYS be a super key → BCNF violated!
+  
+So this table is in 3NF but NOT in BCNF.
+```
+
+### BCNF Conversion:
+```
+SPLIT the table to remove the BCNF violation:
+
+TABLE 1: TEACHER_SUBJECT (Teacher determines Subject)
+┌────────────┬─────────┐
+│  Teacher   │ Subject │
+│    [PK]    │         │
+├────────────┼─────────┤
+│  Dr. Jha   │  Math   │
+│  Dr. Rao   │  CS     │
+│  Dr. Kumar │  Math   │
+└────────────┴─────────┘
+
+TABLE 2: STUDENT_TEACHER (Student + Teacher determines the pairing)
+┌─────────┬────────────┐
+│ Student │  Teacher   │
+│  [PK1]  │   [PK2]    │  ← Composite PK
+├─────────┼────────────┤
+│  Ravi   │  Dr. Jha   │
+│  Ravi   │  Dr. Rao   │
+│  Priya  │  Dr. Jha   │
+│  Aman   │  Dr. Kumar │
+└─────────┴────────────┘
+
+✅ In BCNF now — every determinant is a super key in its table.
 ```
 
 ---
 
-## 🌊 El Niño and La Niña — Impact on India
+## 🔷 SECTION 8: Complete Normalization Flow — Step by Step
 
-| Phenomenon | What Happens | Effect on India's Monsoon |
-|------------|--------------|---------------------------|
-| **El Niño** | Warm water accumulates in eastern Pacific Ocean near Peru | **Weakens** SW Monsoon → drought tendency in India |
-| **La Niña** | Cool water in eastern Pacific | **Strengthens** SW Monsoon → above-normal rainfall |
-| **ENSO** | El Niño Southern Oscillation — the combined cycle | Affects global climate including Indian monsoon |
+### The Full Worked Example (Start to BCNF):
 
-> **🔔 Exam Fact:** El Niño years often correlate with drought/poor monsoon in India. 2002, 2009 droughts were El Niño years.
-
----
-
-## 📍 Bihar's Climate
-
-Since this is BPSC, Bihar-specific climate is important:
-
-- **Climate:** Humid Subtropical (Cwa)
-- **Rainfall:** 1000–1500 mm annually, mostly June–September
-- **Rivers:** Ganga, Gandak, Kosi, Son, Bagmati (seasonal flooding)
-- **Floods:** North Bihar floods (Kosi river — "Sorrow of Bihar")
-- **Droughts:** South Bihar (Palamu, Gaya) — less rainfall
-- **Winters:** Cold December–January, fog common
-- **Summers:** Hot dry winds (Loo) common in May–June
-
----
-
-## 📝 High-Frequency GS PYQ Facts — Climate
-
-| Question Trigger | Answer |
-|-----------------|--------|
-| Wettest place in India / World | Mawsynram (Meghalaya) |
-| Official onset of SW Monsoon | Kerala, June 1 |
-| "Mausim" meaning | Season (Arabic origin) |
-| Hot dry wind of north India | Loo |
-| Norwesters / Kalbaisakhi — region | West Bengal / Assam |
-| Monsoon — wind type arriving in June | SW Monsoon |
-| Tamil Nadu gets rain from | NE/Retreating Monsoon (Oct–Dec) |
-| India's main rainy season | SW Monsoon (June–September) |
-| El Niño effect on India | Drought / weak monsoon |
-| Rain shadow area in India | Deccan Plateau (behind W. Ghats) |
-| Thar Desert climate type | Tropical Hot Desert (BW) |
-| Koeppen climate type of Gangetic plains | Cwa (Humid Subtropical) |
-| ITCZ full form | Inter-Tropical Convergence Zone |
-| Mango showers fall in | Karnataka, Kerala |
-| Kosi river nickname | Sorrow of Bihar |
+```
+INITIAL UNNORMALIZED TABLE (UNF):
+┌────────┬──────────┬────────────────────┬──────────────┬───────┐
+│ StdID  │ StdName  │ Courses & Teachers │   DeptInfo   │ Marks │
+├────────┼──────────┼────────────────────┼──────────────┼───────┤
+│  101   │  Ravi    │CS101/Dr.Rao,Mth/Jha│CS/CompSci/Ph1│ 85,90 │
+└────────┴──────────┴────────────────────┴──────────────┴───────┘
+           ↓ STEP 1: Make atomic (1NF)
+           
+1NF TABLE:
+┌────────┬──────────┬──────────┬──────────────┬────────┬────────┬──────────────┐
+│ StdID  │ StdName  │ CourseID │ CourseName   │Teacher │ DeptID │ DeptName     │
+│        │          │          │              │        │        │ DeptHeadPhone│
+├────────┼──────────┼──────────┼──────────────┼────────┼────────┼──────────────┤
+│  101   │  Ravi    │  CS101   │ Data Structs │Dr. Rao │  CS    │Comp/9876     │
+│  101   │  Ravi    │  Math101 │ Mathematics  │Dr. Jha │  CS    │Comp/9876     │
+│  102   │  Priya   │  CS101   │ Data Structs │Dr. Rao │  Math  │Math/9877     │
+└────────┴──────────┴──────────┴──────────────┴────────┴────────┴──────────────┘
+PK = {StdID, CourseID}
+           ↓ STEP 2: Remove PARTIAL dependencies (2NF)
+           
+2NF TABLES:
+  STUDENT(StdID, StdName, DeptID, DeptName, DeptHeadPhone)
+  COURSE(CourseID, CourseName, Teacher)
+  ENROLLMENT(StdID[FK], CourseID[FK], Marks)
+           ↓ STEP 3: Remove TRANSITIVE dependencies (3NF)
+           
+3NF TABLES:
+  STUDENT(StdID, StdName, DeptID[FK])
+  DEPARTMENT(DeptID, DeptName, DeptHeadPhone)
+  COURSE(CourseID, CourseName, Teacher)
+  ENROLLMENT(StdID[FK], CourseID[FK], Marks)
+           ↓ STEP 4: Ensure all determinants are super keys (BCNF)
+           
+BCNF CHECK: In COURSE table: Teacher → CourseName?
+  If Teacher → Subject violates BCNF → split further.
+  Otherwise → BCNF achieved.
+```
 
 ---
 
-# ═══════════════════════════════════════════════
-# 📝 PRACTICE QUESTIONS
-# ═══════════════════════════════════════════════
+## 🔷 SECTION 9: Normal Forms Comparison — Master Table
 
-> ⚠️ **INSTRUCTION:** Attempt ALL questions before looking at the Answer Key.
-> The Answer Key with explanations is provided AFTER all 50 questions.
-> Option D = "More than one of the above" | Option E = "None of the above"
+```
+┌─────────┬──────────────────────────────┬───────────────────────────────────────────┐
+│   NF    │           RULE               │            WHAT IT REMOVES                │
+├─────────┼──────────────────────────────┼───────────────────────────────────────────┤
+│   UNF   │ No rules                     │ Starting point — messy data               │
+│(Unnorm) │                              │                                           │
+├─────────┼──────────────────────────────┼───────────────────────────────────────────┤
+│   1NF   │ Atomic values                │ Multi-valued cells, repeating groups       │
+│         │ No repeating groups          │ "CS101, Math101" in one cell              │
+├─────────┼──────────────────────────────┼───────────────────────────────────────────┤
+│   2NF   │ In 1NF                       │ PARTIAL DEPENDENCIES                      │
+│         │ + No partial dependency      │ Non-key attr depending on PART of PK      │
+│         │   on composite PK            │ (only relevant with composite PK)         │
+├─────────┼──────────────────────────────┼───────────────────────────────────────────┤
+│   3NF   │ In 2NF                       │ TRANSITIVE DEPENDENCIES                   │
+│         │ + No transitive dependency   │ A → B → C where B is not candidate key    │
+│         │   (X → Y where Y→Z, Z is    │ "Most practical normal form for RDBMS"    │
+│         │   non-key attribute)         │                                           │
+├─────────┼──────────────────────────────┼───────────────────────────────────────────┤
+│  BCNF   │ In 3NF                       │ Even BCNF violations in 3NF tables        │
+│(Boyce-  │ + For every A → B,           │ Every determinant must be a candidate key │
+│ Codd)   │   A must be a super key      │ STRONGER version of 3NF                   │
+└─────────┴──────────────────────────────┴───────────────────────────────────────────┘
+```
+
+### Flowchart: UNF → 1NF → 2NF → 3NF → BCNF
+
+```
+START: Unnormalized Table
+           │
+           ▼
+    ┌─────────────────────────────────┐
+    │           1NF TEST              │
+    │ All values atomic?              │
+    │ No repeating groups?            │
+    └──────────────┬──────────────────┘
+                   │ YES → 1NF achieved
+                   ▼
+    ┌─────────────────────────────────┐
+    │           2NF TEST              │
+    │ Composite PK present?           │
+    │ If YES: Any non-key attr        │
+    │ depend on PART of PK only?      │
+    └──────────────┬──────────────────┘
+                   │ YES → Partial dependency found
+                   │ → Split table: separate partial
+                   │   dependents into own table
+                   ▼ NO partial deps → 2NF achieved
+    ┌─────────────────────────────────┐
+    │           3NF TEST              │
+    │ Any A → B → C where B is       │
+    │ not a candidate key?            │
+    └──────────────┬──────────────────┘
+                   │ YES → Transitive dependency found
+                   │ → Move B and its dependents to
+                   │   separate table (B becomes FK)
+                   ▼ NO transitive deps → 3NF achieved
+    ┌─────────────────────────────────┐
+    │          BCNF TEST              │
+    │ For every A → B:                │
+    │ Is A a super key?               │
+    └──────────────┬──────────────────┘
+                   │ NO → BCNF violation
+                   │ → Decompose further
+                   ▼ All A's are super keys → BCNF achieved
+    ✅ FULLY NORMALIZED DATABASE
+```
 
 ---
 
-# 💻 SECTION A: CS QUESTIONS — NORMALIZATION (Q1–Q25)
+## 🔷 SECTION 10: PYQ Traps Summary
+
+```
+TRAP 1: "Normalization increases redundancy"
+  → FALSE! Normalization DECREASES (reduces) redundancy.
+
+TRAP 2: "2NF is applicable even with single-attribute primary key"
+  → Partially FALSE! 2NF issues arise specifically with COMPOSITE keys.
+    A table with single-attribute PK is automatically 2NF compliant
+    (no "part" of a single key to have partial dependency on).
+
+TRAP 3: "3NF is rarely used in practice"
+  → FALSE! 3NF is the MOST COMMONLY USED normal form in real databases.
+    Most RDBMS designs aim for 3NF as sufficient.
+
+TRAP 4: "BCNF and 3NF are always equivalent"
+  → FALSE! Every BCNF table IS in 3NF. But NOT every 3NF is in BCNF.
+    BCNF is STRICTER than 3NF.
+
+TRAP 5: "Normalization never causes any data loss"
+  → TRUE — Normalization should be LOSSLESS (data can be reconstructed
+    by joining the decomposed tables back together).
+
+TRAP 6: "2NF removes transitive dependencies"
+  → FALSE! 2NF removes PARTIAL dependencies.
+    3NF removes TRANSITIVE dependencies.
+
+TRAP 7: "1NF allows multi-valued cells as long as they are consistent"
+  → FALSE! 1NF requires ALL cells to be ATOMIC — no exceptions.
+
+TRAP 8: "If A → B and B → C, then this is always a violation"
+  → DEPENDS on B! If B is a candidate key, A → B → C is fine (B is a key).
+    Only a violation if B is NOT a candidate key.
+
+TRAP 9: "Normalization is only about primary keys"
+  → FALSE! It's about ALL functional dependencies, including those
+    involving non-key attributes.
+
+TRAP 10: "Denormalization = making the database worse"
+  → NOT NECESSARILY! Denormalization is intentionally introducing
+    redundancy for PERFORMANCE (faster queries by avoiding complex joins).
+    Used in data warehouses and analytics databases.
+```
 
 ---
 
-**Q1.** Which of the following anomalies is associated with an unnormalized or poorly normalized database?
+# PART 2: GENERAL STUDIES
+## 🌤️ Geography — India's Climate Zones
 
-(A) Insertion Anomaly
-(B) Deletion Anomaly
-(C) Updation Anomaly
+---
+
+## 🔷 SECTION 1: Overview of India's Climate
+
+### India's Climate Type:
+```
+INDIA'S CLIMATE = TROPICAL MONSOON CLIMATE (dominant)
+
+WHY "TROPICAL"?
+  → Most of India lies between Tropic of Cancer (23.5°N) and Equator
+  → High temperatures throughout the year
+  → Receives intense solar radiation
+
+WHY "MONSOON"?
+  → Seasonal reversal of wind direction (SW in summer, NE in winter)
+  → "Monsoon" comes from Arabic word "MAUSIM" (season)
+  → Rain brought by Southwest Monsoon (June-September)
+  
+INDIA'S UNIQUE POSITION:
+  → Large landmass (thermal contrast with oceans)
+  → Himalayas in the north (block cold winds, trap monsoon)
+  → Three water bodies: Arabian Sea (W), Bay of Bengal (E), Indian Ocean (S)
+  → Tropic of Cancer passes through 8 states
+```
+
+---
+
+## 🔷 SECTION 2: Factors Affecting India's Climate
+
+### Factor 1: LATITUDE
+```
+EFFECT: Controls the amount of solar radiation received
+  → Low latitude (near equator) = More direct sun = HOT
+  → High latitude (near poles) = Oblique sun = COLD
+
+INDIA's RANGE: 8°N (Kanyakumari) to 37°N (Ladakh)
+  → South India (Kerala, Tamil Nadu) = HOT, near equator
+  → North India (Himachal, J&K, Ladakh) = COLD, farther from equator
+  → Bihar (25°N) = Moderate to hot; Tropic of Cancer passes nearby
+
+TROPIC OF CANCER (23.5°N) passes through:
+  Gujarat → Rajasthan → MP → Chhattisgarh → Jharkhand → 
+  West Bengal → Tripura → Mizoram
+  (8 states — frequently asked in Bihar exams!)
+```
+
+### Factor 2: ALTITUDE
+```
+EFFECT: Higher altitude = COLDER temperature
+        Temperature decreases by ~6.5°C per 1000 metres rise (lapse rate)
+
+EXAMPLES:
+  Mumbai (sea level): ~30°C in summer
+  Shimla (2200m):     ~15°C in summer (much cooler!)
+  Leh-Ladakh (3500m): Can go -30°C in winter!
+  
+  Ooty, Darjeeling, Mussoorie = "hill stations" because HIGH ALTITUDE
+  = cooler temperatures even in tropical India
+
+WHY HIMALAYAS ARE IMPORTANT:
+  → Block COLD CENTRAL ASIAN winds from entering India in winter
+  → Without Himalayas, North India would be like Central Asia (severe cold)
+  → Act as a BARRIER for monsoon clouds (rain on southern side, dry Tibet to north)
+```
+
+### Factor 3: DISTANCE FROM THE SEA (Continentality)
+```
+EFFECT: Areas near sea = MODERATE climate (not too hot, not too cold)
+        Areas far from sea = EXTREME climate (very hot in summer, very cold in winter)
+
+WHY?
+  Water heats and cools SLOWLY (high specific heat capacity)
+  Land heats and cools QUICKLY
+  
+  Coastal areas: Sea moderates temperatures → moderate climate
+  Interior India: No sea influence → temperature extremes
+
+EXAMPLES:
+  Mumbai (coastal):   Summer ~33°C, Winter ~22°C  → moderate range
+  Delhi (interior):   Summer ~45°C, Winter ~5°C   → extreme range!
+  
+  "MARITIME INFLUENCE" vs "CONTINENTAL INFLUENCE"
+  Bihar (inland) = continental climate = extreme temperatures
+```
+
+### Factor 4: MONSOON WINDS
+```
+EFFECT: Controls when and where it rains!
+
+SOUTHWEST MONSOON (June-September):
+  → Blows from Southwest (Arabian Sea + Bay of Bengal) toward land
+  → Brings 75-80% of India's annual rainfall!
+  → Main crop season: Kharif (June-Oct)
+  
+  TWO BRANCHES:
+  Branch 1: ARABIAN SEA BRANCH
+    → Hits Western Ghats first → HEAVY rainfall on western slopes
+    → Rain shadow on eastern side (Deccan Plateau gets less rain)
+    → Continues to Gujarat, Rajasthan (weaker)
+  
+  Branch 2: BAY OF BENGAL BRANCH
+    → Enters Bengal/Northeast → heavy rainfall in NE India
+    → Moves westward along Gangetic Plains (Bihar gets this!)
+    → Reaches western India last
+
+NORTHEAST MONSOON (October-December):
+  → Blows from Northeast (from land toward sea)
+  → Cold, dry wind — NOT a major rainfall carrier for most India
+  → EXCEPTION: Tamil Nadu coast gets rain from NE monsoon!
+    (When winds cross Bay of Bengal, pick up moisture, rain on Tamil Nadu)
+  
+  🎯 PYQ: Tamil Nadu gets most rain from NORTHEAST MONSOON (not SW!)
+           Rest of India = mainly SW monsoon rain.
+
+MONSOON WORD ORIGIN: Arabic "MAUSIM" = season
+```
+
+### Factor 5: OCEAN CURRENTS
+```
+EFFECT: Warm currents = warmer weather; Cold currents = cooler, foggy
+
+India's relevant currents:
+  → WARM INDIAN OCEAN water in summer → evaporation → monsoon formation
+  → Bay of Bengal is warm → storms and cyclones in Oct-Nov (post-monsoon)
+```
+
+### Factor 6: RELIEF (Mountains, Plateaus)
+```
+EFFECT: Mountains act as barriers; valleys channel winds
+
+EXAMPLES:
+  → Western Ghats: Block Arabian Sea monsoon → wet coast, dry Deccan
+  → Himalayas: Block cold winds → protect North India
+  → Khasi Hills (Meghalaya): Funnel monsoon → Mawsynram/Cherrapunji
+    = WORLD'S WETTEST PLACE (average ~11,000 mm rainfall/year!)
+    
+🎯 PYQ: Mawsynram (Meghalaya) = currently world's wettest place
+         Cherrapunji (Sohra) = second wettest / historically wettest
+```
+
+---
+
+## 🔷 SECTION 3: India's Climate Zones / Types
+
+### ZONE 1: TROPICAL RAINFOREST (Hot and Wet)
+```
+LOCATION: Western Ghats (Kerala, coastal Karnataka, Goa)
+          Andaman & Nicobar Islands
+          Parts of Northeast India (Assam, Meghalaya, Mizoram)
+
+CHARACTERISTICS:
+  → Very high rainfall (200+ cm per year)
+  → Very hot and humid
+  → Dense evergreen forests
+  → Temperature: 25-30°C throughout year
+  
+SPECIAL: Mawsynram (Meghalaya) gets ~11,000 mm/year — world's wettest!
+```
+
+### ZONE 2: TROPICAL SAVANNA (Hot with Seasonal Rain)
+```
+LOCATION: Deccan Plateau (Maharashtra, Karnataka, AP, Telangana)
+          Central India
+
+CHARACTERISTICS:
+  → Distinct wet (monsoon) and dry seasons
+  → Moderate rainfall (75-150 cm)
+  → Temperature: 20-35°C
+  → CROPS: Cotton, Jowar (Black soil + Savanna climate)
+
+Bihar mostly falls in this zone.
+```
+
+### ZONE 3: SEMI-ARID / TROPICAL STEPPE
+```
+LOCATION: Parts of Rajasthan (eastern), Karnataka Plateau, 
+          Rain shadow areas of Deccan
+
+CHARACTERISTICS:
+  → Low rainfall (25-75 cm)
+  → Grasslands with scattered trees
+  → Hot summers, mild winters
+```
+
+### ZONE 4: ARID / DESERT CLIMATE
+```
+LOCATION: Rajasthan (Thar Desert), Kutch (Gujarat)
+
+CHARACTERISTICS:
+  → Extreme temperatures: +50°C in summer, near 0°C in winter nights
+  → Very low rainfall (<25 cm per year)
+  → Sparse vegetation — scrub, thorny plants, cacti
+  
+  THAR DESERT = World's 7th largest hot desert
+              = Most densely populated desert in the world!
+  JAISALMER = Driest city in India
+  
+🎯 PYQ: India's hot desert = Thar Desert (Rajasthan + parts of Gujarat, Punjab, Haryana)
+```
+
+### ZONE 5: HUMID SUBTROPICAL (North Indian Plains)
+```
+LOCATION: Punjab, Haryana, UP, Bihar, West Bengal (Gangetic Plains)
+
+CHARACTERISTICS:
+  → HOT summers: 40-48°C (loo winds — hot dry wind in summer!)
+  → COLD winters: 5-15°C (fog, frost in parts of Bihar and UP)
+  → Moderate rainfall (60-150 cm) from SW Monsoon
+  → Four distinct seasons
+  
+  BIHAR'S CLIMATE = Humid Subtropical
+  → Hot dry summers, monsoon rains (June-September), cool winters
+  
+🎯 PYQ: LOO = Hot dry summer wind that blows over North India plains
+         LOO is associated with: Punjab, Haryana, UP, Bihar, Rajasthan
+```
+
+### ZONE 6: MOUNTAIN CLIMATE (Highland / Alpine)
+```
+LOCATION: Himalayas (J&K, Ladakh, HP, Uttarakhand)
+          Northeast hills (Nagaland, Manipur at altitude)
+
+CHARACTERISTICS:
+  → Temperature decreases with altitude
+  → Below treeline: Temperate forests
+  → Above treeline: Alpine meadows (Bugyals)
+  → Permanent snow: Himalayan peaks (above 5000m)
+  → Very COLD winters (Dras in J&K = coldest inhabited place in India!)
+  
+DRAS, LADAKH: Sometimes recorded at -45°C! 
+              Called the "Ice Box of India" / "Coldest place in India (inhabited)"
+```
+
+---
+
+## 🔷 SECTION 4: India's Four Seasons
+
+```
+SEASON 1: WINTER (December – February)
+  Temperature: Low (5-25°C in plains; below 0°C in hills)
+  Wind: NORTHEAST MONSOON (dry, cold from land to sea)
+  Rainfall: Western Disturbances → rain/snow in NW India
+            Tamil Nadu coast: gets rain from retreating NE monsoon
+  
+  WESTERN DISTURBANCES: Cold weather systems from Mediterranean region
+    → Bring winter rains to Punjab, Haryana, UP, J&K
+    → Important for RABI crops (wheat, mustard, barley)!
+    
+  🎯 Western Disturbances → winter rain → Rabi crops (wheat)
+
+SEASON 2: PRE-MONSOON / SUMMER (March – May)
+  Temperature: Extreme heat (40-48°C in North India)
+  Notable features:
+  → LOO: Hot, dry, dust-laden wind over plains (causes heat stroke)
+  → KAL BAISAKHI (Nor'westers): Pre-monsoon thunderstorms in Bengal, 
+    Bihar, Assam (called Kalbaisakhi or "Nor'westers")
+    → Bring relief from heat; can be violent
+    
+  🎯 PYQ: Nor'westers / Kalbaisakhi = pre-monsoon storms in Bengal/Bihar/Assam
+           Associated with: Tea cultivation in Assam + Jute in Bengal
+
+SEASON 3: MONSOON (June – September)
+  The main event! 75-80% of India's annual rainfall.
+  SW Monsoon arrives: Kerala ~June 1 → Bihar/UP ~June 20-25 → Delhi ~July 1
+  
+  ONSET ORDER (approximate):
+  Kerala → Karnataka, Goa → Maharashtra → Gujarat, MP, Chhattisgarh →
+  Bihar, West Bengal → UP, Rajasthan → Delhi → Punjab → J&K
+  
+  WITHDRAWAL (retreat) ORDER: Opposite direction
+  NW India (September) → Bihar (October) → South India (November-December)
+  
+  🎯 PYQ: Normal onset date for Kerala = June 1 (± few days)
+           Bihar receives SW monsoon: mid-to-late June
+
+SEASON 4: POST-MONSOON / AUTUMN (October – November)
+  → SW monsoon retreats
+  → NE monsoon begins
+  → Bay of Bengal cyclones active! (Oct-Nov = peak cyclone season)
+  → Tamil Nadu coasts get NE monsoon rain
+  
+  🎯 PYQ: Most cyclones hit India's east coast (Andhra, Odisha, Tamil Nadu, West Bengal)
+           Peak season: October-November
+```
+
+---
+
+## 🔷 SECTION 5: Climate — Key PYQ Facts
+
+```
+RAINFALL EXTREMES:
+  Highest rainfall: MAWSYNRAM (Meghalaya) — ~11,000 mm/year (world's wettest)
+                    Cherrapunji (Sohra) = historically wettest (still among highest)
+  Lowest rainfall:  JAISALMER (Rajasthan) — ~20-25 cm/year
+  
+TEMPERATURE EXTREMES:
+  Hottest:   GANGANAGAR, Rajasthan (summer ~50°C recorded)
+             (Phalodi, Rajasthan = recently recorded 51°C+)
+  Coldest (inhabited): DRAS, Ladakh (-45°C in winter)
+  
+WINDS:
+  LOO = Hot dry wind, North Indian plains, summer
+  KALBAISAKHI / NOR'WESTERS = pre-monsoon storms, Bengal/Bihar/Assam
+  WESTERN DISTURBANCES = winter rain/snow in NW India (Mediterranean origin)
+  MANGO SHOWERS = pre-monsoon showers in Kerala, Karnataka (help mango ripening)
+  BLOSSOM SHOWERS = coffee-growing areas of Karnataka (benefit coffee)
+  CHERRY BLOSSOMS / ANDHIS = dust storms in Rajasthan summers
+  
+MONSOON WORD:
+  "MONSOON" from Arabic "MAUSIM" = season
+  
+STATES WITH TROPIC OF CANCER (8 STATES):
+  Gujarat → Rajasthan → MP → Chhattisgarh → Jharkhand → 
+  West Bengal → Tripura → Mizoram
+  
+  MEMORY TRICK: "GR MC J BWTM"
+  Gujarat, Rajasthan, Madhya Pradesh, Chhattisgarh, Jharkhand, 
+  West Bengal, Tripura, Mizoram
+  
+  OR: "Geeta Roz Mandir Chali Jab Woh The Mein"
+```
+
+---
+
+## 🔷 SECTION 6: Bihar's Climate Specifically
+
+```
+BIHAR'S CLIMATE = HUMID SUBTROPICAL MONSOON
+
+SEASON-WISE:
+  Summer (March-June):
+    → Temperature: 35-42°C
+    → Loo winds (hot, dry) common in April-May
+    → KALBAISAKHI (Nor'westers) bring relief rains in pre-monsoon
+    
+  Monsoon (June-October):
+    → SW Monsoon arrives: mid-to-late June
+    → Most rainfall: July-August
+    → Annual rainfall: 100-150 cm (North Bihar more than South)
+    → North Bihar (close to Nepal, Himalayas) = higher rainfall
+    → Floods common in North Bihar (Kosi, Gandak, Bagmati rivers)
+    
+  Autumn (October-November):
+    → Retreating monsoon
+    → Temperature starts dropping
+    
+  Winter (December-February):
+    → Temperature: 5-20°C
+    → Cold waves from Himalayas
+    → Dense fog in December-January
+    → Western Disturbances bring occasional rains (beneficial for wheat)
+
+IMPORTANT BIHAR GEOGRAPHY POINTS:
+  → North Bihar = Terai region = more rainfall, flood-prone
+  → South Bihar = plateau region = less rainfall, drought-prone sometimes
+  → Kosi River = "Sorrow of Bihar" (frequent floods in North Bihar)
+  → Ganga divides Bihar: North Bihar + South Bihar
+```
+
+---
+
+# PART 3: PRACTICE QUESTIONS
+
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: Normalization, Functional Dependencies, Normal Forms, Anomalies
+
+---
+
+**Q1.** Normalization in DBMS is primarily done to:
+(A) Increase data redundancy for faster retrieval
+(B) Reduce data redundancy and prevent anomalies (insertion, update, deletion)
+(C) Increase the number of tables for better security
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q2.** A table is in First Normal Form (1NF) if:
-
-(A) It has no partial functional dependencies
-(B) It has no transitive functional dependencies
-(C) Every column contains atomic (indivisible) values
+**Q2.** Which anomaly occurs when updating data in one row leaves other rows with the old (incorrect) value?
+(A) Insert Anomaly
+(B) Delete Anomaly
+(C) Update Anomaly
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q3.** Consider a relation R(A, B, C, D) where the Primary Key is (A, B) composite. If C depends only on A (not on B), this violates:
+**Q3.** The functional dependency A → B means:
+(A) A is always less than B
+(B) Knowing the value of A uniquely determines the value of B
+(C) B determines A (reverse relationship)
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q4.** A table is in FIRST NORMAL FORM (1NF) if:
+(A) It has no partial dependencies on the composite primary key
+(B) All attribute values are atomic (indivisible) with no multi-valued cells or repeating groups
+(C) It has no transitive dependencies
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q5.** Which normal form specifically removes PARTIAL FUNCTIONAL DEPENDENCIES?
 (A) 1NF
 (B) 2NF
 (C) 3NF
@@ -538,565 +1204,603 @@ Since this is BPSC, Bihar-specific climate is important:
 
 ---
 
-**Q4.** The process of removing redundancy and improving data integrity in a database is called:
-
-(A) Denormalization
-(B) Normalization
-(C) Decomposition
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q5.** If attribute A functionally determines attribute B, which of the following notations is correct?
-
-(A) B → A
-(B) A ↔ B
-(C) A → B
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q6.** A relation is in 2NF if and only if:
-
-(A) It is in 1NF and has no partial dependencies
-(B) It is in 1NF and has no transitive dependencies
-(C) It has no repeating groups
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q7.** Which normal form is considered adequate for most real-world RDBMS database designs?
-
-(A) 1NF
-(B) 2NF
-(C) 3NF
-(D) BCNF
-
----
-
-**Q8.** Consider a table: Employee(Emp_ID, Dept_ID, Dept_Name). Here Emp_ID → Dept_ID and Dept_ID → Dept_Name. The dependency Emp_ID → Dept_Name (through Dept_ID) is called:
-
-(A) Partial Dependency
-(B) Full Dependency
-(C) Transitive Dependency
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q9.** Removing transitive dependencies from a relation converts it to:
-
-(A) 1NF
-(B) 2NF
-(C) 3NF
-(D) BCNF
-
----
-
-**Q10.** A table with attributes (OrderID, ProductID, ProductName, Quantity) where Primary Key = (OrderID, ProductID). The dependency ProductID → ProductName is a:
-
+**Q6.** Consider a table with composite Primary Key {StdID, CourseID}. The attribute "CourseName" depends only on CourseID (not on StdID). This is a:
 (A) Full functional dependency
-(B) Partial functional dependency
-(C) Transitive dependency
-(D) Multi-valued dependency
-
----
-
-**Q11.** Which of the following statements about BCNF is CORRECT?
-
-(A) BCNF is weaker than 3NF
-(B) Every relation in BCNF is also in 3NF
-(C) BCNF allows non-superkey determinants
-(D) More than one of the above
-
----
-
-**Q12.** Storing the same data in two different places in a database causes:
-
-(A) Wasted storage space
-(B) Data inconsistency
-(C) Faster queries
+(B) Transitive dependency
+(C) Partial dependency — violates 2NF
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q13.** A relation having a SINGLE ATTRIBUTE primary key is automatically in:
+**Q7.** Which normal form specifically removes TRANSITIVE FUNCTIONAL DEPENDENCIES?
+(A) 1NF
+(B) 2NF
+(C) 3NF
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q8.** A → B → C is a transitive dependency. What condition makes this a 3NF violation?
+(A) When A is a primary key
+(B) When B is NOT a candidate key and C depends on B (not directly on A)
+(C) When C is a multivalued attribute
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q9.** BCNF (Boyce-Codd Normal Form) is:
+(A) Weaker than 3NF
+(B) A stronger version of 3NF where every determinant must be a super key/candidate key
+(C) Equivalent to 2NF in all cases
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q10.** A table with a SINGLE-ATTRIBUTE primary key (not composite) is automatically in:
 (A) 1NF only
-(B) 2NF (since no partial dependency is possible with a single PK)
-(C) 3NF
-(D) BCNF
-
----
-
-**Q14.** Consider a student record table where a student can have multiple phone numbers stored in the same column as "9876543210, 8765432109". This violates:
-
-(A) 2NF
-(B) 3NF
-(C) 1NF
-(D) BCNF
-
----
-
-**Q15.** In normalization, the correct sequence (from lowest to highest) is:
-
-(A) 1NF → 3NF → 2NF → BCNF
-(B) 1NF → 2NF → 3NF → BCNF
-(C) 2NF → 1NF → BCNF → 3NF
-(D) BCNF → 3NF → 2NF → 1NF
-
----
-
-**Q16.** Which of the following is NOT a goal of normalization?
-
-(A) Eliminate data redundancy
-(B) Prevent update anomalies
-(C) Improve query performance at all costs
-(D) Ensure data integrity
-
----
-
-**Q17.** A functional dependency X → Y where X is a proper subset of the primary key is called:
-
-(A) Full functional dependency
-(B) Partial functional dependency
-(C) Trivial dependency
-(D) Transitive dependency
-
----
-
-**Q18.** Consider: Student(Roll_No, Name, City, Pincode) where Pincode → City. If Roll_No is the primary key, which NF is violated?
-
-(A) 1NF
-(B) 2NF
-(C) 3NF
-(D) BCNF
-
----
-
-**Q19.** The decomposition of a relation into smaller relations to achieve normalization should ideally be:
-
-(A) Lossy
-(B) Lossless
-(C) Redundant
-(D) More than one of the above
-
----
-
-**Q20.** In BCNF, for every non-trivial functional dependency X → Y:
-
-(A) X must be a candidate key or superkey
-(B) Y must be a candidate key
-(C) X must be a non-key attribute
-(D) Y must depend on partial key
-
----
-
-**Q21.** A table Employee(EmpID, EmpName, DeptID, DeptName, DeptLocation) with EmpID as primary key. Dept_ID → DeptName and Dept_ID → DeptLocation. To achieve 3NF, we should:
-
-(A) Split into Employee(EmpID, EmpName) and Department(DeptID, DeptName, DeptLocation, EmpID)
-(B) Split into Employee(EmpID, EmpName, DeptID) and Department(DeptID, DeptName, DeptLocation)
-(C) Keep the table as is — it is already in 3NF
-(D) Remove DeptID from the table
-
----
-
-**Q22.** Which normal form specifically deals with the problem where a determinant in a functional dependency is NOT a superkey?
-
-(A) 1NF
-(B) 2NF
-(C) 3NF
-(D) BCNF
-
----
-
-**Q23.** The term "denormalization" refers to:
-
-(A) Converting an unnormalized table to 1NF
-(B) Deliberately introducing redundancy to improve read/query performance
-(C) Removing all functional dependencies
-(D) Achieving BCNF from 3NF
-
----
-
-**Q24.** Consider a relation R(A, B, C) with functional dependencies: A → B, B → C. Which of the following is NOT a violation of 3NF if A is the primary key?
-
-(A) B → C is a transitive dependency
-(B) A → C is derived transitively
-(C) A → B is a direct dependency — this is fine
-(D) More than one of the above
-
----
-
-**Q25.** Which of the following is the correct statement about normalization forms?
-
-(A) A relation in BCNF may not be in 3NF
-(B) A relation in 3NF is always in BCNF
-(C) A relation in BCNF is always in 3NF
-(D) 2NF and 3NF are the same
-
----
-
-# 🌍 SECTION B: GS QUESTIONS — INDIA'S CLIMATE (Q26–Q50)
-
----
-
-**Q26.** Which of the following is the wettest place in India and also considered the wettest place in the world?
-
-(A) Cherrapunji, Meghalaya
-(B) Mawsynram, Meghalaya
-(C) Agumbe, Karnataka
-(D) Lachen, Sikkim
-
----
-
-**Q27.** The word "Monsoon" is derived from:
-
-(A) Sanskrit word "Mausam"
-(B) Arabic word "Mausim"
-(C) Portuguese word "Monção"
+(B) Both 1NF and 2NF (partial dependency impossible with single-attribute PK)
+(C) 3NF always
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q28.** The SW Monsoon officially arrives in India by which date?
-
-(A) 15th May — Andhra Pradesh
-(B) 1st June — Kerala
-(C) 15th June — Maharashtra
-(D) 1st July — Delhi
-
----
-
-**Q29.** Which season does Tamil Nadu receive most of its rainfall?
-
-(A) SW Monsoon (June–September)
-(B) Retreating/NE Monsoon (October–December)
-(C) Winter (December–February)
-(D) Pre-monsoon (March–May)
-
----
-
-**Q30.** Kalbaisakhi / Norwesters are violent pre-monsoon storms associated with which region?
-
-(A) Rajasthan and Gujarat
-(B) West Bengal and Assam
-(C) Kerala and Tamil Nadu
-(D) Punjab and Haryana
-
----
-
-**Q31.** The hot dry wind called "Loo" blows over which region of India?
-
-(A) Kerala and Karnataka
-(B) Punjab, Haryana, UP, Rajasthan
-(C) Bihar and Jharkhand
+**Q11.** Which ANOMALY prevents inserting a new course into the database when no student has enrolled yet?
+(A) Update Anomaly
+(B) Delete Anomaly
+(C) Insert Anomaly
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q32.** The Deccan Plateau lies in the rain shadow of the Western Ghats. What type of rainfall does the Deccan Plateau receive?
-
-(A) Heavy orographic rainfall
-(B) Very little — it is on the leeward side
-(C) Cyclonic rainfall throughout the year
-(D) No rainfall at all
-
----
-
-**Q33.** Which of the following climatic phenomena WEAKENS the South-West Monsoon in India?
-
-(A) La Niña
-(B) El Niño
-(C) ITCZ shifting northward
-(D) Low pressure over Thar Desert
-
----
-
-**Q34.** "Mango Showers" — pre-monsoon rains that help in the ripening of mangoes — fall mainly in:
-
-(A) Maharashtra and Gujarat
-(B) Karnataka and Kerala
-(C) Odisha and West Bengal
-(D) Uttar Pradesh and Bihar
-
----
-
-**Q35.** According to the Koeppen classification, which climate type covers the maximum area in India?
-
-(A) Tropical Rainforest (Af)
-(B) Hot Desert (BW)
-(C) Humid Subtropical (Cwa) — Gangetic Plains
-(D) Highland/Mountain (H)
-
----
-
-**Q36.** The ITCZ stands for:
-
-(A) Indian Thermal Convergence Zone
-(B) Inter-Tropical Convergence Zone
-(C) International Tropical Climate Zone
-(D) Intra-Terrestrial Cyclonic Zone
-
----
-
-**Q37.** Which river in Bihar is known as the "Sorrow of Bihar" due to recurring floods?
-
-(A) Ganga
-(B) Son
-(C) Gandak
-(D) Kosi
-
----
-
-**Q38.** Orographic / Relief rainfall occurs when:
-
-(A) Hot air rises convectively due to surface heating
-(B) Moist winds are forced to rise over a mountain barrier
-(C) Cold and warm air masses meet at a front
-(D) Cyclonic winds converge at a low pressure center
-
----
-
-**Q39.** India's climate is broadly classified as:
-
-(A) Equatorial Climate
-(B) Tropical Monsoon Climate
-(C) Mediterranean Climate
-(D) Continental Climate
-
----
-
-**Q40.** The Western Ghats receive very heavy rainfall on their western slopes because:
-
-(A) They face the retreating monsoon
-(B) The SW Monsoon hits the windward (western) slopes causing orographic rain
-(C) Cyclones frequently hit the western coast
-(D) Convectional rain is more intense here
-
----
-
-**Q41.** During which season do cyclones most frequently strike the eastern coast (Odisha, Andhra Pradesh, Tamil Nadu) of India?
-
-(A) SW Monsoon (June–July)
-(B) Winter (December–January)
-(C) Retreating Monsoon / Post-monsoon (Oct–Nov)
-(D) Pre-monsoon (March–May)
-
----
-
-**Q42.** The Thar Desert (Western Rajasthan) has very low rainfall because:
-
-(A) It lies in the rain shadow of the Aravallis
-(B) The SW monsoon loses its moisture before reaching Rajasthan, and the Aravallis are parallel to the monsoon winds
-(C) It is too close to the equator
-(D) The winds are offshore throughout the year
-
----
-
-**Q43.** Leh (Ladakh) is one of the driest places in India because:
-
-(A) It has no rivers nearby
-(B) It lies in the rain shadow of the Himalayas, blocking both monsoon branches
-(C) It is at sea level
+**Q12.** Which ANOMALY occurs when deleting a student's record causes the loss of information about a course they were the last student in?
+(A) Update Anomaly
+(B) Delete Anomaly
+(C) Insert Anomaly
 (D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q44.** Which two branches does the South-West Monsoon divide into when entering India?
-
-(A) Himalayan Branch and Peninsular Branch
-(B) Arabian Sea Branch and Bay of Bengal Branch
-(C) Eastern Branch and Western Branch
+**Q13.** NORMALIZATION should always be:
+(A) LOSSY — some data is sacrificed for better structure
+(B) LOSSLESS — all original data can be reconstructed by joining the decomposed tables
+(C) PARTIAL — only the most important tables are normalized
 (D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q45.** "Cherry Blossom Showers" that help in flowering of coffee plants occur in:
-
-(A) Tamil Nadu
-(B) Kerala
-(C) Karnataka
-(D) Andhra Pradesh
-
----
-
-**Q46.** The monsoon trough (axis of low pressure) lies over the northern plains during peak monsoon. When it shifts northward toward the Himalayas, what typically happens?
-
-(A) Rainfall increases over northern plains
-(B) A break in the monsoon occurs — reduced rainfall over plains
-(C) Monsoon withdraws immediately
-(D) The Arabian Sea branch intensifies
+**Q14.** In the following FDs for table T(A, B, C, D) with PK = {A, B}:
+A → C, B → D, {A,B} → D
+Which dependency violates 2NF?
+(A) {A,B} → D (full dependency)
+(B) A → C (partial: C depends only on A, not full composite key)
+(C) B → D (this is acceptable)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q47.** The Coriolis effect on the South-West Monsoon causes the winds to deflect in which direction in the Northern Hemisphere?
-
-(A) Left (westward)
-(B) Right (eastward/northeastward)
-(C) No deflection — straight northward
-(D) Downward toward land
-
----
-
-**Q48.** Bihar's climate can best be described as:
-
-(A) Tropical Savanna (Aw)
-(B) Hot Desert (BW)
-(C) Humid Subtropical (Cwa)
-(D) Tropical Rainforest (Af)
+**Q15.** What is "DENORMALIZATION" in databases?
+(A) Removing primary keys from tables to speed up queries
+(B) Deliberately introducing redundancy into a normalized database to improve query performance
+(C) Converting a relational database to a hierarchical database
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q49.** Which of the following pairs is CORRECTLY matched?
-
-(A) Loo — West Bengal | Kalbaisakhi — Rajasthan
-(B) Loo — North India (Punjab/UP/Rajasthan) | Kalbaisakhi — West Bengal/Assam
-(C) Loo — Kerala | Kalbaisakhi — Punjab
-(D) Loo — Tamil Nadu | Kalbaisakhi — Gujarat
-
----
-
-**Q50.** Consider the following statements about Indian monsoon:
-1. El Niño strengthens the SW Monsoon in India
-2. La Niña is associated with above-normal rainfall in India
-3. ENSO stands for El Niño Southern Oscillation
-
-Which of the above statements is/are CORRECT?
-
-(A) Only 1
-(B) Only 2 and 3
-(C) Only 1 and 3
-(D) More than one of the above — 2 and 3 only
-(E) All three (1, 2, and 3)
+**Q16.** Consider: StdID → DeptID, DeptID → DeptHead. Is this a transitive dependency?
+(A) No — StdID determines DeptHead directly so it's fine
+(B) Yes — DeptHead depends on DeptID which is a non-key attribute; StdID → DeptID → DeptHead violates 3NF
+(C) No — transitive dependencies only occur with composite keys
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-# ═══════════════════════════════════════════════
-# 🔑 ANSWER KEY — ALL 50 QUESTIONS
-# ═══════════════════════════════════════════════
-
-> Scroll here ONLY after attempting all 50 questions!
-
----
-
-## 💻 CS ANSWERS (Q1–Q25)
-
-| Q | Ans | Explanation |
-|---|-----|-------------|
-| 1 | **(D)** | All three — Insertion, Deletion, and Updation anomalies occur in un-normalized databases. |
-| 2 | **(C)** | 1NF requires every column to have atomic (indivisible) values. No multi-valued or composite attributes. |
-| 3 | **(B)** | C depends only on A (part of composite PK), not on the full key (A,B). This is a partial dependency → violates 2NF. |
-| 4 | **(B)** | Normalization is the systematic process of reducing redundancy and organizing a database. |
-| 5 | **(C)** | A → B is the correct notation for "A functionally determines B". |
-| 6 | **(A)** | 2NF = 1NF + No partial dependencies on composite primary key. |
-| 7 | **(C)** | **3NF is considered adequate for normal RDBMS design.** This is a direct PYQ fact — memorize it. |
-| 8 | **(C)** | Emp_ID → Dept_ID → Dept_Name forms a chain through a non-key attribute = Transitive Dependency. |
-| 9 | **(C)** | **3NF eliminates transitive dependencies.** 2NF eliminates partial deps. |
-| 10 | **(B)** | ProductID → ProductName: ProductID is PART of the composite PK (OrderID, ProductID). Depends on PART of PK = partial functional dependency. |
-| 11 | **(B)** | Every BCNF relation is in 3NF (BCNF is stricter). But 3NF does NOT guarantee BCNF. |
-| 12 | **(D)** | Storing data in two places causes BOTH wasted space AND data inconsistency — classic PYQ answer is D. |
-| 13 | **(B)** | With a single-attribute PK, there can be no partial dependency (which only happens with composite PK). So the relation is automatically in 2NF. |
-| 14 | **(C)** | Storing multiple phone numbers in one cell = non-atomic value = violates **1NF**. |
-| 15 | **(B)** | 1NF → 2NF → 3NF → BCNF — this is the correct ascending ladder of normalization. |
-| 16 | **(C)** | Normalization actually MAY DECREASE query performance (more JOINs needed). "Improve query performance at all costs" is NOT a goal of normalization. |
-| 17 | **(B)** | When X is a PROPER SUBSET of the composite PK and X → Y, it is a Partial Functional Dependency. |
-| 18 | **(C)** | Pincode → City: Pincode is a non-key attribute determining another non-key attribute (City). This is a transitive dependency → violates **3NF**. |
-| 19 | **(B)** | Decomposition should be **lossless** (no data loss when tables are joined back). Lossy decomposition is bad design. |
-| 20 | **(A)** | **BCNF rule:** For every FD X → Y, X must be a superkey or candidate key. No exceptions. |
-| 21 | **(B)** | Correct: Move Dept info to a separate Dept table. Employee keeps DeptID as FK. This eliminates transitive dep → achieves 3NF. |
-| 22 | **(D)** | **BCNF** is specifically about ensuring that every determinant in an FD is a superkey. 3NF still allows some exceptions. |
-| 23 | **(B)** | Denormalization = deliberately adding controlled redundancy back to improve read/query performance. Used in data warehouses. |
-| 24 | **(C)** | A → B with A as PK is a direct full dependency — perfectly fine. The violation is B → C (transitive). |
-| 25 | **(C)** | **BCNF is stricter than 3NF.** Any relation in BCNF automatically satisfies 3NF. But 3NF doesn't guarantee BCNF. |
+**Q17.** The MOST COMMONLY USED normal form in real-world relational databases is:
+(A) 1NF
+(B) 2NF
+(C) 3NF
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 🌍 GS ANSWERS (Q26–Q50)
-
-| Q | Ans | Explanation |
-|---|-----|-------------|
-| 26 | **(B)** | **Mawsynram** (Meghalaya) is the wettest place in India and world (~11,871 mm). Cherrapunji was previously considered the wettest. |
-| 27 | **(B)** | "Monsoon" comes from **Arabic "Mausim"** = Season. Direct PYQ fact. |
-| 28 | **(B)** | SW Monsoon officially arrives in **Kerala by June 1**. This is the standard IMD onset date. |
-| 29 | **(B)** | Tamil Nadu (eastern coast) is in rain shadow during SW Monsoon. It gets rain from the **retreating/NE monsoon** (Oct–Dec). |
-| 30 | **(B)** | Kalbaisakhi / Norwesters are violent pre-monsoon thunderstorms characteristic of **West Bengal and Assam**. |
-| 31 | **(B)** | **Loo** = hot, dry wind blowing in **Punjab, Haryana, UP, and Rajasthan** during May–June. Can be fatal. |
-| 32 | **(B)** | The Deccan Plateau is on the **leeward (rain shadow) side** of the Western Ghats → receives very little rainfall. |
-| 33 | **(B)** | **El Niño** = warm eastern Pacific → weakens SW Monsoon → drought tendency in India. La Niña strengthens it. |
-| 34 | **(B)** | **Mango Showers** fall in **Karnataka and Kerala** — help mango ripening. |
-| 35 | **(C)** | The **Humid Subtropical (Cwa)** climate covering the Gangetic Plains is the most extensive climate zone in India. |
-| 36 | **(B)** | **ITCZ = Inter-Tropical Convergence Zone** — the belt near equator where trade winds converge; shifts north in summer. |
-| 37 | **(D)** | **Kosi River** is called the "Sorrow of Bihar" — it changes course frequently, causing massive floods in North Bihar. |
-| 38 | **(B)** | **Orographic rain** = moist winds forced upward over a mountain → cools → condenses → rains on windward side. |
-| 39 | **(B)** | India has a **Tropical Monsoon Climate** — characterized by distinct wet and dry seasons with seasonal wind reversal. |
-| 40 | **(B)** | SW Monsoon hits the **windward (western) slopes** of W. Ghats → forced upward → orographic rain. Leeward (eastern/Deccan) stays dry. |
-| 41 | **(C)** | Cyclones in Bay of Bengal most frequently strike during **October–November** (retreating/post-monsoon season). |
-| 42 | **(B)** | The Aravallis run **parallel** to the Arabian Sea branch of monsoon (SW to NE) — winds pass alongside rather than being blocked, so little rain falls in Rajasthan. |
-| 43 | **(B)** | Leh/Ladakh is in the **rain shadow of the Himalayas** — both the Arabian Sea and Bay of Bengal monsoon branches are blocked by the high mountains. |
-| 44 | **(B)** | SW Monsoon splits into two: **Arabian Sea Branch** (enters Kerala, western coast) and **Bay of Bengal Branch** (enters NE India, Assam). |
-| 45 | **(C)** | **Cherry Blossom Showers** fall in **Karnataka** (coffee growing region) during pre-monsoon, helping coffee plants flower. |
-| 46 | **(B)** | When the monsoon trough shifts northward toward Himalayas, a **break in the monsoon** occurs — the plains get less rain temporarily. |
-| 47 | **(B)** | **Coriolis effect** in the Northern Hemisphere deflects winds to the **right** — so northward-moving winds become SW winds (deflected to the right = NE deflection in original motion). |
-| 48 | **(C)** | Bihar has **Humid Subtropical (Cwa)** climate — hot summers, cool winters, rainfall mainly in monsoon season. |
-| 49 | **(B)** | Correctly matched: **Loo → North India (Punjab/UP/Rajasthan)** and **Kalbaisakhi → West Bengal/Assam**. |
-| 50 | **(B)** | Statement 1 is WRONG (El Niño WEAKENS monsoon). Statements 2 and 3 are correct. Answer = 2 and 3 only = **(B)**. |
+**Q18.** Which of the following is TRUE about BCNF?
+(A) Every 3NF relation is automatically in BCNF
+(B) Every BCNF relation is automatically in 3NF, but not vice versa
+(C) BCNF is weaker than 3NF
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-# ═══════════════════════════════════════════════
-# 🎯 TOPPER'S CORNER — DAY 39 CHECKLIST
-# ═══════════════════════════════════════════════
-
-## CS Normalization — Must-Know Before Exam Day
-
-- [ ] Can explain all 4 normal forms from memory in 30 seconds each
-- [ ] Know: 3NF = adequate for normal RDBMS design (direct PYQ)
-- [ ] Know: 2NF eliminates partial dependencies
-- [ ] Know: 3NF eliminates transitive dependencies
-- [ ] Know: BCNF = every determinant must be a superkey
-- [ ] Know: Redundant data = wasted space + inconsistency (BOTH)
-- [ ] Know: Single-column PK → automatically in 2NF
-- [ ] Practiced identifying FDs in a table
-
-## GS Climate — Must-Know Before Exam Day
-
-- [ ] Mawsynram = wettest (Meghalaya) — NOT Cherrapunji
-- [ ] Monsoon from Arabic "Mausim"
-- [ ] SW Monsoon: June 1 Kerala onset
-- [ ] Tamil Nadu rain = from NE/Retreating Monsoon (NOT SW Monsoon)
-- [ ] El Niño = weak monsoon; La Niña = strong monsoon
-- [ ] Loo = North India dry hot wind
-- [ ] Kalbaisakhi = West Bengal/Assam pre-monsoon storms
-- [ ] Kosi = Sorrow of Bihar
-- [ ] ITCZ = Inter-Tropical Convergence Zone
+**Q19.** A table has attributes (Employee, Dept, DeptLocation). FDs: Employee → Dept, Dept → DeptLocation. What normal form issue exists?
+(A) 1NF violation — DeptLocation has multiple values
+(B) 2NF violation — DeptLocation partially depends on composite key
+(C) 3NF violation — Employee → Dept → DeptLocation is a transitive dependency
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📊 Score Yourself
-
-| Score | What It Means | Action |
-|-------|--------------|--------|
-| 45–50 | 🏆 Excellent — Topper Level | Revise once and move on |
-| 38–44 | ✅ Good — On Track | Re-read missed topics tonight |
-| 30–37 | ⚠️ Average — Need Revision | Re-read concepts + retry tomorrow |
-| <30 | ❌ Need more practice | Do full concept re-read today |
+**Q20.** Converting from 1NF to 2NF involves:
+(A) Removing multi-valued cells by creating new rows
+(B) Removing transitive dependencies by splitting tables
+(C) Removing partial dependencies by splitting attributes into separate tables based on their minimal determinant
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📅 Day 40 Preview
-
-**CS:** SQL Commands — DDL, DML, DCL, TCL (CREATE, ALTER, DROP, SELECT, INSERT, COMMIT, ROLLBACK)
-**GS:** Biology — Photoperiodism (Garner & Allard), Plant Growth, Hormones
-
-Key PYQ Fact for tomorrow: COMMIT = permanent. ROLLBACK = undo. TRUNCATE = cannot be rolled back.
+**Q21.** A table T(A, B, C) has FDs: A → B, A → C, B → C. Primary key is A. Is there a 3NF violation?
+(A) No — A is a primary key and determines everything; no violation
+(B) Yes — B → C is a transitive dependency (A → B → C, where B is not a candidate key)
+(C) Yes — A → B is a partial dependency
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-*Day 39 Complete ✅ | Target: 130+/150 | You are on track for TOP 50! 🎯*
+**Q22.** Which problem does storing "CourseName" in a STUDENT_COURSE table (with composite PK) create?
+(A) Primary key violation
+(B) Data redundancy — same CourseName repeated for every student in that course (leads to update anomaly)
+(C) Data type mismatch
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q23.** Normalization was proposed by:
+(A) Peter Chen in 1976
+(B) E.F. Codd in 1970
+(C) Charles Bachman in 1969
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q24.** A table is in 2NF. To check for 3NF, we look for:
+(A) Cells containing multiple values
+(B) Non-key attributes that determine other non-key attributes (transitive dependencies)
+(C) Tables without a primary key
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q25.** For BCNF, the rule is: for every functional dependency X → Y in the table:
+(A) Y must be a prime attribute (part of candidate key)
+(B) X must be a super key (contains a candidate key)
+(C) Both X and Y must be part of the primary key
+(D) More than one of the above
+(E) None of the above
+
+---
+
+## 📝 GENERAL STUDIES — 25 MCQs
+### Topics: India's Climate Zones, Monsoon, Seasons, Factors
+
+---
+
+**Q26.** India's overall climate is classified as:
+(A) Tropical Desert climate
+(B) Tropical Monsoon climate
+(C) Mediterranean climate
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q27.** The word "Monsoon" is derived from which language?
+(A) Sanskrit word "Mausa" meaning rain
+(B) Arabic word "Mausim" meaning season
+(C) Portuguese word "Monçao" meaning wind
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q28.** Which coast of India receives the MAXIMUM rainfall from the SOUTHWEST MONSOON?
+(A) Coromandel Coast (Tamil Nadu's eastern coast)
+(B) Malabar Coast (Kerala's western coast — Western Ghats face SW monsoon)
+(C) Northern coast of Odisha
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q29.** Tamil Nadu receives most of its rainfall from:
+(A) Southwest Monsoon (June-September)
+(B) Northeast Monsoon (October-December)
+(C) Western Disturbances
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q30.** The HOTTEST place in India during summer is generally:
+(A) Jaisalmer, Rajasthan
+(B) Ganganagar / Phalodi, Rajasthan (temperatures regularly exceed 50°C)
+(C) Hyderabad, Telangana
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q31.** "Mawsynram" in Meghalaya receives exceptionally high rainfall primarily because:
+(A) It is located near the sea level coastal plain
+(B) The funnel-shaped terrain of Khasi Hills channels the Bay of Bengal monsoon winds, forcing them upward
+(C) It is in the path of the Northeast Monsoon
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q32.** "LOO" is a weather phenomenon associated with:
+(A) Heavy rainfall during the monsoon season in coastal areas
+(B) Hot, dry, dust-laden wind blowing over North Indian plains during summer
+(C) Cold waves descending from the Himalayas in winter
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q33.** "Western Disturbances" bring rainfall to which part of India during WINTER?
+(A) Tamil Nadu and Kerala (southern India)
+(B) Northwestern India — Punjab, Haryana, Himachal Pradesh, J&K, UP
+(C) Eastern India — West Bengal and Assam
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q34.** The Tropic of Cancer (23.5°N) passes through HOW MANY Indian states?
+(A) 6 states
+(B) 8 states
+(C) 10 states
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q35.** Which of the following Indian states does the Tropic of Cancer NOT pass through?
+(A) Madhya Pradesh
+(B) Chhattisgarh
+(C) Bihar
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q36.** "Kalbaisakhi" (Nor'westers) are associated with:
+(A) Winter rains in Rajasthan and Gujarat
+(B) Pre-monsoon thunderstorms in West Bengal, Bihar, and Assam (April-May)
+(C) Post-monsoon cyclones on the eastern coast
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q37.** The Himalayan mountain range influences India's climate by:
+(A) Acting as a barrier to cold Central Asian winds in winter, protecting North India
+(B) Trapping monsoon clouds, causing heavy rainfall on the southern slopes
+(C) Both A and B are correct
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q38.** The climate of Bihar is best described as:
+(A) Tropical Rainforest
+(B) Arid Desert
+(C) Humid Subtropical Monsoon (hot summers, monsoon rain, cool winters)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q39.** The DRIEST place in India (lowest annual rainfall) is:
+(A) Bikaner, Rajasthan
+(B) Jaisalmer, Rajasthan
+(C) Leh, Ladakh
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q40.** The retreat of the Southwest Monsoon from India begins from which direction?
+(A) From the eastern coast first (Bengal)
+(B) From the northwestern part first (Rajasthan, Punjab) in September, moving southeast
+(C) From the southern tip (Kerala) first
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q41.** "MANGO SHOWERS" are pre-monsoon showers that help mango ripening. They occur mainly in:
+(A) Punjab and Haryana
+(B) Kerala and Karnataka (southwestern coastal states)
+(C) Bihar and UP
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q42.** Bay of Bengal cyclones are most frequent during which season?
+(A) June-July (peak monsoon)
+(B) October-November (post-monsoon, retreating monsoon period)
+(C) December-January (winter)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q43.** The factor primarily responsible for the RAIN SHADOW area on the Deccan Plateau (less rain compared to Western Ghats) is:
+(A) Distance from the Bay of Bengal
+(B) Western Ghats blocking the Arabian Sea branch of the SW Monsoon
+(C) Very high altitude of the Deccan Plateau
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q44.** Which of the following statements about India's climate is INCORRECT?
+(A) Tamil Nadu receives most of its rainfall from the Northeast Monsoon
+(B) Mawsynram in Meghalaya is one of the world's wettest places
+(C) The LOO wind brings cooling relief during the Indian summer
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q45.** North Bihar (like Muzaffarpur, Darbhanga) gets more rainfall than South Bihar because:
+(A) North Bihar is near the Bay of Bengal, getting direct sea winds
+(B) North Bihar is closer to the Himalayas and Nepal hills, which receive and direct more monsoon rainfall; rivers like Kosi also bring moisture
+(C) North Bihar has more forests which attract rainfall
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q46.** "DRAS" in Ladakh is famous for being:
+(A) The highest battlefield in the world
+(B) One of the coldest inhabited places in India (temperatures below -40°C in winter)
+(C) The wettest place in Ladakh
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q47.** The SOUTHWEST MONSOON arrives on the Kerala coast approximately on:
+(A) March 1
+(B) June 1 (approximately, with normal variations of ± a week)
+(C) July 15
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q48.** "Blossom Showers" are associated with which agricultural product?
+(A) Rice cultivation in Bihar
+(B) Coffee plantations in Karnataka (these showers help coffee flowering)
+(C) Wheat cultivation in Punjab
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q49.** The Thar Desert in India is classified as a:
+(A) Cold desert (like Ladakh)
+(B) Hot desert — world's 7th largest hot desert; also most densely populated desert
+(C) Coastal desert (due to proximity to Arabian Sea)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q50.** Consider the following statements about Indian climate:
+I.   Western Disturbances originate from the Mediterranean region and bring winter rain to NW India.
+II.  The Southwest Monsoon is responsible for about 75-80% of India's annual rainfall.
+III. Kalbaisakhi / Nor'westers occur in Tamil Nadu and Kerala during June-July.
+IV.  The retreating northeast monsoon brings rain to Tamil Nadu coast.
+
+Which statements are CORRECT?
+(A) Only I and II
+(B) Only I, II, and IV
+(C) Only II, III, and IV
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+# ANSWER KEY
+
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
+
+---
+
+### CS Answers (Q1–Q25):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (B) | Normalization = reduce redundancy + prevent insertion/update/delete anomalies |
+| 2 | (C) | Update Anomaly = updating one copy leaves others stale/inconsistent |
+| 3 | (B) | A → B: knowing A uniquely determines B |
+| 4 | (B) | 1NF = atomic values + no repeating groups |
+| 5 | (B) | 2NF removes PARTIAL dependencies (from composite key) |
+| 6 | (C) | CourseName depends only on CourseID (part of composite key) = partial dependency |
+| 7 | (C) | 3NF removes TRANSITIVE dependencies |
+| 8 | (B) | Transitive violation = B is NOT a candidate key and C depends on B not directly on A |
+| 9 | (B) | BCNF = stronger 3NF; every determinant must be a super key |
+| 10 | (B) | Single-attribute PK = automatically 2NF (no partial dependency possible) |
+| 11 | (C) | Insert Anomaly = can't add course without student (PK can't be NULL) |
+| 12 | (B) | Delete Anomaly = deleting a row loses unrelated info (course details) |
+| 13 | (B) | Normalization must be LOSSLESS — data preserved, just better organised |
+| 14 | (D) | Both A → C (partial: C needs only A) AND B → D (partial: D needs only B) violate 2NF |
+| 15 | (B) | Denormalization = deliberate redundancy for query performance |
+| 16 | (B) | StdID → DeptID → DeptHead = transitive dependency; DeptID is non-key → 3NF violation |
+| 17 | (C) | 3NF is the most practical and most commonly targeted normal form |
+| 18 | (B) | Every BCNF is in 3NF; NOT every 3NF is in BCNF (BCNF is stricter) |
+| 19 | (C) | Employee → Dept → DeptLocation = transitive dependency = 3NF violation |
+| 20 | (C) | 1NF→2NF = removing partial dependencies by splitting into separate tables |
+| 21 | (B) | B → C: B is not a candidate key; A → B → C = transitive = 3NF violation |
+| 22 | (B) | CourseName repeats for every student in that course = redundancy = update anomaly risk |
+| 23 | (B) | Normalization proposed by E.F. Codd, 1970 (with Relational Model) |
+| 24 | (B) | 3NF check = look for non-key → non-key dependencies (transitive) |
+| 25 | (B) | BCNF rule: X → Y requires X to be a super key (no exceptions) |
+
+---
+
+### GS Answers (Q26–Q50):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (B) | India = Tropical Monsoon climate (dominant classification) |
+| 27 | (B) | Monsoon = from Arabic "Mausim" = season |
+| 28 | (B) | Malabar Coast (Kerala) gets maximum SW monsoon rain (Western Ghats block/receive it) |
+| 29 | (B) | Tamil Nadu = Northeast Monsoon (rest of India mainly SW) |
+| 30 | (B) | Ganganagar/Phalodi = regularly highest temperatures in India |
+| 31 | (B) | Khasi Hills funnel shape + Bay of Bengal branch = extreme orographic rainfall |
+| 32 | (B) | LOO = hot dry wind over North Indian plains in summer |
+| 33 | (B) | Western Disturbances → winter rain in NW India (Punjab, HP, J&K, UP) |
+| 34 | (B) | 8 states: Gujarat, Rajasthan, MP, Chhattisgarh, Jharkhand, WB, Tripura, Mizoram |
+| 35 | (C) | Bihar does NOT lie on the Tropic of Cancer |
+| 36 | (B) | Kalbaisakhi = pre-monsoon thunderstorms in Bengal/Bihar/Assam (April-May) |
+| 37 | (C) | Himalayas do BOTH: block cold winds AND trap monsoon clouds |
+| 38 | (C) | Bihar = Humid Subtropical Monsoon climate |
+| 39 | (B) | Jaisalmer = driest city (~20-25 cm/year) |
+| 40 | (B) | Monsoon retreats from NW (Rajasthan/Punjab) first in September, moves SE |
+| 41 | (B) | Mango Showers = pre-monsoon in Kerala and Karnataka |
+| 42 | (B) | Bay of Bengal cyclones peak in October-November (post-monsoon) |
+| 43 | (B) | Western Ghats block Arabian Sea branch → rain shadow on Deccan/leeward side |
+| 44 | (C) | Statement C is INCORRECT: LOO is HOT, causes heat exhaustion (not cooling!) |
+| 45 | (B) | North Bihar closer to Nepal hills = more orographic rainfall; rivers from Nepal |
+| 46 | (B) | Dras = one of coldest inhabited places in India (below -40°C in winter) |
+| 47 | (B) | SW Monsoon arrives Kerala ~June 1 (normal onset date) |
+| 48 | (B) | Blossom Showers = benefit coffee in Karnataka |
+| 49 | (B) | Thar = hot desert; world's 7th largest + most densely populated desert |
+| 50 | (B) | I ✓ (Western Disturbances = Mediterranean, NW India winter rain) II ✓ (75-80% rain) III ✗ (Kalbaisakhi is Bengal/Bihar, not Tamil Nadu; and April-May not June-July) IV ✓ (NE monsoon rain to Tamil Nadu) → Only I, II, IV correct |
+
+---
+---
+
+# 🔁 DAY 39 — CRISP REVISION NOTES
+
+## ⚡ RAPID FIRE — Normalization
+
+### Normal Forms — One Line Each:
+```
+UNF  → Raw messy data (no rules)
+1NF  → Make ALL cells ATOMIC (no lists, no repeating columns)
+2NF  → Remove PARTIAL dependencies (composite key issue: non-key depends on PART of PK)
+3NF  → Remove TRANSITIVE dependencies (A → B → C where B is non-key)
+BCNF → Every DETERMINANT must be a SUPER KEY (stricter than 3NF)
+```
+
+### Dependency Types in 5 Seconds:
+```
+FULL:        B depends on ENTIRE composite key → GOOD (keeps in 2NF)
+PARTIAL:     B depends on only PART of composite key → 2NF VIOLATION
+TRANSITIVE:  A → B → C where B is NOT a candidate key → 3NF VIOLATION
+```
+
+### Three Anomalies:
+```
+INSERT  = Can't add data without unrelated data (e.g., can't add course without student)
+UPDATE  = Change in one place must be made in all places → miss one = inconsistency
+DELETE  = Deleting one row unintentionally deletes other info (last student in course)
+```
+
+### PYQ Trap Summary:
+```
+✅ 2NF removes PARTIAL (not transitive)
+✅ 3NF removes TRANSITIVE (not partial)
+✅ Single-attribute PK → automatically 2NF
+✅ BCNF ⊂ 3NF (all BCNF is 3NF; not all 3NF is BCNF)
+✅ 3NF = most commonly used in real RDBMS
+✅ Normalization = LOSSLESS (data always recoverable)
+✅ Denormalization = deliberate redundancy for performance
+✅ Proposed by E.F. Codd (1970)
+```
+
+### Quick Flowchart:
+```
+1NF: Atomic? → 2NF: Full FD? → 3NF: No transitive? → BCNF: All determinants super keys?
+```
+
+---
+
+## ⚡ RAPID FIRE — India's Climate
+
+### Climate Type + Factor Flash:
+```
+India = TROPICAL MONSOON climate
+"Monsoon" = Arabic "MAUSIM" = season
+75-80% of India's rain = from SOUTHWEST MONSOON (June-September)
+Tamil Nadu exception = gets most rain from NORTHEAST MONSOON
+
+FACTORS: Latitude + Altitude + Distance from Sea + Monsoon + Relief + Ocean Currents
+```
+
+### Key Winds:
+```
+LOO = Hot dry wind, North India plains, summer (kills people — heat stroke!)
+KALBAISAKHI / NOR'WESTERS = pre-monsoon storms, Bengal/Bihar/Assam (April-May)
+WESTERN DISTURBANCES = Mediterranean origin, winter rain in NW India (rabi crops!)
+MANGO SHOWERS = pre-monsoon, Kerala + Karnataka (mango ripening)
+BLOSSOM SHOWERS = Karnataka (coffee flowering)
+```
+
+### Extremes:
+```
+Wettest: MAWSYNRAM, Meghalaya (~11,000 mm/year)
+Driest:  JAISALMER, Rajasthan (~20-25 cm/year)
+Hottest: GANGANAGAR/PHALODI, Rajasthan (50°C+)
+Coldest (inhabited): DRAS, Ladakh (-45°C)
+```
+
+### Tropic of Cancer — 8 States:
+```
+Gujarat → Rajasthan → MP → Chhattisgarh → Jharkhand → WB → Tripura → Mizoram
+
+TRICK: "Geeta Roz Mandir Chali Jab Woh The Mein"
+Bihar is NOT on Tropic of Cancer (common trap!)
+```
+
+### Bihar Climate Quick Facts:
+```
+Bihar = Humid Subtropical Monsoon
+Summer = HOT (35-42°C) + LOO winds + Kalbaisakhi
+Monsoon = arrives mid-June, peaks July-August, ~100-150 cm rain
+North Bihar = more rain + floods (Kosi = "Sorrow of Bihar")
+Winter = cold (5-20°C) + fog + Western Disturbance rains (wheat crop)
+```
+
+---
+
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. **Normalization flow**: 1NF (atomic) → 2NF (no partial FD on composite key) → 3NF (no transitive FD: A→B→C where B is non-key) → BCNF (all determinants are super keys); Proposed by E.F. Codd (1970).
+2. **Anomalies**: INSERT (can't add without unrelated data), UPDATE (must change all copies), DELETE (lose unrelated data); Normalization eliminates all three.
+3. **Key trap**: 2NF = removes PARTIAL; 3NF = removes TRANSITIVE; BCNF is STRICTER than 3NF; not all 3NF is BCNF; single-attribute PK → auto 2NF.
+4. **India's climate**: Tropical Monsoon; "Monsoon" from Arabic Mausim; SW monsoon = 75-80% of rain (June-Sep); Tamil Nadu = NE monsoon exception; LOO = hot dry summer wind; Kalbaisakhi = pre-monsoon storms in Bengal/Bihar.
+5. **Climate extremes + Bihar**: Mawsynram = wettest; Jaisalmer = driest; Dras = coldest; Phalodi = hottest; Bihar = Humid Subtropical; Tropic of Cancer passes 8 states (NOT Bihar — common trap!).
+
+---
+
+## 📅 DAY 40 PREVIEW — What's Coming Next:
+**CS**: SQL Basics — DDL (CREATE, ALTER, DROP), DML (SELECT, INSERT, UPDATE, DELETE), DCL (GRANT, REVOKE), TCL (COMMIT, ROLLBACK), WHERE clause, ORDER BY, GROUP BY, HAVING
+**GS**: Indian Polity — Fundamental Rights (Articles 12-35): Right to Equality (14-18), Right to Freedom (19-22), Right Against Exploitation (23-24), Right to Freedom of Religion (25-28), Cultural & Educational Rights (29-30), Right to Constitutional Remedies (Article 32)
+
+---
+
+*🚀 Day 39 of 170 — You're 23% through! Normalization is a high-yield DBMS topic — PYQs consistently ask about 2NF vs 3NF and anomaly types. Nail it now, score big in the exam!*

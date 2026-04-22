@@ -1,1355 +1,1636 @@
-# 📅 DAY-33 — BPSC TRE 4.0 STUDY FILE
-## CS: NP-Completeness & Algorithm Paradigms | GS: Bihar GK — Industries & Economy
-### 🎯 Target: TOPPER RANK | Phase 1 → Week 5
+# 📅 BPSC TRE 4.0 — DAY 33 COMPLETE STUDY MODULE
+### NP-Completeness & Algorithm Design Paradigms + Bihar GK: Industries & Economy
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-> **📌 TODAY'S BATTLE PLAN**
-> - **Morning (1.5 hrs):** CS — NP-Completeness, P vs NP, Algorithm Paradigms (Greedy, DP, D&C, Backtracking)
-> - **Afternoon (1 hr):** GS — Bihar Economy: Agriculture, Industries, Schemes, Economic Facts
-> - **Evening (1 hr):** Solve all 50 MCQs (25 CS + 25 GS) from this file
-> - **Night (30 min):** Write 5-bullet summary from memory — NEVER skip this
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): NP-Completeness, P vs NP, Algorithm Design Paradigms (Greedy, DP, D&C)
+> - Afternoon (1 hr): Bihar GK — Industries, Economy, Key Products & Locations
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-# 🖥️ PART A: COMPUTER SCIENCE
-
-## NP-Completeness & Algorithm Paradigms
-
----
-
-## 🔷 SECTION 1: P vs NP — The Million Dollar Problem
-
-### 1.1 What is a "Problem" in Computer Science?
-
-A **computational problem** asks: given an input, produce a correct output.
-
-**Two types we care about:**
-- **Decision Problem:** Answer is YES or NO. Example: "Is there a path of length ≤ k from A to B?"
-- **Optimization Problem:** Find the BEST solution. Example: "Find the shortest path from A to B."
-
-> 💡 **Why decision problems?** Complexity theory mostly works with decision problems because YES/NO is simpler to analyze formally.
+# PART 1: COMPUTER SCIENCE
+## 📘 NP-Completeness & Algorithm Design Paradigms — Deep Conceptual Guide
 
 ---
 
-### 1.2 Class P (Polynomial Time)
+## 🔷 SECTION 1: Complexity Classes — The Foundation
 
-```
-P = Problems solvable in O(n^k) time for some constant k
-    (Polynomial time = Efficient = Fast)
-```
+### Real-Life Analogy — The Lock and Key Problem:
 
-**Simple Rule:** If you can SOLVE it in polynomial time → it's in P.
+**Solving a problem (P):**
+You need to OPEN a lock. With the key in hand, you try it → door opens in seconds.
+This is FAST and EFFICIENT → **Polynomial time** solution.
 
-**Examples of P Problems:**
-| Problem | Algorithm | Time Complexity |
-|---------|-----------|-----------------|
-| Sorting | Merge Sort | O(n log n) |
-| Shortest Path | Dijkstra's | O(V² or E log V) |
-| Matrix Multiplication | Strassen | O(n^2.81) |
-| Binary Search | Binary Search | O(log n) |
-| Minimum Spanning Tree | Kruskal's/Prim's | O(E log V) |
-| Maximum Flow | Ford-Fulkerson | O(VE²) |
+**Verifying a solution (NP):**
+Someone shows you a combination "4-7-2-9" and claims it opens the safe.
+You try it → yes it opens. You VERIFIED it quickly, even if you couldn't FIND the combo yourself.
 
-> ⚠️ **KEY PYQ FACT:** Shortest Path = POLYNOMIAL (P class). It is NOT NP-Complete. This is a very common trap in BPSC exams!
+**The hard problem (NP-Complete):**
+You're given a lock with 1000 digits (each 0-9) and no key.
+Finding the right combination by brute force = 10^1000 tries.
+But if GIVEN a solution, verifying it takes just 1 try.
+**Finding is hard. Verifying is easy.**
 
 ---
 
-### 1.3 Class NP (Non-deterministic Polynomial Time)
+### What is a Problem's "Complexity"?
 
 ```
-NP = Problems where a given solution (certificate) can be
-     VERIFIED in polynomial time
-```
-
-**DO NOT confuse:** NP does NOT mean "Non-Polynomial" or "Not Polynomial"!
-
-**Memory Trick:**
-- P → Can be **Solved** fast
-- NP → Can be **Verified** fast
-
-**ASCII Diagram — P and NP Relationship:**
-
-```
-+----------------------------------+
-|              NP                  |
-|   +--------------------------+   |
-|   |           P              |   |
-|   |  (All P problems are     |   |
-|   |   also in NP)            |   |
-|   +--------------------------+   |
-|                                  |
-|   NP-Complete problems are at    |
-|   the boundary of NP (hardest)   |
-+----------------------------------+
-```
-
-**Examples of NP Problems:**
-- Travelling Salesman Problem (TSP) — given a solution, verify if it's ≤ k? → YES/NO → verifiable in O(n)
-- Boolean Satisfiability (SAT)
-- Hamiltonian Cycle
-- Graph Coloring
-- Subset Sum
-- Knapsack
-
----
-
-### 1.4 NP-Complete (NPC)
-
-```
-A problem is NP-Complete if:
-  1. It is IN NP (can be verified in polynomial time)
-  2. Every other NP problem can be REDUCED to it in polynomial time
-     (i.e., it is NP-Hard)
-```
-
-**Think of NP-Complete as:** The HARDEST problems inside NP. If you solve one NP-Complete problem efficiently, you solve ALL of NP!
-
-**ASCII Diagram — Full Picture:**
-
-```
-+------------------------------------------------+
-|                  NP-Hard                       |
-|  +------------------------------------------+ |
-|  |                  NP                       | |
-|  |  +------------------------------------+  | |
-|  |  |           NP-Complete              |  | |
-|  |  |  (Intersection of NP and NP-Hard)  |  | |
-|  |  +------------------------------------+  | |
-|  |                                          | |
-|  |  +--------+                              | |
-|  |  |   P    |  (P ⊆ NP)                   | |
-|  |  +--------+                              | |
-|  +------------------------------------------+ |
-+------------------------------------------------+
-```
-
----
-
-### 1.5 The P = NP Question
-
-**The Famous Unsolved Problem:**
-- Is P equal to NP?
-- If yes → Every NP-Complete problem could be solved efficiently!
-- Currently: P ≠ NP (believed but NOT proven)
-- Clay Mathematics Institute has listed it as one of the **Millennium Prize Problems** (prize: $1 million)
-
----
-
-### 1.6 Complete List of NP-Complete Problems (BPSC PYQ Favourites)
-
-| Problem | Description | PYQ Relevance |
-|---------|-------------|---------------|
-| **Travelling Salesman Problem (TSP)** | Visit all cities exactly once, return to start, minimize distance | ⭐⭐⭐ Very High |
-| **Boolean Satisfiability (SAT)** | First ever NP-Complete problem (Cook's theorem, 1971) | ⭐⭐⭐ Very High |
-| **Hamiltonian Cycle** | Visit every vertex exactly once and return to start | ⭐⭐ High |
-| **Graph Coloring** | Color graph using k colors, no adjacent same color | ⭐⭐ High |
-| **Subset Sum** | Find a subset with sum = target | ⭐⭐ High |
-| **Vertex Cover** | Find min set of vertices covering all edges | ⭐ Medium |
-| **Clique Problem** | Find clique of size k | ⭐ Medium |
-| **3-SAT** | 3-variable boolean satisfiability | ⭐⭐ High |
-
-> ⚠️ **CRITICAL PYQ TRAP:** 
-> - Shortest Path → **P** (Dijkstra's algorithm)  
-> - Longest Path → **NP-Complete**  
-> - Minimum Spanning Tree → **P** (Kruskal's, Prim's)  
-> - Hamiltonian Cycle → **NP-Complete**
-
----
-
-### 1.7 NP-Hard (Bonus Concept)
-
-```
-NP-Hard = At least as hard as NP-Complete
-         (May not even be in NP itself)
-```
-
-**Example:** Halting Problem = NP-Hard but NOT in NP (it's undecidable — cannot be verified in polynomial time).
-
----
-
-## 🔷 SECTION 2: Algorithm Paradigms — The 4 Big Strategies
-
-### 2.1 Overview of Algorithm Design Paradigms
-
-```
-ALGORITHM PARADIGMS
-├── Greedy Algorithm
-├── Dynamic Programming (DP)
-├── Divide and Conquer (D&C)
-└── Backtracking
-```
-
-These are **methods of thinking** — not specific algorithms. A paradigm tells you HOW to approach a problem.
-
----
-
-### 2.2 Greedy Algorithm
-
-**Core Idea:** At every step, make the **locally optimal choice** hoping to reach the globally optimal solution.
-
-```
-Greedy Strategy:
-  Step 1: Identify the "greedy choice" (best option at this moment)
-  Step 2: Make that choice (irreversible)
-  Step 3: Reduce problem to smaller subproblem
-  Step 4: Repeat until done
-```
-
-**When does Greedy work?** Only when the problem has:
-1. **Greedy Choice Property** — locally optimal = globally optimal
-2. **Optimal Substructure** — optimal solution contains optimal sub-solutions
-
-**Classic Greedy Problems:**
-
-| Problem | Greedy Choice | Correct? |
-|---------|--------------|----------|
-| Activity Selection | Choose earliest finishing time | ✅ YES |
-| Minimum Spanning Tree | Pick cheapest edge (Kruskal/Prim) | ✅ YES |
-| Huffman Coding | Merge two smallest frequency nodes | ✅ YES |
-| Dijkstra's Shortest Path | Pick closest unvisited vertex | ✅ YES (no negative edges) |
-| Fractional Knapsack | Pick item with max value/weight ratio | ✅ YES |
-| 0/1 Knapsack | Pick most valuable items first | ❌ NO (need DP) |
-| TSP | Visit nearest unvisited city | ❌ NO (approximate only) |
-
-**Memory Trick for Greedy:**
-> "Greedy is SELFISH — always takes the best it can see RIGHT NOW, never looks back."
-
----
-
-### 2.3 Dynamic Programming (DP)
-
-**Core Idea:** Break the problem into **overlapping subproblems**, solve each once, store results (memoization/tabulation).
-
-**Two Key Properties Required:**
-1. **Optimal Substructure:** Optimal solution to problem = composed of optimal solutions to subproblems
-2. **Overlapping Subproblems:** Same subproblems are computed multiple times (unlike D&C)
-
-```
-DP Approaches:
-  1. Top-Down (Memoization): 
-     - Recursion + Cache
-     - Solve big problem, recursively break down
-     - Store results in array/hash map
-     
-  2. Bottom-Up (Tabulation):  
-     - Iterative
-     - Solve smallest subproblems first
-     - Build up to big problem
-```
-
-**ASCII Diagram — Fibonacci with DP:**
-```
-WITHOUT DP (Exponential):
-fib(5)
-├── fib(4)          ← computed TWICE
-│   ├── fib(3)      ← computed THRICE
-│   │   ├── fib(2)
-│   │   └── fib(1)
-│   └── fib(2)
-└── fib(3)          ← REPEATED WORK!
-    ├── fib(2)
-    └── fib(1)
-
-WITH DP (Linear):
-fib(1)=1, fib(2)=1, fib(3)=2, fib(4)=3, fib(5)=5
-Each value computed EXACTLY ONCE → O(n)
-```
-
-**Classic DP Problems:**
-
-| Problem | Time Complexity | Space |
-|---------|-----------------|-------|
-| Fibonacci (DP) | O(n) | O(n) or O(1) |
-| 0/1 Knapsack | O(n×W) | O(n×W) |
-| Longest Common Subsequence (LCS) | O(m×n) | O(m×n) |
-| Matrix Chain Multiplication | O(n³) | O(n²) |
-| Floyd-Warshall (All-pairs shortest path) | O(V³) | O(V²) |
-| Bellman-Ford | O(VE) | O(V) |
-| Edit Distance | O(m×n) | O(m×n) |
-
-> ⚠️ **PYQ KEY FACT:** 0/1 Knapsack uses DP (NOT greedy). Fractional Knapsack uses Greedy.
-
----
-
-### 2.4 Divide and Conquer (D&C)
-
-**Core Idea:** Divide the problem into **non-overlapping** subproblems, solve independently, combine results.
-
-```
-D&C Template:
-  1. DIVIDE: Split problem into smaller subproblems
-  2. CONQUER: Solve subproblems recursively
-  3. COMBINE: Merge solutions to get final answer
-```
-
-**Key Difference from DP:**
-- D&C → Subproblems are **INDEPENDENT** (no overlap)
-- DP → Subproblems are **OVERLAPPING** (share computation)
-
-**Classic D&C Algorithms:**
-
-| Algorithm | Time Complexity | Stable? |
-|-----------|-----------------|---------|
-| Merge Sort | O(n log n) — always | ✅ Yes |
-| Quick Sort | O(n log n) avg, O(n²) worst | ❌ No |
-| Binary Search | O(log n) | — |
-| Strassen's Matrix Multiplication | O(n^2.81) | — |
-| Closest Pair of Points | O(n log n) | — |
-
-> ⚠️ **PYQ KEY FACT:** Both Merge Sort AND Quick Sort are Divide & Conquer algorithms.
-
----
-
-### 2.5 Backtracking
-
-**Core Idea:** Build solution incrementally; **abandon (backtrack)** a path as soon as you detect it cannot lead to a valid solution.
-
-```
-Backtracking Template:
-  1. Choose a candidate solution step
-  2. Check if it satisfies constraints
-  3. If YES → continue deeper
-  4. If NO → BACKTRACK (undo the choice, try next)
-  5. Repeat until complete solution found (or all options exhausted)
-```
-
-**ASCII Diagram — N-Queens Backtracking:**
-```
-         Q . . .        ← Place Queen at (0,0)
-         . . Q .        ← Place Queen at (1,2)
-         . . . .        ← Can't place → BACKTRACK
-         . . . .
-         
-         ↓ Try next position...
-         
-         Q . . .
-         . . . Q        ← Place Queen at (1,3)
-         . Q . .        ← Place Queen at (2,1)
-         . . . .        ← Continue...
-```
-
-**Classic Backtracking Problems:**
-
-| Problem | Description |
-|---------|-------------|
-| N-Queens | Place N queens on N×N board, none attacking |
-| Sudoku Solver | Fill grid satisfying constraints |
-| Hamiltonian Cycle | Visit all vertices exactly once |
-| Graph Coloring | Color graph with minimum colors |
-| Rat in a Maze | Find path from source to destination |
-| Subset Sum | Find all subsets summing to target |
-
-> ⚠️ **PYQ KEY FACT:** Backtracking is used for NP-Complete problems (like Graph Coloring, Hamiltonian Cycle). It is a brute-force with pruning.
-
----
-
-### 2.6 Comparison Table — All 4 Paradigms
-
-| Feature | Greedy | Dynamic Programming | Divide & Conquer | Backtracking |
-|---------|--------|---------------------|------------------|--------------|
-| **Strategy** | Locally optimal choice | Solve + store subproblems | Split → Solve → Merge | Try all + prune |
-| **Subproblems** | Sequential | Overlapping | Non-overlapping | All possibilities |
-| **Guarantees optimal?** | Not always | Yes (if properties hold) | Yes | Yes (but slow) |
-| **Typical complexity** | O(n log n) | O(n²) or O(n³) | O(n log n) | Exponential |
-| **Key examples** | Activity Selection, Huffman, Dijkstra, MST | Knapsack, LCS, Floyd-Warshall | Merge Sort, Quick Sort, Binary Search | N-Queens, Sudoku, Hamiltonian |
-
----
-
-### 2.7 Branch and Bound (Bonus — For Hard Questions)
-
-**Used for:** NP-Hard optimization problems (TSP, 0/1 Knapsack with large n)
-
-**Concept:**
-- Like Backtracking, but uses BOUNDS to prune more aggressively
-- Calculates upper/lower bound at each node
-- If bound is worse than current best → prune that branch
-
----
-
-## 🔷 SECTION 3: Important Algorithms & Their Paradigm Classification
-
-| Algorithm | Paradigm | Time Complexity |
-|-----------|----------|-----------------|
-| Dijkstra's Shortest Path | Greedy | O(V² or E log V) |
-| Prim's MST | Greedy | O(V² or E log V) |
-| Kruskal's MST | Greedy | O(E log E) |
-| Huffman Coding | Greedy | O(n log n) |
-| Activity Selection | Greedy | O(n log n) |
-| Merge Sort | D&C | O(n log n) |
-| Quick Sort | D&C | O(n log n) avg |
-| Binary Search | D&C | O(log n) |
-| Fibonacci (DP) | DP | O(n) |
-| 0/1 Knapsack | DP | O(nW) |
-| LCS | DP | O(mn) |
-| Floyd-Warshall | DP | O(V³) |
-| Bellman-Ford | DP | O(VE) |
-| Matrix Chain | DP | O(n³) |
-| N-Queens | Backtracking | O(n!) |
-| Sudoku | Backtracking | Exponential |
-| Hamiltonian Cycle | Backtracking | O(n!) |
-
-> 🏆 **TOPPER TIP:** In PYQs, you may be asked "Which algorithm paradigm does X use?" Learn the table above by heart.
-
----
-
-## 🔷 SECTION 4: Quick Revision — NP & Complexity Key Facts
-
-```
-MUST MEMORIZE — NP FACTS:
-════════════════════════════════════════════════════════
-1. P ⊆ NP  (every P problem is also in NP)
-2. NP-Complete = in NP AND NP-Hard
-3. First NP-Complete problem = Boolean Satisfiability (SAT) — proved by Stephen Cook (1971)
-4. TSP = NP-Complete
-5. Shortest Path (Dijkstra's) = POLYNOMIAL (NOT NP-Complete)
-6. Hamiltonian Cycle = NP-Complete | Eulerian Cycle = POLYNOMIAL
-7. Graph Coloring (k≥3) = NP-Complete
-8. 2-Coloring (bipartite check) = POLYNOMIAL (O(V+E) using BFS/DFS)
-9. Longest Path = NP-Complete | Shortest Path = Polynomial
-10. P = NP? → UNSOLVED (Millennium Prize Problem)
-════════════════════════════════════════════════════════
-```
-
----
-
-# 🌍 PART B: GENERAL STUDIES — BIHAR GK
-
-## Bihar Economy, Industries & Development
-
----
-
-## 🔶 SECTION 1: Bihar — Economic Overview
-
-Bihar is one of India's **most populous** and **fastest-growing** states. Understanding Bihar's economy is essential for BPSC exams as 5–8 questions directly test Bihar-specific facts.
-
-### 1.1 Key Economic Facts — Bihar
-
-| Indicator | Fact |
-|-----------|------|
-| **State GDP Rank** | Among lower-middle income states; growing rapidly post-bifurcation |
-| **Capital** | Patna (also financial capital) |
-| **Bifurcation** | Jharkhand carved out in **2000** (mineral-rich areas went to Jharkhand) |
-| **Primary sector** | Agriculture dominates (~70% population dependent) |
-| **GSDP Growth** | Among fastest-growing states in recent years (10–12% GSDP growth) |
-| **Literacy Rate** | ~70% (Census 2011); improving with education schemes |
-| **Per Capita Income** | One of the lowest among major states |
-| **Main reason for poverty** | Loss of mineral-rich Jharkhand, flooding, lack of industries |
-
-> ⚠️ **PYQ KEY FACT:** After Jharkhand's creation in 2000, Bihar lost its mineral wealth (coal, iron ore, bauxite). This is a frequently tested fact in BPSC.
-
----
-
-## 🔶 SECTION 2: Agriculture in Bihar
-
-Bihar's economy is fundamentally **agriculture-based**. Know these facts cold.
-
-### 2.1 Major Crops of Bihar
-
-| Crop | Season | Key Districts |
-|------|--------|---------------|
-| **Paddy (Rice)** | Kharif | North Bihar — Darbhanga, Muzaffarpur, Champaran |
-| **Wheat** | Rabi | Central & South Bihar |
-| **Maize** | Kharif | Kosi region — world-famous **Biharsharif Maize** |
-| **Sugarcane** | Kharif+Rabi | Champaran, Saran, Muzaffarpur |
-| **Makhana (Fox Nut)** | — | **Darbhanga, Madhubani, Saharsa** — Bihar produces **95% of world's Makhana** |
-| **Litchi** | — | **Muzaffarpur** — famous for Shahi Litchi (GI Tag) |
-| **Mango** | — | Hajipur, Darbhanga (Malda variety) |
-| **Potato** | Rabi | Nalanda, Patna |
-| **Banana** | — | Hajipur — famous variety |
-
-> ⭐ **SUPER IMPORTANT BPSC FACTS:**
-> - Bihar produces **~95% of India's Makhana** (Fox Nut) — GI Tag given
-> - **Shahi Litchi of Muzaffarpur** has GI Tag (Geographical Indication)
-> - **Hajipur Banana** is famous
-> - **Champaran** is known for indigo cultivation historically AND sugarcane today
-
-### 2.2 Agricultural Zones of Bihar
-
-```
-NORTH BIHAR (Gangetic Plains):
-  - High rainfall, fertile soil
-  - Rice, Sugarcane, Makhana, Litchi, Jute
-  - Flood-prone (Kosi, Gandak, Bagmati rivers)
-
-SOUTH BIHAR (Plateau fringe):
-  - Less rainfall, mixed crops
-  - Wheat, Maize, Vegetables
-  - More industrialized than North Bihar
-```
-
-### 2.3 Important Agricultural Facts
-
-- **Bihar Agricultural University:** Sabour, Bhagalpur (established 2010)
-- **ICAR Research Centre:** Patna
-- **Land holdings:** Mostly small/marginal (below 2 hectares)
-- **Green Revolution impact:** Wheat production increased significantly in south Bihar
-- **Bihar flood:** World's most flood-affected state per area; Kosi River called "Sorrow of Bihar"
-
----
-
-## 🔶 SECTION 3: Industries in Bihar
-
-### 3.1 Pre-Bifurcation vs Post-Bifurcation Industrial Status
-
-```
-BEFORE 2000 (With Jharkhand):
-  ✅ Steel industry (Bokaro, Jamshedpur)
-  ✅ Coal mines (Jharia, Raniganj adjacent)
-  ✅ Mineral processing
-  ✅ Heavy industries
-
-AFTER 2000 (Without Jharkhand):
-  ❌ Lost all mineral-based industries
-  Bihar became largely de-industrialized
-  Focus shifted to: Agro-based, Small-scale, Services
-```
-
-### 3.2 Major Industries of Present-Day Bihar
-
-| Industry | Location | Details |
-|----------|----------|---------|
-| **Sugar Industry** | Champaran, Saran, Muzaffarpur | Largest agro-industry in Bihar; Bihar has several large sugar mills |
-| **Textile / Silk** | Bhagalpur | Famous for **Bhagalpuri Silk (Tussar Silk)** — GI Tag |
-| **Leather Industry** | Muzaffarpur, Patna | Shoe manufacturing |
-| **Paper Industry** | Muzaffarpur | Paper mills |
-| **Cement** | Rohtas (Dalmianagar) | **Dalmia Cement** at Dalmianagar is historic |
-| **Glass Industry** | Bhagalpur, Sahibganj | |
-| **Jute** | North Bihar (Darbhanga, Purnea) | |
-| **Makhana Processing** | Darbhanga, Madhubani | Value-added processing |
-| **IT/Software** | Patna | Emerging IT sector |
-
-> ⭐ **BPSC PYQ FAVOURITE:**
-> - **Bhagalpuri Silk (Tassar/Tussar)** = most famous industry with GI Tag
-> - **Dalmianagar** (Rohtas) = cement + chemical industry hub
-> - **Sugar** = largest agro-based industry in Bihar
-
-### 3.3 GI Tags of Bihar (Very Important for PYQ!)
-
-| Product | District |
-|---------|---------|
-| Shahi Litchi | Muzaffarpur |
-| Bhagalpuri Silk (Tassar) | Bhagalpur |
-| Makhana | Darbhanga region |
-| Katarni Rice | Bhagalpur, Banka |
-| Jardalu Mango | Bhagalpur |
-| Silao Khaja (sweet) | Nalanda |
-| Bihar Madhubani Painting | Madhubani |
-
----
-
-## 🔶 SECTION 4: Major Industrial Areas & BIADA
-
-### 4.1 BIADA — Bihar Industrial Area Development Authority
-
-- **Full form:** Bihar Industrial Area Development Authority
-- **Purpose:** Develop industrial zones, attract investment
-- **Major industrial areas:**
-  - **Hajipur Industrial Area** (Vaishali) — largest in Bihar
-  - **Muzaffarpur Industrial Area**
-  - **Bihta (Patna)** — emerging hub
-  - **Dalmianagar** — Rohtas (chemicals, cement)
-  - **Barauni** — oil refinery + fertilizers
-
-### 4.2 Key Industries at Specific Locations
-
-```
-BARAUNI (Begusarai):
-  - Indian Oil Corporation (IOC) Refinery
-  - HPCL/Barauni Refinery — one of Bihar's most important industries
-  - BFCL (Barauni Fertilizer and Chemicals Ltd)
+In computer science, we ask:
+"How does the TIME required to solve this problem GROW with input size n?"
+
+POLYNOMIAL TIME (tractable/feasible problems):
+  Time grows as n^k for some constant k
+  Examples: n, n², n³, n^100 — all polynomial
+  These are PRACTICALLY SOLVABLE for large n (at some k)
   
+EXPONENTIAL TIME (intractable problems):
+  Time grows as 2^n, n!, 10^n, etc.
+  For n=100: 2^100 ≈ 10^30 operations → IMPOSSIBLE even on fastest computers
+  These grow so fast they become UNSOLVABLE in reasonable time
+```
+
+---
+
+## 🔷 SECTION 2: THE P CLASS — Polynomial Time
+
+### Definition:
+```
+P = Class of decision problems solvable by a deterministic algorithm
+    in POLYNOMIAL TIME (O(n^k) for some constant k)
+
+"P" stands for POLYNOMIAL
+
+A problem is in P if there EXISTS an efficient algorithm to SOLVE it.
+
+DECISION PROBLEM: Has a YES/NO answer
+  "Is there a path from A to B in this graph?" → YES or NO
+  "Is this number prime?" → YES or NO
+  "Is this array sorted?" → YES or NO
+```
+
+### Examples of Problems in P (Solvable in Polynomial Time):
+```
+PROBLEM                           | ALGORITHM          | COMPLEXITY
+----------------------------------|--------------------|-----------
+Sorting an array                  | Merge Sort         | O(n log n)
+Finding shortest path (graph)     | Dijkstra's algo    | O(n² or n log n)
+Searching a sorted array          | Binary Search      | O(log n)
+Matrix multiplication             | Standard algorithm | O(n³)
+Determining if number is prime    | Miller-Rabin test  | O(k log²n)
+Finding maximum subarray sum      | Kadane's algorithm | O(n)
+Linear programming                | Simplex method     | Polynomial avg
+Minimum spanning tree             | Kruskal/Prim       | O(n log n)
+Network flow (max flow)           | Ford-Fulkerson     | Polynomial
+```
+
+### Key Insight:
+```
+P problems are those that can be SOLVED EFFICIENTLY.
+"Efficiently" in CS = polynomial time = practical for large inputs.
+
+P is the "EASY" class — problems we know how to solve quickly.
+```
+
+---
+
+## 🔷 SECTION 3: THE NP CLASS — Non-deterministic Polynomial Time
+
+### Definition:
+```
+NP = Class of decision problems where a proposed solution can be
+     VERIFIED in POLYNOMIAL TIME by a deterministic algorithm.
+
+"NP" stands for Non-deterministic Polynomial time
+(NOT "Non-Polynomial"! This is the #1 misconception!)
+
+A problem is in NP if:
+  → Given a CANDIDATE SOLUTION (called a "certificate")
+  → We can VERIFY whether it is correct in polynomial time
+```
+
+### The Crucial Distinction:
+```
+P:   Problems we can SOLVE in polynomial time
+NP:  Problems we can VERIFY a given solution in polynomial time
+
+SOLVING   ≠   VERIFYING
+
+Example — Jigsaw Puzzle:
+  SOLVING: Starting from scratch, find how to assemble 1000 pieces → HARD
+  VERIFYING: Given a completed puzzle, check if all pieces fit → EASY (just check each piece)
+
+Example — Sudoku:
+  SOLVING: Fill a 9×9 Sudoku grid (hard, tries many combinations)
+  VERIFYING: Given a completed Sudoku, check if valid → Easy (scan rows, cols, boxes)
+```
+
+### Key Relationships:
+```
+FUNDAMENTAL RELATIONSHIP:
+  Every problem in P is ALSO in NP
+  Because: If you can SOLVE a problem efficiently, you can also VERIFY efficiently
+            (just solve it and compare with the candidate solution!)
+
+  P ⊆ NP   (P is a SUBSET of NP)
+
+  ┌─────────────────────────────────────┐
+  │                NP                   │
+  │  ┌─────────────────────────┐        │
+  │  │            P            │        │
+  │  │  (solvable efficiently) │        │
+  │  └─────────────────────────┘        │
+  │  (verifiable efficiently,           │
+  │   but may not be solvable fast)     │
+  └─────────────────────────────────────┘
+
+THE BIG OPEN QUESTION: Does P = NP?
+  Most computer scientists BELIEVE P ≠ NP
+  But it has NEVER been proven either way!
+  This is one of the Millennium Prize Problems ($1,000,000 reward!)
+```
+
+### 🚨 PYQ TRAP #1: "NP means Not Polynomial"
+> NP does NOT mean "Not Polynomial"!
+> NP = Non-deterministic Polynomial time (problems VERIFIABLE in polynomial time)
+> The confusion arises because NP-Hard/NP-Complete problems ARE hard to SOLVE,
+> but "NP" itself refers to VERIFICATION, not difficulty of solving.
+> **Exam answer: NP problems are VERIFIABLE (not necessarily solvable) in polynomial time.**
+
+---
+
+## 🔷 SECTION 4: NP-COMPLETE — The Hardest Problems in NP
+
+### Definition:
+```
+NP-COMPLETE = Problems that are:
+  (1) IN NP — their solutions can be VERIFIED in polynomial time
+  (2) NP-HARD — at least as hard as EVERY problem in NP
+                (every NP problem can be REDUCED to it in polynomial time)
+
+Think of NP-Complete problems as:
+  "The HARDEST problems in the NP class"
+  "Universal problems — if you solve one, you solve them all!"
+```
+
+### The Magic of Reducibility:
+```
+REDUCTION: Problem A reduces to Problem B means:
+  "If we can solve B efficiently, we can also solve A efficiently"
+  
+  A →(reduces to)→ B
+  
+  If B is easy → A is easy
+  If A is hard → B must be hard too!
+
+NP-COMPLETENESS DISCOVERY:
+  1971: Stephen Cook proved SAT (Boolean Satisfiability) is NP-Complete
+        (Called "Cook's Theorem" — first NP-Complete problem ever identified!)
+  1972: Richard Karp showed 21 more classic problems are NP-Complete
+        (All reduce to each other!)
+
+THE KEY IMPLICATION:
+  If you find a polynomial-time algorithm for ANY NP-Complete problem
+  → you have proven P = NP
+  → ALL NP problems become solvable in polynomial time
+  → This would revolutionise computing, cryptography, and science!
+```
+
+### The Venn Diagram of Complexity Classes:
+```
+Current understanding (assuming P ≠ NP):
+
+┌─────────────────────────────────────────────────────────────┐
+│                      NP-HARD                                 │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │                       NP                               │  │
+│  │   ┌──────────────────────────┐  ┌──────────────────┐  │  │
+│  │   │         P                │  │   NP-Complete    │  │  │
+│  │   │ (Easy: solvable fast)    │  │  (Hardest in NP) │  │  │
+│  │   │ Sorting, Shortest Path,  │  │  TSP, SAT,       │  │  │
+│  │   │ Matrix Mult, Searching   │  │  3-COLOR, CLIQUE │  │  │
+│  │   └──────────────────────────┘  └──────────────────┘  │  │
+│  │                                                         │  │
+│  │ (All problems VERIFIABLE in polynomial time)            │  │
+│  └────────────────────────────────────────────────────────┘  │
+│  (Problems at LEAST as hard as NP-Complete;                  │
+│   may not even be in NP — e.g., Halting Problem)             │
+└─────────────────────────────────────────────────────────────┘
+
+NP-Complete = (NP) ∩ (NP-Hard) = the OVERLAP region
+```
+
+---
+
+## 🔷 SECTION 5: Classic NP-Complete Problems
+
+### 1. SAT (Boolean Satisfiability Problem) — The FIRST NP-Complete
+
+```
+PROBLEM: Given a Boolean formula (with AND, OR, NOT operations),
+         is there an assignment of TRUE/FALSE to variables that
+         makes the WHOLE formula TRUE?
+
+EXAMPLE:
+  Formula: (x₁ OR x₂) AND (NOT x₁ OR x₃) AND (NOT x₂ OR NOT x₃)
+  
+  Try x₁=TRUE, x₂=FALSE, x₃=TRUE:
+    (T OR F) AND (F OR T) AND (T OR F)
+    = T AND T AND T = TRUE ✅
+  
+  This assignment SATISFIES the formula → YES answer.
+  
+  Finding this assignment for large formulas = NP-Complete
+  Verifying a given assignment = O(n) = easy!
+
+WHY IMPORTANT:
+  First proven NP-Complete problem (Cook, 1971)
+  Many real-world problems reduce to SAT:
+    → Circuit design verification
+    → AI planning
+    → Software testing (finding bugs)
+    → Cryptographic analysis
+```
+
+### 2. Travelling Salesman Problem (TSP) — The Famous NP-Complete
+
+```
+PROBLEM: Given n cities and distances between all pairs of cities,
+         find the SHORTEST POSSIBLE TOUR that:
+         → Visits EACH CITY EXACTLY ONCE
+         → Returns to the STARTING CITY
+
+EXAMPLE with 4 cities (A, B, C, D):
+
+        A
+       / \
+    10/   \20
+     /     \
+    B───15───C
+     \     /
+    25\   /30
+       \ /
+        D
+
+Possible tours (starting from A):
+  A→B→C→D→A: 10+15+30+20 = 75
+  A→B→D→C→A: 10+25+30+20 = 85
+  A→C→B→D→A: 20+15+25+20 = 80
+  A→C→D→B→A: 20+30+25+10 = 85
+  A→D→B→C→A: 20+25+15+20 = 80
+  A→D→C→B→A: 20+30+15+10 = 75 (same as first — reverse tour)
+
+For n=4 cities: (4-1)!/2 = 3 distinct tours
+For n=20 cities: 19!/2 ≈ 6 × 10^16 tours → IMPOSSIBLE by brute force!
+For n=100 cities: effectively IMPOSSIBLE today
+
+VERIFICATION (easy): Given a specific tour, calculate its total length → O(n)
+FINDING (hard): Try all (n-1)!/2 possible tours → exponential!
+
+REAL-WORLD APPLICATIONS:
+  → Delivery route optimization (Amazon, FedEx, Zomato!)
+  → Circuit board drilling (minimize drill movement)
+  → DNA sequencing
+  → Telescope pointing (minimize slewing time)
+
+🎯 PYQ FACT: TSP is NP-Complete (NOT just "hard" — specifically NP-Complete).
+              For n cities: (n-1)!/2 possible tours.
+              Brute force = O(n!) — exponential, impractical for large n.
+```
+
+### 3. Knapsack Problem (0/1 Knapsack) — NP-Complete
+
+```
+PROBLEM: Given items with weights and values, and a knapsack with
+         weight limit W, find the maximum value you can carry.
+         Each item can be taken (1) or NOT taken (0) — no fractions.
+
+EXAMPLE:
+  Items: {(weight=2, value=3), (weight=3, value=4), (weight=4, value=5), (weight=5, value=6)}
+  W = 5 (maximum weight limit)
+  
+  Option 1: Items 1+2 = weight 5, value 7 ✅
+  Option 2: Items 1+3 = weight 6 > 5 ❌
+  Option 3: Item 4 alone = weight 5, value 6
+  Best: Option 1 → value = 7
+
+For n items: 2^n possible subsets to try → NP-Complete (decision version)
+With DP: O(nW) solution — PSEUDO-polynomial (polynomial in W, but W can be exponential in bits)
+
+🎯 PYQ NOTE: 0/1 Knapsack is NP-Complete. Fractional Knapsack is NOT (solvable by Greedy in O(n log n)).
+```
+
+### 4. Graph Coloring — NP-Complete
+
+```
+PROBLEM (k-coloring): Can we color a graph's vertices using k colors
+                       such that no two adjacent vertices share the same color?
+
+For k=2: EASY (O(n+m)) — just check if graph is bipartite!
+For k=3: NP-COMPLETE!
+
+REAL APPLICATION:
+  Map coloring (no two adjacent countries same color)
+  Register allocation in compilers
+  Exam scheduling (no student has two exams at same time)
+```
+
+### 5. Clique Problem — NP-Complete
+
+```
+PROBLEM: Does a graph contain a CLIQUE of size k?
+         (A clique = subset of vertices where every pair is connected)
+
+Example: In a social network, does any group of k people all know each other?
+Finding such a group in a large graph = NP-Complete
+Verifying a given group is a clique = O(k²) = polynomial = easy
+```
+
+---
+
+## 🔷 SECTION 6: NP-HARD — Beyond NP
+
+```
+NP-HARD = Problems that are AT LEAST AS HARD as NP-Complete problems
+          BUT may NOT be in NP themselves (solution may not be verifiable in poly time)
+
+NP-Hard problems include:
+  → All NP-Complete problems (NP-Complete ⊆ NP-Hard)
+  → Plus problems HARDER than NP-Complete
+
+HALTING PROBLEM:
+  Given a program and input, will the program eventually STOP (halt)?
+  This is NP-Hard (actually UNDECIDABLE — no algorithm can solve it!)
+  → Proven by Alan Turing (1936) — Turing's famous Undecidability result.
+
+TSP OPTIMIZATION:
+  "Find the SHORTEST tour" (not just "is there a tour shorter than k?")
+  The OPTIMIZATION version of TSP is NP-Hard (but technically not NP, because
+  the solution — a specific tour length — is hard to bound)
+
+NP-HARD vs NP-COMPLETE:
+  Every NP-Complete problem is NP-Hard.
+  NOT every NP-Hard problem is NP-Complete.
+  NP-Complete = NP-Hard ∩ NP  (must be BOTH NP-Hard AND IN NP)
+```
+
+### Quick Classification Summary:
+```
+PROBLEM                          | CLASS      | WHY
+---------------------------------|------------|-----------------------------
+Shortest Path (Dijkstra)         | P          | O(n²) algorithm exists
+Sorting                          | P          | O(n log n) exists
+Binary Search                    | P          | O(log n) exists
+Boolean SAT                      | NP-Complete| Cook's theorem (1971)
+Travelling Salesman (decision)   | NP-Complete| Reduces from Hamiltonian path
+0/1 Knapsack (decision)          | NP-Complete| Classic NP-C problem
+Graph 3-Coloring                 | NP-Complete| Reduces from SAT
+Clique                           | NP-Complete| Classic NP-C problem
+Halting Problem                  | NP-Hard    | UNDECIDABLE — no algorithm!
+TSP (optimization, no bound)     | NP-Hard    | Harder than NP-Complete TSP
+```
+
+### 🚨 PYQ TRAP #2: Shortest Path is NOT NP-Complete!
+> Shortest path problems (finding minimum distance between two nodes) are in **class P**.
+> Dijkstra's algorithm solves it in O(n²) or O(n log n).
+> LONGEST PATH problem IS NP-Complete (finding the longest simple path).
+> **Exam trap**: Don't confuse SHORTEST PATH (easy, P) with LONGEST PATH or TSP (hard, NP-C).
+
+---
+
+## 🔷 SECTION 7: ALGORITHM DESIGN PARADIGMS
+
+### The Three Major Paradigms:
+
+```
+Three fundamental strategies for solving problems:
+
+1. GREEDY: Make the LOCALLY BEST choice at each step
+           Hope that local optima → global optimum
+           FAST but not always OPTIMAL
+
+2. DYNAMIC PROGRAMMING (DP): Break into overlapping subproblems
+                              Solve each subproblem ONCE, store results
+                              OPTIMAL but may use more memory
+
+3. DIVIDE & CONQUER (D&C): Break into INDEPENDENT subproblems
+                            Solve recursively, COMBINE results
+                            No reuse of subproblem solutions
+```
+
+---
+
+### ✅ PARADIGM 1: GREEDY ALGORITHM
+
+### Concept:
+```
+At each step, make the choice that looks BEST RIGHT NOW
+without reconsidering previous choices.
+
+The greedy algorithm is like a person who:
+  → Always takes the BIGGEST piece of cake at a party
+  → Never trades back or reconsiders
+  → Hopes this leads to eating the most total cake
+
+This works WONDERFULLY for some problems.
+It FAILS miserably for others (TSP, Knapsack 0/1, etc.)
+```
+
+### Real-Life Analogy — The Change-Giving Problem:
+```
+Give ₹93 change using fewest coins: ₹50, ₹20, ₹10, ₹5, ₹2, ₹1
+
+GREEDY APPROACH:
+  Step 1: Biggest coin ≤ 93 is ₹50 → TAKE ₹50 → Remaining: ₹43
+  Step 2: Biggest coin ≤ 43 is ₹20 → TAKE ₹20 → Remaining: ₹23
+  Step 3: Biggest coin ≤ 23 is ₹20 → TAKE ₹20 → Remaining: ₹3
+  Step 4: Biggest coin ≤ 3 is ₹2   → TAKE ₹2  → Remaining: ₹1
+  Step 5: Biggest coin ≤ 1 is ₹1   → TAKE ₹1  → Remaining: ₹0
+
+  Result: 50+20+20+2+1 = ₹93 using 5 coins ✅
+
+GREEDY WORKS HERE because Indian coin system is "canonical"
+(each coin is a multiple or factor of others in a nice way)
+
+GREEDY FAILS for unusual coin systems:
+  Coins: {1, 3, 4}. Make change for 6.
+  Greedy: 4+1+1 = 3 coins
+  Optimal: 3+3 = 2 coins ← Greedy gives WRONG answer!
+```
+
+### Examples Where Greedy Works:
+```
+FRACTIONAL KNAPSACK:
+  Problem: Maximize value; can take fractions of items
+  Greedy: Sort by value/weight ratio; take highest ratio first
+  → OPTIMAL! (greedy works because fractions allowed)
+  Time: O(n log n) for sorting
+
+ACTIVITY SELECTION:
+  Problem: Select maximum non-overlapping activities
+  Greedy: Always pick activity that ends EARLIEST
+  → OPTIMAL!
+
+HUFFMAN CODING:
+  Problem: Assign variable-length codes to minimize total code length
+  Greedy: Always merge two lowest-frequency nodes
+  → OPTIMAL!
+
+MINIMUM SPANNING TREE:
+  Prim's Algorithm: Greedy — always add cheapest edge connecting tree to new vertex → OPTIMAL
+  Kruskal's Algorithm: Greedy — always add cheapest edge not creating cycle → OPTIMAL
+
+DIJKSTRA'S SHORTEST PATH:
+  Greedy: Always explore closest unvisited vertex → OPTIMAL for non-negative edges
+```
+
+### When Greedy FAILS:
+```
+0/1 KNAPSACK:
+  Can't take fractions → greedy (highest ratio) doesn't guarantee optimal
+  Counterexample:
+    Capacity=10, Items: (w=6,v=10), (w=5,v=7), (w=5,v=7)
+    Greedy by value/weight: 10/6=1.67, 7/5=1.4
+    Takes item 1 (w=6,v=10), can't fit both item 2&3 (w=10 total)
+    Greedy: v=10
+    Optimal: items 2+3 → v=14 ← much better!
+
+SHORTEST PATH with negative edges: Dijkstra (greedy) fails!
+TSP: Nearest-neighbor greedy gives bad tours (30-40% worse than optimal)
+```
+
+---
+
+### ✅ PARADIGM 2: DYNAMIC PROGRAMMING (DP)
+
+### Concept:
+```
+Break problem into OVERLAPPING SUBPROBLEMS.
+Solve each subproblem ONCE.
+Store results (MEMOIZATION) to avoid recomputation.
+
+TWO KEY PROPERTIES required for DP:
+  1. OPTIMAL SUBSTRUCTURE:
+     Optimal solution of larger problem contains
+     optimal solutions of smaller subproblems.
+     "The best way to reach New Delhi via Patna =
+      best path to Patna + best path Patna→Delhi"
+
+  2. OVERLAPPING SUBPROBLEMS:
+     Same smaller subproblems are solved MULTIPLE TIMES.
+     Example: Fibonacci fib(5) = fib(4) + fib(3)
+              fib(4) = fib(3) + fib(2)
+              fib(3) appears TWICE → overlapping!
+```
+
+### The Classic Example — Fibonacci with DP:
+```
+WITHOUT DP (naive recursion):
+  fib(5) = fib(4) + fib(3)
+  fib(4) = fib(3) + fib(2)
+  fib(3) = fib(2) + fib(1)
+  ...
+  fib(3) computed MULTIPLE TIMES → O(2^n) — exponential!
+
+WITH DP (memoization):
+  Store fib(i) once computed:
+  fib[0] = 0
+  fib[1] = 1
+  fib[2] = 1
+  fib[3] = 2
+  fib[4] = 3
+  fib[5] = 5
+
+  Each value computed ONCE → O(n) time, O(n) space → massive improvement!
+
+DP APPROACHES:
+  TOP-DOWN (Memoization): Recursion + cache results
+  BOTTOM-UP (Tabulation): Fill table iteratively from base cases up
+```
+
+### Famous DP Problems:
+```
+PROBLEM                    | DP APPROACH               | COMPLEXITY
+---------------------------|---------------------------|-------------
+Fibonacci Numbers          | Bottom-up table           | O(n)
+0/1 Knapsack               | 2D table (items × weight) | O(n×W)
+Longest Common Subsequence | 2D table (LCS)            | O(m×n)
+Matrix Chain Multiplication| Interval DP               | O(n³)
+Floyd-Warshall (all-pairs) | 3D table                  | O(n³)
+Edit Distance (Levenshtein)| 2D table                  | O(m×n)
+Rod Cutting Problem        | 1D table                  | O(n²)
+Coin Change (minimum coins)| 1D table                  | O(amount×n)
+Longest Increasing Subseq  | 1D table                  | O(n²)
+```
+
+---
+
+### ✅ PARADIGM 3: DIVIDE & CONQUER (D&C) — Recap
+
+```
+(Covered in detail in Day 31 — brief recap)
+
+CONCEPT: Break into INDEPENDENT subproblems (no overlap),
+         solve recursively, COMBINE results.
+
+KEY DIFFERENCE FROM DP:
+  D&C: Subproblems are INDEPENDENT — no overlap
+       Each subproblem solved separately, not reused
+  DP:  Subproblems OVERLAP — same sub-problem appears many times
+       Solutions stored and reused
+
+EXAMPLES:
+  Merge Sort: T(n) = 2T(n/2) + O(n) → O(n log n)
+  Quick Sort: T(n) = 2T(n/2) + O(n) avg → O(n log n)
+  Binary Search: T(n) = T(n/2) + O(1) → O(log n)
+  Strassen's Matrix Mult: T(n) = 7T(n/2) + O(n²) → O(n^2.81)
+```
+
+---
+
+## 🔷 SECTION 8: MASTER COMPARISON TABLE — All Three Paradigms
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Property        | Greedy          | Dynamic Prog.   | Divide & Conquer
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Core Idea       | Local optimum   | Overlapping     | Independent
+                | at each step    | subproblems +   | subproblems;
+                |                 | store results   | combine
+Subproblems     | None (just one  | OVERLAPPING     | INDEPENDENT
+                | greedy choice)  | (reused)        | (not reused)
+Optimal always? | NOT always      | YES (if optimal | YES (if
+                | (problem-depend)| substructure)   | correctly combined)
+Memory          | O(1) extra      | O(n) or O(n²)   | O(log n) stack
+                | (usually)       | (table storage) | (recursion)
+Speed           | Fastest         | Moderate        | Moderate-fast
+Reconsiders?    | NO              | YES (implicitly | NO
+                |                 | via table)      |
+Classic algos   | Dijkstra, Prim, | Fibonacci, 0/1  | Merge Sort,
+                | Kruskal,        | Knapsack, LCS,  | Quick Sort,
+                | Huffman,        | Floyd-Warshall, | Binary Search,
+                | Fractional      | Edit Distance   | Strassen's
+                | Knapsack        |                 |
+When to use     | Greedy choice   | Problem has     | Problem splits
+                | property holds  | optimal sub-    | naturally into
+                | (usually proven)| structure +     | independent
+                |                 | overlapping     | halves
+                |                 | subproblems     |
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Decision Flowchart — Which Paradigm to Use?
+
+```
+START: Problem to solve
+          |
+          v
+Can you make ONE greedy choice that
+leads to optimal solution?
+          |              |
+         YES             NO
+          |              |
+    GREEDY algo          v
+    (fast, simple)  Do subproblems OVERLAP
+                    (same sub-problems repeat)?
+                         |              |
+                        YES             NO
+                         |              |
+                      DYNAMIC      DIVIDE & CONQUER
+                   PROGRAMMING     (independent
+                   (store and       subproblems,
+                    reuse results)   recurse + combine)
+```
+
+### 🚨 PYQ TRAP #3: Greedy vs DP for Knapsack
+```
+FRACTIONAL KNAPSACK → GREEDY (can take fractions → sort by ratio, greedy works!)
+0/1 KNAPSACK        → DYNAMIC PROGRAMMING (cannot take fractions → greedy fails!)
+
+This is ONE OF THE MOST TESTED DISTINCTIONS in algorithm exams!
+The word "0/1" means binary choice (take it all or not at all).
+The word "fractional" means you can take any fraction.
+```
+
+### 🚨 PYQ TRAP #4: Dijkstra's Algorithm Classification
+```
+Dijkstra's Shortest Path = GREEDY algorithm
+  (Always explores the nearest unvisited vertex — greedy choice)
+  Works for NON-NEGATIVE edge weights
+  FAILS for negative edge weights
+
+Bellman-Ford Shortest Path = DYNAMIC PROGRAMMING
+  Works for NEGATIVE edge weights (but not negative cycles)
+  Slower: O(V×E) vs Dijkstra's O(V²)
+
+EXAM ANSWER: Dijkstra = GREEDY; Bellman-Ford = DP
+```
+
+---
+
+# PART 2: GENERAL STUDIES
+## 🏭 Bihar GK — Industries & Economy
+
+---
+
+## 🔷 SECTION 1: Bihar's Economic Profile
+
+### Overview:
+```
+Bihar's Economy Type:    Primarily AGRARIAN (agriculture-based)
+GDP Contribution:        Bihar contributes ~4% of India's GDP
+Per Capita Income:       One of the LOWEST among Indian states
+Population:              ~13 crore (3rd most populous state)
+Literacy Rate:           ~70% (lower than national average of ~77%)
+GSDP Growth:             One of the FASTEST growing state economies
+                         (12-14% GSDP growth rate in recent years!)
+
+PRIMARY SECTOR: Agriculture employs ~75% of Bihar's workforce
+                Contributes ~22% of Bihar's GSDP
+
+KEY CHALLENGE: Despite fast GSDP growth, per capita income remains low
+               because population is very large and diverse development needed
+```
+
+### 🎯 PYQ FACT: Bihar is one of India's fastest-growing state economies by GSDP growth rate but has one of the lowest per capita incomes due to its large population.
+
+---
+
+## 🔷 SECTION 2: Agriculture — Bihar's Backbone
+
+### Major Crops and Producing Districts:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CROP          | MAJOR DISTRICTS/REGIONS           | SEASON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RICE (Paddy)  | Rohtas, Kaimur, Buxar,            | Kharif
+              | Nalanda, Patna, Bhojpur            |
+WHEAT         | Rohtas, Kaimur, Buxar, Bhojpur,   | Rabi
+              | Champaran, Vaishali               |
+MAIZE         | Kosi region, Madhubani, Samastipur | Kharif
+SUGARCANE     | Champaran (East & West),          | Year-round
+              | Muzaffarpur, Vaishali, Saran       |
+POTATO        | Nalanda, Vaishali, Samastipur,    | Rabi
+              | Patna                             |
+ONION         | Patna, Nalanda, Vaishali           | Rabi
+LITCHI        | Muzaffarpur (WORLD FAMOUS!)        | Summer
+              | Sitamarhi, Vaishali, Sheohar       |
+MANGO         | Darbhanga, Bhagalpur, Saharsa      | Summer
+BANANA        | Vaishali, Hajipur, Muzaffarpur     | Year-round
+LENTILS(Dal)  | Saran, Siwan, Gopalganj            | Rabi
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### 🎯 PYQ SPECIAL: Muzaffarpur Litchi
+```
+MUZAFFARPUR LITCHI:
+  → Muzaffarpur is WORLD FAMOUS for its SHAHI LITCHI
+  → One of India's most significant litchi production centres
+  → Bihar produces approximately 40% of India's total litchi production
+  → GI TAG: Shahi Litchi of Muzaffarpur has Geographical Indication (GI) tag
+  → Litchi exported to Middle East, Europe, UK
+  → Litchi season: May-June
+
+OTHER FAMOUS GI PRODUCTS OF BIHAR:
+  → Champaran Sattu (from Champaran)
+  → Katarni Rice (from Rohtas, Bhojpur area — fragrant variety)
+  → Jardalu Mango (from Bhagalpur — GI tagged)
+  → Magahi Paan (betel leaf from Magadh region — Nalanda, Patna)
+  → Sujani Embroidery (Bhusura village, Muzaffarpur)
+  → Madhubani Painting (Madhubani district — UNESCO heritage recognition)
+  → Sikki Grass Craft (North Bihar)
+  → Bhagalpuri Silk (Bhagalpur — detailed below)
+```
+
+---
+
+## 🔷 SECTION 3: Key Industries in Bihar
+
+### 1. SILK INDUSTRY — Bhagalpur (Most Important!)
+
+```
+BHAGALPUR SILK:
+  City:         Bhagalpur (on banks of Ganga, Bhagalpur district)
+  Nickname:     "SILK CITY" of India
+  Type:         TUSSAR SILK (also called Kosa silk / wild silk)
+                Made from Antheraea mylitta silkworm (feeds on Arjun/Saja trees)
+  Specialty:    Natural GOLDEN/TAWNY colour — unique texture — NOT smooth like mulberry silk
+  
+  WHY BHAGALPUR?
+  → Dense forests of Arjun and Saja trees (silkworm food source)
+  → Ganga river — ideal climate and humidity for silk production
+  → Centuries-old tradition of silk weaving (mentioned in Mughal records)
+  → Bhagalpur weavers (mostly Ansari community) have hereditary expertise
+
+  PRODUCTS: Sarees, kurtas, dupattas — popular across India and in export
+  
+  BHAGALPURI SILK CHARACTERISTICS:
+  → NATURAL TEXTURE — slightly rough (unlike smooth mulberry silk)
+  → EARTH TONES — golden, brown, beige (natural dye-like colours)
+  → DURABLE and BREATHABLE
+  → UNIQUE SHEEN — iridescent finish
+  
+  GI TAG: Bhagalpur Silk has GI (Geographical Indication) tag
+  EXPORT: Significant export to Japan, Germany, USA, UK
+  
+  GOVERNMENT SUPPORT:
+  → Silk City project under National Textile Policy
+  → Central Silk Board has offices in Bhagalpur
+  → Silk Park developed to modernise industry
+
+🎯 PYQ MOST TESTED: Bhagalpur = "Silk City of India" = TUSSAR SILK production.
+```
+
+### 2. SUGAR INDUSTRY — Champaran & Surroundings
+
+```
+SUGARCANE & SUGAR MILLS:
+  Leading Districts: East Champaran, West Champaran, Muzaffarpur,
+                     Vaishali, Saran, Siwan, Gopalganj
+  
+  WHY CHAMPARAN?
+  → Fertile Terai plains (Indo-Nepal border area)
+  → High rainfall and alluvial soil ideal for sugarcane
+  → This was site of CHAMPARAN SATYAGRAHA (1917) — Gandhi's first
+    major agitation in India was about INDIGO/NEEL, but SUGARCANE
+    is now the dominant commercial crop in same region!
+  
+  MAJOR SUGAR MILLS in Bihar:
+  → Harinagar Sugar Mill (West Champaran)
+  → Samastipur, Sugauli, Motihari sugar mills
+  → Bihar State Sugar Corporation operates many units
+
+  CHALLENGE: Many old mills have closed; Bihar no longer among
+             India's top sugar producers (UP leads by far)
+             Recent revival efforts under Bihar Industrial Policy
+
+🎯 PYQ: Champaran = sugarcane → sugar mills; also site of Gandhi's first Indian satyagraha
+```
+
+### 3. JUTE INDUSTRY — Kosi & Seemanchal Region
+
+```
+JUTE PRODUCTION:
+  Districts: Darbhanga, Saharsa, Supaul, Madhepura, Araria, Kishanganj
+             (Kosi river basin and Seemanchal region)
+  
+  WHY THIS REGION?
+  → High rainfall, humid climate, waterlogged soil ideal for jute
+  → Kosi and other rivers provide water for jute retting (soaking)
+  
+  STATUS: Bihar is India's 3rd largest jute-producing state (after WB and Assam)
+  PRODUCTS: Gunny bags, carpet backing, rope, jute yarn, eco-friendly bags
+  
+  CHALLENGE: Competition from synthetic materials; traditional jute mills declining
+             "Green gold" revival as eco-friendly alternatives gain popularity
+```
+
+### 4. COAL & MINING — Gaya Region
+
+```
+COAL:
+  Districts: Gaya, Aurangabad (Daudnagar) — small coal deposits
+  Note: Bihar lost major coal reserves to Jharkhand when it was carved out in 2000
+  
+LIMESTONE & CEMENT:
+  Districts: Rohtas, Kaimur (Kaimur Plateau — limestone-rich)
+  Major Plant: Banjari Cement Plant (Rohtas), Dalmia Cement
+  
+MICA:
+  Small deposits in Gaya, Nawada districts
+  
+GLASS SAND:
+  Bhojpur district has silica sand deposits
+
+🎯 PYQ NOTE: When Jharkhand was created in 2000, Bihar lost most of its mineral 
+             wealth (coal, iron ore, mica). This is WHY Bihar's industry declined post-2000.
+```
+
+### 5. FOOD PROCESSING INDUSTRY
+
+```
+MAJOR FOOD PROCESSING CLUSTERS:
+
 HAJIPUR (Vaishali):
-  - EPIP (Export Promotion Industrial Park)
-  - Hajipur Industrial Area
-  - Food processing industries
-  
+  → HAJIPUR BANANA processing — Hajipur is famous for bananas!
+  → Hajipur is the district HQ of Vaishali
+  → APMC (Agricultural Produce Market) — major banana market
+  → Food processing units for banana chips, powder
+
+MUZAFFARPUR:
+  → Litchi processing, pulp, juice units
+  → Makhana (Fox nut) processing — Bihar produces ~90% of India's makhana!
+
+MAKHANA (Fox Nuts / Lotus Seeds):
+  → Bihar produces 90%+ of India's Makhana
+  → Districts: Darbhanga, Madhubani, Sitamarhi, Saharsa, Supaul
+  → Especially DARBHANGA = MAKHANA capital of India!
+  → Makhana requires freshwater ponds/lakes → North Bihar wetlands ideal
+  → GI TAG: Mithila Makhana has GI tag (2022)
+  → Used in religious ceremonies, sweets, health food
+  → EXPORT: Growing export market (health food trend globally)
+
+🎯 PYQ GOLD: Bihar produces ~90% of India's Makhana. 
+             Darbhanga is Makhana capital.
+             Mithila Makhana has GI tag.
+```
+
+### 6. LEATHER & FOOTWEAR INDUSTRY
+
+```
+MUZAFFARPUR & HAJIPUR:
+  → Small leather goods manufacturing
+  → Footwear units (small scale)
+
 PATNA:
-  - Capital city, service sector
-  - Leather, Printing, Glass
-  
-DALMIANAGAR (Rohtas):
-  - Dalmia Cement
-  - Chemical industries
+  → Leather tanning units (historically significant)
+  → Now mostly small-scale cottage industry
+
+CHALLENGE: Competition from Agra, Kanpur (major leather hubs of UP)
 ```
 
-> ⭐ **SUPER IMPORTANT:** **Barauni Oil Refinery (IOC)** = most important heavy industry in Bihar. It was established in **1964** as Indo-Soviet collaboration!
-
 ---
 
-## 🔶 SECTION 5: Bihar Government Schemes & Economic Development
-
-### 5.1 Seven Nishchay (Saat Nishchay) — Flagship Programme
-
-Bihar government launched **7 Nishchay (Resolutions)** for development:
-
-| Nishchay | Focus |
-|----------|-------|
-| Aarthik Hal, Yuvaon ko Bal | Unemployment allowance to youth |
-| Aarakshit Rozgar, Mahilaon ka Adhikar | 35% reservation for women in government jobs |
-| Har Ghar Bijli (Lagatar) | Electricity to every household |
-| Har Ghar Nal Ka Jal | Piped water to every house |
-| Ghar Tak Pakki Gali-Naali | Paved roads to every house |
-| Shauchalay Nirman, Ghar ka Samman | Toilet construction |
-| Avsar Badhe, Aage Padhe | Higher education opportunities |
-
-### 5.2 Important Bihar-specific Economic Schemes
-
-| Scheme | Purpose |
-|--------|---------|
-| **Mukhyamantri Udyami Yojana** | ₹10 lakh loan to SC/ST/women entrepreneurs (50% grant, 50% loan) |
-| **Bihar Startup Policy** | Promote startups in Bihar |
-| **Jivikas (Bihar Rural Livelihoods Project)** | Women's SHG-based poverty reduction — highly successful |
-| **BRLPS** | Bihar Rural Livelihoods Promotion Society |
-| **Har Khet Sinchai** | Irrigation to every farm |
-| **PMGSY** | Pradhan Mantri Gram Sadak Yojana — rural roads |
-
-> ⭐ **PYQ KEY:** **Jeevika (BRLPS)** — Bihar's flagship rural livelihood programme through Self Help Groups — often asked in BPSC!
-
----
-
-## 🔶 SECTION 6: Transport Infrastructure in Bihar
-
-| Type | Key Facts |
-|------|----------|
-| **Railways** | East Central Railway HQ at **Hajipur** |
-| **Airports** | Patna Airport (Jay Prakash Narayan International), Gaya Airport (international — Buddhist Circuit), Darbhanga Airport (recently upgraded) |
-| **Highways** | NH-19 (Grand Trunk Road passes through Bihar), NH-31 (Patna-Kolkata direction) |
-| **Bridges** | Mahatma Gandhi Setu (Patna) over Ganga — one of Asia's longest road bridges; Vikramshila Setu (Bhagalpur) |
-| **Rivers** | Ganga (main), Gandak, Kosi, Bagmati, Son, Punpun, Budhi Gandak |
-
-> ⭐ **PYQ FACT:** 
-> - East Central Railway HQ = **Hajipur** (Vaishali)
-> - Mahatma Gandhi Setu = 5.575 km — one of India's longest river bridges
-> - Gaya airport serves Buddhist pilgrims (Bodhgaya nearby)
-
----
-
-## 🔶 SECTION 7: Bihar — Important Economic Statistics
-
-| Parameter | Detail |
-|-----------|--------|
-| **State Animal** | Gaur (Indian Bison) |
-| **State Bird** | House Sparrow (Gauraya) |
-| **State Tree** | Peepal (Sacred Fig) |
-| **State Flower** | Kachnar (Bauhinia variegata) |
-| **GSDP** | Growing at ~10–11% per year (one of highest in India) |
-| **Highest literacy district** | Rohtas |
-| **Lowest literacy district** | Purnia/Kishanganj |
-| **Most populous district** | Patna |
-| **Largest district by area** | West Champaran |
-| **Highest population density** | Sheohar |
-| **Ganga length in Bihar** | ~445 km |
-| **Total districts** | 38 districts |
-| **Total divisions** | 9 divisions |
-
----
-
-## 🔶 SECTION 8: Mining and Natural Resources of Bihar
-
-> **Post-Jharkhand bifurcation context is essential here!**
-
-**Bihar now has very limited minerals compared to pre-2000:**
-
-| Mineral/Resource | Location in Bihar |
-|-----------------|------------------|
-| **Pyrite** | Rohtas (Amjhore — largest pyrite deposit in Asia!) |
-| **China Clay (Kaolin)** | Bhagalpur, Munger |
-| **Mica** | Nawada, Jamui, Munger |
-| **Bauxite** | Munger region |
-| **Glass Sand** | Bhagalpur |
-| **Limestone** | Rohtas, Kaimur |
-
-> ⭐ **VERY IMPORTANT PYQ FACT:** **Amjhore (Rohtas)** has India's (and Asia's) largest **Pyrite deposits**. This is a classic BPSC question!
-
----
-
-## 🔶 SECTION 9: Power Sector in Bihar
-
-| Power Station | Location | Type |
-|--------------|----------|------|
-| Barauni Thermal Power Station | Begusarai | Thermal |
-| Kanti Thermal Power Station | Muzaffarpur | Thermal |
-| Muzaffarpur Thermal Power Station | Muzaffarpur | Thermal |
-| NTPC Nabinagar | Aurangabad | Thermal (large capacity) |
-| North Koel Reservoir | Palamu (Jharkhand-border) | Hydro |
-
-> Bihar faces severe power shortage; major focus of government is improving power infrastructure (Har Ghar Bijli scheme).
-
----
-
-## 🔶 SECTION 10: Rivers and Irrigation in Bihar
-
-### Major Rivers of Bihar:
+## 🔷 SECTION 4: Bihar's Industrial Zones & Special Areas
 
 ```
-NORTH BIHAR RIVERS (originate in Nepal/Himalayas):
-  Gandak → enters at Champaran
-  Burhi Gandak → Muzaffarpur
-  Bagmati → Sitamarhi
-  Kamla → Madhubani
-  Kosi → Supaul (called "Sorrow of Bihar" — changes course frequently)
-  Mahananda → Kishanganj
+BIADC (Bihar Industrial Area Development Corporation):
+  Manages industrial estates and areas in Bihar
 
-SOUTH BIHAR RIVERS (originate in Peninsular plateau):
-  Son → Shahdabad (Arrah area) — most important south Bihar river
-  Punpun → Patna area
-  Falgu → Gaya (sacred river for Pitru-paksha ritual)
-  Panchane → Munger
+MAJOR INDUSTRIAL AREAS:
+  → Hajipur (Vaishali): Food processing, leather, electronics
+    HAJIPUR INDUSTRIAL AREA = Bihar's FIRST industrial estate!
+  → Muzaffarpur: Sugar, food processing
+  → Patna: Light manufacturing, printing, pharmaceuticals
+  → Bhagalpur: Silk, textile
+  → Biharsharif: Small industries
+  → Gaya: Tourism-based economy, some food processing
+  → Darbhanga: Makhana processing, jute
+
+SPECIAL ECONOMIC FEATURES:
+  → Bihta (near Patna): New industrial corridor developing
+  → Rajgir: Tourism + eco-resort development
+  → Bodh Gaya: Tourism industry (international Buddhist circuit)
+
+PHULWARI SHARIF & BIHTA:
+  Industrial corridors under development for electronics and light manufacturing
+  Connected to Patna metropolitan area planning
 ```
 
-> ⭐ **PYQ FACTS:**
-> - **Kosi = Sorrow of Bihar** (most devastating flood river)
-> - **Falgu River** at Gaya is famous for **Pitru Paksha (ancestor worship)**
-> - **Son River** = main river of south Bihar, a tributary of Ganga
+---
+
+## 🔷 SECTION 5: Key Economic Initiatives
+
+```
+BIHAR INDUSTRIAL INVESTMENT PROMOTION POLICY:
+  Offers tax incentives, land allocation for industries
+  Focus sectors: Food processing, IT, textiles, tourism
+
+SKILL DEVELOPMENT:
+  Bihar Skill Development Mission (BSDM)
+  Focus on construction, hospitality, IT, healthcare
+
+7 NISCHAY (Seven Resolves) — CM Nitish Kumar:
+  Important governance + economic scheme
+  Includes: Bijli Har Ghar Tak, Har Ghar Nal Ka Jal,
+            Asphalted Roads, Toilet in Every House,
+            Educated Youth, Empowered Youth
+
+AGRICULTURE ROAD MAP:
+  Vision documents for agricultural development
+  Focus on: Horticulture, fisheries, animal husbandry
+
+JEEVIKA (JEEViKa):
+  Bihar Rural Livelihoods Promotion Society
+  SHG (Self Help Group) based programme
+  One of India's largest SHG programmes — ~1 crore women members!
+  Model studied worldwide for poverty alleviation
+```
 
 ---
 
-## 🔶 SECTION 11: Bihar Tourism & Culture (Economic Angle)
+## 🔷 SECTION 6: Bihar's Key GI-Tagged Products Summary
 
-| Place | Significance |
-|-------|-------------|
-| **Bodhgaya** | Where Buddha attained enlightenment — top foreign tourist destination in Bihar |
-| **Nalanda** | Ancient university (UNESCO World Heritage Site) |
-| **Vaishali** | Lord Mahavira's birthplace; first republic of world |
-| **Rajgir** | Ancient city; hot springs; wildlife sanctuary |
-| **Pawapuri** | Lord Mahavira's last rites site |
-| **Vikramshila** | Ancient Buddhist university site |
-| **Patna Sahib** | Birthplace of Guru Gobind Singh |
-
-> ⭐ **Buddhist Circuit Tourism:** Bodhgaya → Rajgir → Nalanda = major foreign exchange earner for Bihar. Gaya airport gets direct international flights.
-
----
-
-# 📝 PRACTICE QUESTIONS
-
----
-
-# 🖥️ PART A — CS MCQs (25 Questions)
-
-### Topic: NP-Completeness & Algorithm Paradigms
-### Format: 5-option BPSC style (A/B/C/D = More than one of the above / E = None of the above)
-### Difficulty: Easy → Medium → Hard → PYQ-Style → Tricky
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GI-TAGGED PRODUCT       | DISTRICT/REGION     | TYPE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Bhagalpur Silk (Tussar) | Bhagalpur           | Textile
+Mithila Madhubani       | Madhubani           | Art/Painting
+  Painting              |                     |
+Mithila Makhana         | Darbhanga, North    | Food
+                        | Bihar wetlands      |
+Jardalu Mango           | Bhagalpur           | Agriculture
+Shahi Litchi            | Muzaffarpur         | Agriculture
+Katarni Rice            | Rohtas, Bhojpur     | Agriculture
+Magahi Paan (Betel leaf)| Nalanda, Patna      | Agriculture
+Champaran Sattu         | Champaran           | Food
+Sujani Embroidery       | Muzaffarpur region  | Craft
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 ---
 
-**Q1.** Which of the following correctly defines Class P in computational complexity?
+## 🔷 SECTION 7: Key Bihar Economy Facts for MCQs
 
-(A) Problems that can be verified in polynomial time  
-(B) Problems that cannot be solved in polynomial time  
-(C) Problems that can be solved in polynomial time  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q2.** The abbreviation NP in complexity theory stands for:
-
-(A) Non-Polynomial  
-(B) Not Possible  
-(C) Non-deterministic Polynomial time  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q3.** Which of the following is an application of the Greedy algorithm?
-
-(A) Huffman Coding  
-(B) Dijkstra's Shortest Path  
-(C) Kruskal's Minimum Spanning Tree  
-(D) More than one of the above  
-(E) None of the above  
+```
+Agriculture sector employs: ~75% of Bihar's workforce
+Makhana production share:   ~90% of India's total (Bihar dominates!)
+Litchi production share:    ~40% of India's total
+Silk type at Bhagalpur:     TUSSAR silk (not mulberry, not eri)
+"Silk City" of India:       BHAGALPUR
+"Makhana Capital":          DARBHANGA
+Banana district:            HAJIPUR (Vaishali)
+Litchi capital:             MUZAFFARPUR
+Sugarcane belt:             Champaran region
+Jute region:                Kosi basin (Darbhanga, Saharsa, Supaul)
+Minerals Bihar LOST in 2000: Coal, iron ore, mica → went to JHARKHAND
+Largest SHG programme:      JEEVIKA — Bihar's women SHG (~1 crore members)
+First industrial estate:    Hajipur Industrial Area
+Bihar GSDP growth rate:     Among India's fastest (12-14% in recent years)
+Per capita income:          Among India's lowest
+```
 
 ---
 
-**Q4.** Which sorting algorithm uses the Divide and Conquer paradigm?
+# PART 3: PRACTICE QUESTIONS
 
-(A) Bubble Sort  
-(B) Insertion Sort  
-(C) Selection Sort  
-(D) More than one of the above  
-(E) None of the above  
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: P vs NP, NP-Complete, Greedy, DP, Divide & Conquer
 
 ---
 
-**Q5.** The 0/1 Knapsack problem is best solved using which algorithm paradigm?
-
-(A) Greedy  
-(B) Dynamic Programming  
-(C) Divide and Conquer  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q6.** Which of the following is/are NP-Complete problems?
-
-(A) Travelling Salesman Problem (Decision version)  
-(B) Boolean Satisfiability (SAT)  
-(C) Hamiltonian Cycle  
-(D) More than one of the above  
-(E) None of the above  
+**Q1.** What does "NP" stand for in computational complexity?
+(A) Non-Polynomial
+(B) Not Possible
+(C) Non-deterministic Polynomial time
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q7.** Dijkstra's shortest path algorithm belongs to which class of problems?
-
-(A) NP-Complete  
-(B) NP-Hard  
-(C) Polynomial (Class P)  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q8.** Which of the following properties MUST hold for Dynamic Programming to be applicable?
-
-(A) Greedy Choice Property  
-(B) Optimal Substructure  
-(C) Overlapping Subproblems  
-(D) More than one of the above  
-(E) None of the above  
+**Q2.** A problem is in class P if:
+(A) It can be VERIFIED in polynomial time
+(B) It can be SOLVED in polynomial time
+(C) It requires exponential time to solve
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q9.** The N-Queens problem is solved using which algorithm paradigm?
-
-(A) Greedy  
-(B) Dynamic Programming  
-(C) Backtracking  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q10.** Which of the following statements about P and NP is TRUE?
-
-(A) P = NP has been proven  
-(B) P ⊆ NP  
-(C) NP ⊆ P  
-(D) More than one of the above  
-(E) None of the above  
+**Q3.** Which of the following is the correct relationship between P and NP?
+(A) P and NP are completely separate — no overlap
+(B) NP is a subset of P
+(C) P is a subset of NP (P ⊆ NP)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q11.** The FIRST problem ever proven to be NP-Complete was:
-
-(A) Travelling Salesman Problem  
-(B) Graph Coloring  
-(C) Boolean Satisfiability (SAT)  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q12.** In Backtracking, when a partial solution is found to be invalid, what happens?
-
-(A) The algorithm terminates  
-(B) The algorithm goes forward and tries next element  
-(C) The algorithm abandons that path and tries another (backtracks)  
-(D) More than one of the above  
-(E) None of the above  
+**Q4.** NP-Complete problems are defined as problems that are:
+(A) In NP but NOT solvable in polynomial time
+(B) In NP AND at least as hard as every other problem in NP (NP-Hard)
+(C) Outside both P and NP
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q13.** Merge Sort has a time complexity of:
-
-(A) O(n²) in all cases  
-(B) O(n log n) in all cases  
-(C) O(n) in best case  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q14.** Which of the following problems can be solved in POLYNOMIAL time?
-
-(A) Hamiltonian Cycle  
-(B) Graph 2-Coloring (Bipartite checking)  
-(C) Travelling Salesman Problem  
-(D) More than one of the above  
-(E) None of the above  
+**Q5.** Which of the following is the FIRST problem proven to be NP-Complete?
+(A) Travelling Salesman Problem (TSP)
+(B) Graph Coloring
+(C) Boolean Satisfiability Problem (SAT)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q15.** Floyd-Warshall algorithm for all-pairs shortest path uses which paradigm?
-
-(A) Greedy  
-(B) Divide and Conquer  
-(C) Dynamic Programming  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q16.** Huffman Coding produces:
-
-(A) Fixed-length codes for all characters  
-(B) Variable-length codes; frequent characters get shorter codes  
-(C) Random-length codes  
-(D) More than one of the above  
-(E) None of the above  
+**Q6.** The Travelling Salesman Problem (TSP) with n cities has how many possible tours (starting and ending at same city)?
+(A) n! tours
+(B) n² tours
+(C) (n-1)!/2 distinct tours
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q17.** Which of the following is TRUE about NP-Complete problems?
-
-(A) They can be solved in polynomial time  
-(B) Every NP problem can be reduced to an NP-Complete problem in polynomial time  
-(C) They are outside the class NP  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q18.** The key difference between Divide and Conquer and Dynamic Programming is:
-
-(A) D&C uses recursion; DP does not  
-(B) D&C solves overlapping subproblems; DP solves non-overlapping ones  
-(C) D&C solves non-overlapping subproblems; DP solves overlapping ones  
-(D) More than one of the above  
-(E) None of the above  
+**Q7.** Shortest Path finding (e.g., Dijkstra's algorithm) belongs to which complexity class?
+(A) NP-Complete
+(B) NP-Hard but not NP-Complete
+(C) P (solvable in polynomial time)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q19.** Activity Selection Problem (scheduling maximum non-overlapping activities) is solved by:
-
-(A) Selecting activity with earliest START time  
-(B) Selecting activity with minimum DURATION  
-(C) Selecting activity with earliest FINISH time  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q20.** Quick Sort has a WORST case time complexity of:
-
-(A) O(n log n)  
-(B) O(n²)  
-(C) O(n)  
-(D) More than one of the above  
-(E) None of the above  
+**Q8.** If someone proves P = NP, the immediate consequence would be:
+(A) All NP-Complete problems become solvable in polynomial time
+(B) All NP-Complete problems become harder to solve
+(C) Only TSP becomes easier — other problems unaffected
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q21 (PYQ-Style).** In BPSC TRE 2.0, the following was asked: Which algorithm is NOT a Greedy algorithm?
-
-(A) Dijkstra's algorithm  
-(B) Prim's algorithm  
-(C) Bellman-Ford algorithm  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q22 (PYQ-Style).** Consider a problem: "Given a graph G and integer k, does G have a Hamiltonian Cycle of length ≤ k?" This problem is:
-
-(A) In class P  
-(B) In class NP  
-(C) Neither P nor NP  
-(D) More than one of the above  
-(E) None of the above  
+**Q9.** The GREEDY algorithm paradigm is best described as:
+(A) Solving problems by storing results of subproblems
+(B) Dividing problems into independent halves
+(C) Making the locally optimal choice at each step, hoping to find global optimum
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q23 (PYQ-Style).** The Longest Path problem in a general graph is:
-
-(A) Solvable in polynomial time  
-(B) NP-Hard  
-(C) Same as Shortest Path in complexity  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q24 (Tricky).** Which of the following statements is/are CORRECT about Greedy algorithms?
-
-(A) Greedy always gives optimal solution  
-(B) Fractional Knapsack can be solved optimally by Greedy  
-(C) 0/1 Knapsack can be solved optimally by Greedy  
-(D) More than one of the above  
-(E) None of the above  
+**Q10.** The 0/1 Knapsack problem should be solved using which paradigm?
+(A) Greedy (sort by value/weight ratio)
+(B) Divide & Conquer
+(C) Dynamic Programming
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q25 (Tricky).** A problem X is NP-Hard. Which of the following MUST be true?
-
-(A) X is in class NP  
-(B) X is at least as hard as every problem in NP  
-(C) X can be solved in polynomial time  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-# 🌍 PART B — GS/GK MCQs (25 Questions)
-
-### Topic: Bihar Economy, Industries & Development
-### Format: 5-option BPSC style (A/B/C/D = More than one of the above / E = None of the above)
-### Difficulty: Easy → Medium → Hard → PYQ-Style → Tricky
+**Q11.** The FRACTIONAL Knapsack problem is best solved using:
+(A) Dynamic Programming
+(B) Greedy (sort by value/weight ratio and take greedily)
+(C) Backtracking
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q26.** Bihar was bifurcated and Jharkhand was carved out in which year?
-
-(A) 1999  
-(B) 2000  
-(C) 2001  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q27.** Which of the following is called the "Sorrow of Bihar"?
-
-(A) Son River  
-(B) Ganga River  
-(C) Kosi River  
-(D) More than one of the above  
-(E) None of the above  
+**Q12.** Which of the following is NOT an example of a Greedy algorithm?
+(A) Dijkstra's shortest path
+(B) Kruskal's minimum spanning tree
+(C) Floyd-Warshall all-pairs shortest path
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q28.** Bihar produces approximately what percentage of India's total Makhana (Fox Nut)?
-
-(A) 50%  
-(B) 70%  
-(C) 95%  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q29.** Which district of Bihar is most famous for Shahi Litchi with GI Tag?
-
-(A) Darbhanga  
-(B) Muzaffarpur  
-(C) Patna  
-(D) More than one of the above  
-(E) None of the above  
+**Q13.** Dynamic Programming requires which TWO key properties?
+(A) Greedy choice property AND optimal substructure
+(B) Optimal substructure AND overlapping subproblems
+(C) Independent subproblems AND greedy choice
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q30.** The Headquarters of East Central Railway (ECR) is located at:
-
-(A) Patna  
-(B) Muzaffarpur  
-(C) Hajipur  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q31.** Bhagalpuri Silk (Tassar Silk) has received which recognition?
-
-(A) National Award  
-(B) UNESCO Heritage Tag  
-(C) Geographical Indication (GI) Tag  
-(D) More than one of the above  
-(E) None of the above  
+**Q14.** The key difference between Divide & Conquer and Dynamic Programming is:
+(A) D&C uses recursion; DP does not
+(B) D&C subproblems are INDEPENDENT; DP subproblems OVERLAP
+(C) D&C is always faster than DP
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q32.** The Barauni Oil Refinery in Bihar is managed by:
-
-(A) HPCL  
-(B) Indian Oil Corporation (IOC)  
-(C) BPCL  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q33.** Which of the following is Bihar's State Animal?
-
-(A) Tiger  
-(B) Elephant  
-(C) Gaur (Indian Bison)  
-(D) More than one of the above  
-(E) None of the above  
+**Q15.** Naive recursive Fibonacci is O(2^n). With Dynamic Programming it becomes:
+(A) O(n log n)
+(B) O(n²)
+(C) O(n)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q34.** The largest pyrite deposit in Asia is located at:
-
-(A) Jharia, Bihar  
-(B) Amjhore, Rohtas district, Bihar  
-(C) Dalmianagar, Rohtas  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q35.** The Mahatma Gandhi Setu (road bridge) is built over which river?
-
-(A) Son River at Patna  
-(B) Ganga River at Patna  
-(C) Gandak River  
-(D) More than one of the above  
-(E) None of the above  
+**Q16.** Dijkstra's algorithm uses which paradigm and works correctly under which condition?
+(A) DP; works for all edge weights including negative
+(B) Greedy; works ONLY for non-negative edge weights
+(C) D&C; works for all graphs
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q36.** Which of the following cities is known as the "Silk City" of Bihar?
-
-(A) Patna  
-(B) Muzaffarpur  
-(C) Bhagalpur  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q37.** The Falgu River, associated with Pitru Paksha rituals, flows through which Bihar city?
-
-(A) Patna  
-(B) Gaya  
-(C) Nalanda  
-(D) More than one of the above  
-(E) None of the above  
+**Q17.** Bellman-Ford algorithm for shortest path is classified as:
+(A) Greedy
+(B) Dynamic Programming
+(C) Divide & Conquer
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q38.** The Barauni Oil Refinery was established in:
-
-(A) 1954  
-(B) 1964  
-(C) 1975  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q39.** Which of the following is Bihar's largest district by area?
-
-(A) Patna  
-(B) Rohtas  
-(C) West Champaran  
-(D) More than one of the above  
-(E) None of the above  
+**Q18.** NP-Hard problems differ from NP-Complete in that:
+(A) NP-Hard problems must be in NP
+(B) NP-Hard problems are at least as hard as NP-Complete but may NOT be in NP
+(C) NP-Hard problems are easier than NP-Complete
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q40 (PYQ-Style).** Jeevika (BRLPS) is primarily associated with:
-
-(A) Providing bank loans to farmers  
-(B) Promoting women's Self Help Groups for rural livelihoods  
-(C) Building roads in rural Bihar  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q41.** Nalanda University (ancient) has been declared a UNESCO World Heritage Site. The modern Nalanda University is located in:
-
-(A) Patna  
-(B) Rajgir, Nalanda district  
-(C) Gaya  
-(D) More than one of the above  
-(E) None of the above  
+**Q19.** The Halting Problem is an example of:
+(A) A P problem (solvable efficiently)
+(B) An NP-Complete problem
+(C) An NP-Hard and UNDECIDABLE problem
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q42.** Under the 'Saat Nishchay' programme of Bihar, "Har Ghar Bijli" aims at:
-
-(A) Providing a light bulb to every house  
-(B) Providing continuous electricity to every household in Bihar  
-(C) Building solar panels in every district  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q43.** Katarni Rice, which has received a GI Tag, is associated with which district?
-
-(A) Darbhanga  
-(B) Bhagalpur  
-(C) Muzaffarpur  
-(D) More than one of the above  
-(E) None of the above  
+**Q20.** Huffman Coding (optimal prefix-free encoding) uses which paradigm?
+(A) Dynamic Programming
+(B) Divide & Conquer
+(C) Greedy (always merge two lowest-frequency nodes)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q44.** The Bihar Agricultural University is located at:
-
-(A) Patna  
-(B) Sabour, Bhagalpur  
-(C) Muzaffarpur  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q45 (PYQ-Style).** Which of the following airport(s) in Bihar serve international flights?
-
-(A) Patna (Jay Prakash Narayan International Airport)  
-(B) Gaya International Airport  
-(C) Darbhanga Airport  
-(D) More than one of the above  
-(E) None of the above  
+**Q21.** The P vs NP question (whether P equals NP) is:
+(A) Proven to be true (P = NP)
+(B) Proven to be false (P ≠ NP)
+(C) One of the unsolved Millennium Prize Problems ($1 million reward)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q46.** The total number of districts in Bihar (as of 2024) is:
-
-(A) 35  
-(B) 38  
-(C) 40  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q47 (Tricky).** Hajipur Industrial Area is located in which district of Bihar?
-
-(A) Patna  
-(B) Vaishali  
-(C) Muzaffarpur  
-(D) More than one of the above  
-(E) None of the above  
+**Q22.** In verification of NP problems, the candidate solution is called a:
+(A) Witness or Certificate
+(B) Heuristic
+(C) Approximation
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q48 (Tricky).** Which of the following is NOT an agro-based industry of Bihar?
-
-(A) Sugar Industry  
-(B) Makhana Processing  
-(C) Steel Manufacturing  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q49 (Tricky).** Under Mukhyamantri Udyami Yojana, an SC/ST entrepreneur gets financial assistance of:
-
-(A) ₹5 lakh (100% grant)  
-(B) ₹10 lakh (50% grant + 50% loan)  
-(C) ₹20 lakh (30% grant + 70% loan)  
-(D) More than one of the above  
-(E) None of the above  
+**Q23.** The Activity Selection Problem (maximise number of non-overlapping activities) is solved optimally by:
+(A) Dynamic Programming
+(B) Greedy (select activity with earliest finish time first)
+(C) Divide & Conquer
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q50 (Tricky).** "Silao Khaja" which has a GI Tag is associated with which district?
-
-(A) Muzaffarpur  
-(B) Nalanda  
-(C) Vaishali  
-(D) More than one of the above  
-(E) None of the above  
-
----
+**Q24.** The LONGEST PATH problem in a graph (finding the longest simple path) belongs to:
+(A) P class (solvable by Dijkstra-type algorithm)
+(B) Same class as Shortest Path (P)
+(C) NP-Complete class (unlike Shortest Path which is in P)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-# ✅ ANSWER KEY
-
-> **Solve all 50 questions BEFORE looking here!**
-
----
-
-## CS Answers (Q1–Q25)
-
-| Q | Ans | Explanation |
-|---|-----|-------------|
-| Q1 | **(C)** | P = solvable in polynomial time. (A) is definition of NP |
-| Q2 | **(C)** | NP = Non-deterministic Polynomial time. Common misconception: it does NOT mean "Not Polynomial" |
-| Q3 | **(D)** | Huffman Coding, Dijkstra's, Kruskal's — ALL three are Greedy algorithms |
-| Q4 | **(E)** | Bubble, Insertion, Selection are NOT D&C. D&C sorts = Merge Sort, Quick Sort (not listed here) |
-| Q5 | **(B)** | 0/1 Knapsack = Classic DP problem. Fractional Knapsack = Greedy |
-| Q6 | **(D)** | TSP (decision), SAT, Hamiltonian Cycle — ALL are NP-Complete |
-| Q7 | **(C)** | Dijkstra's = Polynomial (P class). Very common PYQ trap: Shortest Path ≠ NP-Complete |
-| Q8 | **(D)** | DP requires BOTH Optimal Substructure AND Overlapping Subproblems |
-| Q9 | **(C)** | N-Queens = classic Backtracking problem |
-| Q10 | **(B)** | P ⊆ NP is true. P=NP is NOT proven. NP ⊆ P is not established |
-| Q11 | **(C)** | SAT (Boolean Satisfiability) = first NP-Complete problem (Cook's theorem, 1971) |
-| Q12 | **(C)** | Backtracking abandons invalid path and tries another → key defining characteristic |
-| Q13 | **(B)** | Merge Sort = O(n log n) in ALL cases (best, average, worst) — this is its advantage |
-| Q14 | **(B)** | Graph 2-Coloring (bipartite check) = Polynomial using BFS/DFS. Hamiltonian Cycle and TSP are NP-Complete |
-| Q15 | **(C)** | Floyd-Warshall uses DP (fills a matrix bottom-up) |
-| Q16 | **(B)** | Huffman = variable-length; frequent chars → shorter codes. This is the whole point! |
-| Q17 | **(B)** | Every NP problem can be reduced to NP-Complete in polynomial time — that's the definition |
-| Q18 | **(C)** | D&C = non-overlapping subproblems. DP = overlapping subproblems. This is the KEY difference |
-| Q19 | **(C)** | Greedy choice for Activity Selection = earliest FINISH time (not start time, not duration) |
-| Q20 | **(B)** | Quick Sort worst case = O(n²) — happens when pivot is always min/max element |
-| Q21 | **(C)** | Bellman-Ford is Dynamic Programming, NOT Greedy. Dijkstra's and Prim's are Greedy |
-| Q22 | **(B)** | Hamiltonian Cycle is in NP — a given solution can be verified in polynomial time |
-| Q23 | **(B)** | Longest Path in general graph = NP-Hard (Shortest Path = P — they are DIFFERENT!) |
-| Q24 | **(B)** | Fractional Knapsack → Greedy optimal. 0/1 Knapsack → Greedy NOT optimal (needs DP). So only B is correct |
-| Q25 | **(B)** | NP-Hard means at least as hard as every problem in NP. NP-Hard problems may NOT be in NP |
+**Q25.** Which algorithm paradigm is used by the Floyd-Warshall all-pairs shortest path algorithm?
+(A) Greedy
+(B) Divide & Conquer
+(C) Dynamic Programming
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## GS Answers (Q26–Q50)
-
-| Q | Ans | Explanation |
-|---|-----|-------------|
-| Q26 | **(B)** | Jharkhand formed on **15 November 2000** from Bihar |
-| Q27 | **(C)** | Kosi River = "Sorrow of Bihar" due to frequent devastating floods and course changes |
-| Q28 | **(C)** | Bihar produces ~95% of India's Makhana; Darbhanga region is the hub |
-| Q29 | **(B)** | Muzaffarpur's Shahi Litchi has GI Tag — extremely famous |
-| Q30 | **(C)** | East Central Railway HQ = **Hajipur** (Vaishali district) |
-| Q31 | **(C)** | Bhagalpuri Silk (Tassar) has GI Tag |
-| Q32 | **(B)** | Barauni Refinery = **Indian Oil Corporation (IOC)** |
-| Q33 | **(C)** | Bihar State Animal = **Gaur (Indian Bison)** |
-| Q34 | **(B)** | Amjhore (Rohtas) = largest pyrite deposits in Asia — classic BPSC question |
-| Q35 | **(B)** | Mahatma Gandhi Setu spans the **Ganga at Patna** (5.575 km long) |
-| Q36 | **(C)** | **Bhagalpur** = Silk City of Bihar (famous for Tussar/Tassar silk) |
-| Q37 | **(B)** | **Gaya** — Falgu River; famous for Pitru Paksha (ancestor worship rituals) |
-| Q38 | **(B)** | Barauni Refinery established **1964** as Indo-Soviet collaboration |
-| Q39 | **(C)** | **West Champaran** = largest district of Bihar by area |
-| Q40 | **(B)** | Jeevika (BRLPS) = women's SHG-based rural livelihoods programme |
-| Q41 | **(B)** | Modern Nalanda University is at **Rajgir, Nalanda district** |
-| Q42 | **(B)** | Har Ghar Bijli = continuous electricity supply to every household |
-| Q43 | **(B)** | Katarni Rice GI Tag → **Bhagalpur** (also Banka) |
-| Q44 | **(B)** | Bihar Agricultural University = **Sabour, Bhagalpur** |
-| Q45 | **(D)** | Both Patna AND Gaya airports handle international flights (Gaya serves Buddhist pilgrims) |
-| Q46 | **(B)** | Bihar has **38 districts** |
-| Q47 | **(B)** | Hajipur is in **Vaishali** district (not Patna, though close to Patna) |
-| Q48 | **(C)** | Steel manufacturing is NOT agro-based and Bihar doesn't have it (Jharkhand does) |
-| Q49 | **(B)** | Mukhyamantri Udyami Yojana = ₹10 lakh (50% grant + 50% loan) for SC/ST/women |
-| Q50 | **(B)** | Silao Khaja GI Tag → **Nalanda** district (Silao is a town in Nalanda) |
+## 📝 GENERAL STUDIES — 25 MCQs
+### Bihar GK: Industries, Economy, Key Products & Locations
 
 ---
 
-# 🌟 TOPPER'S REVISION NOTES — Day 33
-
-## ⚡ CS Quick Revision (5 Points)
-1. **P** = Solvable in polynomial time | **NP** = Verifiable in polynomial time | **P ⊆ NP**
-2. **NP-Complete** = In NP + NP-Hard | Examples: TSP, SAT, Hamiltonian Cycle, Graph Coloring
-3. **Shortest Path = P** (Dijkstra's) | **Longest Path = NP-Hard** — Remember this contrast!
-4. **Greedy** = Local optimal (Activity Selection, Huffman, Dijkstra, Kruskal, Prim, Fractional Knapsack) | **DP** = Overlapping subproblems (0/1 Knapsack, LCS, Floyd-Warshall)
-5. **D&C** = Non-overlapping → Merge Sort, Quick Sort, Binary Search | **Backtracking** = Pruned exhaustive → N-Queens, Sudoku, Hamiltonian Cycle
-
-## ⚡ GS Quick Revision (5 Points)
-1. **Jharkhand bifurcation: 2000** — Bihar lost minerals; now agro-economy dominant
-2. **Kosi = Sorrow of Bihar** | **Amjhore (Rohtas) = Largest Pyrite in Asia**
-3. **GI Tags:** Shahi Litchi (Muzaffarpur), Bhagalpuri Silk (Bhagalpur), Makhana (Darbhanga), Katarni Rice (Bhagalpur), Silao Khaja (Nalanda), Jardalu Mango (Bhagalpur)
-4. **Barauni Refinery (IOC, 1964)** | **ECR HQ = Hajipur** | **Bihar has 38 districts**
-5. **Jeevika = women SHG scheme** | **Bihar produces 95% India's Makhana** | **West Champaran = largest district**
+**Q26.** Bhagalpur is known as the "Silk City" of India. What TYPE of silk is primarily produced there?
+(A) Mulberry Silk
+(B) Tussar (Kosa) Silk
+(C) Eri Silk
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📌 Traps to Avoid in the Actual Exam
-
-| Trap | Correct Answer |
-|------|---------------|
-| NP means "Not Polynomial" | ❌ Wrong → NP = Non-deterministic Polynomial (verifiable in poly time) |
-| Shortest Path = NP-Complete | ❌ Wrong → Shortest Path = POLYNOMIAL (P class) |
-| Quick Sort = O(n log n) always | ❌ Wrong → Quick Sort WORST case = O(n²) |
-| 0/1 Knapsack = Greedy | ❌ Wrong → 0/1 Knapsack = Dynamic Programming |
-| Bellman-Ford = Greedy | ❌ Wrong → Bellman-Ford = Dynamic Programming |
-| Hajipur is in Patna district | ❌ Wrong → Hajipur is in Vaishali district |
-| Makhana = Bihar produces 50% | ❌ Wrong → Bihar produces ~95% of India's Makhana |
-| ECR HQ = Patna | ❌ Wrong → ECR HQ = Hajipur |
-| Katarni Rice = Muzaffarpur | ❌ Wrong → Katarni Rice = Bhagalpur |
+**Q27.** Approximately what percentage of India's Makhana (Fox Nut) production comes from Bihar?
+(A) About 30%
+(B) About 60%
+(C) About 90%
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-> **🏆 Daily Target:** Finish all 50 MCQs, score your answers, review only what you got wrong. Write the 5-point summary from memory TONIGHT.
->
-> **Next Up → Day 34:** DSA Full PYQ Practice Session (Catalan Numbers, Circular Queue, Expression Conversion focus)
+**Q28.** Which district is known as the MAKHANA capital of India?
+(A) Muzaffarpur
+(B) Darbhanga
+(C) Samastipur
+(D) More than one of the above
+(E) None of the above
 
 ---
-*BPSC TRE 4.0 | Phase 1 — Week 5 | Day 33 of 170*
+
+**Q29.** Muzaffarpur is world-famous for producing which fruit?
+(A) Jardalu Mango
+(B) Shahi Litchi
+(C) Katarni Rice
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q30.** The Champaran Satyagraha (1917), Gandhi's first major agitation in India, was related to forced cultivation of which crop?
+(A) Sugarcane
+(B) Cotton
+(C) Indigo (Neel)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q31.** Bihar lost most of its mineral wealth (coal, iron ore, mica) when which new state was carved out in 2000?
+(A) Uttarakhand
+(B) Chhattisgarh
+(C) Jharkhand
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q32.** Which GI-tagged traditional ART FORM originates from Bihar's Mithila region?
+(A) Warli Painting
+(B) Madhubani (Mithila) Painting
+(C) Pattachitra
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q33.** The Jardalu Mango, famous for its distinctive flavour, is primarily associated with which district of Bihar?
+(A) Muzaffarpur
+(B) Patna
+(C) Bhagalpur
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q34.** Which district of Bihar is famous for BANANA cultivation and has a major banana market?
+(A) Vaishali (Hajipur)
+(B) Bhagalpur
+(C) Rohtas
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q35.** The jute-producing belt of Bihar is primarily concentrated in which region?
+(A) Champaran and Muzaffarpur in West Bihar
+(B) Kosi basin (Darbhanga, Saharsa, Supaul, Madhepura)
+(C) Gaya and Nalanda in South Bihar
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q36.** Which is Bihar's FIRST industrial estate?
+(A) Bihta Industrial Area (near Patna)
+(B) Muzaffarpur Industrial Area
+(C) Hajipur Industrial Area (Vaishali)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q37.** Bihar's JEEVIKA programme is known for:
+(A) Setting up large factories for heavy industry
+(B) Being one of India's largest Self Help Group (SHG) programmes for women's livelihood
+(C) Building industrial corridors between cities
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q38.** Katarni Rice, known for its aroma and thin grain, is primarily grown in which districts of Bihar?
+(A) East Champaran and Muzaffarpur
+(B) Rohtas and Bhojpur region
+(C) Darbhanga and Saharsa
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q39.** The Mithila Makhana received its Geographical Indication (GI) tag in which year?
+(A) 2019
+(B) 2022
+(C) 2015
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q40.** Cement production in Bihar is primarily based in which district due to limestone availability?
+(A) Bhagalpur
+(B) Muzaffarpur
+(C) Rohtas (Kaimur Plateau region)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q41.** What approximately is Bihar's share in India's total LITCHI production?
+(A) About 10-15%
+(B) About 25-30%
+(C) About 40%
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q42.** The Magahi Paan (betel leaf) is associated with which region of Bihar?
+(A) Mithila region (North Bihar)
+(B) Magadh region (Nalanda, Patna, Gaya)
+(C) Bhojpur region (West Bihar)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q43.** Which primary sector employs approximately 75% of Bihar's workforce?
+(A) Manufacturing and Industry
+(B) Agriculture
+(C) Services and IT
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q44.** Bihar is one of India's fastest-growing economies by GSDP growth rate. Despite this, per capita income remains low primarily because of:
+(A) Poor agricultural production
+(B) Very large population making per capita calculation small despite growth
+(C) Lack of natural resources
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q45.** The Champaran district's significance in Bihar's agriculture is primarily related to:
+(A) Makhana production
+(B) Silk weaving
+(C) Sugarcane cultivation (Terai plains)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q46.** Silkworms used for Bhagalpur's Tussar silk production feed on which trees?
+(A) Mulberry trees (Shehtu)
+(B) Arjun and Saja trees (forest trees)
+(C) Castor and Eri trees
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q47.** The famous SUJANI embroidery craft of Bihar is associated with which area?
+(A) Bhagalpur
+(B) Muzaffarpur region (Bhusura village)
+(C) Patna Sahib
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q48.** Bihar's famous Sattu (roasted gram flour) is especially associated with which district?
+(A) Rohtas
+(B) Nalanda
+(C) Champaran (GI-tagged Champaran Sattu)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q49.** Which of the following statements about Bihar's economy is CORRECT?
+(A) Bihar is India's highest per capita income state
+(B) Bihar's GSDP growth rate is among India's highest, but per capita income is among the lowest
+(C) Bihar's economy is primarily industry-based rather than agriculture-based
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q50.** The BODH GAYA and RAJGIR areas of Bihar are primarily important for which type of economic activity?
+(A) Heavy industry and mining
+(B) Silk and textile production
+(C) Tourism (Buddhist and heritage tourism)
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+# ANSWER KEY
+
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
+
+---
+
+### CS Answers (Q1–Q25):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (C) | NP = Non-deterministic Polynomial time (NOT "Not Polynomial") |
+| 2 | (B) | P = solvable in polynomial time; NP = verifiable in polynomial time |
+| 3 | (C) | P ⊆ NP: every P problem is also in NP (can verify by solving) |
+| 4 | (B) | NP-Complete = In NP + NP-Hard (every NP problem reduces to it) |
+| 5 | (C) | SAT (Boolean Satisfiability) — Cook's theorem, 1971 |
+| 6 | (C) | (n-1)!/2 distinct tours for TSP with n cities |
+| 7 | (C) | Shortest path (Dijkstra) = P; polynomial time algorithm exists |
+| 8 | (A) | P=NP → ALL NP-Complete problems become polynomial → all NP solved |
+| 9 | (C) | Greedy = locally optimal choice at each step |
+| 10 | (C) | 0/1 Knapsack = DP (greedy fails because no fractions allowed) |
+| 11 | (B) | Fractional Knapsack = Greedy (sort by value/weight ratio) |
+| 12 | (C) | Floyd-Warshall = DP (not Greedy; Dijkstra and Kruskal ARE greedy) |
+| 13 | (B) | DP requires: optimal substructure + overlapping subproblems |
+| 14 | (B) | D&C = independent subproblems; DP = overlapping subproblems |
+| 15 | (C) | DP Fibonacci = O(n) vs naive O(2^n) — massive improvement |
+| 16 | (B) | Dijkstra = Greedy; only non-negative edge weights (negative fails!) |
+| 17 | (B) | Bellman-Ford = Dynamic Programming (relaxation = DP concept) |
+| 18 | (B) | NP-Hard = at least as hard as NP-C, but may NOT be in NP class |
+| 19 | (C) | Halting Problem = NP-Hard AND Undecidable (no algorithm can solve!) |
+| 20 | (C) | Huffman Coding = Greedy (merge two lowest-frequency nodes always) |
+| 21 | (C) | P vs NP = unsolved Millennium Prize Problem ($1,000,000 reward) |
+| 22 | (A) | A proposed solution in NP is called a "witness" or "certificate" |
+| 23 | (B) | Activity Selection = Greedy (earliest finish time first) = optimal |
+| 24 | (C) | Longest Path = NP-Complete; Shortest Path = P (key contrast!) |
+| 25 | (C) | Floyd-Warshall = Dynamic Programming (builds solution via sub-paths) |
+
+---
+
+### GS Answers (Q26–Q50):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (B) | Bhagalpur produces TUSSAR (Kosa/wild) silk from Antheraea mylitta worm |
+| 27 | (C) | Bihar produces ~90% of India's Makhana — dominates completely |
+| 28 | (B) | Darbhanga = Makhana capital; North Bihar wetlands ideal for lotus/makhana |
+| 29 | (B) | Muzaffarpur = world-famous SHAHI LITCHI; GI tagged |
+| 30 | (C) | Champaran Satyagraha 1917 = against INDIGO (neel) forced cultivation |
+| 31 | (C) | Jharkhand carved from Bihar in 2000 — took coal, iron, mica with it |
+| 32 | (B) | Madhubani (Mithila) Painting — UNESCO-recognised; GI tagged |
+| 33 | (C) | Jardalu Mango = Bhagalpur district; GI tagged |
+| 34 | (A) | Vaishali (Hajipur) = famous for bananas; Hajipur banana market |
+| 35 | (B) | Kosi basin (Darbhanga, Saharsa, Supaul) = jute belt of Bihar |
+| 36 | (C) | Hajipur Industrial Area (Vaishali) = Bihar's first industrial estate |
+| 37 | (B) | JEEViKa = Bihar's massive SHG programme (~1 crore women members) |
+| 38 | (B) | Katarni Rice = Rohtas and Bhojpur area; GI tagged fragrant variety |
+| 39 | (B) | Mithila Makhana received GI tag in 2022 |
+| 40 | (C) | Rohtas (Kaimur Plateau) = limestone → cement (Dalmia, Banjari plants) |
+| 41 | (C) | Bihar ≈ 40% of India's litchi production |
+| 42 | (B) | Magahi Paan = Magadh region (Nalanda, Patna, Gaya); GI tagged |
+| 43 | (B) | Agriculture employs ~75% of Bihar's workforce |
+| 44 | (B) | Large population base makes per capita income low despite GSDP growth |
+| 45 | (C) | Champaran = Terai plains + sugarcane; also Gandhi's Satyagraha site |
+| 46 | (B) | Tussar silk worms (Antheraea mylitta) feed on Arjun and Saja trees |
+| 47 | (B) | Sujani embroidery = Bhusura village area, Muzaffarpur region |
+| 48 | (C) | Champaran Sattu = GI tagged product from Champaran |
+| 49 | (B) | Fast GSDP growth + lowest per capita income = Bihar's economic paradox |
+| 50 | (C) | Bodh Gaya + Rajgir = Buddhist/Heritage TOURISM economy |
+
+---
+---
+
+# 🔁 DAY 33 — CRISP REVISION NOTES
+
+## ⚡ RAPID FIRE — NP-Completeness & Algorithm Paradigms
+
+### P vs NP vs NP-Complete (The Holy Trinity):
+```
+P:           SOLVABLE in polynomial time (O(n^k))
+             Examples: Sorting, Shortest Path, Binary Search, Matrix Mult
+
+NP:          VERIFIABLE in polynomial time (given solution, can check quickly)
+             P ⊆ NP (every P problem is also NP)
+             NP ≠ "Not Polynomial" — COMMON EXAM TRAP!
+
+NP-Complete: IN NP + EVERY NP problem REDUCES to it
+             "Hardest problems in NP"
+             Examples: SAT, TSP, 0/1 Knapsack, 3-Coloring, Clique
+
+NP-Hard:     At LEAST as hard as NP-Complete — but may NOT be IN NP
+             Examples: Halting Problem (undecidable!), TSP optimization version
+
+HIERARCHY:   P ⊆ NP ⊆ NP-Hard
+             NP-Complete = NP ∩ NP-Hard
+```
+
+### Algorithm Paradigm One-Liners:
+```
+GREEDY:  Local best choice → (hopefully) global best
+         FAST; NOT always optimal
+         Works: Dijkstra, Kruskal, Prim, Huffman, Fractional Knapsack, Activity Selection
+         Fails: 0/1 Knapsack, TSP (greedy gives bad tours)
+
+DP:      Optimal substructure + Overlapping subproblems → store and reuse
+         OPTIMAL; uses more memory (O(n) or O(n²) table)
+         Works: Fibonacci O(n), 0/1 Knapsack O(nW), LCS, Floyd-Warshall, Edit Distance
+
+D&C:     Independent subproblems; recurse + combine
+         No reuse of subproblem results (unlike DP)
+         Works: Merge Sort O(n log n), Quick Sort, Binary Search O(log n)
+```
+
+### Top 5 PYQ Traps:
+```
+TRAP 1: NP ≠ "Not Polynomial" → NP = Non-deterministic Polynomial (VERIFIABLE in poly time)
+TRAP 2: Shortest Path = P (Dijkstra); Longest Path = NP-Complete!
+TRAP 3: Fractional Knapsack → GREEDY; 0/1 Knapsack → DYNAMIC PROGRAMMING
+TRAP 4: Dijkstra = GREEDY (not DP); Bellman-Ford = DP (not Greedy)
+TRAP 5: P=NP? → UNSOLVED ($1M Millennium Prize); most believe P≠NP
+```
+
+---
+
+## ⚡ RAPID FIRE — Bihar Industries & Economy
+
+### Must-Know Location → Product Map:
+```
+BHAGALPUR    → TUSSAR SILK ("Silk City of India"); Jardalu Mango (GI)
+MUZAFFARPUR  → SHAHI LITCHI (world-famous; GI); ~40% of India's litchi
+DARBHANGA    → MAKHANA capital (~90% of India's production; GI: Mithila Makhana)
+HAJIPUR      → BANANA; Bihar's FIRST Industrial Estate
+CHAMPARAN    → SUGARCANE; Site of Gandhi's first Indian Satyagraha (1917, against INDIGO)
+ROHTAS       → KATARNI RICE (GI); CEMENT (limestone from Kaimur Plateau)
+KOSI BASIN   → JUTE production (Darbhanga, Saharsa, Supaul)
+NALANDA      → MAGAHI PAAN (GI); also famous as ancient university site
+MADHUBANI    → MADHUBANI PAINTING (GI; UNESCO recognition)
+JHARKHAND    → Where Bihar's COAL and MINERALS went (carved out 2000)
+```
+
+### GI-Tagged Products Quick List:
+```
+Bhagalpuri Silk | Mithila Makhana | Shahi Litchi | Jardalu Mango |
+Katarni Rice | Magahi Paan | Madhubani Painting | Champaran Sattu |
+Sujani Embroidery
+```
+
+### Key Statistics:
+```
+Makhana: Bihar = ~90% of India → DOMINANT
+Litchi: Bihar = ~40% of India → LEADING
+Agriculture workforce: ~75% of Bihar's total
+GSDP growth: Among India's FASTEST
+Per capita income: Among India's LOWEST
+JEEVIKA SHG members: ~1 crore women
+```
+
+---
+
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. **P = solvable efficiently; NP = verifiable efficiently; NP-Complete = hardest in NP (both NP + NP-Hard); NP ≠ "Not Polynomial"** — this is the most exam-tested distinction
+2. **Key NP-Complete problems**: SAT (first, 1971 Cook), TSP ((n-1)!/2 tours), 0/1 Knapsack, 3-Coloring, Clique; **NOT NP-Complete**: Shortest Path (P class!)
+3. **Paradigm shortcuts**: Greedy → Dijkstra/Kruskal/Huffman/Fractional Knapsack; DP → 0/1 Knapsack/Fibonacci/Floyd-Warshall; D&C → Merge Sort/Binary Search
+4. **Bhagalpur = Tussar Silk ("Silk City"); Muzaffarpur = Litchi (40% India); Darbhanga = Makhana (90% India); Hajipur = Banana; Champaran = Sugarcane + Gandhi Satyagraha**
+5. **Bihar lost minerals to Jharkhand (2000); Bihar = fast GSDP growth but low per capita; JEEVIKA = ~1 crore women in SHGs; GI tags: Mithila Makhana (2022), Jardalu Mango, Bhagalpur Silk, Magahi Paan**
+
+---
+
+## 📅 DAY 34 PREVIEW — What's Coming Next:
+**CS**: Operating Systems — Introduction, Process Management, CPU Scheduling Algorithms (FCFS, SJF, Round Robin, Priority), Process States
+**GS**: Bihar GK — History of Bihar: Ancient period (Magadh Empire, Mauryas, Guptas), Medieval period, Bihar in modern history
+
+---
+
+*🚀 Day 33 of 170 complete — NP problems may be unsolvable in polynomial time, but your exam score certainly isn't!*

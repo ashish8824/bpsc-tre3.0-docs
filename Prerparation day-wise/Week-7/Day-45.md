@@ -1,1765 +1,1882 @@
-# 📅 BPSC TRE 4.0 — DAY 45
-## CS Topic: IP Addressing Deep-Dive — IPv4 Classes, Subnetting, CIDR, NAT + Network Topologies
-## GS Topic: Science & Technology — Artificial Intelligence, Machine Learning, IoT, Emerging Tech
-### 🎯 Target: 130+/150 | TOP 50 RANK
+# 📅 BPSC TRE 4.0 — DAY 45 COMPLETE STUDY MODULE
+### Computer Networks: IP Addressing (IPv4 & IPv6), Subnetting & CIDR + Science & Technology — AI/ML Basics
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-> **Topper Note for Day 45:**
-> IP Addressing is one of the most calculation-heavy topics in Networks — yet BPSC only asks
-> conceptual questions (no long subnetting calculations). Master the CONCEPTS and TRAPS.
-> AI/ML is a GROWING topic in TRE — appeared 4 times in TRE 3.0. Easy marks if you read today.
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): IP Addressing — IPv4 Classes, Subnet Mask, CIDR, IPv6, Private IPs
+> - Afternoon (1 hr): Science & Technology — AI, Machine Learning, Types, Applications
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-## ⏰ TODAY'S STUDY SCHEDULE
-
-| Slot | Duration | Activity |
-|------|----------|----------|
-| Morning | 1.5 hrs | CS: IP Addressing + Subnetting + Topologies |
-| Afternoon | 1 hr | GS: AI, ML, IoT, Emerging Technologies |
-| Evening | 1 hr | Solve all 50 MCQs (25 CS + 25 GS) |
-| Night | 30 min | Write 5-bullet summary from memory |
-
----
----
-
-# 🖥️ PART A — COMPUTER SCIENCE
-# IP ADDRESSING: IPv4, IPv6, SUBNETTING, NAT & NETWORK TOPOLOGIES
+# PART 1: COMPUTER SCIENCE
+## 📘 IP Addressing — IPv4, IPv6, Subnetting & CIDR
 
 ---
 
-## 🎯 PYQ FREQUENCY: IP ADDRESSING IN BPSC TRE
+## 🔷 SECTION 1: What is an IP Address?
 
-| Paper | IP Addressing Questions |
-|-------|------------------------|
-| TRE 1.0 | 2 questions (IPv4 classes, subnet mask) |
-| TRE 2.0 | 3 questions (IPv4 bits, IPv6 bits, private IPs) |
-| TRE 3.0 | 3 questions (IPv6 flow label, subnetting concept, Class D) |
-| **TRE 4.0 Expected** | **3–5 questions** |
+### Real-Life Analogy — The Postal Address System:
 
----
+Every house in India has an address:
+**"House No. 42, Street 5, Rajendra Nagar, Patna, Bihar — 800016"**
 
-## 🌐 SECTION 1: THE COMPLETE IPv4 ADDRESS SYSTEM
+This address has layers:
+- **PIN code (800016)** → identifies the city/area (like Network ID)
+- **House No. (42)** → identifies the specific house (like Host ID)
 
-### What is an IP Address?
+Without this address, no letter can reach you. Similarly, without an IP address, no data packet can reach a device on the internet.
 
-Think of an **IP address like a postal address** for your computer on the internet:
+> **An IP Address (Internet Protocol Address) is a unique numerical label assigned to every device connected to a computer network that uses the Internet Protocol for communication.**
 
+### Purpose of IP Address:
 ```
-Your House Address:         Your Computer's IP Address:
-┌─────────────────────┐     ┌─────────────────────────────┐
-│ 12, MG Road         │  ↔  │    192  . 168  .  1  .  10  │
-│ Patna - 800001      │     │   [Network Part] [Host Part] │
-│ Bihar, India        │     └─────────────────────────────┘
-└─────────────────────┘
-Country = Network class
-City = Network address
-House number = Host address
+IP ADDRESS SERVES TWO FUNCTIONS:
+  1. IDENTIFICATION:  "Who are you?" — Uniquely identifies a device on the network
+  2. LOCATION:        "Where are you?" — Tells routers how to route data to you
+
+ANALOGY:
+  Your NAME         = identifies you as a person (like a MAC address — hardware identity)
+  Your HOME ADDRESS = locates where to send your mail (like an IP address — logical location)
 ```
 
----
-
-## 📐 IPv4 — COMPLETE TECHNICAL BREAKDOWN
-
-### Structure of IPv4:
-
+### Logical vs Physical Addressing:
 ```
-IPv4 = 32 bits = 4 octets (each octet = 8 bits)
+┌──────────────────────────────────────────────────────────────────────────────┐
+│              PHYSICAL vs LOGICAL ADDRESSING                                  │
+├─────────────────────────┬────────────────────────────────────────────────────┤
+│   PHYSICAL ADDRESS      │           LOGICAL ADDRESS                          │
+│   (MAC Address)         │           (IP Address)                             │
+├─────────────────────────┼────────────────────────────────────────────────────┤
+│ Burned into NIC hardware│ Assigned by network administrator or DHCP         │
+│ by manufacturer         │                                                    │
+├─────────────────────────┼────────────────────────────────────────────────────┤
+│ 48 bits, hexadecimal    │ IPv4: 32 bits | IPv6: 128 bits                    │
+│ e.g.: 00:1A:2B:3C:4D:5E │ e.g.: 192.168.1.1 | 2001:db8::1                  │
+├─────────────────────────┼────────────────────────────────────────────────────┤
+│ Does NOT change         │ CAN change (dynamic IP via DHCP)                  │
+│ (permanent)             │                                                    │
+├─────────────────────────┼────────────────────────────────────────────────────┤
+│ Used at Data Link Layer │ Used at Network Layer (OSI L3 / TCP/IP Internet)  │
+│ (OSI Layer 2)           │                                                    │
+├─────────────────────────┼────────────────────────────────────────────────────┤
+│ Local delivery          │ End-to-end routing across networks                │
+│ (within same network)   │ (across the entire Internet)                      │
+├─────────────────────────┼────────────────────────────────────────────────────┤
+│ Flat address space      │ Hierarchical (Network + Host portions)            │
+│ (no hierarchy)          │                                                    │
+└─────────────────────────┴────────────────────────────────────────────────────┘
 
-Example: 192.168.10.5
+KEY INSIGHT: When sending data across the Internet:
+  → IP address routes the packet to the CORRECT NETWORK (like city address)
+  → MAC address delivers it to the CORRECT DEVICE within that network (like door number)
+  → ARP protocol bridges them: converts IP → MAC for final delivery
 
-   192        .      168      .      10       .       5
-11000000   .   10101000   .   00001010   .   00000101
-  Octet 1        Octet 2        Octet 3        Octet 4
-
-Each octet: minimum = 0 (00000000), maximum = 255 (11111111)
-Total possible addresses = 2^32 = 4,294,967,296 ≈ 4.3 billion
-```
-
----
-
-## 🏷️ IPv4 ADDRESS CLASSES — COMPLETE TOPPER TABLE
-
-```
-┌───────┬────────────┬──────────────────────────────┬───────────┬──────────┬──────────────┐
-│ Class │  1st Octet │      Full Range              │ Net Bits  │Host Bits │  Purpose     │
-│       │  (Binary)  │                              │           │          │              │
-├───────┼────────────┼──────────────────────────────┼───────────┼──────────┼──────────────┤
-│   A   │ 0xxxxxxx   │  1.0.0.0 – 126.255.255.255  │    8      │   24     │ Large orgs   │
-│       │ (0–127)    │  Default mask: 255.0.0.0     │           │          │ ~16M hosts   │
-├───────┼────────────┼──────────────────────────────┼───────────┼──────────┼──────────────┤
-│   B   │ 10xxxxxx   │128.0.0.0 – 191.255.255.255  │   16      │   16     │ Medium orgs  │
-│       │ (128–191)  │  Default mask: 255.255.0.0   │           │          │ ~65K hosts   │
-├───────┼────────────┼──────────────────────────────┼───────────┼──────────┼──────────────┤
-│   C   │ 110xxxxx   │192.0.0.0 – 223.255.255.255  │   24      │    8     │ Small orgs   │
-│       │ (192–223)  │  Default mask: 255.255.255.0 │           │          │ 254 hosts    │
-├───────┼────────────┼──────────────────────────────┼───────────┼──────────┼──────────────┤
-│   D   │ 1110xxxx   │224.0.0.0 – 239.255.255.255  │   N/A     │  N/A     │ MULTICAST    │
-│       │ (224–239)  │  No default subnet mask      │           │          │ (group send) │
-├───────┼────────────┼──────────────────────────────┼───────────┼──────────┼──────────────┤
-│   E   │ 1111xxxx   │240.0.0.0 – 255.255.255.255  │   N/A     │  N/A     │ EXPERIMENTAL │
-│       │ (240–255)  │  Reserved                    │           │          │ (reserved)   │
-└───────┴────────────┴──────────────────────────────┴───────────┴──────────┴──────────────┘
-```
-
-### 🧠 Memory Trick for First Octet Ranges:
-```
-Class A: 1–126    → "A is the first = starts from 1"
-Class B: 128–191  → "B comes after the gap (127 = loopback)"
-Class C: 192–223  → "C for Common/home networks"
-Class D: 224–239  → "D for Do-multicast"
-Class E: 240–255  → "E for Experimental/End"
-
-⭐ SPECIAL: 127.x.x.x = LOOPBACK (between Class A and B)
-           127.0.0.1 = Your own computer ("localhost")
-           NOT assigned to Class A networks
+🎯 PYQ FACT: IP address = Logical address (Network Layer); MAC = Physical address (Data Link Layer)
 ```
 
 ---
 
-## 🏠 SPECIAL IPv4 ADDRESSES — BPSC MUST KNOW
+## 🔷 SECTION 2: IPv4 Addressing — Deep Dive
 
+### Basic Structure:
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│               SPECIAL IPv4 ADDRESSES                           │
-├──────────────────────┬──────────────────────────────────────────┤
-│  Address             │  Purpose                                 │
-├──────────────────────┼──────────────────────────────────────────┤
-│  0.0.0.0             │  "This host" / Unspecified address       │
-│  127.0.0.1           │  LOOPBACK — your own computer            │
-│  127.x.x.x           │  Entire loopback range                   │
-│  255.255.255.255      │  LIMITED BROADCAST (to all hosts)        │
-│  x.x.x.255           │  Directed broadcast to a network         │
-│  x.x.x.0             │  Network address (NOT a host)            │
-└──────────────────────┴──────────────────────────────────────────┘
+IPv4 = Internet Protocol version 4
+SIZE: 32 BITS total
+REPRESENTATION: DOTTED DECIMAL NOTATION
+  → Divide 32 bits into 4 groups of 8 bits each (= 4 OCTETS)
+  → Each octet converted to decimal (0–255)
+  → Separated by dots
 
-⚠️ BPSC TRAP: "255.255.255.255 is a valid host address"
-→ WRONG! 255.255.255.255 = BROADCAST address, assigned to no single host
-```
+EXAMPLE:
+  Binary:  11000000 . 10101000 . 00000001 . 00000001
+  Decimal:    192   .   168   .    1    .    1
+  → Written as: 192.168.1.1
 
----
+RANGE OF EACH OCTET:
+  8 bits → 2^8 = 256 possible values → 0 to 255
+  So each part of IPv4 address: 0 to 255
 
-## 🔒 PRIVATE IP RANGES (RFC 1918) — BPSC EXAM STAPLE
+TOTAL IPv4 ADDRESSES:
+  32 bits → 2^32 = 4,294,967,296 ≈ 4.3 BILLION addresses
+  (This sounds like a lot but the world has 8 billion people + billions of devices!)
+  → IPv4 address EXHAUSTION is why IPv6 was created!
 
-```
-These addresses are NOT routable on the public internet.
-They are used inside private networks (homes, offices, schools).
-
-┌─────────┬───────────────────────────────┬──────────────────────┐
-│  Class  │       Private IP Range        │    Subnet Mask       │
-├─────────┼───────────────────────────────┼──────────────────────┤
-│    A    │  10.0.0.0 – 10.255.255.255    │  255.0.0.0 (/8)      │
-├─────────┼───────────────────────────────┼──────────────────────┤
-│    B    │  172.16.0.0 – 172.31.255.255  │  255.255.0.0 (/16)   │
-├─────────┼───────────────────────────────┼──────────────────────┤
-│    C    │ 192.168.0.0–192.168.255.255   │  255.255.255.0 (/24) │
-└─────────┴───────────────────────────────┴──────────────────────┘
-
-Real Example: 
-Your home router likely gives you: 192.168.1.x (Class C private)
-Your company server farm may use:  10.x.x.x (Class A private)
-
-When your private device wants to reach google.com:
-→ NAT (Network Address Translation) converts private IP → public IP
+🎯 PYQ FACT: IPv4 = 32 bits = 4 octets = dotted decimal notation (e.g., 192.168.1.1)
+🎯 PYQ FACT: Maximum value of any octet = 255 (2^8 - 1)
+🎯 PYQ FACT: Total IPv4 addresses ≈ 4.3 billion (2^32)
 ```
 
----
-
-## 🎭 SUBNET MASK — UNDERSTANDING IT DEEPLY
-
-### What does a Subnet Mask DO?
-
+### IPv4 Address Structure — Network ID and Host ID:
 ```
-Subnet mask separates the IP address into two parts:
-  1. NETWORK part  — which network you belong to
-  2. HOST part     — which specific device you are
+AN IPv4 ADDRESS HAS TWO PARTS:
 
-Example:
-IP Address:   192.168.1.100
-Subnet Mask:  255.255.255.0
+┌────────────────────────────────────────────────────────────────┐
+│                    IPv4 ADDRESS (32 bits)                       │
+├────────────────────────────┬───────────────────────────────────┤
+│      NETWORK ID            │           HOST ID                  │
+│   (Network Portion)        │         (Host Portion)             │
+├────────────────────────────┼───────────────────────────────────┤
+│ Identifies WHICH NETWORK   │ Identifies WHICH DEVICE           │
+│ the device belongs to      │ within that network               │
+├────────────────────────────┼───────────────────────────────────┤
+│ Like the CITY + AREA of    │ Like the specific HOUSE NUMBER    │
+│ your address               │ within that area                  │
+├────────────────────────────┼───────────────────────────────────┤
+│ All devices on the SAME    │ Must be UNIQUE within the         │
+│ network share the same     │ network (no two devices have      │
+│ Network ID                 │ the same Host ID)                 │
+└────────────────────────────┴───────────────────────────────────┘
 
-In Binary:
-IP:    11000000.10101000.00000001.01100100
-Mask:  11111111.11111111.11111111.00000000
-         ↑ Network Part (1s) ↑    ↑Host↑
+EXAMPLE: 192.168.1.45 with subnet mask 255.255.255.0
+  Network ID = 192.168.1   (first 3 octets / 24 bits)
+  Host ID    = 45          (last octet / 8 bits)
+  
+  This means: Device is on network "192.168.1.0"
+              And is specifically device number "45" in that network
 
-Where mask = 1 → that bit is part of the NETWORK address
-Where mask = 0 → that bit is part of the HOST address
-
-Result:
-Network address: 192.168.1.0   (replace host bits with 0s)
-Broadcast addr:  192.168.1.255 (replace host bits with 1s)
-Usable hosts:    192.168.1.1 – 192.168.1.254 (254 devices)
+VISUAL:
+  192  .  168  .   1   .  45
+  ┌────────────────────┐┌──────┐
+  │    NETWORK ID      ││HOST  │
+  │   (24 bits)        ││ID    │
+  └────────────────────┘└──────┘
 ```
 
 ---
 
-## 📏 CIDR NOTATION (Classless Inter-Domain Routing)
+## 🔷 SECTION 3: IPv4 Classes — The Original Classification System
+
+Before CIDR, IP addresses were divided into CLASSES based on the first octet. Each class defines how many bits are for the Network ID vs Host ID.
+
+```
+IPv4 CLASSES — OVERVIEW DIAGRAM:
+
+First Octet    Class    Purpose
+  0–127         A       Large networks (governments, ISPs)
+128–191         B       Medium networks (universities, companies)
+192–223         C       Small networks (most common — home/office)
+224–239         D       Multicasting (no host addresses)
+240–255         E       Experimental/Reserved (not for general use)
+
+HOW TO IDENTIFY CLASS FROM FIRST OCTET:
+  First bit = 0          → Class A  (0xxxxxxx → 0–127)
+  First bits = 10        → Class B  (10xxxxxx → 128–191)
+  First bits = 110       → Class C  (110xxxxx → 192–223)
+  First bits = 1110      → Class D  (1110xxxx → 224–239)
+  First bits = 11110     → Class E  (11110xxx → 240–255)
+```
+
+### Class A:
+```
+CLASS A — LARGE NETWORKS
+
+FIRST OCTET RANGE:  1 to 126  (0 is reserved; 127 is loopback)
+NETWORK BITS:       8 bits (first octet = Network ID)
+HOST BITS:          24 bits (last 3 octets = Host ID)
+DEFAULT SUBNET MASK: 255.0.0.0  (or /8 in CIDR)
+
+FORMAT:  [Network(8)] . [Host(8)] . [Host(8)] . [Host(8)]
+         NNN.HHH.HHH.HHH
+
+NUMBER OF NETWORKS:  2^7 = 128 (but usable = 126, since 0 and 127 reserved)
+HOSTS PER NETWORK:   2^24 - 2 = 16,777,214 hosts
+                     (-2 because: network address + broadcast address reserved)
+
+EXAMPLE:  10.0.0.1
+  Network ID = 10
+  Host ID    = 0.0.1
+  
+WHO USES CLASS A:
+  Very large organisations — internet backbone ISPs, large governments
+  Example: 10.0.0.0/8 is a private Class A network
+
+SPECIAL: 127.0.0.1 = LOOPBACK ADDRESS ("localhost")
+  When you ping 127.0.0.1, you're pinging YOUR OWN device!
+  Used for testing network software on your own machine.
+  
+🎯 PYQ FACT: 127.0.0.1 = loopback/localhost address
+🎯 PYQ FACT: Class A default subnet mask = 255.0.0.0 = /8
+🎯 PYQ FACT: Class A can have ~16.7 million hosts per network!
+```
+
+### Class B:
+```
+CLASS B — MEDIUM NETWORKS
+
+FIRST OCTET RANGE:  128 to 191
+NETWORK BITS:       16 bits (first 2 octets = Network ID)
+HOST BITS:          16 bits (last 2 octets = Host ID)
+DEFAULT SUBNET MASK: 255.255.0.0  (or /16 in CIDR)
+
+FORMAT:  [Network(8)] . [Network(8)] . [Host(8)] . [Host(8)]
+         NNN.NNN.HHH.HHH
+
+NUMBER OF NETWORKS:  2^14 = 16,384
+HOSTS PER NETWORK:   2^16 - 2 = 65,534 hosts
+
+EXAMPLE:  172.16.5.20
+  Network ID = 172.16
+  Host ID    = 5.20
+  
+WHO USES CLASS B:
+  Medium-sized organisations — universities, large companies
+
+🎯 PYQ FACT: Class B default subnet mask = 255.255.0.0 = /16
+🎯 PYQ FACT: Class B can have ~65,534 hosts per network
+```
+
+### Class C:
+```
+CLASS C — SMALL NETWORKS (MOST COMMON!)
+
+FIRST OCTET RANGE:  192 to 223
+NETWORK BITS:       24 bits (first 3 octets = Network ID)
+HOST BITS:          8 bits (last octet = Host ID)
+DEFAULT SUBNET MASK: 255.255.255.0  (or /24 in CIDR)
+
+FORMAT:  [Network(8)] . [Network(8)] . [Network(8)] . [Host(8)]
+         NNN.NNN.NNN.HHH
+
+NUMBER OF NETWORKS:  2^21 = 2,097,152
+HOSTS PER NETWORK:   2^8 - 2 = 254 hosts
+
+EXAMPLE:  192.168.1.50
+  Network ID = 192.168.1
+  Host ID    = 50
+  
+WHO USES CLASS C:
+  Small networks — homes, small offices (most common type!)
+  Your home Wi-Fi router almost certainly uses 192.168.x.x!
+
+🎯 PYQ FACT: Class C default subnet mask = 255.255.255.0 = /24
+🎯 PYQ FACT: Class C allows only 254 hosts per network (most limited)
+🎯 PYQ FACT: 192.168.x.x is the MOST commonly seen private IP range (Class C private)
+```
+
+### Class D and Class E:
+```
+CLASS D — MULTICASTING
+
+FIRST OCTET RANGE: 224 to 239
+PURPOSE: MULTICAST — send data to a GROUP of devices simultaneously
+         (not to a single device like unicast, not to all like broadcast)
+NO SUBNET MASK: Not used for individual hosts
+EXAMPLE: 224.0.0.1 (all hosts multicast), 239.x.x.x (organisation-local)
+USE: Video conferencing, IPTV, live streaming to multiple subscribers simultaneously
+
+CLASS E — EXPERIMENTAL / RESERVED
+
+FIRST OCTET RANGE: 240 to 255
+PURPOSE: Research and experimental use; NOT assigned to regular hosts
+         255.255.255.255 = Limited Broadcast Address (send to ALL on local network)
+EXAMPLE: 240.0.0.0 to 254.255.255.255 (experimental)
+         255.255.255.255 (broadcast to everyone on local network)
+```
+
+### IPv4 Classes — Master Summary Table:
+```
+┌─────────┬───────────────┬──────────────────┬──────────────────┬────────────────────┬─────────────────┐
+│  CLASS  │  FIRST OCTET  │  NETWORK BITS /  │  DEFAULT SUBNET  │  HOSTS PER         │  PURPOSE        │
+│         │    RANGE      │   HOST BITS      │     MASK         │  NETWORK           │                 │
+├─────────┼───────────────┼──────────────────┼──────────────────┼────────────────────┼─────────────────┤
+│    A    │   1 – 126     │    8 / 24        │   255.0.0.0      │  16,777,214        │ Very large      │
+│         │               │    (/8)          │                  │  (~16.7 million)   │ networks        │
+├─────────┼───────────────┼──────────────────┼──────────────────┼────────────────────┼─────────────────┤
+│    B    │  128 – 191    │   16 / 16        │  255.255.0.0     │  65,534            │ Medium          │
+│         │               │    (/16)         │                  │  (~65K)            │ networks        │
+├─────────┼───────────────┼──────────────────┼──────────────────┼────────────────────┼─────────────────┤
+│    C    │  192 – 223    │   24 / 8         │ 255.255.255.0    │  254               │ Small networks  │
+│         │               │    (/24)         │                  │                    │ (most common)   │
+├─────────┼───────────────┼──────────────────┼──────────────────┼────────────────────┼─────────────────┤
+│    D    │  224 – 239    │   N/A            │   No mask        │  N/A               │ Multicast only  │
+├─────────┼───────────────┼──────────────────┼──────────────────┼────────────────────┼─────────────────┤
+│    E    │  240 – 255    │   N/A            │   No mask        │  N/A               │ Experimental /  │
+│         │               │                  │                  │                    │ Reserved        │
+└─────────┴───────────────┴──────────────────┴──────────────────┴────────────────────┴─────────────────┘
+
+MEMORY TRICK for first octet ranges:
+"A Boys Can't Do Experiments"
+  A → 1-126
+  B → 128-191
+  C → 192-223
+  D → 224-239
+  E → 240-255
+  
+EASY PATTERN:
+  Class A: starts at 0 (first bit = 0) → 1 to 126
+  Class B: starts at 128 (10000000) → 128 to 191
+  Class C: starts at 192 (11000000) → 192 to 223
+  Class D: starts at 224 (11100000) → 224 to 239
+  Class E: starts at 240 (11110000) → 240 to 255
+```
+
+---
+
+## 🔷 SECTION 4: Private IP Addresses — The "Home Use" Ranges
+
+### Why Private IPs?
+```
+PROBLEM: IPv4 only has ~4.3 billion addresses.
+         The world has BILLIONS more devices than that!
+
+SOLUTION: PRIVATE IP RANGES — addresses used INSIDE private networks
+          (home, office) that are NOT routed on the public Internet.
+
+  HOME ROUTER gives private IPs to your devices (192.168.1.x)
+  Your router has ONE PUBLIC IP from your ISP
+  → This is called NAT (Network Address Translation):
+    Many devices with private IPs share ONE public IP address!
+
+ANALOGY:
+  Private IP = Internal phone extension in an office (ext. 101, 102, 103...)
+  Public IP  = The ONE external phone number of the entire office
+  
+  Internal calls: use extensions (private IPs — fast, free, internal)
+  External calls: go through the main number (public IP — NAT)
+```
+
+### Three Private IP Ranges:
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      PRIVATE IP ADDRESS RANGES                               │
+├──────────────────────┬─────────────────────────┬────────────────────────────┤
+│    IP RANGE          │    CIDR NOTATION         │   CLASS / TYPICAL USE      │
+├──────────────────────┼─────────────────────────┼────────────────────────────┤
+│  10.0.0.0 to         │  10.0.0.0/8              │  Class A private           │
+│  10.255.255.255       │                          │  Large enterprise networks │
+│                      │                          │  16,777,214 hosts!         │
+├──────────────────────┼─────────────────────────┼────────────────────────────┤
+│  172.16.0.0 to       │  172.16.0.0/12           │  Class B private           │
+│  172.31.255.255       │                          │  Medium networks           │
+│                      │                          │  1,048,574 hosts           │
+├──────────────────────┼─────────────────────────┼────────────────────────────┤
+│  192.168.0.0 to      │  192.168.0.0/16          │  Class C private           │
+│  192.168.255.255      │                          │  HOME NETWORKS! (most seen)│
+│                      │                          │  65,534 hosts possible     │
+└──────────────────────┴─────────────────────────┴────────────────────────────┘
+
+MEMORY TRICK — Three Private Ranges:
+"10 is A-class, 172 is B-range, 192.168 is my Home"
+  10.x.x.x       = Class A private (one BIG network)
+  172.16-31.x.x  = Class B private (medium)
+  192.168.x.x    = Class C private (your home Wi-Fi!)
+
+SPECIAL IP ADDRESSES:
+  0.0.0.0         = This host / Unknown source
+  127.0.0.1       = LOOPBACK (localhost — your own device)
+  255.255.255.255 = Broadcast (send to ALL on local network)
+  169.254.x.x     = APIPA (Auto IP when DHCP fails — link-local address)
+
+🎯 PYQ FACT: 192.168.x.x = most common home network private range
+🎯 PYQ FACT: 127.0.0.1 = loopback address (localhost)
+🎯 PYQ FACT: Private IPs are NOT routable on the public Internet — need NAT
+🚨 TRAP: "192.168.x.x is a public IP" → FALSE! It's a PRIVATE range!
+```
+
+---
+
+## 🔷 SECTION 5: Subnet Mask — The Network vs Host Identifier
+
+### What is a Subnet Mask?
+```
+PROBLEM: Given an IP address like 192.168.1.45, how do we know which part
+         is the Network ID and which is the Host ID?
+
+SOLUTION: SUBNET MASK!
+
+> A SUBNET MASK is a 32-bit number that, when applied to an IP address,
+> separates the NETWORK portion from the HOST portion.
+
+RULE:
+  → Bits set to 1 in subnet mask = NETWORK portion of IP address
+  → Bits set to 0 in subnet mask = HOST portion of IP address
+
+ANALOGY:
+  Subnet mask = a TEMPLATE or STENCIL laid over the IP address
+  Where the stencil has holes (1s) = Network ID shows through
+  Where the stencil is solid (0s) = Host ID is hidden
+
+EXAMPLE:
+  IP Address:    192.168.1.45
+  Subnet Mask:   255.255.255.0
+
+  In binary:
+  IP:      11000000.10101000.00000001.00101101
+  Mask:    11111111.11111111.11111111.00000000
+           ←────── NETWORK (24 bits) ────────→←HOST (8 bits)→
+
+  Network ID = 192.168.1.0   (where mask bits = 1)
+  Host ID    = 45            (where mask bits = 0)
+  
+  So this device is host #45 on network 192.168.1.0
+```
+
+### How Subnet Mask Works (AND Operation):
+```
+THE BITWISE AND OPERATION:
+  Network Address = IP Address AND Subnet Mask
+  
+  IP:   192.168.1.45  = 11000000.10101000.00000001.00101101
+  Mask: 255.255.255.0 = 11111111.11111111.11111111.00000000
+  AND:                = 11000000.10101000.00000001.00000000
+                      = 192.168.1.0  ← NETWORK ADDRESS!
+
+RULE OF AND:
+  1 AND 1 = 1  (both network bits → keeps network bit)
+  1 AND 0 = 0  (network mask 1, but host bit → zeroes host)
+  0 AND anything = 0
+  
+  Result: ALL the host bits become 0 → reveals pure network address!
+```
+
+### Common Subnet Masks:
+```
+┌───────────────────────────────┬──────────────────┬──────────────┬───────────────────┐
+│      SUBNET MASK              │  CIDR NOTATION   │ NETWORK BITS │   HOST BITS       │
+├───────────────────────────────┼──────────────────┼──────────────┼───────────────────┤
+│   255.0.0.0                   │      /8          │     8 bits   │  24 bits          │
+│   (11111111.00000000.00000000.00000000)            │              │  2^24-2 = ~16.7M hosts │
+├───────────────────────────────┼──────────────────┼──────────────┼───────────────────┤
+│   255.255.0.0                 │      /16         │    16 bits   │  16 bits          │
+│   (11111111.11111111.00000000.00000000)            │              │  2^16-2 = 65,534 hosts │
+├───────────────────────────────┼──────────────────┼──────────────┼───────────────────┤
+│   255.255.255.0               │      /24         │    24 bits   │  8 bits           │
+│   (11111111.11111111.11111111.00000000)            │              │  2^8-2 = 254 hosts│
+├───────────────────────────────┼──────────────────┼──────────────┼───────────────────┤
+│   255.255.255.128             │      /25         │    25 bits   │  7 bits           │
+│                               │                  │              │  2^7-2 = 126 hosts│
+├───────────────────────────────┼──────────────────┼──────────────┼───────────────────┤
+│   255.255.255.192             │      /26         │    26 bits   │  6 bits           │
+│                               │                  │              │  2^6-2 = 62 hosts │
+├───────────────────────────────┼──────────────────┼──────────────┼───────────────────┤
+│   255.255.255.224             │      /27         │    27 bits   │  5 bits           │
+│                               │                  │              │  2^5-2 = 30 hosts │
+└───────────────────────────────┴──────────────────┴──────────────┴───────────────────┘
+
+FORMULA: Number of usable hosts = 2^(host bits) - 2
+         (-2 because: network address + broadcast address are reserved, not assignable)
+
+NETWORK ADDRESS (all host bits = 0):   e.g., 192.168.1.0 — identifies the network
+BROADCAST ADDRESS (all host bits = 1): e.g., 192.168.1.255 — sends to ALL hosts on network
+USABLE HOST RANGE: everything between network and broadcast address
+```
+
+---
+
+## 🔷 SECTION 6: CIDR — Classless Inter-Domain Routing
 
 ### What is CIDR?
-
-CIDR is a more **flexible way to write subnet masks** — instead of writing the full mask, you just write how many bits are the network part.
-
 ```
-Format: IP_Address / Prefix_Length
-Example: 192.168.1.0/24
+CIDR = Classless Inter-Domain Routing
+Introduced in 1993 to REPLACE the rigid class system (A, B, C)
 
-/24 means: first 24 bits = network portion
-Equivalent subnet mask: 255.255.255.0
+PROBLEM WITH CLASSES:
+  A company needs 300 host addresses.
+  → Class C allows only 254 hosts (too small!)
+  → Class B allows 65,534 hosts (WAY too many — wastes 65,234 addresses!)
+  → Rigid classes cause MASSIVE ADDRESS WASTE
 
-Common CIDR Mappings:
-┌──────────┬─────────────────────┬─────────────────────────┐
-│  CIDR    │    Subnet Mask      │   Usable Hosts          │
-├──────────┼─────────────────────┼─────────────────────────┤
-│  /8      │    255.0.0.0        │   16,777,214 hosts      │
-│  /16     │    255.255.0.0      │   65,534 hosts          │
-│  /24     │    255.255.255.0    │   254 hosts             │
-│  /25     │    255.255.255.128  │   126 hosts             │
-│  /26     │    255.255.255.192  │   62 hosts              │
-│  /27     │    255.255.255.224  │   30 hosts              │
-│  /28     │    255.255.255.240  │   14 hosts              │
-│  /30     │    255.255.255.252  │   2 hosts (point-point) │
-└──────────┴─────────────────────┴─────────────────────────┘
+CIDR SOLUTION:
+  → Allows ANY number of network bits (not just 8, 16, or 24)
+  → Written as: IP_address/prefix_length
+  → Prefix length = number of NETWORK bits
 
-BPSC PYQ FORMULA:
-Usable hosts = 2^(host bits) - 2
-(subtract 2 for network address and broadcast address)
+CIDR NOTATION:
+  192.168.1.0/24  → 24 network bits, 8 host bits → 254 hosts
+  192.168.1.0/25  → 25 network bits, 7 host bits → 126 hosts
+  192.168.1.0/26  → 26 network bits, 6 host bits → 62 hosts
+  10.0.0.0/8      → 8 network bits, 24 host bits → ~16.7M hosts
+  172.16.0.0/12   → 12 network bits, 20 host bits → ~1M hosts
 
-For /24: host bits = 32 - 24 = 8
-Usable = 2^8 - 2 = 256 - 2 = 254 hosts
+FORMAT: IP Address / Prefix Length
+  e.g., 192.168.1.0/24
+         ─────────── ──
+         Network Addr  └ 24 = first 24 bits are network portion
 ```
 
----
-
-## 🌍 IPv6 — COMPLETE DEEP DIVE
-
-### Why IPv6 Was Created:
-
+### CIDR to Subnet Mask Conversion — Must Know:
 ```
-Problem: IPv4 has 4.3 billion addresses.
-         In 2011, IANA (Internet Assigned Numbers Authority)
-         gave out the LAST IPv4 blocks!
-         The world has 8+ billion people + billions of devices.
-         
-Solution: IPv6 = 128-bit addresses = 340 undecillion addresses
-         (340,282,366,920,938,463,463,374,607,431,768,211,456)
-         That's enough for every grain of sand on Earth and more!
-```
+QUICK CONVERSION TABLE:
 
----
+  /8  → 255.0.0.0       (/8 means first 8 bits are 1s)
+  /16 → 255.255.0.0     (/16 means first 16 bits are 1s)
+  /24 → 255.255.255.0   (/24 means first 24 bits are 1s)
+  /25 → 255.255.255.128 (first 25 bits 1s → last octet = 10000000 = 128)
+  /26 → 255.255.255.192 (first 26 bits 1s → last octet = 11000000 = 192)
+  /27 → 255.255.255.224 (first 27 bits 1s → last octet = 11100000 = 224)
+  /28 → 255.255.255.240 (first 28 bits 1s → last octet = 11110000 = 240)
+  /30 → 255.255.255.252 (first 30 bits 1s → last octet = 11111100 = 252)
+  /32 → 255.255.255.255 (all 32 bits 1s → single host, no host bits!)
 
-### IPv6 Address Structure:
+MEMORY SHORTCUT for /24, /16, /8:
+  /24 = 255.255.255.0   ← 3 full octets of 255 (24 = 3×8)
+  /16 = 255.255.0.0     ← 2 full octets of 255 (16 = 2×8)
+  /8  = 255.0.0.0       ← 1 full octet of 255  (8  = 1×8)
 
-```
-IPv6 = 128 bits = 8 groups of 16 bits (each group in hexadecimal)
-
-Full Address:  2001:0db8:0000:0000:0000:0000:0000:0001
-               ↑                                     ↑
-            First group                         Last group
-            (16 bits)                           (16 bits)
-
-ABBREVIATION RULES:
-Rule 1: Leading zeros in a group CAN be dropped
-   2001:0db8:0000:0000  →  2001:db8:0:0
-
-Rule 2: ONE consecutive run of all-zero groups → replaced by ::
-   2001:0db8:0000:0000:0000:0000:0000:0001  →  2001:db8::1
-
-⚠️ NOTE: :: can only appear ONCE in an address!
-
-Loopback in IPv6: ::1  (equivalent of 127.0.0.1 in IPv4)
+LAST OCTET VALUES for /25, /26, /27, /28:
+  /25 → last octet 128 = 10000000 (one 1 in last octet)
+  /26 → last octet 192 = 11000000 (two 1s in last octet)
+  /27 → last octet 224 = 11100000 (three 1s in last octet)
+  /28 → last octet 240 = 11110000 (four 1s in last octet)
+  
+  TRICK: 128, 192, 224, 240, 248, 252 — each adds half the remaining bits!
 ```
 
----
-
-### IPv4 vs IPv6 — COMPLETE BPSC COMPARISON TABLE
-
+### Subnetting Concept (Conceptual — No Deep Calculation):
 ```
-┌────────────────────────┬──────────────────────┬──────────────────────┐
-│  Feature               │       IPv4           │       IPv6           │
-├────────────────────────┼──────────────────────┼──────────────────────┤
-│ Address size           │ 32 bits              │ 128 bits             │
-│ Address notation       │ Dotted decimal       │ Hexadecimal + colons │
-│ Total addresses        │ ~4.3 billion         │ ~3.4 × 10^38         │
-│ Header size            │ Variable (20–60 B)   │ Fixed (40 bytes)     │
-│ Fragmentation          │ By routers AND hosts │ By source host ONLY  │
-│ Checksum in header     │ YES (at IP layer)    │ NO (removed in IPv6) │
-│ Broadcast              │ YES                  │ NO (uses multicast)  │
-│ IPSec (security)       │ Optional             │ Built-in (mandatory) │
-│ Flow label field       │ NOT present          │ PRESENT              │
-│ NAT required           │ YES (due to shortage)│ NOT required         │
-│ Auto-configuration     │ Needs DHCP           │ SLAAC (stateless)    │
-│ Classes                │ A, B, C, D, E        │ No classes (CIDR)    │
-│ Header fields          │ 12 fields            │ 8 fields             │
-└────────────────────────┴──────────────────────┴──────────────────────┘
-```
+WHAT IS SUBNETTING?
+  Subnetting = dividing a large network into SMALLER sub-networks (subnets)
 
----
+WHY SUBNET?
+  → Better network management (smaller, more organised networks)
+  → Improved security (isolate departments)
+  → Reduced broadcast traffic (broadcasts don't cross subnet boundaries)
+  → Efficient IP address use
 
-### 🔑 IPv6 FLOW LABEL — THE #1 BPSC IPv6 TRAP
+EXAMPLE:
+  A company gets network 192.168.1.0/24 (254 usable IPs)
+  They want 4 departments, each with ~50 computers
+  
+  WITHOUT subnetting: All 254 devices in one big network
+                      → Broadcast traffic goes to ALL 254 devices
+  
+  WITH subnetting (/26 = 62 hosts each):
+    Subnet 1 (HR):      192.168.1.0/26   → .1 to .62
+    Subnet 2 (Finance): 192.168.1.64/26  → .65 to .126
+    Subnet 3 (IT):      192.168.1.128/26 → .129 to .190
+    Subnet 4 (Admin):   192.168.1.192/26 → .193 to .254
+  
+  → Each department in its own subnet
+  → Broadcasts CONTAINED within each subnet (less traffic!)
+  → Finance can't directly see HR's traffic (security!)
 
-```
-Flow Label = NEW field in IPv6 header (does NOT exist in IPv4)
-Purpose: Identifies packets belonging to the same flow
-         (e.g., a video stream, VoIP call)
-         Allows routers to give special treatment (QoS)
+BORROWING BITS:
+  To create subnets, you "borrow" bits from the HOST portion
+  and add them to the NETWORK portion.
+  
+  More borrowed bits = More subnets BUT fewer hosts per subnet
+  Fewer borrowed bits = Fewer subnets BUT more hosts per subnet
 
-During IPv6-to-IPv4 header translation:
-→ Flow label is CONSIDERED (taken into account by translator)
-→ It is NOT discarded or ignored
-
-⭐ TRE 3.0 asked exactly this!
-Answer: "Considered" — not discarded, not set to zero
+FORMULA:
+  Number of subnets  = 2^(borrowed bits)
+  Hosts per subnet   = 2^(remaining host bits) - 2
 ```
 
 ---
 
-## 🔄 NAT — NETWORK ADDRESS TRANSLATION
+## 🔷 SECTION 7: IPv6 — The Future of IP Addressing
 
-### What is NAT and Why Does It Matter?
+### Why IPv6?
+```
+IPv4 EXHAUSTION PROBLEM:
+  IPv4 has 2^32 ≈ 4.3 billion addresses.
+  By 2011, IANA (Internet Assigned Numbers Authority) had allocated
+  ALL IPv4 address blocks to regional registries!
+  
+  IANA announced IPv4 EXHAUSTION on February 3, 2011.
+  
+  Solution: IPv6 — a much larger address space.
+```
+
+### IPv6 Basics:
+```
+IPv6 = Internet Protocol version 6
+SIZE: 128 BITS (4 times longer than IPv4's 32 bits!)
+TOTAL ADDRESSES: 2^128 = 340,282,366,920,938,463,463,374,607,431,768,211,456
+                ≈ 340 UNDECILLION (340 trillion trillion trillion)
+                
+This is enough to give TRILLIONS of IP addresses to every single person on Earth!
+We will NEVER run out of IPv6 addresses in any foreseeable future.
+
+REPRESENTATION: HEXADECIMAL NOTATION
+  → 128 bits divided into 8 GROUPS of 16 bits each
+  → Each group written in HEXADECIMAL (0-9, A-F)
+  → Groups separated by COLONS (:) — NOT dots like IPv4!
+
+EXAMPLE IPv6 ADDRESS:
+  2001:0db8:85a3:0000:0000:8a2e:0370:7334
+  
+  Breaking it down:
+  2001 : 0db8 : 85a3 : 0000 : 0000 : 8a2e : 0370 : 7334
+  ↑      ↑      ↑      ↑      ↑      ↑      ↑      ↑
+  Grp1  Grp2  Grp3  Grp4  Grp5  Grp6  Grp7  Grp8
+  (each group = 16 bits = 4 hex digits)
+```
+
+### IPv6 Address Shortening Rules:
+```
+IPv6 addresses can be SHORTENED for readability:
+
+RULE 1: Leading zeros in each group can be omitted:
+  0db8 → db8
+  0000 → 0
+  0370 → 370
+
+RULE 2: One or more consecutive groups of ALL zeros can be replaced with ::
+  (can only be used ONCE in an address)
+  
+EXAMPLE:
+  Full:      2001:0db8:85a3:0000:0000:8a2e:0370:7334
+  Step 1:    2001:db8:85a3:0:0:8a2e:370:7334    (removed leading zeros)
+  Step 2:    2001:db8:85a3::8a2e:370:7334        (:: replaces :0:0:)
+  
+  Another example:
+  Full:     FE80:0000:0000:0000:0202:B3FF:FE1E:8329
+  Shortened: FE80::202:B3FF:FE1E:8329
+
+SPECIAL IPv6 ADDRESSES:
+  ::1          = Loopback address (equivalent to 127.0.0.1 in IPv4!)
+  ::           = Unspecified address (all zeros)
+  FE80::/10    = Link-local addresses (similar to 169.254.x.x in IPv4)
+  FF00::/8     = Multicast addresses
+  2001::/32    = Teredo tunneling
+```
+
+### IPv6 Key Features:
+```
+1. MASSIVE ADDRESS SPACE:
+   2^128 ≈ 340 undecillion — virtually UNLIMITED for any future need!
+   
+2. NO NEED FOR NAT:
+   Since every device can get a UNIQUE public IPv6 address,
+   NAT (Network Address Translation) is no longer needed.
+   → True end-to-end connectivity restored!
+   
+3. SIMPLIFIED HEADER:
+   IPv6 header is SIMPLER than IPv4 (fewer fields, fixed size 40 bytes)
+   → Faster processing by routers!
+   → IPv4 header = variable length (20-60 bytes)
+   
+4. BUILT-IN IPSec (SECURITY):
+   IPv6 was designed with IPSEC (Internet Protocol Security) as mandatory
+   → Encryption and authentication BUILT IN
+   → IPv4 had IPSec as an optional add-on only
+   
+5. AUTO-CONFIGURATION (SLAAC):
+   Stateless Address Autoconfiguration — devices can AUTOMATICALLY
+   configure their own IPv6 addresses without needing DHCP!
+   
+6. EFFICIENT ROUTING:
+   Hierarchical addressing + elimination of broadcast
+   (IPv6 uses MULTICAST instead of broadcast)
+   → Routers process packets more efficiently
+   
+7. NO FRAGMENTATION AT ROUTERS:
+   IPv6 handles fragmentation only at source, NOT at intermediate routers
+   → Better router performance!
+   
+8. QUALITY OF SERVICE (QoS):
+   IPv6 has a built-in Flow Label field for better QoS support
+   → Prioritise video/voice traffic natively
+
+🎯 PYQ FACT: IPv6 = 128 bits = 8 groups of 16 bits = hexadecimal, colon-separated
+🎯 PYQ FACT: IPv6 loopback = ::1 (equivalent to IPv4's 127.0.0.1)
+🎯 PYQ FACT: IPv6 removes need for NAT (every device gets unique public address)
+🎯 PYQ FACT: IPv6 has built-in IPSec (IPv4 had it as optional)
+```
+
+---
+
+## 🔷 SECTION 8: IPv4 vs IPv6 — Complete Comparison
 
 ```
-PROBLEM:
-Private IPs (192.168.x.x) are NOT routable on internet.
-Millions of home devices need to access google.com.
-But they all have PRIVATE addresses.
+┌──────────────────────────┬───────────────────────────────┬────────────────────────────────┐
+│         FEATURE          │           IPv4                │             IPv6               │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Full Name                │ Internet Protocol version 4   │ Internet Protocol version 6    │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Address Size             │ 32 BITS                       │ 128 BITS                       │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Total Addresses          │ 2^32 ≈ 4.3 billion            │ 2^128 ≈ 340 undecillion        │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Address Format           │ Dotted DECIMAL                │ HEXADECIMAL with colons        │
+│                          │ 4 octets (e.g., 192.168.1.1)  │ 8 groups (e.g., 2001:db8::1)  │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Header Size              │ Variable (20-60 bytes)        │ Fixed (40 bytes)               │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ NAT Required             │ YES (private IPs share 1 pub) │ NO (every device unique IP)    │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Security (IPSec)         │ OPTIONAL (add-on)             │ MANDATORY (built-in)           │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Broadcast                │ YES (255.255.255.255)         │ NO — uses MULTICAST instead    │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Loopback Address         │ 127.0.0.1                     │ ::1                            │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Auto-configuration       │ DHCP required                 │ SLAAC — self-configures!       │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Address Classes          │ A, B, C, D, E                 │ No classes (CIDR-like system)  │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Fragmentation            │ At routers and source         │ ONLY at source                 │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Checksum in header       │ YES                           │ NO (removed for speed)         │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Subnet Mask              │ Uses subnet mask              │ Uses prefix length (/64 etc.)  │
+├──────────────────────────┼───────────────────────────────┼────────────────────────────────┤
+│ Status Today             │ Still MOST widely used        │ Adoption growing (dual-stack)  │
+└──────────────────────────┴───────────────────────────────┴────────────────────────────────┘
 
-SOLUTION: NAT (Network Address Translation)
+🧠 MEMORY TRICK: IPv4 = "Four-dotted decimal" | IPv6 = "Six-colon-hex" (more complex, more space)
+```
+
+---
+
+## 🔷 SECTION 9: Common PYQ Traps — IP Addressing
+
+```
+🚨 TRAP 1: "IPv4 has 128 bits" → FALSE! IPv4 = 32 bits. IPv6 = 128 bits.
+🚨 TRAP 2: "IPv6 uses dotted decimal notation" → FALSE! IPv6 = hexadecimal with colons.
+🚨 TRAP 3: "192.168.1.1 is a public IP address" → FALSE! 192.168.x.x = PRIVATE range.
+🚨 TRAP 4: "Subnet mask 255.255.0.0 = /24" → FALSE! 255.255.0.0 = /16. /24 = 255.255.255.0.
+🚨 TRAP 5: "127.0.0.1 is a private network address" → PARTIALLY MISLEADING.
+           127.0.0.1 = LOOPBACK address (localhost) — reserved for self-testing.
+           It's not a "private" range like 192.168.x.x but is reserved/special.
+🚨 TRAP 6: "Class D is used for regular host assignment" → FALSE! Class D = multicast ONLY.
+🚨 TRAP 7: "Class A starts from 0" → CAREFUL! Range is 1-126 (0 is reserved, 127 is loopback).
+🚨 TRAP 8: "Subnet mask identifies the host portion" → MISLEADING.
+           Subnet mask bits = 1 identify the NETWORK portion.
+           Subnet mask bits = 0 identify the HOST portion.
+🚨 TRAP 9: "CIDR /24 means 24 hosts" → FALSE! /24 means 24 network bits → 2^8-2 = 254 hosts.
+🚨 TRAP 10: "IPv6 requires NAT like IPv4" → FALSE! IPv6 eliminates the need for NAT.
+🚨 TRAP 11: "Class C allows more hosts than Class A" → FALSE!
+            Class A = ~16.7 million hosts; Class C = only 254 hosts per network.
+🚨 TRAP 12: "Network address and broadcast address are usable host addresses" → FALSE!
+            These are RESERVED — network address (all host bits 0) and
+            broadcast address (all host bits 1) cannot be assigned to hosts.
+            Usable = Total addresses - 2.
+```
+
+---
+
+# PART 2: GENERAL STUDIES
+## 🤖 Science & Technology — Artificial Intelligence & Machine Learning Basics
+
+---
+
+## 🔷 SECTION 1: What is Artificial Intelligence (AI)?
+
+### Real-Life Analogy — Teaching a Child vs Programming a Robot:
+
+Old-style computers were like **calculators** — you give exact instructions, they follow exactly. But what if a task is too complex to write rules for? Teaching a child to recognize a cat doesn't involve saying "if has pointy ears AND whiskers AND is small AND meows, then it's a cat." The child just SEES many cats and learns automatically.
+
+**AI gives computers the ability to learn and perform tasks that normally require human intelligence.**
+
+> **Artificial Intelligence (AI) is the simulation of human intelligence processes by computer systems — including learning, reasoning, problem-solving, perception, and language understanding.**
+
+### History of AI:
+```
+AI TIMELINE:
+  1950 → Alan Turing proposes "Turing Test" 
+         (Can a machine behave indistinguishably from a human?)
+  1956 → Term "Artificial Intelligence" COINED by John McCarthy
+         at Dartmouth Conference — considered the BIRTH OF AI
+  1997 → IBM's Deep Blue defeats chess champion Garry Kasparov
+  2011 → IBM Watson wins Jeopardy! (natural language understanding)
+  2016 → Google DeepMind's AlphaGo defeats Go champion (complex strategy game)
+  2022 → ChatGPT released (OpenAI) — mass public adoption of AI
+  2023 → AI integrated into mainstream products everywhere
+
+🎯 PYQ FACT: "Artificial Intelligence" coined by John McCarthy (1956)
+🎯 PYQ FACT: Alan Turing proposed the Turing Test (1950)
+🎯 PYQ FACT: First AI conference = Dartmouth Conference (1956)
+```
+
+### Types of AI (Narrow vs General vs Super):
+```
+TYPE 1: NARROW AI (Weak AI)
+  → AI that performs ONE specific task very well
+  → Does NOT understand the task — just pattern recognition
+  → ALL current AI is Narrow AI!
+  
+  EXAMPLES:
+  → Chess programs (Deep Blue) — only plays chess, can't drive a car
+  → Face recognition (phone unlock) — only recognizes faces
+  → Voice assistant (Siri, Alexa) — only answers queries
+  → Spam filter — only classifies emails
+  → Google Maps navigation — only finds routes
+  → Recommendation engine (Netflix, YouTube) — only suggests content
+
+TYPE 2: GENERAL AI (Strong AI / AGI)
+  → AI that can perform ANY intellectual task that a human can
+  → Can transfer knowledge between domains
+  → Can reason, plan, learn, and understand language like humans
+  → Does NOT EXIST yet — only theoretical!
+  
+  EXAMPLE (fictional): HAL 9000 from "2001: A Space Odyssey"
+                        JARVIS from Iron Man
+
+TYPE 3: SUPER AI (Artificial Superintelligence / ASI)
+  → AI that SURPASSES human intelligence in ALL areas
+  → Can improve itself, solve problems humans can't
+  → Does NOT EXIST yet — only theoretical / hypothetical
+  → Subject of AI safety concerns (Nick Bostrom's "Superintelligence")
+
+🎯 PYQ FACT: All current AI (ChatGPT, Siri, etc.) = NARROW AI
+🎯 PYQ FACT: AGI (General AI) does NOT exist yet — still theoretical
+```
+
+---
+
+## 🔷 SECTION 2: What is Machine Learning (ML)?
+
+### AI vs ML — The Relationship:
+```
+AI CONTAINS ML:
+
+         ┌─────────────────────────────────────┐
+         │       ARTIFICIAL INTELLIGENCE        │
+         │  (Broad field — all intelligent machines)│
+         │                                     │
+         │   ┌───────────────────────────────┐ │
+         │   │     MACHINE LEARNING          │ │
+         │   │  (Subset of AI — learning    │ │
+         │   │   from data)                 │ │
+         │   │                              │ │
+         │   │  ┌───────────────────────┐   │ │
+         │   │  │   DEEP LEARNING       │   │ │
+         │   │  │ (Subset of ML —       │   │ │
+         │   │  │  neural networks)     │   │ │
+         │   │  └───────────────────────┘   │ │
+         │   └───────────────────────────────┘ │
+         └─────────────────────────────────────┘
+
+AI ⊃ ML ⊃ Deep Learning (each is a SUBSET of the one above)
+```
+
+> **Machine Learning (ML) is a subset of AI that enables computers to LEARN from data and improve their performance WITHOUT being explicitly programmed for each task.**
+
+### Traditional Programming vs Machine Learning:
+```
+TRADITIONAL PROGRAMMING:
+  Input: DATA + RULES (written by programmers)
+  Output: ANSWERS
+  
+  Example: 
+    Rule: "If price < ₹100 AND rating > 4, then recommend"
+    Data: Product prices and ratings
+    Output: List of recommended products
+    PROBLEM: Can't handle complexity — too many rules needed!
+
+MACHINE LEARNING:
+  Input: DATA + ANSWERS (historical examples)
+  Output: RULES (learned automatically by the algorithm!)
+  
+  Example:
+    Data: 1 million past Amazon purchases + customer profiles
+    Answers: What each customer bought
+    ML learns: Patterns, correlations, what types of customers buy what
+    Output: A MODEL that can predict what any new customer might buy!
+```
+
+---
+
+## 🔷 SECTION 3: Types of Machine Learning
+
+### TYPE 1 — SUPERVISED LEARNING (Learning with a Teacher)
+
+```
+CONCEPT: The algorithm learns from LABELLED training data
+         (data where the correct answer is already provided)
+
+"SUPERVISED" because: Like a teacher who tells the student whether the answer is 
+                       right or wrong. The algorithm is "supervised" by labels.
 
 HOW IT WORKS:
-┌──────────────────────────────────────────────────────────┐
-│              HOME NETWORK                                │
-│  Device 1: 192.168.1.10  ─┐                             │
-│  Device 2: 192.168.1.11  ─┼──→  ROUTER  ──→  Internet  │
-│  Device 3: 192.168.1.12  ─┘     (NAT)                   │
-│                            Your public IP: 103.45.67.89  │
-└──────────────────────────────────────────────────────────┘
-
-Router maintains NAT Table:
-Private IP:Port  ←→  Public IP:Port
-192.168.1.10:1234  ↔  103.45.67.89:5000
-192.168.1.11:2345  ↔  103.45.67.89:5001
-
-3 devices share ONE public IP address!
-This is why IPv4 hasn't completely run out yet.
-
-BPSC KEY FACT: 
-NAT = allows multiple private IPs to share one public IP
-IPv6 = NAT NOT required (enough unique addresses for everyone)
-```
-
----
-
-## 🌐 SECTION 2: NETWORK TOPOLOGIES — COMPLETE COVERAGE
-
-### What is a Network Topology?
-
-**Topology** = the arrangement/layout of computers and cables in a network.
-
-Two types:
-- **Physical Topology** = actual physical layout of cables and devices
-- **Logical Topology** = how data actually flows (may differ from physical)
-
----
-
-### 🏗️ ALL 6 TOPOLOGIES — ASCII DIAGRAMS
-
-#### 1. BUS TOPOLOGY
-```
-All devices connected to a SINGLE central cable (bus/backbone)
-
-Computer  Computer  Computer  Computer  Computer
-   │         │         │         │         │
-═══╪═════════╪═════════╪═════════╪═════════╪═══
-               (Central Bus Cable)
-                                              │
-                                         Terminator
-                                         (at both ends)
-
-Advantages:
-✅ Simple and cheap
-✅ Easy to install
-✅ Less cable required
-
-Disadvantages:
-❌ If cable fails → ENTIRE network fails
-❌ Limited length of cable
-❌ Performance degrades with more devices
-
-BPSC KEY FACT: Bus topology uses a single backbone cable.
-               Both ends must have TERMINATORS.
-```
-
----
-
-#### 2. STAR TOPOLOGY
-```
-All devices connected to a CENTRAL HUB or SWITCH
-
-          Computer
-              │
-Computer─── HUB/SWITCH ───Computer
-              │
-          Computer
-
-Advantages:
-✅ If one cable fails → only that device affected
-✅ Easy to add/remove devices
-✅ Easy to troubleshoot
-✅ MOST POPULAR topology today
-
-Disadvantages:
-❌ If central HUB/SWITCH fails → ENTIRE network fails
-❌ More cable needed than bus
-❌ Cost of hub/switch
-
-BPSC KEY FACT: 
-Star topology requires a central controller (hub/switch).
-Single point of failure = the HUB/SWITCH.
-```
-
----
-
-#### 3. RING TOPOLOGY
-```
-Each device connected to EXACTLY TWO neighbors, forming a circle
-
-    Computer
-   ↗         ↖
-Computer       Computer
-   ↖         ↗
-    Computer
-
-Data travels in ONE DIRECTION (unidirectional) around the ring.
-(Token Ring uses a TOKEN to control who can send)
-
-Advantages:
-✅ Equal access for all devices
-✅ No collisions (token passing)
-✅ Predictable performance
-
-Disadvantages:
-❌ If ANY device fails → entire ring fails (in basic ring)
-❌ Difficult to add/remove devices
-❌ Slower than star (token must pass around)
-
-BPSC KEY FACT: Token Ring protocol uses ring topology.
-               Data travels in ONE direction.
-```
-
----
-
-#### 4. MESH TOPOLOGY
-```
-Every device connected to EVERY OTHER device
-
-Computer ════ Computer
-  ║    ╲   ╱    ║
-  ║      X      ║
-  ║    ╱   ╲    ║
-Computer ════ Computer
-
-FULL MESH: n devices → n(n-1)/2 connections
-           4 devices → 4(3)/2 = 6 connections
-
-Advantages:
-✅ MOST RELIABLE — multiple paths for data
-✅ If one link fails → data takes another path
-✅ No traffic bottleneck
-
-Disadvantages:
-❌ MOST EXPENSIVE — lots of cables
-❌ Complex installation
-❌ Impractical for large networks
-
-BPSC KEY FACT: 
-Number of links in FULL MESH = n(n-1)/2
-This formula is directly asked in BPSC exams!
-5 nodes: 5(4)/2 = 10 links
-```
-
----
-
-#### 5. TREE TOPOLOGY (Hierarchical)
-```
-Root (Top-level switch/router)
-         │
-    ─────┴─────
-    │           │
- Branch 1    Branch 2
-    │           │
-  ──┴──       ──┴──
-  │   │       │   │
- PC  PC      PC  PC
-
-= Extended Star topology
-= Star networks connected to other star networks
-
-Advantages:
-✅ Easy to expand
-✅ Easy to manage hierarchically
-✅ Fault isolation at branch level
-
-Disadvantages:
-❌ If root fails → entire network fails
-❌ Maintenance can be difficult
-
-BPSC KEY FACT: Tree topology = Hierarchical topology
-               Used in WAN (Wide Area Networks)
-```
-
----
-
-#### 6. HYBRID TOPOLOGY
-```
-= Combination of two or more different topologies
-
-Example: Star-Bus hybrid
-         Star-Ring hybrid
-
-Advantages:
-✅ Flexible — best of multiple topologies
-✅ Scalable
-✅ Fault tolerance depends on combination
-
-Disadvantages:
-❌ Complex design
-❌ Expensive
-
-BPSC KEY FACT: Most real-world networks use HYBRID topology.
-               Internet itself is a hybrid topology.
-```
-
----
-
-### 📊 TOPOLOGY COMPARISON TABLE — BPSC MASTER TABLE
-
-```
-┌────────────┬────────────┬──────────────┬──────────────┬─────────────────┐
-│ Topology   │ Failure    │ Cable Used   │ Cost         │ Key Feature     │
-│            │ Point      │              │              │                 │
-├────────────┼────────────┼──────────────┼──────────────┼─────────────────┤
-│ Bus        │ Backbone   │ Least        │ Cheapest     │ Single backbone │
-│            │ cable      │              │              │ + terminators   │
-├────────────┼────────────┼──────────────┼──────────────┼─────────────────┤
-│ Star       │ Hub/Switch │ More         │ Moderate     │ Central device; │
-│            │            │              │              │ MOST POPULAR    │
-├────────────┼────────────┼──────────────┼──────────────┼─────────────────┤
-│ Ring       │ Any device │ Moderate     │ Moderate     │ Token passing;  │
-│            │            │              │              │ unidirectional  │
-├────────────┼────────────┼──────────────┼──────────────┼─────────────────┤
-│ Mesh       │ No single  │ Most         │ Most         │ n(n-1)/2 links; │
-│            │ point      │              │ expensive    │ most reliable   │
-├────────────┼────────────┼──────────────┼──────────────┼─────────────────┤
-│ Tree       │ Root node  │ Moderate     │ Moderate     │ Hierarchical;   │
-│            │            │              │              │ extended star   │
-├────────────┼────────────┼──────────────┼──────────────┼─────────────────┤
-│ Hybrid     │ Varies     │ Varies       │ High         │ Mix of types;   │
-│            │            │              │              │ real networks   │
-└────────────┴────────────┴──────────────┴──────────────┴─────────────────┘
-
-NOT A TOPOLOGY (BPSC TRAP): "Peer-to-peer" = network architecture, NOT a topology!
-```
-
----
-
-## 🔗 SECTION 3: LAN, WAN, MAN — NETWORK TYPES
-
-```
-┌──────────┬──────────────────┬──────────────┬──────────────────────┐
-│  Type    │  Full Form       │  Range       │  Example             │
-├──────────┼──────────────────┼──────────────┼──────────────────────┤
-│  PAN     │ Personal Area    │ ~10 meters   │ Bluetooth between    │
-│          │ Network          │              │ phone and headset    │
-├──────────┼──────────────────┼──────────────┼──────────────────────┤
-│  LAN     │ Local Area       │ Building/    │ Office network,      │
-│          │ Network          │ Campus       │ School network       │
-├──────────┼──────────────────┼──────────────┼──────────────────────┤
-│  MAN     │ Metropolitan     │ City level   │ Cable TV network,    │
-│          │ Area Network     │              │ City-wide Wi-Fi      │
-├──────────┼──────────────────┼──────────────┼──────────────────────┤
-│  WAN     │ Wide Area        │ Country/     │ Internet, MPLS,      │
-│          │ Network          │ Global       │ leased lines         │
-└──────────┴──────────────────┴──────────────┴──────────────────────┘
-
-BPSC KEY FACTS:
-• Switch = used in LAN
-• Router = connects LAN to WAN (or connects multiple LANs)
-• Internet = largest WAN in the world
-```
-
----
-
-## ⚠️ COMPLETE BPSC TRAPS — IP ADDRESSING & TOPOLOGIES
-
-| Question | Trap Answer | Correct Answer |
-|----------|-------------|----------------|
-| "IPv4 address size?" | 64 bits | **32 bits** |
-| "IPv6 address size?" | 64 bits or 256 bits | **128 bits** |
-| "127.0.0.1 belongs to Class A?" | Yes (it's in 1–127 range) | **NO — 127.x.x.x is LOOPBACK, not Class A** |
-| "255.255.255.255 is a host?" | Yes | **NO — it's BROADCAST address** |
-| "IPv6 has checksum in header?" | Yes (like IPv4) | **NO — IPv6 removed checksum from IP header** |
-| "IPv6 needs NAT?" | Yes | **NO — IPv6 has enough addresses; NAT not needed** |
-| "IPv6 flow label = ?" | Discarded | **Considered** |
-| "Peer-to-peer is a topology?" | Yes | **NO — it's a network architecture** |
-| "Star topology failure point?" | Any single device | **Central HUB/SWITCH** |
-| "Mesh topology links (n nodes)?" | n-1 | **n(n-1)/2** |
-| "Bus topology needs terminators?" | No | **YES — at both ends of bus** |
-| "Ring topology data direction?" | Bidirectional | **Unidirectional** |
-| "Most reliable topology?" | Star | **MESH** (multiple paths) |
-| "CIDR /24 means?" | 24 host bits | **24 NETWORK bits** |
-| "Class D for?" | Large corporations | **MULTICAST** |
-
----
----
-
-# 🤖 PART B — GENERAL STUDIES
-# SCIENCE & TECHNOLOGY: ARTIFICIAL INTELLIGENCE, ML, IoT & EMERGING TECH
-
----
-
-## 🔑 WHY AI/ML IS NOW HIGH-SCORING IN BPSC TRE
-
-- **TRE 3.0 had 4 questions** on AI/ML/IoT — this is a fast-growing area
-- Questions are factual, easy, and predictable
-- The government actively promotes AI policy → more current affairs angle
-- As a CS teacher, you're expected to know these basics
-
----
-
-## 🧠 SECTION 1: ARTIFICIAL INTELLIGENCE (AI) — COMPLETE COVERAGE
-
-### What is Artificial Intelligence?
-
-```
-AI = The ability of a machine to imitate INTELLIGENT HUMAN BEHAVIOUR
-
-Coined by: JOHN McCARTHY in 1956 (at Dartmouth Conference)
-"Father of AI" = John McCarthy
-
-Goal of AI: Build machines that can:
-✅ Learn from experience
-✅ Understand natural language
-✅ Recognize objects/faces/patterns
-✅ Make decisions
-✅ Solve problems
-✅ Plan and reason
-```
-
----
-
-### 🌳 AI — THE COMPLETE FAMILY TREE
-
-```
-                    ARTIFICIAL INTELLIGENCE
-                           │
-          ┌────────────────┼─────────────────┐
-          │                │                 │
-   MACHINE LEARNING    ROBOTICS        NATURAL LANGUAGE
-     (ML)                               PROCESSING (NLP)
-          │
-    ┌─────┼─────┐
-    │     │     │
-Supervised Unsupervised Reinforcement
-Learning  Learning    Learning
-
-⭐ BPSC PYQ (TRE 3.0): "Subfields of AI include ___?"
-Answer: Machine Learning, Robotics, NLP — ALL THREE (Option D = More than one)
-```
-
----
-
-### 📚 AI TERMINOLOGY — KEY TERMS FOR BPSC
-
-```
-ALGORITHM: Step-by-step instructions for solving a problem
-           (the "recipe" a computer follows)
-
-NEURAL NETWORK: System inspired by human brain neurons
-                Layers of nodes that process information
-
-DEEP LEARNING: Neural networks with MANY layers (deep = many layers)
-               Used for: image recognition, speech, translation
-
-NLP (Natural Language Processing):
-               AI that understands human language
-               Used for: chatbots, translation, voice assistants
-               Examples: Google Translate, Siri, ChatGPT
-
-COMPUTER VISION: AI that "sees" and understands images/videos
-               Used for: face recognition, self-driving cars
-
-EXPERT SYSTEM: AI that mimics a human expert's decision-making
-               Early form of AI (1980s)
-
-CHATBOT: Conversational AI program
-         Example: Claude, ChatGPT, Google Gemini
-
-DEEPFAKE: Technology that uses AI to digitally REPLACE one
-          person's face/voice with another
-          ⭐ BPSC PYQ: "Deepfake is technology to digitally
-          revive/impersonate people" — CORRECT
-```
-
----
-
-### 🤖 TYPES OF AI BY CAPABILITY
-
-```
-1. NARROW AI (Weak AI):
-   = Designed for ONE specific task
-   = ALL current AI systems are Narrow AI
-   Examples: Chess AI (DeepBlue), Alexa, Google Maps,
-             Spam filter, Face unlock
-
-2. GENERAL AI (Strong AI / AGI):
-   = Can perform ANY intellectual task like a human
-   = Does NOT yet exist (theoretical)
-   = Major goal of AI research
-
-3. SUPER AI (Superintelligence):
-   = Surpasses human intelligence in ALL areas
-   = Theoretical / future concept
-   = Subject of debate (Stephen Hawking warned about this)
-
-BPSC NOTE: "Current AI systems are examples of ___?"
-→ NARROW AI (not General AI or Super AI)
-```
-
----
-
-## 📊 SECTION 2: MACHINE LEARNING (ML) — BPSC GOLDMINE
-
-### What is Machine Learning?
-
-```
-ML = Subset of AI
-   = Systems that LEARN from data without being explicitly programmed
-
-Traditional Programming:   Rules + Data → Output
-Machine Learning:          Data + Output → Rules (learned!)
-
-Analogy: Teaching a child
-Traditional: "An apple is red and round"
-ML: Show child 1000 apples → child learns what an apple is!
-```
-
----
-
-### 🎓 THREE TYPES OF MACHINE LEARNING
-
-#### TYPE 1: SUPERVISED LEARNING (Most Important for BPSC)
-
-```
-Definition: Model is trained on LABELED data
-            (Input + Correct Output provided during training)
-
-Analogy: Teacher gives you questions AND answers
-         You learn the PATTERN between questions and answers
-
-Examples of Labeled Data:
-• Email (spam/not spam) → labeled by humans
-• Cancer scan (malignant/benign) → labeled by doctors
-• House price (features + actual price) → labeled
-
-KEY SUPERVISED LEARNING ALGORITHMS:
-┌─────────────────────────────────────────────────────────┐
-│  Algorithm          │  Use Case                         │
-├─────────────────────┼───────────────────────────────────┤
-│  LINEAR REGRESSION  │  Predicting numbers               │
-│                     │  (house prices, stock prices)     │
-├─────────────────────┼───────────────────────────────────┤
-│  LOGISTIC REGRESSION│  Binary classification            │
-│                     │  (spam or not, disease or not)    │
-├─────────────────────┼───────────────────────────────────┤
-│  DECISION TREE      │  Classification + regression      │
-│                     │  ⭐ BPSC PYQ: "Supervised         │
-│                     │  learning algorithm?" → Decision  │
-│                     │  Tree (also SVM, Linear Reg.)     │
-├─────────────────────┼───────────────────────────────────┤
-│  RANDOM FOREST      │  Many decision trees combined     │
-├─────────────────────┼───────────────────────────────────┤
-│  SVM (Support       │  Classification                   │
-│  Vector Machine)    │  (face recognition, text classif.)│
-├─────────────────────┼───────────────────────────────────┤
-│  NEURAL NETWORK     │  Complex pattern recognition      │
-│                     │  (image, speech, translation)     │
-└─────────────────────┴───────────────────────────────────┘
-
-⭐ BPSC PYQ DIRECT: "Decision Tree is a ___ learning algorithm"
-   Answer: SUPERVISED learning algorithm
-```
-
----
-
-#### TYPE 2: UNSUPERVISED LEARNING
-
-```
-Definition: Model is trained on UNLABELED data
-            (Only Input, NO correct output provided)
-            Model finds patterns ON ITS OWN
-
-Analogy: Sorting a pile of clothes WITHOUT being told the categories
-         The algorithm groups similar items together
-
-KEY UNSUPERVISED ALGORITHMS:
-┌─────────────────────────────────────────────────────────┐
-│  Algorithm          │  Use Case                         │
-├─────────────────────┼───────────────────────────────────┤
-│  K-MEANS CLUSTERING │  Groups data into K clusters      │
-│                     │  ⭐ BPSC PYQ: "K-Means is ___     │
-│                     │  learning?" → UNSUPERVISED        │
-├─────────────────────┼───────────────────────────────────┤
-│  HIERARCHICAL       │  Creates tree of clusters         │
-│  CLUSTERING         │                                   │
-├─────────────────────┼───────────────────────────────────┤
-│  PCA (Principal     │  Reduces number of features       │
-│  Component Analysis)│  (dimensionality reduction)       │
-├─────────────────────┼───────────────────────────────────┤
-│  AUTOENCODERS       │  Compresses and reconstructs data │
-│                     │  (anomaly detection)              │
-└─────────────────────┴───────────────────────────────────┘
-
-⭐ BPSC PYQ DIRECT: "K-Means Clustering is ___ learning"
-   Answer: UNSUPERVISED learning
-```
-
----
-
-#### TYPE 3: REINFORCEMENT LEARNING
-
-```
-Definition: Agent LEARNS by interacting with environment
-            Receives REWARDS for correct actions
-            Receives PENALTIES for wrong actions
-            Goal: Maximize total reward
-
-Analogy: Training a dog
-         Dog sits → give treat (reward)
-         Dog barks at guest → say "No!" (penalty)
-         Dog learns to maximize treats!
-
-Applications:
-• Game playing: AlphaGo (defeated world chess champions)
-• Self-driving cars (learning to drive)
-• Robot movement
-• Trading algorithms
-
-KEY TERMS:
-Agent = The learner (the algorithm)
-Environment = The world the agent interacts with
-Action = What the agent does
-Reward = Feedback from the environment
-```
-
----
-
-## 🌐 SECTION 3: IoT — INTERNET OF THINGS
-
-### What is IoT?
-
-```
-IoT = Network of PHYSICAL DEVICES embedded with sensors,
-      software, and connectivity that enables them to
-      COLLECT and EXCHANGE data over the internet
-
-"Internet of Things" because everyday THINGS get internet connectivity
-
-Examples of IoT Devices:
-✅ Smart thermostat (adjusts temperature automatically)
-✅ Fitness tracker (Fitbit, Apple Watch)
-✅ Smart refrigerator (orders milk when running low)
-✅ Industrial sensors (monitor machine performance)
-✅ Smart traffic lights
-✅ Remote patient monitoring (healthcare IoT)
-✅ Smart agriculture sensors
-```
-
----
-
-### 📡 IoT COMMUNICATION TECHNOLOGIES — BPSC TABLE
-
-```
-┌───────────────┬──────────────────┬────────────────────────────┐
-│  Technology   │     Range        │     BPSC Key Fact          │
-├───────────────┼──────────────────┼────────────────────────────┤
-│  BLUETOOTH    │  ~10 meters      │ IoT SHORT-RANGE wireless   │
-│               │  (short range)   │ ⭐ Direct PYQ fact!        │
-├───────────────┼──────────────────┼────────────────────────────┤
-│  Wi-Fi        │  ~100 meters     │ Medium range wireless      │
-│               │  (medium range)  │ Home/office networks       │
-├───────────────┼──────────────────┼────────────────────────────┤
-│  Zigbee       │  ~100 meters     │ Low power, mesh IoT        │
-│               │                  │ Smart home devices         │
-├───────────────┼──────────────────┼────────────────────────────┤
-│  LoRaWAN      │  ~15 km          │ Long range, low power IoT  │
-│               │  (long range)    │ Agriculture, smart cities  │
-├───────────────┼──────────────────┼────────────────────────────┤
-│  5G           │  Wide area       │ Ultra-fast IoT backbone    │
-├───────────────┼──────────────────┼────────────────────────────┤
-│  RFID         │  cm to meters    │ Asset tracking, retail     │
-└───────────────┴──────────────────┴────────────────────────────┘
-
-⭐ BPSC PYQ (TRE 3.0): "IoT short-range wireless = BLUETOOTH"
-⭐ BPSC PYQ (TRE 3.0): "IoT communication PROTOCOL = MQTT"
-```
-
----
-
-### 🔌 IoT PROTOCOLS
-
-```
-MQTT (Message Queuing Telemetry Transport):
-= MOST IMPORTANT IoT application protocol
-= Lightweight, designed for low-bandwidth, unreliable networks
-= Used by: smart sensors, home automation, industrial IoT
-= Architecture: Publish-Subscribe (not request-response)
-= Port: 1883 (unsecured), 8883 (secured with TLS)
-
-CoAP (Constrained Application Protocol):
-= Used for constrained devices (limited memory/power)
-= Like HTTP but simpler and smaller
-
-HTTP/HTTPS:
-= Standard web protocol
-= Used when IoT devices have sufficient resources
-
-⭐ BPSC: "IoT device communication protocol = MQTT"
-         This appeared in TRE 3.0 directly!
-```
-
----
-
-## 💻 SECTION 4: COMPUTER GENERATIONS — BPSC CLASSIC TOPIC
-
-```
-┌────────────┬───────────┬─────────────────┬──────────────────────┐
-│ Generation │   Years   │   Technology    │   Key Features       │
-├────────────┼───────────┼─────────────────┼──────────────────────┤
-│    1st     │ 1940–1956 │ Vacuum Tubes    │ ENIAC, UNIVAC        │
-│            │           │                 │ Machine language only│
-│            │           │                 │ Very large, hot      │
-├────────────┼───────────┼─────────────────┼──────────────────────┤
-│    2nd     │ 1956–1963 │ Transistors     │ Smaller, faster      │
-│            │           │                 │ Assembly language    │
-├────────────┼───────────┼─────────────────┼──────────────────────┤
-│    3rd     │ 1964–1971 │ Integrated      │ IC chips; keyboard + │
-│            │           │ Circuits (ICs)  │ monitor; High-level  │
-│            │           │                 │ languages (FORTRAN)  │
-├────────────┼───────────┼─────────────────┼──────────────────────┤
-│    4th     │ 1971–1980 │ Microprocessors │ VLSI; Personal       │
-│            │           │ (VLSI)          │ computers; GUI; C/C++│
-├────────────┼───────────┼─────────────────┼──────────────────────┤
-│    5th     │ 1980–Now  │ AI & Parallel   │ AI, NLP, Expert      │
-│            │           │ Processing      │ systems, Voice rec.  │
-│            │           │                 │ Uses NLP + AI        │
-└────────────┴───────────┴─────────────────┴──────────────────────┘
-
-⭐ BPSC PYQ: "5th generation computers use ___ and ___"
-   Answer: Artificial Intelligence and Natural Language Processing
-
-⭐ BPSC PYQ: "ENIAC was a ___ generation computer"
-   Answer: 1st generation (used vacuum tubes)
-```
-
----
-
-## 🔬 SECTION 5: EMERGING TECHNOLOGIES — BPSC QUICK FACTS
-
-### Green Hydrogen:
-```
-Green Hydrogen = Hydrogen produced by ELECTROLYSIS of water
-                 using RENEWABLE ENERGY (solar, wind)
-
-Why "green"? No carbon emissions during production
-             (unlike "grey hydrogen" from natural gas)
-
-⭐ BPSC PYQ (TRE 3.0): "Green Hydrogen is produced by ___"
-   Answer: ELECTROLYSIS
-```
-
----
-
-### Blockchain:
-```
-Blockchain = Distributed, decentralized digital LEDGER
-             Records transactions across many computers
-             Each "block" contains data + hash of previous block
-             Once written, data is IMMUTABLE (cannot be changed)
-
-Used for: Cryptocurrency (Bitcoin, Ethereum)
-          Supply chain tracking
-          Digital identity verification
-
-Key Feature: DECENTRALIZED (no single controlling authority)
-```
-
----
-
-### Quantum Computing:
-```
-Classical Computer: Uses BITS (0 or 1)
-Quantum Computer:   Uses QUBITS (can be 0 AND 1 simultaneously
-                    through SUPERPOSITION)
-
-Advantage: Exponentially faster for certain problems
-           (cryptography, drug discovery, optimization)
-
-Key Terms:
-• Qubit = quantum bit (0, 1, or both simultaneously)
-• Superposition = qubit can be 0 AND 1 at same time
-• Entanglement = two qubits linked regardless of distance
-```
-
----
-
-### Augmented Reality (AR) vs Virtual Reality (VR):
-```
-┌──────────────────────────────────────────────────────────┐
-│         AR vs VR — BPSC COMPARISON                      │
-├────────────────────┬────────────────┬────────────────────┤
-│  Feature           │  AR            │  VR                │
-├────────────────────┼────────────────┼────────────────────┤
-│  Full form         │ Augmented      │ Virtual Reality    │
-│                    │ Reality        │                    │
-├────────────────────┼────────────────┼────────────────────┤
-│  Real world?       │ YES + digital  │ NO — fully virtual │
-│                    │ overlay        │                    │
-├────────────────────┼────────────────┼────────────────────┤
-│  Device needed     │ Smartphone,    │ VR headset         │
-│                    │ AR glasses     │ (Oculus, etc.)     │
-├────────────────────┼────────────────┼────────────────────┤
-│  Example           │ Pokemon Go,    │ VR gaming,         │
-│                    │ IKEA app,      │ VR training, Meta  │
-│                    │ Google Lens    │ Horizon            │
-└────────────────────┴────────────────┴────────────────────┘
-```
-
----
-
-### Cloud Computing:
-```
-Cloud Computing = Delivery of computing services (storage, servers,
-                  databases, networking, software) over the INTERNET
-
-Service Models:
-• IaaS (Infrastructure as a Service): AWS, Azure, GCP
-  → You rent virtual machines, storage
+  1. Training data is provided WITH correct labels (answers)
+  2. Algorithm learns the MAPPING from input → correct output
+  3. Once trained, it can predict labels for NEW, unseen data
+
+TYPES OF SUPERVISED LEARNING:
   
-• PaaS (Platform as a Service): Google App Engine, Heroku
-  → You deploy applications without managing infrastructure
+  CLASSIFICATION:
+  → Predicts a CATEGORY (discrete label)
+  → Output is a CLASS
+  → Examples:
+     ✅ Email = Spam or Not Spam?
+     ✅ Photo = Cat or Dog?
+     ✅ Patient = Diabetic or Not Diabetic?
+     ✅ Loan = Approve or Reject?
+     ✅ Message = Positive or Negative sentiment?
   
-• SaaS (Software as a Service): Gmail, Office 365, Dropbox
-  → You USE software; provider manages everything
+  REGRESSION:
+  → Predicts a CONTINUOUS VALUE (number)
+  → Output is a QUANTITY
+  → Examples:
+     ✅ House price prediction (₹ amount)
+     ✅ Temperature forecast (degrees)
+     ✅ Stock price prediction (₹ amount)
+     ✅ Student score prediction (marks out of 100)
 
-BPSC KEY FACTS:
-• IaaS = Infrastructure (most control, most responsibility)
-• PaaS = Platform (medium control)
-• SaaS = Software (least control, provider manages all)
+POPULAR SUPERVISED ALGORITHMS:
+  → Linear Regression (predicts continuous values)
+  → Logistic Regression (classification despite the name!)
+  → Decision Tree (tree of yes/no questions)
+  → Random Forest (many decision trees combined)
+  → Support Vector Machine (SVM)
+  → K-Nearest Neighbors (KNN)
+  → Neural Networks
+
+DECISION TREE — Explained:
+  Like a FLOWCHART of yes/no questions:
+  
+                    "Is it raining?"
+                    /              \
+                 YES               NO
+                 /                   \
+        "Do you have          "Is it hot outside?"
+         an umbrella?"         /              \
+          /      \           YES               NO
+        YES       NO         ↓                 ↓
+         ↓         ↓      "Wear T-shirt"  "Wear jacket"
+      "Go out    "Stay 
+       with      inside"
+       umbrella"
+  
+  In ML: Questions are based on FEATURES of the data
+  → Used for both classification and regression
+  → Easy to understand and explain (interpretable!)
+
+🎯 PYQ FACT: Supervised learning = labelled data + learns mapping input → output
+🎯 PYQ FACT: Decision Tree = Supervised learning algorithm
+🎯 PYQ FACT: Classification = predicts category; Regression = predicts continuous value
 ```
 
 ---
 
-## ⚠️ BPSC EXAM TRAPS — AI/ML/IOT/TECH SECTION
+### TYPE 2 — UNSUPERVISED LEARNING (Learning without a Teacher)
 
-| Question | Trap Answer | Correct Answer |
-|----------|-------------|----------------|
-| "Father of AI?" | Alan Turing | **John McCarthy** (coined term in 1956) |
-| "Turing Test measures?" | Computer speed | **Machine's ability to exhibit intelligent human behaviour** |
-| "Decision Tree is ___ learning?" | Unsupervised | **Supervised** learning |
-| "K-Means is ___ learning?" | Supervised | **Unsupervised** learning |
-| "IoT short-range wireless?" | Wi-Fi | **Bluetooth** |
-| "IoT communication protocol?" | HTTP | **MQTT** |
-| "Deepfake is technology for?" | Photo editing | **Digitally impersonating/reviving people using AI** |
-| "5th gen computers use?" | Microprocessors | **AI and Natural Language Processing** |
-| "Green Hydrogen produced by?" | Solar panels | **Electrolysis** (using renewable energy) |
-| "All subfields of AI?" | Only ML | **ML + Robotics + NLP** (More than one = D) |
-| "Current AI type?" | General AI | **Narrow AI** (task-specific) |
-| "Blockchain key feature?" | Centralized | **Decentralized (distributed ledger)** |
-| "AR vs VR: real world?" | VR uses real world | **AR uses real world + digital overlay; VR = fully virtual** |
-| "AlphaGo uses ___ learning?" | Supervised | **Reinforcement** learning |
-| "ENIAC is ___ gen computer?" | 2nd | **1st generation** (vacuum tubes) |
+```
+CONCEPT: The algorithm learns from UNLABELLED data
+         (no correct answers provided — must find hidden patterns itself)
 
----
+"UNSUPERVISED" because: Like a student exploring a library with NO teacher.
+                         Must find patterns and structure independently.
 
-## 🏆 TOPPER LEVEL FACTS — DAY 45
+HOW IT WORKS:
+  1. Unlabelled data is provided (no correct answers!)
+  2. Algorithm finds hidden PATTERNS, STRUCTURES, or GROUPINGS in data
+  3. Discovers what the data "looks like" naturally
 
-### CS Quick Fire:
-1. IPv4 = 32 bits; IPv6 = 128 bits; IPv6 has NO checksum, NO broadcast, NO NAT needed
-2. IPv6 flow label = CONSIDERED during translation (not discarded)
-3. Private IPs: 10.x.x.x, 172.16–31.x.x, 192.168.x.x
-4. Subnet mask = identifies NETWORK portion; /24 = 255.255.255.0 = 254 usable hosts
-5. 127.0.0.1 = loopback; 255.255.255.255 = broadcast (not host addresses)
-6. Mesh links = n(n-1)/2; Most reliable = Mesh; Most popular = Star
-7. Bus needs terminators; Ring is unidirectional; Star fails if hub fails
-8. NOT a topology: Peer-to-peer; Switch = LAN; Router = connects networks
+TYPES OF UNSUPERVISED LEARNING:
 
-### GS Quick Fire:
-1. AI coined by John McCarthy, 1956; Current AI = Narrow AI
-2. AI subfields = ML + Robotics + NLP (ALL THREE — answer D)
-3. Supervised: Decision Tree, SVM, Linear Regression
-4. Unsupervised: K-Means Clustering, PCA
-5. Reinforcement: AlphaGo, self-driving cars
-6. IoT short-range = Bluetooth; IoT protocol = MQTT
-7. Deepfake = AI to impersonate people digitally
-8. 5th gen computers = AI + NLP; 1st gen = vacuum tubes (ENIAC)
-9. Green Hydrogen = Electrolysis using renewable energy
-10. Cloud: IaaS (infrastructure) → PaaS (platform) → SaaS (software)
+  CLUSTERING:
+  → Groups similar data points together into CLUSTERS
+  → No predefined labels — algorithm discovers natural groupings
+  → Examples:
+     ✅ Customer segmentation (group customers by buying patterns)
+        "Cluster 1: young, tech-savvy shoppers"
+        "Cluster 2: price-sensitive family shoppers"
+     ✅ Document categorisation (group articles by topic)
+     ✅ Gene expression analysis in biology
+     ✅ Social network community detection
+  
+  POPULAR CLUSTERING ALGORITHM: K-Means Clustering
+  → K = number of clusters (you decide)
+  → Algorithm assigns each data point to nearest cluster centre
+  → Iteratively improves until clusters stabilise
 
----
----
+  DIMENSIONALITY REDUCTION:
+  → Reduces the number of features while keeping important information
+  → Makes data easier to visualise and process
+  → Example: Compressing a 1000-feature dataset to 2 features for visualisation
+  
+  POPULAR ALGORITHM: PCA (Principal Component Analysis)
 
-# 📝 PRACTICE QUESTIONS
+  ASSOCIATION:
+  → Finds RULES about associations between variables in large datasets
+  → "People who buy X also tend to buy Y"
+  → Example: Amazon's "Customers who bought this also bought..."
+             "Beer and diapers are often bought together on Fridays"
+  
+  POPULAR ALGORITHM: Apriori Algorithm (Market Basket Analysis)
 
-## ⚠️ RULES:
-### → Attempt ALL 50 questions FIRST
-### → Write your answers on paper
-### → Check answers ONLY after Q50
-### → No peeking! Be honest with yourself
+🎯 PYQ FACT: Unsupervised learning = NO labels, finds hidden patterns
+🎯 PYQ FACT: Clustering = unsupervised learning technique (e.g., K-Means)
+🎯 PYQ FACT: Customer segmentation = classic unsupervised clustering application
+```
 
 ---
 
-# 🖥️ SECTION A: COMPUTER SCIENCE
-## 25 MCQs — IP Addressing, Topologies, Networking Concepts
+### TYPE 3 — REINFORCEMENT LEARNING (Learning through Trial and Error)
+
+```
+CONCEPT: An AGENT learns by INTERACTING with an ENVIRONMENT
+         Gets REWARDS for correct actions, PENALTIES for wrong ones
+         Learns to maximise cumulative reward over time
+
+ANALOGY: Training a dog:
+  → Dog does a trick correctly → gets a treat (REWARD)
+  → Dog misbehaves → no treat or scolding (PENALTY)
+  → Over time, dog learns which actions earn treats (maximises reward!)
+
+KEY COMPONENTS:
+  AGENT:       The learner/decision-maker (the AI)
+  ENVIRONMENT: Where the agent operates (the game, the road, the market)
+  STATE:       Current situation the agent observes
+  ACTION:      What the agent does
+  REWARD:      Positive/negative feedback for each action
+  POLICY:      Strategy agent develops — what to do in each state
+
+EXAMPLES:
+  → AlphaGo (Google DeepMind) — learned Go by playing millions of games
+  → Game playing AI (chess, video games — beating human champions!)
+  → Robotics (robot learns to walk by trial and error)
+  → Self-driving cars (learns to navigate by receiving rewards for safe driving)
+  → Stock trading algorithms
+
+🎯 PYQ FACT: AlphaGo uses Reinforcement Learning
+🎯 PYQ FACT: Reinforcement learning = reward/penalty based learning
+```
+
+### ML Types Summary Table:
+```
+┌──────────────────────┬───────────────────────┬───────────────────────────┬───────────────────────┐
+│    TYPE              │   DATA NEEDED          │   WHAT IT LEARNS          │   EXAMPLES            │
+├──────────────────────┼───────────────────────┼───────────────────────────┼───────────────────────┤
+│ SUPERVISED           │ Labelled data          │ Mapping input → output    │ Spam filter,          │
+│ LEARNING             │ (with correct answers) │ (with known answers)      │ Disease diagnosis,    │
+│                      │                        │                           │ Price prediction      │
+├──────────────────────┼───────────────────────┼───────────────────────────┼───────────────────────┤
+│ UNSUPERVISED         │ Unlabelled data        │ Hidden patterns,          │ Customer clustering,  │
+│ LEARNING             │ (NO correct answers)   │ natural groupings         │ Topic modelling,      │
+│                      │                        │                           │ Anomaly detection     │
+├──────────────────────┼───────────────────────┼───────────────────────────┼───────────────────────┤
+│ REINFORCEMENT        │ Interaction with       │ Optimal actions via       │ AlphaGo, Game AI,     │
+│ LEARNING             │ environment +          │ trial and error           │ Robotics,             │
+│                      │ reward/penalty signals │ (maximise rewards)        │ Self-driving cars     │
+└──────────────────────┴───────────────────────┴───────────────────────────┴───────────────────────┘
+```
 
 ---
 
-**Q1.** An IPv4 address is made up of how many bits?
+## 🔷 SECTION 4: Deep Learning — AI's Brain Simulation
 
-(A) 16 bits  
-(B) 64 bits  
-(C) 32 bits  
-(D) More than one of the above  
-(E) None of the above  
+```
+DEEP LEARNING = A subset of Machine Learning that uses
+                ARTIFICIAL NEURAL NETWORKS (ANNs) with
+                MANY HIDDEN LAYERS (hence "DEEP")
 
----
+INSPIRED BY: Human brain's neuron structure
+  Human brain: ~86 billion neurons connected in networks
+  ANN: Mathematical model with interconnected "artificial neurons"
 
-**Q2.** Which of the following IPv4 address belongs to Class B?
+STRUCTURE OF A NEURAL NETWORK:
+  
+  INPUT LAYER    HIDDEN LAYERS        OUTPUT LAYER
+  ┌─────────┐   ┌──────────────────┐   ┌──────────┐
+  │ Feature1│──▶│○  ○  ○  ○  ○  ○ │──▶│          │
+  │ Feature2│──▶│○  ○  ○  ○  ○  ○ │──▶│ Output   │
+  │ Feature3│──▶│○  ○  ○  ○  ○  ○ │──▶│          │
+  └─────────┘   └──────────────────┘   └──────────┘
+                Many "deep" layers
+                = "Deep" Learning
 
-(A) 10.0.0.1  
-(B) 172.20.5.1  
-(C) 192.168.1.1  
-(D) More than one of the above  
-(E) None of the above  
+WHY DEEP LEARNING WORKS SO WELL:
+  → Automatically learns features from raw data
+  → No manual feature engineering needed!
+  → Given enough data + computation → matches or beats human performance
 
----
+APPLICATIONS OF DEEP LEARNING:
+  → IMAGE RECOGNITION: Face unlock, medical imaging (detecting cancer)
+  → NATURAL LANGUAGE: ChatGPT, Google Translate, Siri, Alexa
+  → SPEECH RECOGNITION: Voice assistants, transcription services
+  → SELF-DRIVING CARS: Object detection, path planning
+  → GAME PLAYING: AlphaGo, OpenAI Five (Dota 2)
 
-**Q3.** The IP address 127.0.0.1 is used for:
+FAMOUS DEEP LEARNING MODELS:
+  → CNNs (Convolutional Neural Networks): Image recognition
+  → RNNs (Recurrent Neural Networks): Sequential data (text, speech)
+  → LSTMs (Long Short-Term Memory): Language understanding
+  → Transformers: GPT (ChatGPT), BERT (Google Search)
+  → GANs (Generative Adversarial Networks): Deepfakes, image generation
 
-(A) Broadcast to all devices  
-(B) Default gateway  
-(C) Loopback / testing own computer  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q4.** IPv4 Class D addresses (224–239) are reserved for:
-
-(A) Large organizations  
-(B) Experimental use  
-(C) Multicast communication  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q5.** Which of the following is a PRIVATE IP address?
-
-(A) 172.20.5.10  
-(B) 192.168.0.100  
-(C) 10.0.0.1  
-(D) More than one of the above  
-(E) None of the above  
+🎯 PYQ FACT: Deep Learning uses neural networks with MANY hidden layers
+🎯 PYQ FACT: Deep Learning powers face recognition, ChatGPT, self-driving cars
+🎯 PYQ FACT: CNN = images; RNN/LSTM = sequences (text/speech)
+```
 
 ---
 
-**Q6.** The subnet mask 255.255.255.0 in CIDR notation is written as:
+## 🔷 SECTION 5: Important AI/ML Terms for Exam
 
-(A) /8  
-(B) /16  
-(C) /24  
-(D) More than one of the above  
-(E) None of the above  
+```
+ALGORITHM:
+  Step-by-step procedure for solving a problem or making a prediction.
+  In ML, algorithms learn patterns from data.
 
----
+TRAINING DATA:
+  The historical data used to TEACH the ML model.
+  More training data → usually better model!
 
-**Q7.** How many USABLE host addresses does a /24 network provide?
+TEST DATA:
+  Data the model has NEVER seen — used to evaluate its performance.
 
-(A) 256  
-(B) 255  
-(C) 254  
-(D) More than one of the above  
-(E) None of the above  
+MODEL:
+  The OUTPUT of the ML training process — the "learned rules" encoded in math.
+  
+FEATURE:
+  An individual measurable property of the data.
+  Example: For predicting house price — features = area, rooms, location, age.
 
----
+LABEL:
+  The correct answer in supervised learning.
+  Example: For email classification — label = "spam" or "not spam"
 
-**Q8.** A subnet mask is used to identify the ___ portion of an IP address.
+OVERFITTING:
+  Model learns training data TOO well — even memorises noise.
+  Result: Works great on training data but POORLY on new data.
+  (Like a student who memorises answers without understanding concepts!)
 
-(A) Host  
-(B) Network  
-(C) Both Network and Host  
-(D) More than one of the above  
-(E) None of the above  
+UNDERFITTING:
+  Model is too simple — doesn't learn patterns well enough.
+  Result: Performs poorly even on training data.
 
----
+NATURAL LANGUAGE PROCESSING (NLP):
+  AI/ML applied to understanding and generating HUMAN LANGUAGE.
+  Applications: Chatbots, translation, sentiment analysis, voice assistants.
 
-**Q9.** IPv6 addresses are written in which format?
+COMPUTER VISION:
+  AI/ML applied to understanding IMAGES and VIDEOS.
+  Applications: Face recognition, medical imaging, autonomous vehicles.
 
-(A) Dotted decimal (e.g., 192.168.1.1)  
-(B) Binary  
-(C) Hexadecimal with colons (e.g., 2001:db8::1)  
-(D) More than one of the above  
-(E) None of the above  
+CHATBOT / GENERATIVE AI:
+  AI that generates text, images, or other content.
+  Examples: ChatGPT (OpenAI), Gemini (Google), Copilot (Microsoft), Claude (Anthropic)
+```
 
----
+### India's AI Initiatives:
+```
+INDIA AND AI:
+  → INDIA AI MISSION: Government initiative for AI infrastructure in India
+  → NASSCOM AI initiative: Industry body promoting AI adoption
+  → IIT Delhi, IIT Bombay — leading AI research institutions
+  → AI used in Aarogya Setu (COVID contact tracing), BHIM (payments)
+  → ISRO uses AI for satellite imagery analysis
+  → AI in agriculture: crop disease detection using smartphone cameras
+  → AI in education: adaptive learning platforms (BYJU's, etc.)
 
-**Q10.** Which feature is present in IPv6 but NOT in IPv4?
-
-(A) Fragmentation support  
-(B) Broadcasting  
-(C) Flow Label field  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q11.** In IPv6, during header translation (IPv6 to IPv4), the flow label is:
-
-(A) Discarded  
-(B) Set to zero  
-(C) Considered  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q12.** NAT (Network Address Translation) is primarily used to:
-
-(A) Encrypt network traffic  
-(B) Allow multiple private IPs to share one public IP  
-(C) Convert domain names to IP addresses  
-(D) More than one of the above  
-(E) None of the above  
+🎯 PYQ FACT: India AI Mission = Government's plan for AI development infrastructure
+🎯 PYQ FACT: AI applications in India: healthcare, agriculture, finance, education
+```
 
 ---
 
-**Q13.** Which topology requires the MOST number of cables/connections?
+## 🔷 SECTION 6: PYQ Traps — AI/ML
 
-(A) Star  
-(B) Bus  
-(C) Mesh  
-(D) More than one of the above  
-(E) None of the above  
+```
+🚨 TRAP 1: "Machine Learning = Artificial Intelligence" → FALSE (incomplete)!
+   ML is a SUBSET of AI. AI is the broader field.
+   All ML is AI but not all AI is ML.
 
----
+🚨 TRAP 2: "Supervised learning uses unlabelled data" → FALSE!
+   Supervised = LABELLED data.
+   Unsupervised = UNLABELLED data.
 
-**Q14.** In a fully connected mesh topology with n nodes, the number of links is:
+🚨 TRAP 3: "Clustering is a supervised learning technique" → FALSE!
+   Clustering = UNSUPERVISED (no predefined labels).
 
-(A) n - 1  
-(B) n²  
-(C) n(n-1)/2  
-(D) More than one of the above  
-(E) None of the above  
+🚨 TRAP 4: "Deep Learning is the same as Machine Learning" → FALSE!
+   Deep Learning is a SUBSET of Machine Learning (which itself is a subset of AI).
 
----
+🚨 TRAP 5: "AlphaGo uses supervised learning to play Go" → FALSE (partially)!
+   AlphaGo primarily uses REINFORCEMENT LEARNING (plus supervised for initial training).
 
-**Q15.** In which topology does failure of the central device bring down the ENTIRE network?
+🚨 TRAP 6: "AI was coined by Alan Turing" → FALSE!
+   "Artificial Intelligence" coined by JOHN McCARTHY (1956).
+   Alan Turing proposed the TURING TEST (1950).
 
-(A) Bus  
-(B) Ring  
-(C) Star  
-(D) More than one of the above  
-(E) None of the above  
+🚨 TRAP 7: "Decision Tree is unsupervised learning" → FALSE!
+   Decision Tree = SUPERVISED learning algorithm.
 
----
+🚨 TRAP 8: "Reinforcement learning needs labelled training data" → FALSE!
+   Reinforcement learning learns via REWARD/PENALTY signals, not labelled data.
 
-**Q16.** Bus topology requires which components at both ends of the cable?
+🚨 TRAP 9: "General AI (AGI) currently exists" → FALSE!
+   AGI does NOT exist yet. All current AI is NARROW AI.
 
-(A) Switches  
-(B) Routers  
-(C) Terminators  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q17.** Which of the following is NOT a network topology?
-
-(A) Star  
-(B) Ring  
-(C) Peer-to-peer  
-(D) More than one of the above  
-(E) None of the above  
+🚨 TRAP 10: "NLP deals with computer vision tasks" → FALSE!
+   NLP = Natural Language Processing (text/speech).
+   Computer Vision = image/video understanding.
+```
 
 ---
 
-**Q18.** In a Token Ring topology, data travels in which direction?
+# PART 3: PRACTICE QUESTIONS
 
-(A) Both directions (bidirectional)  
-(B) Only one direction (unidirectional)  
-(C) Random direction  
-(D) More than one of the above  
-(E) None of the above  
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: IPv4, IPv6, IP Classes, Subnet Mask, CIDR, Private IPs
 
 ---
 
-**Q19.** Which topology is considered the MOST RELIABLE because it provides multiple paths for data?
-
-(A) Star  
-(B) Tree  
-(C) Mesh  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q20.** A Switch is used to connect devices in which type of network?
-
-(A) WAN (Wide Area Network)  
-(B) MAN (Metropolitan Area Network)  
-(C) LAN (Local Area Network)  
-(D) More than one of the above  
-(E) None of the above  
+**Q1.** An IPv4 address is how many bits long?
+(A) 16 bits
+(B) 64 bits
+(C) 32 bits
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q21.** Which IPv6 feature makes NAT UNNECESSARY?
-
-(A) Fixed header size  
-(B) Built-in IPSec  
-(C) Abundance of unique addresses (128-bit space)  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q22.** The loopback address in IPv6 is:
-
-(A) 0.0.0.0  
-(B) 255.255.255.255  
-(C) ::1  
-(D) More than one of the above  
-(E) None of the above  
+**Q2.** An IPv6 address is how many bits long?
+(A) 32 bits
+(B) 64 bits
+(C) 128 bits
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q23.** IPv6 removed which field that was present in IPv4 headers?
-
-(A) Source address  
-(B) Destination address  
-(C) Checksum  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q24.** A fully connected mesh network has 6 nodes. How many links does it have?
-
-(A) 12  
-(B) 15  
-(C) 18  
-(D) More than one of the above  
-(E) None of the above  
+**Q3.** An IPv4 address is represented in which notation?
+(A) Hexadecimal with colons (e.g., 2001:db8::1)
+(B) Dotted decimal (e.g., 192.168.1.1)
+(C) Binary with slashes (e.g., 11000000/10101000)
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q25.** Which network covers the LARGEST geographical area?
-
-(A) LAN  
-(B) MAN  
-(C) WAN  
-(D) More than one of the above  
-(E) None of the above  
-
----
+**Q4.** The maximum value that any single OCTET in an IPv4 address can have is:
+(A) 128
+(B) 256
+(C) 255
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-# 🇮🇳 SECTION B: GENERAL STUDIES
-## 25 MCQs — AI, Machine Learning, IoT & Emerging Technologies
+**Q5.** Which IPv4 address class has a default subnet mask of 255.255.255.0?
+(A) Class A
+(B) Class B
+(C) Class C
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q26.** The term "Artificial Intelligence" was coined by which scientist?
-
-(A) Alan Turing  
-(B) John McCarthy  
-(C) Marvin Minsky  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q27.** Which of the following is a subfield of Artificial Intelligence?
-
-(A) Machine Learning  
-(B) Natural Language Processing  
-(C) Robotics  
-(D) More than one of the above  
-(E) None of the above  
+**Q6.** The IPv4 address 172.20.5.10 belongs to which class?
+(A) Class A
+(B) Class B
+(C) Class C
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q28.** "Decision Tree" is an algorithm used in which type of Machine Learning?
-
-(A) Unsupervised Learning  
-(B) Reinforcement Learning  
-(C) Supervised Learning  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q29.** "K-Means Clustering" is an algorithm used in which type of Machine Learning?
-
-(A) Supervised Learning  
-(B) Unsupervised Learning  
-(C) Reinforcement Learning  
-(D) More than one of the above  
-(E) None of the above  
+**Q7.** The IPv4 address 10.50.100.200 belongs to which class?
+(A) Class A
+(B) Class B
+(C) Class C
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q30.** Which type of Machine Learning does AlphaGo (Google's game-playing AI) primarily use?
-
-(A) Supervised Learning  
-(B) Unsupervised Learning  
-(C) Reinforcement Learning  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q31.** IoT stands for:
-
-(A) Internet of Technology  
-(B) Internet of Things  
-(C) Integrated Object Technology  
-(D) More than one of the above  
-(E) None of the above  
+**Q8.** Which of the following IPv4 address ranges is a PRIVATE address range?
+(A) 8.8.8.0 to 8.8.8.255 (Google DNS)
+(B) 192.168.0.0 to 192.168.255.255
+(C) 20.0.0.0 to 20.255.255.255
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q32.** For SHORT-RANGE wireless communication in IoT devices, which technology is primarily used?
-
-(A) 5G  
-(B) Wi-Fi  
-(C) Bluetooth  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q33.** The communication protocol specifically designed for IoT devices is:
-
-(A) HTTP  
-(B) FTP  
-(C) MQTT  
-(D) More than one of the above  
-(E) None of the above  
+**Q9.** The IPv4 address 127.0.0.1 is known as the:
+(A) Default gateway address
+(B) Broadcast address
+(C) Loopback (localhost) address
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q34.** "Deepfake" technology is best described as:
-
-(A) A method to secure online payments  
-(B) A technology to digitally impersonate/revive people using AI  
-(C) A type of firewall  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q35.** Fifth generation (5th gen) computers are characterized by the use of:
-
-(A) Vacuum tubes  
-(B) Transistors  
-(C) Artificial Intelligence and Natural Language Processing  
-(D) More than one of the above  
-(E) None of the above  
+**Q10.** A subnet mask is used to:
+(A) Assign MAC addresses to devices
+(B) Separate the Network portion from the Host portion of an IP address
+(C) Encrypt data during transmission
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q36.** The first generation of computers used which technology?
-
-(A) Transistors  
-(B) Integrated Circuits  
-(C) Vacuum Tubes  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q37.** ENIAC, the world's first general-purpose electronic computer, belongs to which generation?
-
-(A) 2nd generation  
-(B) 3rd generation  
-(C) 1st generation  
-(D) More than one of the above  
-(E) None of the above  
+**Q11.** The subnet mask 255.255.255.0 in CIDR notation is:
+(A) /8
+(B) /16
+(C) /24
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q38.** Green Hydrogen is produced by which process?
-
-(A) Combustion of natural gas  
-(B) Solar thermal heating  
-(C) Electrolysis of water using renewable energy  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q39.** Which cloud service model provides virtual machines, storage, and networking (maximum infrastructure control)?
-
-(A) SaaS (Software as a Service)  
-(B) PaaS (Platform as a Service)  
-(C) IaaS (Infrastructure as a Service)  
-(D) More than one of the above  
-(E) None of the above  
+**Q12.** The CIDR notation /16 corresponds to which subnet mask?
+(A) 255.0.0.0
+(B) 255.255.0.0
+(C) 255.255.255.0
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q40.** Gmail and Microsoft Office 365 are examples of which cloud service model?
-
-(A) IaaS  
-(B) PaaS  
-(C) SaaS (Software as a Service)  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q41.** Which feature distinguishes Augmented Reality (AR) from Virtual Reality (VR)?
-
-(A) AR replaces the real world; VR overlays digital content  
-(B) AR overlays digital content on the real world; VR creates a fully virtual environment  
-(C) Both AR and VR create fully virtual environments  
-(D) More than one of the above  
-(E) None of the above  
+**Q13.** For a network with subnet mask 255.255.255.0 (/24), how many USABLE host addresses are available?
+(A) 256
+(B) 255
+(C) 254
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q42.** What is the KEY property of Blockchain technology?
-
-(A) Centralized control by one authority  
-(B) Data can be easily modified after entry  
-(C) Decentralized, immutable distributed ledger  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q43.** All current AI systems (like Alexa, Google Assistant, ChatGPT) are examples of:
-
-(A) General AI (AGI)  
-(B) Super AI  
-(C) Narrow AI  
-(D) More than one of the above  
-(E) None of the above  
+**Q14.** In the address 192.168.1.100/24, what is the Network Address?
+(A) 192.168.1.100
+(B) 192.168.1.255
+(C) 192.168.1.0
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q44.** In Machine Learning, "Supervised Learning" means:
-
-(A) Model learns from unlabeled data  
-(B) Human supervises every decision the algorithm makes  
-(C) Model is trained on labeled data (input + correct output)  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q45.** Deep Learning is a subset of Machine Learning that uses:
-
-(A) Decision Trees with many branches  
-(B) Neural Networks with many layers  
-(C) Statistical regression models  
-(D) More than one of the above  
-(E) None of the above  
+**Q15.** In the address 192.168.1.100/24, what is the Broadcast Address?
+(A) 192.168.1.0
+(B) 192.168.1.255
+(C) 192.168.2.0
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q46.** Which of the following is an application of Computer Vision (a subfield of AI)?
-
-(A) Voice assistant (Alexa, Siri)  
-(B) Face recognition and self-driving car cameras  
-(C) Machine translation (Google Translate)  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q47.** A Quantum Computer uses QUBITS instead of bits. What makes a qubit special?
-
-(A) It is 10 times faster than a regular bit  
-(B) It can only represent 0 or 1  
-(C) It can represent 0 AND 1 simultaneously (superposition)  
-(D) More than one of the above  
-(E) None of the above  
+**Q16.** Which IPv4 address class is used EXCLUSIVELY for MULTICASTING?
+(A) Class B
+(B) Class C
+(C) Class D
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q48.** NLP (Natural Language Processing) is the field of AI that deals with:
-
-(A) Processing numerical data  
-(B) Recognizing images and videos  
-(C) Understanding and generating human language  
-(D) More than one of the above  
-(E) None of the above  
-
----
-
-**Q49.** Which of the following is the BEST example of an IoT device?
-
-(A) A standard desktop computer  
-(B) A printer connected via USB  
-(C) A smart thermostat that automatically adjusts temperature based on data  
-(D) More than one of the above  
-(E) None of the above  
+**Q17.** CIDR (Classless Inter-Domain Routing) was introduced primarily to:
+(A) Replace IPv4 with IPv6
+(B) Improve routing speed in Data Link Layer
+(C) Overcome the rigid class system and reduce IP address waste
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-**Q50.** MQTT protocol uses a ___ architecture.
-
-(A) Client-Server (Request-Response)  
-(B) Peer-to-Peer  
-(C) Publish-Subscribe  
-(D) More than one of the above  
-(E) None of the above  
+**Q18.** What is the total number of possible IPv4 addresses?
+(A) 2^16 ≈ 65,536
+(B) 2^32 ≈ 4.3 billion
+(C) 2^128 ≈ 340 undecillion
+(D) More than one of the above
+(E) None of the above
 
 ---
+
+**Q19.** An IPv6 address uses which notation format?
+(A) Dotted decimal with 4 octets
+(B) Hexadecimal with 8 groups separated by colons
+(C) Binary with 32 bits separated by slashes
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q20.** Which of the following is the LOOPBACK address in IPv6?
+(A) FE80::1
+(B) FF00::
+(C) ::1
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q21.** One key advantage of IPv6 over IPv4 is:
+(A) IPv6 uses dotted decimal notation which is easier to remember
+(B) IPv6 eliminates the need for NAT by providing enough unique addresses for every device
+(C) IPv6 has a smaller header size making it more complex to process
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q22.** The private IP range 10.0.0.0/8 corresponds to which IPv4 class?
+(A) Class B private range
+(B) Class C private range
+(C) Class A private range
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q23.** Which of the following correctly identifies the CLASS of IP addresses based on first octet?
+(A) 128–191 = Class A; 1–126 = Class B
+(B) 1–126 = Class A; 128–191 = Class B; 192–223 = Class C
+(C) 192–255 = Class A; 128–191 = Class B; 1–127 = Class C
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q24.** A company has the network 192.168.10.0/26. How many USABLE host addresses does this subnet provide?
+(A) 64
+(B) 62
+(C) 30
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q25.** Consider these statements about IP addressing:
+I.   IPv4 = 32 bits; IPv6 = 128 bits
+II.  Class C default subnet mask = 255.255.255.0 = /24
+III. 192.168.x.x is a PUBLIC IP range
+IV.  IPv6 uses colons; IPv4 uses dots
+
+Which are CORRECT?
+(A) I, II, and IV only
+(B) I, II, III, and IV all correct
+(C) I and IV only
+(D) More than one of the above
+(E) None of the above
+
+---
+
+## 📝 GENERAL STUDIES — 25 MCQs
+### Topics: Artificial Intelligence, Machine Learning, Deep Learning, Types & Applications
+
+---
+
+**Q26.** The term "Artificial Intelligence" was coined by:
+(A) Alan Turing
+(B) John McCarthy
+(C) Marvin Minsky
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q27.** The Turing Test was proposed by Alan Turing in 1950. Its purpose was to:
+(A) Test the speed of early computers
+(B) Determine if a machine can exhibit intelligent behaviour indistinguishable from a human
+(C) Measure the memory capacity of computers
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q28.** Machine Learning is BEST described as:
+(A) Programming computers with explicit rules for every situation
+(B) A subset of AI where computers learn from data without being explicitly programmed
+(C) A hardware component that makes computers faster
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q29.** Which of the following correctly describes the relationship between AI, ML, and Deep Learning?
+(A) Deep Learning ⊃ Machine Learning ⊃ AI (Deep Learning is largest)
+(B) AI ⊃ ML ⊃ Deep Learning (AI is broadest; DL is subset of subset)
+(C) They are three separate, unrelated fields
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q30.** SUPERVISED LEARNING is characterized by:
+(A) Training on UNLABELLED data to find hidden patterns
+(B) Learning through trial and error with rewards and penalties
+(C) Training on LABELLED data where correct answers are provided
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q31.** UNSUPERVISED LEARNING is characterized by:
+(A) Training on labelled data with known correct outputs
+(B) Learning patterns from UNLABELLED data without predefined correct answers
+(C) Learning through reward and penalty signals
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q32.** CLUSTERING is an example of which type of Machine Learning?
+(A) Supervised Learning
+(B) Reinforcement Learning
+(C) Unsupervised Learning
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q33.** A DECISION TREE algorithm is an example of:
+(A) Unsupervised learning
+(B) Reinforcement learning
+(C) Supervised learning
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q34.** Google DeepMind's AlphaGo, which defeated a world champion at the game of Go, primarily uses:
+(A) Supervised learning with a database of winning moves
+(B) Unsupervised clustering of game positions
+(C) Reinforcement learning (learning through millions of self-play games with win/loss rewards)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q35.** REINFORCEMENT LEARNING involves:
+(A) An agent learning optimal actions by receiving rewards for correct and penalties for wrong actions
+(B) Finding clusters in unlabelled datasets
+(C) Classifying emails as spam using labelled training data
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q36.** DEEP LEARNING is distinguished from regular Machine Learning by:
+(A) It uses DECISION TREES exclusively
+(B) It uses artificial NEURAL NETWORKS with MANY hidden layers
+(C) It only works for text data
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q37.** NATURAL LANGUAGE PROCESSING (NLP) is a branch of AI that deals with:
+(A) Processing and understanding HUMAN LANGUAGE (text and speech)
+(B) Understanding and interpreting IMAGES and VIDEOS
+(C) Training robots to walk and move
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q38.** Which of the following is the BEST example of a NARROW AI application?
+(A) A robot that can solve any intellectual problem a human can
+(B) An AI that surpasses humans in all cognitive tasks
+(C) A spam email filter that classifies emails as spam or not spam
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q39.** In Machine Learning, OVERFITTING refers to:
+(A) Model that is too simple and fails to learn even training data patterns
+(B) Model that learns training data TOO perfectly, performing poorly on new unseen data
+(C) Using too much computing power during training
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q40.** The first conference where the term "Artificial Intelligence" was officially used was:
+(A) MIT AI Conference, 1960
+(B) Stanford AI Lab Meeting, 1970
+(C) Dartmouth Conference, 1956
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q41.** ChatGPT, developed by OpenAI, is an example of which type of AI?
+(A) General AI (AGI) — can do anything a human can
+(B) Super AI — surpasses human intelligence
+(C) Narrow AI — a specific AI system for language generation tasks
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q42.** Which of the following is an example of SUPERVISED LEARNING?
+(A) Grouping customers into segments based on purchasing behaviour (no predefined groups)
+(B) Training a spam filter with emails labelled "spam" and "not spam"
+(C) A game AI that learns chess by playing millions of games against itself
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q43.** "K-Means Clustering" is an algorithm used in:
+(A) Supervised classification
+(B) Reinforcement learning
+(C) Unsupervised learning (clustering)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q44.** COMPUTER VISION in AI refers to:
+(A) AI that processes and understands images and videos
+(B) The physical display screen used for AI computing
+(C) AI for text translation between languages
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q45.** Which statement CORRECTLY distinguishes AI from ML?
+(A) AI and ML are the same thing — different names for the same field
+(B) ML is broader than AI — AI is a subset of ML
+(C) AI is the broad field simulating human intelligence; ML is a subset of AI that learns from data
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q46.** In supervised learning, REGRESSION is used when:
+(A) The output is a discrete category (like "spam" or "not spam")
+(B) The output is a CONTINUOUS VALUE (like house price or temperature)
+(C) There are no labels in the training data
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q47.** "IBM's Deep Blue" (1997) that defeated chess champion Garry Kasparov is an example of:
+(A) General AI — it could handle any intellectual task
+(B) Narrow AI — it was specifically designed to play chess only
+(C) Reinforcement learning exclusively
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q48.** Which of the following applications uses DEEP LEARNING most prominently?
+(A) Sorting a list of numbers in ascending order
+(B) Finding all files with a specific name on a computer
+(C) Recognising faces in photos on a smartphone
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q49.** Which of the following is NOT an example of Machine Learning application?
+(A) Netflix recommending movies based on viewing history
+(B) A calculator performing 2 + 2 = 4 based on programmed rules
+(C) A hospital system predicting patient readmission risk
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q50.** Consider these statements about AI and ML:
+I.  Supervised learning requires labelled training data.
+II. Clustering is an unsupervised learning technique.
+III. AGI (General AI) currently exists in systems like ChatGPT.
+IV. Deep Learning is a subset of Machine Learning.
+
+Which statements are CORRECT?
+(A) I, II, and III only
+(B) I, II, and IV only
+(C) II, III, and IV only
+(D) More than one of the above
+(E) None of the above
 
 ---
 
 # ✅ ANSWER KEY
-## (Check ONLY after attempting all 50 questions!)
+
+## ⚠️ ATTEMPT ALL 50 QUESTIONS BEFORE CHECKING ANSWERS
 
 ---
 
-### 🖥️ CS SECTION — ANSWERS WITH EXPLANATIONS
+### CS Answers (Q1–Q25):
 
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| 1 | **(C)** | IPv4 = **32 bits** = 4 octets × 8 bits. Never confuse with IPv6 (128 bits). |
-| 2 | **(B)** | Class B = first octet 128–191. 172.20.5.1 → first octet = 172 → **Class B**. (10.x.x.x = Class A; 192.168.x.x = Class C) |
-| 3 | **(C)** | 127.0.0.1 = **loopback address** = your own computer. Not broadcast (255.255.255.255), not gateway. |
-| 4 | **(C)** | Class D (224–239) = **Multicast**. Class E (240–255) = Experimental. Neither is for organizations. |
-| 5 | **(D)** | ALL THREE are private: 172.20.5.10 (Class B private), 192.168.0.100 (Class C private), 10.0.0.1 (Class A private). D = correct. |
-| 6 | **(C)** | 255.255.255.0 = 24 bits are 1s in binary = **CIDR /24**. /8 = 255.0.0.0; /16 = 255.255.0.0. |
-| 7 | **(C)** | /24 → host bits = 8 → Total = 2^8 = 256. Usable = 256 - 2 = **254** (subtract network and broadcast). |
-| 8 | **(B)** | Subnet mask identifies the **NETWORK portion**. This is a direct, repeated PYQ fact. |
-| 9 | **(C)** | IPv6 = **hexadecimal with colons**, e.g., 2001:0db8::1. IPv4 = dotted decimal. |
-| 10 | **(C)** | **Flow Label** is unique to IPv6 (not in IPv4). IPv4 has broadcast; IPv6 removed it. IPv4 also supports fragmentation. |
-| 11 | **(C)** | IPv6 flow label = **Considered** during header translation. NOT discarded. Direct TRE 3.0 PYQ. |
-| 12 | **(B)** | NAT = allows **multiple private IPs to share one public IP**. DNS = domain to IP. |
-| 13 | **(C)** | **Mesh** requires n(n-1)/2 links = most cables of any topology. |
-| 14 | **(C)** | Full mesh = **n(n-1)/2** links. For 4 nodes: 4×3/2 = 6. Classic formula PYQ. |
-| 15 | **(C)** | **Star topology** — if central hub/switch fails, entire network goes down. Bus fails if backbone cable breaks. |
-| 16 | **(C)** | Bus topology requires **Terminators** at both ends to absorb signals and prevent reflection. |
-| 17 | **(C)** | **Peer-to-peer** is a network architecture (type), NOT a topology. Topologies = Star, Ring, Bus, Mesh, Tree, Hybrid. |
-| 18 | **(B)** | Token Ring = data travels **unidirectionally** (one direction around the ring). |
-| 19 | **(C)** | **Mesh** = most reliable because every device has a direct link to every other device; multiple redundant paths. |
-| 20 | **(C)** | Switch connects devices in a **LAN** (Local Area Network). Router connects networks (LAN to WAN). |
-| 21 | **(C)** | IPv6's **128-bit address space** provides 3.4×10^38 addresses — enough for every device without NAT. |
-| 22 | **(C)** | IPv6 loopback = **::1** (short form of 0000:0000:0000:0000:0000:0000:0000:0001). IPv4 loopback = 127.0.0.1. |
-| 23 | **(C)** | IPv6 **removed the Checksum** field from the IP header (error checking done at Layer 2 and Layer 4 instead). |
-| 24 | **(B)** | n=6: links = 6(6-1)/2 = 6×5/2 = 30/2 = **15 links**. |
-| 25 | **(C)** | **WAN** (Wide Area Network) covers the largest area — countries and globally. Internet = largest WAN. |
-
----
-
-### 🇮🇳 GS SECTION — ANSWERS WITH EXPLANATIONS
-
-| Q# | Answer | Key Explanation |
-|----|--------|-----------------|
-| 26 | **(B)** | "Artificial Intelligence" coined by **John McCarthy** at Dartmouth Conference, 1956. Alan Turing = Turing Test. |
-| 27 | **(D)** | All THREE are subfields: Machine Learning + NLP + Robotics. **D = More than one** = correct. Direct TRE PYQ. |
-| 28 | **(C)** | Decision Tree = **Supervised Learning**. It uses labeled training data (input + output). Direct TRE 3.0 PYQ. |
-| 29 | **(B)** | K-Means Clustering = **Unsupervised Learning**. Finds natural groupings in unlabeled data. Direct TRE 3.0 PYQ. |
-| 30 | **(C)** | AlphaGo uses **Reinforcement Learning** — learned by playing millions of games and receiving rewards/penalties. |
-| 31 | **(B)** | IoT = **Internet of Things** — network of physical objects with internet connectivity. |
-| 32 | **(C)** | IoT **short-range** wireless = **Bluetooth** (~10 meters). Wi-Fi = medium range. Direct TRE 3.0 PYQ. |
-| 33 | **(C)** | **MQTT** = IoT communication protocol. Lightweight, publish-subscribe, designed for low-bandwidth. Direct TRE 3.0 PYQ. |
-| 34 | **(B)** | Deepfake = AI used to **digitally impersonate or revive people** by replacing face/voice. Direct PYQ from TRE 3.0. |
-| 35 | **(C)** | 5th generation computers = **AI and NLP**. 4th gen = microprocessors. 1st gen = vacuum tubes. |
-| 36 | **(C)** | 1st generation computers = **Vacuum Tubes** (1940–1956). Examples: ENIAC, UNIVAC. |
-| 37 | **(C)** | ENIAC = **1st generation** computer (1945). Used vacuum tubes. First general-purpose electronic computer. |
-| 38 | **(C)** | Green Hydrogen = produced by **Electrolysis** of water using renewable energy. Direct TRE 3.0 PYQ. |
-| 39 | **(C)** | **IaaS** = Infrastructure as a Service. Provides virtual machines, storage, networking. Maximum control. AWS, Azure. |
-| 40 | **(C)** | Gmail, Office 365 = **SaaS** (Software as a Service). Users just USE the software; provider manages everything. |
-| 41 | **(B)** | **AR** = overlays digital on real world (Pokemon Go); **VR** = fully virtual environment (VR headset games). |
-| 42 | **(C)** | Blockchain = **Decentralized, immutable distributed ledger**. No single authority controls it; records can't be changed. |
-| 43 | **(C)** | All current AI (Alexa, ChatGPT, Google Assistant) = **Narrow AI** (task-specific). General AI doesn't exist yet. |
-| 44 | **(C)** | Supervised = trained on **labeled data** (input + correct output provided). Algorithm learns input→output mapping. |
-| 45 | **(B)** | Deep Learning uses **Neural Networks with many layers** (deep = many hidden layers between input and output). |
-| 46 | **(B)** | **Computer Vision** = AI for images/video. Face recognition + self-driving cameras = Computer Vision. Voice = NLP. |
-| 47 | **(C)** | Qubit = can represent 0 **AND** 1 simultaneously via **superposition**. This makes quantum computers exponentially faster. |
-| 48 | **(C)** | NLP = AI for **understanding and generating human language**. Used in translation, chatbots, voice assistants. |
-| 49 | **(C)** | **Smart thermostat** = classic IoT device. Collects temperature data + connects to internet + acts automatically. |
-| 50 | **(C)** | MQTT uses **Publish-Subscribe** architecture. Devices "publish" to topics; other devices "subscribe" to receive updates. |
+| Q  | Ans | Key Reason |
+|----|-----|-----------|
+| 1  | (C) | IPv4 = 32 bits (4 octets × 8 bits) |
+| 2  | (C) | IPv6 = 128 bits (8 groups × 16 bits) |
+| 3  | (B) | IPv4 = dotted decimal (e.g., 192.168.1.1); IPv6 uses hex with colons |
+| 4  | (C) | Each octet = 8 bits → 2^8 - 1 = 255 maximum |
+| 5  | (C) | Class C default subnet mask = 255.255.255.0 = /24 |
+| 6  | (B) | 172 falls in 128–191 range → Class B |
+| 7  | (A) | 10 falls in 1–126 range → Class A |
+| 8  | (B) | 192.168.x.x = private Class C range; 8.8.8.x = Google public DNS |
+| 9  | (C) | 127.0.0.1 = loopback (localhost) — testing your own device |
+| 10 | (B) | Subnet mask identifies network vs host portion of IP address |
+| 11 | (C) | 255.255.255.0 = 24 bits of 1s = /24 |
+| 12 | (B) | /16 = 16 bits of 1s = 255.255.0.0 |
+| 13 | (C) | /24 = 8 host bits → 2^8 - 2 = 256 - 2 = 254 usable hosts |
+| 14 | (C) | Network address = IP with all host bits zeroed = 192.168.1.0 |
+| 15 | (B) | Broadcast = IP with all host bits set to 1 = 192.168.1.255 |
+| 16 | (C) | Class D (224–239) = multicast ONLY, not for host assignment |
+| 17 | (C) | CIDR introduced to overcome rigid class system and reduce waste |
+| 18 | (B) | IPv4 = 2^32 ≈ 4.3 billion addresses |
+| 19 | (B) | IPv6 = hexadecimal, 8 groups of 16 bits, separated by colons |
+| 20 | (C) | IPv6 loopback = ::1 (equivalent to 127.0.0.1 in IPv4) |
+| 21 | (B) | IPv6 eliminates NAT by providing enough unique addresses for all devices |
+| 22 | (C) | 10.0.0.0/8 = Class A private range (first octet 10 = Class A) |
+| 23 | (B) | Correct: 1–126=A, 128–191=B, 192–223=C |
+| 24 | (B) | /26 = 6 host bits → 2^6 - 2 = 64 - 2 = 62 usable hosts |
+| 25 | (A) | I correct (32/128), II correct (C=/24), III WRONG (192.168=private), IV correct (IPv6 colons) |
 
 ---
 
----
+### GS Answers (Q26–Q50):
 
-## 📊 SCORE YOURSELF — DAY 45
-
-| Score Range | Assessment | Action |
-|------------|------------|--------|
-| 47–50 | 🏆 Topper Level! | Revise once, move to Day 46 |
-| 42–46 | ✅ Very Good | Re-read the traps section |
-| 35–41 | 📚 Good | Revise IPv6 and ML types |
-| Below 35 | 🔄 Needs Work | Re-read all diagrams + tables |
-
----
-
-## 🔮 PYQ PATTERN ANALYSIS
-
-### These exact questions appeared in BPSC TRE:
-| Fact | Appeared In |
-|------|-------------|
-| IPv6 flow label = Considered | TRE 3.0 |
-| IPv6 = 128 bits (not 32/64/256) | TRE 2.0 |
-| Decision Tree = Supervised Learning | TRE 3.0 |
-| K-Means = Unsupervised Learning | TRE 3.0 |
-| IoT short-range = Bluetooth | TRE 3.0 |
-| IoT protocol = MQTT | TRE 3.0 |
-| Deepfake = impersonating people | TRE 3.0 |
-| Green Hydrogen = Electrolysis | TRE 3.0 |
-| AI subfields = ML+Robotics+NLP | TRE 3.0 |
-| Subnet mask = network portion | TRE 1.0, 2.0 |
-
----
-
-## 🌙 NIGHT REVISION — 5 BULLETS (Write from memory)
-
-### CS:
-1. IPv4 = 32 bits, Classes A(1-126), B(128-191), C(192-223), D(224-239 multicast), E(240-255 experimental)
-2. Private IPs: 10.x.x.x, 172.16-31.x.x, 192.168.x.x; 127.0.0.1 = loopback; /24 = 254 usable hosts
-3. IPv6 = 128 bits, hexadecimal, flow label = considered, no checksum, no broadcast, no NAT needed
-4. Topologies: Bus (terminators), Star (hub = failure), Ring (unidirectional), Mesh (n(n-1)/2 links, most reliable)
-5. Peer-to-peer = NOT a topology; Switch = LAN; Router = connects networks; Star = most popular
-
-### GS:
-1. AI = John McCarthy 1956; Current AI = Narrow; Subfields = ML + Robotics + NLP (all three)
-2. Supervised: Decision Tree, SVM; Unsupervised: K-Means; Reinforcement: AlphaGo
-3. IoT: short-range = Bluetooth; protocol = MQTT (publish-subscribe, lightweight)
-4. 1st gen = vacuum tubes (ENIAC); 5th gen = AI + NLP; Deepfake = AI impersonation
-5. Green Hydrogen = Electrolysis; Cloud: IaaS(infra) > PaaS(platform) > SaaS(software)
+| Q  | Ans | Key Reason |
+|----|-----|-----------|
+| 26 | (B) | "Artificial Intelligence" coined by John McCarthy (1956 Dartmouth) |
+| 27 | (B) | Turing Test = can a machine behave indistinguishably from a human? |
+| 28 | (B) | ML = subset of AI, learns from data without explicit programming |
+| 29 | (B) | Hierarchy: AI ⊃ ML ⊃ Deep Learning |
+| 30 | (C) | Supervised = labelled data with correct answers provided |
+| 31 | (B) | Unsupervised = unlabelled data, finds hidden patterns |
+| 32 | (C) | Clustering = unsupervised learning (no predefined labels) |
+| 33 | (C) | Decision Tree = supervised learning algorithm |
+| 34 | (C) | AlphaGo = reinforcement learning (self-play with win/loss reward) |
+| 35 | (A) | Reinforcement learning = agent + rewards/penalties from environment |
+| 36 | (B) | Deep Learning = neural networks with MANY hidden layers |
+| 37 | (A) | NLP = processing and understanding human language (text + speech) |
+| 38 | (C) | Spam filter = narrow AI (one specific task only) |
+| 39 | (B) | Overfitting = model memorises training data, fails on new data |
+| 40 | (C) | Dartmouth Conference 1956 = birth of AI as a field |
+| 41 | (C) | ChatGPT = Narrow AI (language generation task only; not AGI) |
+| 42 | (B) | Spam filter with labelled emails = classic supervised learning |
+| 43 | (C) | K-Means = unsupervised clustering algorithm |
+| 44 | (A) | Computer Vision = AI for understanding images and videos |
+| 45 | (C) | AI = broad field; ML = subset of AI that learns from data |
+| 46 | (B) | Regression = predicts continuous values (price, temperature) |
+| 47 | (B) | Deep Blue = Narrow AI (chess only; couldn't do anything else) |
+| 48 | (C) | Face recognition = deep learning (CNN-based neural networks) |
+| 49 | (B) | Calculator doing 2+2=4 = rule-based programming, NOT machine learning |
+| 50 | (B) | I correct (supervised = labelled), II correct (clustering = unsupervised), III WRONG (AGI doesn't exist; ChatGPT = Narrow AI), IV correct (DL ⊂ ML) |
 
 ---
 
-## 📅 DAY 46 PREVIEW
+# 🔁 DAY 45 — CRISP REVISION NOTES
 
-**CS Topic:** Network Protocols Deep Dive — TCP, UDP, SMTP, HTTP, HTTPS, FTP + Port Numbers  
-**GS Topic:** Current Affairs — Government Schemes (PM Awas Yojana, MGNREGA, PM Kisan, etc.)
+## ⚡ RAPID FIRE — IP Addressing
 
-Come back tomorrow and say: **"Day-46"** — your mentor will be ready! 🎯
+### IPv4 vs IPv6 — 3 Key Differences:
+```
+FEATURE      │  IPv4              │  IPv6
+─────────────┼────────────────────┼──────────────────────
+Bits         │  32 bits           │  128 bits
+Format       │  Dotted decimal    │  Hex with colons
+Addresses    │  ~4.3 billion      │  ~340 undecillion
+NAT needed?  │  YES               │  NO
+Security     │  Optional          │  Built-in (IPSec)
+Loopback     │  127.0.0.1         │  ::1
+```
+
+### IPv4 Classes — Quick Reference:
+```
+CLASS  │ FIRST OCTET  │ SUBNET MASK       │ HOSTS/NETWORK
+───────┼──────────────┼───────────────────┼──────────────
+  A    │   1–126      │ 255.0.0.0   (/8)  │ ~16.7 million
+  B    │  128–191     │ 255.255.0.0 (/16) │ 65,534
+  C    │  192–223     │ 255.255.255.0(/24)│ 254
+  D    │  224–239     │ N/A (multicast)   │ N/A
+  E    │  240–255     │ N/A (reserved)    │ N/A
+```
+
+### Private IP Ranges:
+```
+10.x.x.x          → Class A private
+172.16–31.x.x     → Class B private
+192.168.x.x       → Class C private (HOME NETWORK!)
+127.0.0.1         → Loopback (localhost)
+255.255.255.255   → Broadcast (all hosts on local network)
+```
+
+### CIDR Shortcuts:
+```
+/8  → 255.0.0.0       → ~16.7M hosts
+/16 → 255.255.0.0     → 65,534 hosts
+/24 → 255.255.255.0   → 254 hosts
+/25 → 255.255.255.128 → 126 hosts
+/26 → 255.255.255.192 → 62 hosts
+/27 → 255.255.255.224 → 30 hosts
+
+FORMULA: Usable hosts = 2^(host bits) - 2
+```
+
+### PYQ Trap List — IP Addressing:
+```
+✅ IPv4 = 32 bits; IPv6 = 128 bits (not the other way!)
+✅ IPv6 = hexadecimal with colons (NOT dotted decimal)
+✅ 192.168.x.x = PRIVATE range (NOT public!)
+✅ /24 = 255.255.255.0 (not /24 = 255.255.0.0)
+✅ /16 = 255.255.0.0 (not /16 = 255.0.0.0)
+✅ 127.0.0.1 = loopback (not a private "host" range)
+✅ Class D = multicast ONLY (no host assignment)
+✅ Class A = 1–126 (NOT 0–127; 0 reserved, 127 loopback)
+✅ Usable hosts = 2^(host bits) - 2 (not 2^n)
+✅ Network + Broadcast addresses are NOT usable host addresses
+✅ IPv6 loopback = ::1 (NOT 127.0.0.1)
+✅ IPv6 eliminates NAT (IPv4 requires NAT)
+```
 
 ---
 
-*Day 45 Complete | Phase 1 Week 7 | Computer Networks + AI/ML mastered*
-*You are building an unbreakable foundation. Topper rank is yours — keep going! 💪🎯*
+## ⚡ RAPID FIRE — AI / ML
+
+### Hierarchy:
+```
+AI ⊃ Machine Learning ⊃ Deep Learning
+(Broadest)  (Subset)      (Subset of subset)
+```
+
+### ML Types — 3 Lines:
+```
+SUPERVISED:    Labelled data → learns input-output mapping
+               (Decision Tree, SVM, Neural Networks)
+               Examples: spam filter, disease diagnosis, price prediction
+
+UNSUPERVISED:  Unlabelled data → finds hidden patterns
+               (K-Means Clustering, PCA)
+               Examples: customer segmentation, topic discovery
+
+REINFORCEMENT: Agent + rewards/penalties → optimal policy
+               (Q-Learning, Policy Gradient)
+               Examples: AlphaGo, game AI, robotics
+```
+
+### Key AI/ML Facts:
+```
+"AI" coined by:     John McCarthy, 1956 Dartmouth Conference
+Turing Test:        Alan Turing, 1950
+Deep Learning:      Neural networks with many hidden layers
+NLP:                Language (text/speech) understanding
+Computer Vision:    Image/video understanding
+Current AI type:    ALL current AI = NARROW AI (AGI doesn't exist!)
+ChatGPT by:         OpenAI | Claude by: Anthropic | Gemini by: Google
+```
+
+### PYQ Trap List — AI/ML:
+```
+✅ ML = subset of AI (not the same!)
+✅ Clustering = UNSUPERVISED (no predefined labels)
+✅ Decision Tree = SUPERVISED
+✅ AlphaGo = Reinforcement Learning
+✅ AGI (General AI) does NOT exist yet
+✅ ChatGPT = Narrow AI (not AGI)
+✅ "AI" term coined by John McCarthy (not Alan Turing)
+✅ Alan Turing = Turing Test (1950)
+✅ Supervised = labelled; Unsupervised = unlabelled
+✅ Overfitting = too good on training data → fails on new data
+```
+
+---
+
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. **IPv4 = 32 bits** (dotted decimal, e.g., 192.168.1.1); Classes: A=1–126(/8, 255.0.0.0), B=128–191(/16, 255.255.0.0), C=192–223(/24, 255.255.255.0); Private: 10.x.x.x, 172.16–31.x.x, 192.168.x.x; Loopback=127.0.0.1.
+2. **IPv6 = 128 bits** (hex with colons, e.g., 2001:db8::1); ~340 undecillion addresses; no NAT needed; built-in IPSec; loopback = ::1; no broadcast (uses multicast).
+3. **Subnet mask & CIDR**: /24=255.255.255.0=254 hosts; /16=255.255.0.0=65,534 hosts; /8=255.0.0.0=~16.7M hosts; usable hosts = 2^(host bits) - 2; network address + broadcast NOT usable.
+4. **AI hierarchy**: AI ⊃ ML ⊃ Deep Learning; Supervised=labelled data (spam filter, decision tree); Unsupervised=unlabelled (clustering/K-means); Reinforcement=reward-penalty (AlphaGo); all current AI = Narrow AI.
+5. **Key AI traps**: "AI" coined by John McCarthy (1956); Turing Test by Alan Turing (1950); AGI doesn't exist; ChatGPT = Narrow AI; Decision Tree = Supervised; Clustering = Unsupervised; Deep Learning = neural networks with many hidden layers.
+
+---
+
+## 📅 DAY 46 PREVIEW — What's Coming Next:
+**CS**: Computer Networks — Network Topologies (Bus, Star, Ring, Mesh, Tree, Hybrid), Network Devices (Hub, Switch, Router, Bridge, Gateway, Repeater, Modem), Transmission Media (Twisted Pair, Coaxial, Fiber Optic, Wireless)
+**GS**: Indian Economy — Inflation: Types (Demand-pull, Cost-push), Measurement (CPI, WPI), RBI's role, Monetary Policy basics
+
+---
+
+*🚀 Day 45 of 170 — You're 26.5% through the journey. IP addressing is one of the most calculation-heavy yet formula-easy topics — master the /24, /16, /8 CIDR shortcuts and the class ranges today. For AI/ML, the supervised vs unsupervised distinction is the #1 PYQ pattern. Stay focused!*

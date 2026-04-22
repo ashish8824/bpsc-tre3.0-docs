@@ -1,1456 +1,1860 @@
-# 📅 BPSC TRE 4.0 — DAY 40
-## CS Topic: SQL Commands — DDL, DML, DCL, TCL (Complete Guide)
-## GS Topic: Biology — Plant Physiology, Photoperiodism, Plant Hormones
-
-> **Target:** 130+/150 | Top 50 Rank
-> **Strategy:** Master SQL command categories + Biology plant topics — both are HIGH-YIELD in BPSC TRE
+# 📅 BPSC TRE 4.0 — DAY 40 COMPLETE STUDY MODULE
+### SQL Commands (DDL, DML, DCL, TCL) + Photoperiodism (Biology)
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-# ═══════════════════════════════════════════════════════
-# 📘 PART 1: COMPUTER SCIENCE — SQL COMMANDS
-# ═══════════════════════════════════════════════════════
-
-## 🎯 What is SQL?
-
-**SQL = Structured Query Language**
-
-- Developed by IBM in the 1970s (originally called **SEQUEL**)
-- Standardized by **ANSI** and **ISO**
-- Used to communicate with **Relational Database Management Systems (RDBMS)**
-- SQL is **NOT** a procedural language — it is a **declarative** language (you say WHAT you want, not HOW to get it)
-- SQL is **case-insensitive** for keywords (SELECT = select = Select)
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): SQL Commands — DDL, DML, DCL, TCL with examples and traps
+> - Afternoon (1 hr): Biology — Photoperiodism, Garner & Allard, Light in plant growth
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-## 🗂️ The Four SQL Command Categories
-
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        SQL COMMAND CATEGORIES                           │
-├──────────┬──────────────────────────────────┬──────────────────────────┤
-│ Category │ Full Form                        │ Commands                 │
-├──────────┼──────────────────────────────────┼──────────────────────────┤
-│ DDL      │ Data Definition Language         │ CREATE, ALTER, DROP,     │
-│          │                                  │ TRUNCATE, RENAME         │
-├──────────┼──────────────────────────────────┼──────────────────────────┤
-│ DML      │ Data Manipulation Language       │ SELECT, INSERT, UPDATE,  │
-│          │                                  │ DELETE                   │
-├──────────┼──────────────────────────────────┼──────────────────────────┤
-│ DCL      │ Data Control Language            │ GRANT, REVOKE            │
-├──────────┼──────────────────────────────────┼──────────────────────────┤
-│ TCL      │ Transaction Control Language     │ COMMIT, ROLLBACK,        │
-│          │                                  │ SAVEPOINT, SET TRANSACTION│
-└──────────┴──────────────────────────────────┴──────────────────────────┘
-```
-
-**Memory Trick:**
-```
-DDL  = "Define the Design"  → Creating/changing STRUCTURE of database
-DML  = "Deal with the Data" → Inserting/reading/changing actual DATA
-DCL  = "Decide who Controls"→ Who gets PERMISSION to do what
-TCL  = "Transaction Control"→ SAVE or UNDO your work
-```
+# PART 1: COMPUTER SCIENCE
+## 📘 SQL Commands — Deep Conceptual Guide
 
 ---
 
-## 🔵 DDL — Data Definition Language
+## 🔷 SECTION 1: What is SQL?
 
-DDL commands work on the **structure (schema)** of the database — tables, columns, indexes.
+### Real-Life Analogy — The Bank Teller Language:
 
-> **Key property:** DDL commands are **auto-committed** — changes are permanent immediately, NO rollback possible.
+Imagine you walk into a bank. You need to:
+- Open a new account (CREATE)
+- Deposit money (INSERT)
+- Check your balance (SELECT)
+- Withdraw money (DELETE/UPDATE)
+- Lock your account (REVOKE)
+- Permanently record a transaction (COMMIT)
 
-### CREATE — Make a new table or database
+Every operation you ask the bank to perform follows a standard protocol — a scripted language both you and the bank understand perfectly.
 
-```sql
--- Create a Database
-CREATE DATABASE College;
+**SQL is exactly that — the standard language for communicating with a relational database.**
 
--- Create a Table
-CREATE TABLE Student (
-    Roll_No     INT PRIMARY KEY,
-    Name        VARCHAR(50) NOT NULL,
-    Age         INT,
-    City        VARCHAR(30),
-    Marks       DECIMAL(5,2)
-);
+### Formal Definition:
+> **SQL (Structured Query Language) is a standardised language used to create, manage, query, and control data in Relational Database Management Systems (RDBMS).**
+
+### Key Facts:
 ```
+FULL FORM:    SQL = Structured Query Language
+DEVELOPED BY: IBM (Donald Chamberlin & Raymond Boyce), early 1970s
+              Originally called "SEQUEL" (Structured English Query Language)
+STANDARDISED: ANSI (American National Standards Institute) — 1986
+              ISO standard also maintained
+              
+USED WITH: MySQL, Oracle, PostgreSQL, SQL Server, SQLite, etc.
 
-**Diagram of what CREATE does:**
-```
-Before CREATE:         After CREATE:
-                       ┌─────────────────────────────────┐
-  (nothing)     ──►    │ Student Table                   │
-                       ├─────────┬──────┬─────┬──────────┤
-                       │Roll_No  │ Name │ Age │ City ... │
-                       ├─────────┼──────┼─────┼──────────┤
-                       │ (empty) │      │     │          │
-                       └─────────┴──────┴─────┴──────────┘
+SQL IS:
+  → NOT a programming language (no loops, conditionals in basic SQL)
+  → A DECLARATIVE language: you say WHAT you want, not HOW to get it
+  → Case-INSENSITIVE for keywords (SELECT = select = Select)
+  → Case-SENSITIVE for data values in most databases
+
+🎯 PYQ FACT: SQL is a DECLARATIVE language, not procedural.
+             It was developed by IBM and standardised by ANSI.
 ```
 
 ---
 
-### ALTER — Modify an existing table structure
+## 🔷 SECTION 2: SQL Command Categories — Overview
 
-```sql
--- Add a new column
-ALTER TABLE Student ADD Email VARCHAR(100);
+SQL commands are divided into **four major categories** based on their PURPOSE:
 
--- Remove (drop) a column
-ALTER TABLE Student DROP COLUMN Email;
+```
+                         SQL COMMANDS
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        │              │              │              │
+       DDL            DML            DCL            TCL
+  (Definition)    (Manipulation)  (Control)   (Transaction)
+        │              │              │              │
+  CREATE         SELECT          GRANT          COMMIT
+  ALTER          INSERT          REVOKE         ROLLBACK
+  DROP           UPDATE                         SAVEPOINT
+  TRUNCATE       DELETE
+  RENAME
 
--- Change the data type of a column
-ALTER TABLE Student MODIFY Age SMALLINT;
+MEMORY TRICK: "Do Data Daily, Technically"
+  D = DDL (Definition)
+  D = DML (Manipulation)  
+  D = DCL (Control)
+  T = TCL (Transaction)
+```
 
--- Rename a column
-ALTER TABLE Student RENAME COLUMN City TO Location;
+### Master Classification Table:
+
+```
+┌──────────────┬──────────────────────┬────────────────────────────────────┐
+│   CATEGORY   │       PURPOSE        │            COMMANDS                │
+├──────────────┼──────────────────────┼────────────────────────────────────┤
+│ DDL          │ Define/modify the    │ CREATE, ALTER, DROP,               │
+│ (Data        │ STRUCTURE of         │ TRUNCATE, RENAME                   │
+│ Definition   │ database objects     │                                    │
+│ Language)    │ (tables, schemas)    │                                    │
+├──────────────┼──────────────────────┼────────────────────────────────────┤
+│ DML          │ Manipulate/work      │ SELECT, INSERT,                    │
+│ (Data        │ with the ACTUAL DATA │ UPDATE, DELETE                     │
+│ Manipulation │ inside tables        │                                    │
+│ Language)    │                      │                                    │
+├──────────────┼──────────────────────┼────────────────────────────────────┤
+│ DCL          │ Control ACCESS and   │ GRANT, REVOKE                      │
+│ (Data        │ PERMISSIONS to       │                                    │
+│ Control      │ database objects     │                                    │
+│ Language)    │                      │                                    │
+├──────────────┼──────────────────────┼────────────────────────────────────┤
+│ TCL          │ Manage TRANSACTIONS  │ COMMIT, ROLLBACK,                  │
+│ (Transaction │ (make changes        │ SAVEPOINT                          │
+│ Control      │ permanent or undo)   │                                    │
+│ Language)    │                      │                                    │
+└──────────────┴──────────────────────┴────────────────────────────────────┘
 ```
 
 ---
 
-### DROP — Delete the entire table (structure + data, permanently)
+## 🔷 SECTION 3: DDL — Data Definition Language
 
-```sql
-DROP TABLE Student;
--- This deletes the table COMPLETELY — structure AND all data gone
--- CANNOT be rolled back
+### Purpose: Define and manage the STRUCTURE (schema) of the database.
+
+DDL commands work on DATABASE OBJECTS (tables, indexes, views) — not on data inside them.
+
+> **DDL commands are AUTO-COMMITTED** — changes are permanent immediately. They cannot be rolled back with ROLLBACK!
+
+---
+
+### COMMAND 1: CREATE
+
+```
+PURPOSE: Create new database objects (tables, databases, indexes, views)
+
+SYNTAX — Create a Table:
+  CREATE TABLE table_name (
+      column1  datatype  constraint,
+      column2  datatype  constraint,
+      ...
+  );
+
+EXAMPLE — Create STUDENTS table:
+  CREATE TABLE STUDENTS (
+      RollNo    INT         PRIMARY KEY,
+      Name      VARCHAR(50) NOT NULL,
+      Email     VARCHAR(100) UNIQUE,
+      DeptID    VARCHAR(10),
+      Marks     INT         DEFAULT 0,
+      DOB       DATE
+  );
+
+EXAMPLE — Create a DATABASE:
+  CREATE DATABASE CollegeDB;
+
+EXAMPLE — Create a VIEW:
+  CREATE VIEW CS_Students AS
+  SELECT RollNo, Name, Marks
+  FROM STUDENTS
+  WHERE DeptID = 'CS';
+
+CONSTRAINTS used in CREATE:
+  PRIMARY KEY    → unique identifier, not null
+  NOT NULL       → column must always have a value
+  UNIQUE         → all values must be distinct
+  DEFAULT value  → if no value given, use this default
+  FOREIGN KEY    → references another table's PK
+  CHECK          → value must satisfy a condition
+  
+EXAMPLE with all constraints:
+  CREATE TABLE EMPLOYEES (
+      EmpID   INT          PRIMARY KEY,
+      Name    VARCHAR(50)  NOT NULL,
+      Salary  DECIMAL(10,2) DEFAULT 20000,
+      Age     INT          CHECK (Age >= 18 AND Age <= 65),
+      Email   VARCHAR(100) UNIQUE,
+      DeptID  INT,
+      FOREIGN KEY (DeptID) REFERENCES DEPARTMENTS(DeptID)
+  );
 ```
 
 ---
 
-### TRUNCATE — Delete ALL rows but keep the table structure
+### COMMAND 2: ALTER
 
-```sql
-TRUNCATE TABLE Student;
--- All rows are deleted, but the table still exists (empty)
--- CANNOT be rolled back (auto-committed like DROP)
--- Faster than DELETE because it does not log individual row deletions
+```
+PURPOSE: Modify the STRUCTURE of an existing table
+         → Add/remove/modify columns
+         → Add/drop constraints
+         → Rename table or column
+
+TYPES OF ALTER OPERATIONS:
+
+1. ADD a new column:
+   ALTER TABLE STUDENTS ADD PhoneNo VARCHAR(15);
+
+2. DROP (remove) a column:
+   ALTER TABLE STUDENTS DROP COLUMN PhoneNo;
+
+3. MODIFY/ALTER a column's data type or constraint:
+   ALTER TABLE STUDENTS MODIFY Marks DECIMAL(5,2);  -- MySQL syntax
+   ALTER TABLE STUDENTS ALTER COLUMN Marks DECIMAL(5,2);  -- SQL Server
+
+4. RENAME a column:
+   ALTER TABLE STUDENTS RENAME COLUMN Marks TO FinalMarks;
+
+5. RENAME a table:
+   ALTER TABLE STUDENTS RENAME TO ENROLLED_STUDENTS;
+
+6. ADD a constraint:
+   ALTER TABLE STUDENTS ADD CONSTRAINT chk_marks CHECK (Marks >= 0 AND Marks <= 100);
+
+7. DROP a constraint:
+   ALTER TABLE STUDENTS DROP CONSTRAINT chk_marks;
+
+KEY POINT: ALTER does NOT delete data. 
+           It changes the structure around existing data.
+           
+🎯 PYQ FACT: ALTER modifies structure WITHOUT deleting existing data.
 ```
 
 ---
 
-### TRUNCATE vs DROP vs DELETE — The Critical Comparison
+### COMMAND 3: DROP
 
 ```
-┌─────────────┬────────────────┬──────────────┬─────────────────────────┐
-│ Feature     │ DROP           │ TRUNCATE     │ DELETE (DML)            │
-├─────────────┼────────────────┼──────────────┼─────────────────────────┤
-│ Removes     │ Entire table   │ All rows     │ Specific/all rows       │
-│             │ (structure too)│ (keeps table)│ (based on WHERE clause) │
-├─────────────┼────────────────┼──────────────┼─────────────────────────┤
-│ Structure   │ DELETED        │ KEPT         │ KEPT                    │
-├─────────────┼────────────────┼──────────────┼─────────────────────────┤
-│ Rollback?   │ NO             │ NO           │ YES (can rollback)      │
-├─────────────┼────────────────┼──────────────┼─────────────────────────┤
-│ WHERE clause│ Not applicable │ Not allowed  │ YES — can filter rows   │
-├─────────────┼────────────────┼──────────────┼─────────────────────────┤
-│ Auto-commit │ YES            │ YES          │ NO (needs COMMIT)       │
-├─────────────┼────────────────┼──────────────┼─────────────────────────┤
-│ Category    │ DDL            │ DDL          │ DML                     │
-├─────────────┼────────────────┼──────────────┼─────────────────────────┤
-│ Speed       │ Fastest        │ Fast         │ Slower (logs each row)  │
-└─────────────┴────────────────┴──────────────┴─────────────────────────┘
-```
+PURPOSE: PERMANENTLY DELETE an entire database object (table, database, view, index)
+         ALL DATA and STRUCTURE are deleted.
 
-> **🔔 PYQ Trap:** "Which command deletes all rows but CANNOT be rolled back?" → TRUNCATE (DDL, not DML). DELETE can be rolled back; TRUNCATE cannot.
+SYNTAX:
+  DROP TABLE table_name;
+  DROP DATABASE database_name;
+  DROP VIEW view_name;
+  DROP INDEX index_name;
 
----
+EXAMPLES:
+  DROP TABLE STUDENTS;           -- Deletes table AND all its data permanently!
+  DROP DATABASE CollegeDB;       -- Deletes entire database!
+  DROP VIEW CS_Students;         -- Deletes the view definition
 
-## 🟡 DML — Data Manipulation Language
+WARNING:
+  → DROP is IRREVERSIBLE (cannot be undone!)
+  → The entire table including structure and data is GONE
+  → Unlike DELETE (which removes rows but keeps the table structure)
 
-DML commands work on the **data (rows)** inside tables.
-
-> **Key property:** DML commands are **NOT auto-committed** — changes can be undone with ROLLBACK until you COMMIT.
-
-### SELECT — Retrieve/Read data
-
-```sql
--- Basic syntax
-SELECT column1, column2 FROM table_name WHERE condition;
-
--- Select all columns
-SELECT * FROM Student;
-
--- Select with condition
-SELECT Name, Marks FROM Student WHERE Marks > 80;
-
--- Select distinct values (no duplicates)
-SELECT DISTINCT City FROM Student;
-
--- Select with ordering
-SELECT Name, Marks FROM Student ORDER BY Marks DESC;
-
--- Select with limit
-SELECT Name FROM Student WHERE City = 'Patna' LIMIT 5;
-```
-
-**SELECT execution order (important for BPSC):**
-```
-Execution Order:   FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT
-Writing Order:     SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT
+🎯 PYQ: DROP removes BOTH structure AND data permanently.
+         DELETE removes only ROWS but keeps the table structure.
 ```
 
 ---
 
-### INSERT — Add new rows
+### COMMAND 4: TRUNCATE
 
-```sql
--- Insert with all columns (values must match column order)
-INSERT INTO Student VALUES (101, 'Prag', 25, 'Patna', 92.5);
+```
+PURPOSE: REMOVE ALL ROWS from a table QUICKLY, but KEEP the table structure.
 
--- Insert with specific columns (safer practice)
-INSERT INTO Student (Roll_No, Name, Marks) VALUES (102, 'Riya', 88.0);
+SYNTAX:
+  TRUNCATE TABLE STUDENTS;
+  TRUNCATE STUDENTS;  -- (shorter form in some databases)
+
+WHAT HAPPENS:
+  BEFORE TRUNCATE:
+  ┌────────┬──────────┬────────┐
+  │ RollNo │  Name    │ Marks  │
+  ├────────┼──────────┼────────┤
+  │  101   │  Ravi    │  85    │
+  │  102   │  Priya   │  90    │
+  │  103   │  Aman    │  78    │
+  └────────┴──────────┴────────┘
+
+  AFTER TRUNCATE:
+  ┌────────┬──────────┬────────┐
+  │ RollNo │  Name    │ Marks  │
+  ├────────┼──────────┼────────┤
+  └────────┴──────────┴────────┘
+  (Table is EMPTY but still EXISTS with its structure!)
+
+WHY IS TRUNCATE FASTER THAN DELETE?
+  TRUNCATE: Drops entire data pages at once (OS-level operation)
+            Does NOT log individual row deletions
+            Resets AUTO-INCREMENT counters
+  DELETE:   Logs each row deletion individually (slower for large tables)
+            Can use WHERE clause to delete selective rows
+            Does NOT reset AUTO-INCREMENT counters
+
+🚨 PYQ TRAP — THE MOST IMPORTANT TRUNCATE FACT:
+  TRUNCATE is a DDL command → AUTO-COMMITTED → CANNOT BE ROLLED BACK!
+  
+  If you do: TRUNCATE TABLE STUDENTS;
+             ROLLBACK;  ← This DOES NOT bring data back!
+  
+  vs.
+  If you do: DELETE FROM STUDENTS;
+             ROLLBACK;  ← This DOES bring data back! (DELETE is DML)
 ```
 
 ---
 
-### UPDATE — Modify existing rows
+### COMMAND 5: RENAME
 
-```sql
--- Update with WHERE (recommended)
-UPDATE Student SET Marks = 95.0 WHERE Roll_No = 101;
+```
+PURPOSE: Rename a database object
 
--- Update multiple columns
-UPDATE Student SET City = 'Delhi', Age = 26 WHERE Roll_No = 101;
+SYNTAX:
+  RENAME TABLE old_name TO new_name;        -- MySQL
+  ALTER TABLE old_name RENAME TO new_name;  -- Standard SQL
 
--- DANGER: Update without WHERE (affects ALL rows!)
-UPDATE Student SET Marks = 0;   -- All students get 0!
+EXAMPLE:
+  RENAME TABLE STUDENTS TO ENROLLED_STUDENTS;
 ```
 
 ---
 
-### DELETE — Remove specific rows
+## 🔷 SECTION 4: DML — Data Manipulation Language
 
-```sql
--- Delete specific row(s)
-DELETE FROM Student WHERE Roll_No = 101;
+### Purpose: Operate on the ACTUAL DATA inside tables.
 
--- Delete multiple rows with condition
-DELETE FROM Student WHERE Marks < 35;
+DML commands work on ROWS and DATA — not on structure.
 
--- Delete ALL rows (like TRUNCATE but CAN be rolled back)
-DELETE FROM Student;
+> **DML commands are NOT auto-committed** — changes can be undone with ROLLBACK until COMMIT is executed.
+
+---
+
+### COMMAND 1: SELECT
+
+```
+PURPOSE: RETRIEVE/QUERY data from tables — the most used SQL command!
+
+BASIC SYNTAX:
+  SELECT column1, column2, ...
+  FROM table_name
+  WHERE condition
+  ORDER BY column [ASC|DESC]
+  GROUP BY column
+  HAVING group_condition
+  LIMIT n;
+
+STEP-BY-STEP EXAMPLES:
+
+1. Select ALL columns:
+   SELECT * FROM STUDENTS;
+   (Returns all rows, all columns)
+
+2. Select SPECIFIC columns:
+   SELECT RollNo, Name, Marks FROM STUDENTS;
+
+3. WHERE clause (filter rows):
+   SELECT * FROM STUDENTS WHERE Marks > 80;
+   SELECT * FROM STUDENTS WHERE DeptID = 'CS';
+   SELECT * FROM STUDENTS WHERE Marks BETWEEN 70 AND 90;
+   SELECT * FROM STUDENTS WHERE Name LIKE 'R%';  -- starts with R
+
+4. ORDER BY (sort results):
+   SELECT * FROM STUDENTS ORDER BY Marks DESC;  -- highest first
+   SELECT * FROM STUDENTS ORDER BY Name ASC;    -- alphabetical
+
+5. GROUP BY (aggregate groups):
+   SELECT DeptID, AVG(Marks) as AvgMarks
+   FROM STUDENTS
+   GROUP BY DeptID;
+   
+6. HAVING (filter after grouping — WHERE for groups):
+   SELECT DeptID, COUNT(*) as StudentCount
+   FROM STUDENTS
+   GROUP BY DeptID
+   HAVING COUNT(*) > 5;  -- only depts with more than 5 students
+
+7. AGGREGATE FUNCTIONS:
+   SELECT COUNT(*) FROM STUDENTS;          -- total rows
+   SELECT SUM(Marks) FROM STUDENTS;        -- total of marks
+   SELECT AVG(Marks) FROM STUDENTS;        -- average marks
+   SELECT MAX(Marks) FROM STUDENTS;        -- highest mark
+   SELECT MIN(Marks) FROM STUDENTS;        -- lowest mark
+
+8. DISTINCT (remove duplicates):
+   SELECT DISTINCT DeptID FROM STUDENTS;   -- unique departments
+
+🎯 PYQ FACT: WHERE filters BEFORE grouping; HAVING filters AFTER grouping.
+             HAVING is used WITH GROUP BY.
 ```
 
 ---
 
-## 🟢 DCL — Data Control Language
+### COMMAND 2: INSERT
 
-DCL manages **permissions and access rights** for database objects.
-
-### GRANT — Give permissions to a user
-
-```sql
--- Give SELECT and INSERT permission on Student table to user 'Rohan'
-GRANT SELECT, INSERT ON Student TO Rohan;
-
--- Give ALL privileges
-GRANT ALL PRIVILEGES ON Student TO Rohan;
-
--- Give permission to ALL users
-GRANT SELECT ON Student TO PUBLIC;
-
--- WITH GRANT OPTION — Rohan can also give this permission to others
-GRANT SELECT ON Student TO Rohan WITH GRANT OPTION;
 ```
+PURPOSE: Add new rows to a table
 
-### REVOKE — Take back permissions
+SYNTAX — Insert with all columns:
+  INSERT INTO table_name VALUES (val1, val2, val3, ...);
 
-```sql
--- Remove specific permission
-REVOKE INSERT ON Student FROM Rohan;
+SYNTAX — Insert with specific columns:
+  INSERT INTO table_name (col1, col2, col3) VALUES (val1, val2, val3);
 
--- Remove all privileges
-REVOKE ALL PRIVILEGES ON Student FROM Rohan;
-```
+EXAMPLES:
+  -- Insert a complete student record:
+  INSERT INTO STUDENTS VALUES (101, 'Ravi Kumar', 'r@mail.com', 'CS', 85);
 
-**GRANT/REVOKE diagram:**
-```
-DBA (Database Admin)
-        │
-        ├── GRANT SELECT ON Student TO Rohan;
-        │         ↓
-        │      Rohan can now SELECT from Student
-        │
-        └── REVOKE SELECT ON Student FROM Rohan;
-                  ↓
-               Rohan CANNOT select anymore
+  -- Insert with specific columns (others get DEFAULT or NULL):
+  INSERT INTO STUDENTS (RollNo, Name, DeptID) VALUES (104, 'Kavya', 'Math');
+
+  -- Insert MULTIPLE rows at once:
+  INSERT INTO STUDENTS VALUES
+    (102, 'Priya Singh', 'p@mail.com', 'Math', 90),
+    (103, 'Aman Gupta', 'a@mail.com', 'CS', 78);
 ```
 
 ---
 
-## 🔴 TCL — Transaction Control Language
+### COMMAND 3: UPDATE
 
-TCL manages **transactions** — a transaction is a unit of work that should be completed fully or not at all (ACID properties).
+```
+PURPOSE: MODIFY existing data in one or more rows
+
+SYNTAX:
+  UPDATE table_name
+  SET column1 = value1, column2 = value2, ...
+  WHERE condition;
+
+EXAMPLES:
+  -- Update one student's marks:
+  UPDATE STUDENTS SET Marks = 92 WHERE RollNo = 101;
+
+  -- Update multiple columns at once:
+  UPDATE STUDENTS 
+  SET Marks = 88, DeptID = 'Math' 
+  WHERE RollNo = 102;
+
+  -- Update ALL rows (dangerous! — no WHERE clause):
+  UPDATE STUDENTS SET Marks = 0;  -- ALL students get marks = 0!
+
+⚠️ WARNING: Always use WHERE with UPDATE!
+            Without WHERE → ALL rows are modified!
+
+🎯 PYQ: UPDATE without WHERE affects ALL rows in the table.
+```
+
+---
+
+### COMMAND 4: DELETE
+
+```
+PURPOSE: REMOVE specific rows from a table
+
+SYNTAX:
+  DELETE FROM table_name WHERE condition;
+
+EXAMPLES:
+  -- Delete one specific student:
+  DELETE FROM STUDENTS WHERE RollNo = 101;
+
+  -- Delete students with low marks:
+  DELETE FROM STUDENTS WHERE Marks < 40;
+
+  -- Delete ALL rows (dangerous! — no WHERE clause):
+  DELETE FROM STUDENTS;  -- ALL rows deleted, but table structure remains!
+
+KEY DIFFERENCES FROM TRUNCATE:
+  DELETE:   → DML command (can be rolled back!)
+             → Logs each row deletion (slower)
+             → Can use WHERE to delete selective rows
+             → Does NOT reset auto-increment counter
+             → Triggers fire for each deleted row
+             
+  TRUNCATE: → DDL command (CANNOT be rolled back!)
+             → Faster (drops data pages at once)
+             → No WHERE clause allowed
+             → Resets auto-increment counter
+             → Triggers do NOT fire
+```
+
+---
+
+## 🔷 SECTION 5: DELETE vs TRUNCATE — The Most Tested Comparison
+
+```
+┌──────────────────────┬──────────────────────────┬──────────────────────────┐
+│       FEATURE        │          DELETE           │         TRUNCATE         │
+├──────────────────────┼──────────────────────────┼──────────────────────────┤
+│ Category             │ DML (Data Manipulation)   │ DDL (Data Definition)    │
+├──────────────────────┼──────────────────────────┼──────────────────────────┤
+│ Can be ROLLED BACK?  │ YES — can be undone       │ NO — auto-committed!     │
+│                      │ (if not yet committed)    │ PERMANENT immediately    │
+├──────────────────────┼──────────────────────────┼──────────────────────────┤
+│ WHERE clause?        │ YES — can delete          │ NO — removes ALL rows    │
+│                      │ specific rows             │ always                   │
+├──────────────────────┼──────────────────────────┼──────────────────────────┤
+│ Speed                │ SLOWER (logs each row)    │ FASTER (bulk operation)  │
+├──────────────────────┼──────────────────────────┼──────────────────────────┤
+│ Table structure?     │ Keeps structure           │ Keeps structure          │
+├──────────────────────┼──────────────────────────┼──────────────────────────┤
+│ Auto-increment reset?│ NO — counter continues    │ YES — resets to 1        │
+├──────────────────────┼──────────────────────────┼──────────────────────────┤
+│ Triggers?            │ YES — triggers fire       │ NO — triggers don't fire │
+├──────────────────────┼──────────────────────────┼──────────────────────────┤
+│ Log individual rows? │ YES (detailed log)        │ NO (deallocation only)   │
+├──────────────────────┼──────────────────────────┼──────────────────────────┤
+│ Selective deletion?  │ YES (WHERE condition)     │ NO (all rows always)     │
+└──────────────────────┴──────────────────────────┴──────────────────────────┘
+
+MEMORY TRICK:
+  "DELETE is careful — logs each step, can undo"
+  "TRUNCATE is fast and final — no undo, no WHERE, resets everything"
+```
+
+---
+
+## 🔷 SECTION 6: DCL — Data Control Language
+
+### Purpose: Control WHO can do WHAT in the database (permissions/privileges).
+
+```
+DCL COMMANDS: GRANT and REVOKE
+
+These are used by the DATABASE ADMINISTRATOR (DBA) to:
+→ Give users permission to access/modify database objects
+→ Remove previously given permissions
+```
+
+### COMMAND 1: GRANT
+
+```
+PURPOSE: Give specific PERMISSIONS (privileges) to a user
+
+SYNTAX:
+  GRANT privilege_list ON object TO user;
+
+PRIVILEGE TYPES:
+  SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALL PRIVILEGES
+
+EXAMPLES:
+  -- Give Ravi permission to SELECT from STUDENTS:
+  GRANT SELECT ON STUDENTS TO 'ravi'@'localhost';
+
+  -- Give Priya permission to INSERT and UPDATE:
+  GRANT INSERT, UPDATE ON STUDENTS TO 'priya'@'localhost';
+
+  -- Give ALL permissions to admin user:
+  GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
+
+  -- Grant with ability to pass the privilege to others:
+  GRANT SELECT ON STUDENTS TO 'manager'@'localhost' WITH GRANT OPTION;
+  
+  (WITH GRANT OPTION allows manager to grant this permission to others)
+
+REAL-WORLD USE:
+  Hospital DB: Nurse → GRANT SELECT, UPDATE on PATIENT_RECORDS
+               Receptionist → GRANT SELECT, INSERT on APPOINTMENTS
+               Billing staff → GRANT SELECT on BILLING only
+```
+
+### COMMAND 2: REVOKE
+
+```
+PURPOSE: REMOVE previously granted permissions
+
+SYNTAX:
+  REVOKE privilege_list ON object FROM user;
+
+EXAMPLES:
+  -- Remove Ravi's SELECT permission:
+  REVOKE SELECT ON STUDENTS FROM 'ravi'@'localhost';
+
+  -- Remove ALL permissions from a user:
+  REVOKE ALL PRIVILEGES ON STUDENTS FROM 'priya'@'localhost';
+
+IMPORTANT: If user A granted permission to user B with GRANT OPTION,
+           and A's permission is revoked → B's permission is also revoked!
+           This is called CASCADE REVOKE.
+```
+
+---
+
+## 🔷 SECTION 7: TCL — Transaction Control Language
 
 ### What is a Transaction?
 
 ```
-A transaction is a sequence of SQL operations treated as ONE unit.
+TRANSACTION = A sequence of SQL operations that are treated as a SINGLE UNIT.
+              Either ALL operations succeed together, OR ALL fail together.
+              
+ANALOGY: BANK TRANSFER of ₹10,000 from Account A to Account B:
+  Step 1: DEDUCT ₹10,000 from Account A
+  Step 2: ADD ₹10,000 to Account B
+  
+  These TWO steps are ONE TRANSACTION.
+  → If Step 1 succeeds but Step 2 fails (power cut) →
+    Both steps must be UNDONE (rolled back)
+  → Money can't vanish in the middle of a transfer!
 
-Example: Bank Transfer ₹1000 from Account A to Account B:
-  Step 1: UPDATE Account SET Balance = Balance - 1000 WHERE AccNo = 'A';
-  Step 2: UPDATE Account SET Balance = Balance + 1000 WHERE AccNo = 'B';
-
-Both steps MUST succeed. If Step 2 fails, Step 1 must be reversed → ROLLBACK
-```
-
-### COMMIT — Make changes permanent
-
-```sql
--- Start some DML work
-INSERT INTO Student VALUES (103, 'Anjali', 22, 'Gaya', 78.5);
-UPDATE Student SET Marks = 90 WHERE Roll_No = 101;
-
--- COMMIT makes ALL pending changes permanent
-COMMIT;
--- After COMMIT: changes are saved to disk permanently, cannot be undone
-```
-
-### ROLLBACK — Undo all uncommitted changes
-
-```sql
--- Start some DML work
-DELETE FROM Student WHERE Roll_No = 103;
-UPDATE Student SET Marks = 0 WHERE City = 'Patna';
-
--- Oops! That was a mistake — ROLLBACK to undo
-ROLLBACK;
--- All changes since last COMMIT are reversed
-```
-
-### SAVEPOINT — Mark a point to roll back to
-
-```sql
-INSERT INTO Student VALUES (104, 'Dev', 23, 'Muzaffarpur', 85.0);
-SAVEPOINT sp1;   -- Mark this point
-
-INSERT INTO Student VALUES (105, 'Asha', 21, 'Darbhanga', 91.0);
-SAVEPOINT sp2;   -- Mark another point
-
-UPDATE Student SET City = 'Bihar' WHERE Roll_No = 104;  -- Made a mistake
-
-ROLLBACK TO sp2;  -- Undo only the UPDATE, keep rows 104 and 105
-
--- Or rollback further:
-ROLLBACK TO sp1;  -- Undo rows 105 AND the UPDATE, keep only row 104
-
-COMMIT;  -- Now save what remains
-```
-
-**SAVEPOINT Diagram:**
-```
-BEGIN TRANSACTION
-       │
-       ▼
- INSERT row 104  ──► SAVEPOINT sp1
-       │
-       ▼
- INSERT row 105  ──► SAVEPOINT sp2
-       │
-       ▼
- UPDATE mistake
-       │
-   ROLLBACK TO sp2 ──► Goes back to this point
-       │               (undoes UPDATE, keeps row 104 + 105)
-       ▼
-   ROLLBACK TO sp1 ──► Goes back further
-                       (undoes row 105 + UPDATE, keeps only row 104)
+ACID Properties of Transactions:
+  A = Atomicity    → All or nothing (whole transaction or none)
+  C = Consistency  → DB moves from one valid state to another
+  I = Isolation    → Concurrent transactions don't interfere
+  D = Durability   → Committed transactions survive failures
 ```
 
 ---
 
-## 🧱 SQL CONSTRAINTS — Types and Usage
-
-Constraints enforce rules on data in tables.
+### COMMAND 1: COMMIT
 
 ```
-┌─────────────────┬──────────────────────────────────────────────────────┐
-│ Constraint      │ What It Does                                         │
-├─────────────────┼──────────────────────────────────────────────────────┤
-│ PRIMARY KEY     │ Uniquely identifies each row. NOT NULL + UNIQUE.     │
-│                 │ Only ONE per table.                                  │
-├─────────────────┼──────────────────────────────────────────────────────┤
-│ NOT NULL        │ Column cannot have NULL value.                       │
-├─────────────────┼──────────────────────────────────────────────────────┤
-│ UNIQUE          │ All values in column must be different.              │
-│                 │ CAN have NULL (unlike PRIMARY KEY).                  │
-├─────────────────┼──────────────────────────────────────────────────────┤
-│ FOREIGN KEY     │ References PRIMARY KEY of another table.            │
-│                 │ Enforces referential integrity.                      │
-├─────────────────┼──────────────────────────────────────────────────────┤
-│ CHECK           │ Ensures values satisfy a condition.                  │
-│                 │ e.g., CHECK (Age >= 18)                              │
-├─────────────────┼──────────────────────────────────────────────────────┤
-│ DEFAULT         │ Sets default value when no value is provided.        │
-└─────────────────┴──────────────────────────────────────────────────────┘
-```
+PURPOSE: PERMANENTLY SAVE all changes made in the current transaction.
+         Once committed, changes CANNOT be undone by ROLLBACK.
 
-**NOT a Constraint:** `UNION` (it is a SET OPERATION, not a constraint) — Direct PYQ trap!
+SYNTAX:
+  COMMIT;
+  COMMIT WORK;  -- alternative syntax
 
-```sql
-CREATE TABLE Student (
-    Roll_No  INT          PRIMARY KEY,       -- PK constraint
-    Name     VARCHAR(50)  NOT NULL,          -- NOT NULL constraint
-    Email    VARCHAR(100) UNIQUE,            -- UNIQUE constraint
-    Age      INT          CHECK (Age >= 5),  -- CHECK constraint
-    City     VARCHAR(30)  DEFAULT 'Patna',   -- DEFAULT constraint
-    Dept_ID  INT          REFERENCES Dept(Dept_ID)  -- FOREIGN KEY
-);
+ANALOGY: Saving a document (Ctrl+S).
+         After you save, the changes are permanent.
+         "Commit" = officially recording the transaction in the database.
+
+EXAMPLE:
+  BEGIN TRANSACTION;
+  INSERT INTO ACCOUNTS VALUES (101, 5000);
+  UPDATE ACCOUNTS SET Balance = Balance - 1000 WHERE AccID = 101;
+  COMMIT;  ← Changes are NOW permanently saved!
+  
+  -- After COMMIT, ROLLBACK does nothing:
+  ROLLBACK;  ← This CANNOT undo the committed changes!
+
+🎯 PYQ FACT: COMMIT = makes changes PERMANENT. Cannot be undone by ROLLBACK.
 ```
 
 ---
 
-## 📊 Complete SQL Commands Summary Table
+### COMMAND 2: ROLLBACK
 
 ```
-┌───────────┬──────────────┬────────────────────────────────────────────────┐
-│ Category  │ Command      │ Action & Key Points                            │
-├───────────┼──────────────┼────────────────────────────────────────────────┤
-│           │ CREATE       │ Create new table/database                      │
-│   DDL     │ ALTER        │ Add/modify/drop columns in existing table      │
-│ (Structure│ DROP         │ Delete table completely (structure + data)     │
-│  changes) │ TRUNCATE     │ Delete all rows, keep structure. No rollback!  │
-│           │ RENAME       │ Rename a table                                 │
-├───────────┼──────────────┼────────────────────────────────────────────────┤
-│           │ SELECT       │ Read/retrieve data from table                  │
-│   DML     │ INSERT       │ Add new rows to table                          │
-│  (Data    │ UPDATE       │ Modify existing row values                     │
-│  changes) │ DELETE       │ Remove specific rows. Can be rolled back!      │
-├───────────┼──────────────┼────────────────────────────────────────────────┤
-│   DCL     │ GRANT        │ Give permissions to users                      │
-│(Permissions│ REVOKE      │ Take away permissions from users               │
-├───────────┼──────────────┼────────────────────────────────────────────────┤
-│           │ COMMIT       │ Save all changes permanently ★ PYQ             │
-│   TCL     │ ROLLBACK     │ Undo all uncommitted changes ★ PYQ             │
-│(Transactions│ SAVEPOINT  │ Set intermediate checkpoint in transaction     │
-│           │ SET TRANSACTION│ Set transaction properties                   │
-└───────────┴──────────────┴────────────────────────────────────────────────┘
+PURPOSE: UNDO all changes made since the last COMMIT (or SAVEPOINT).
+         Restores the database to its previous consistent state.
+
+SYNTAX:
+  ROLLBACK;
+  ROLLBACK WORK;  -- alternative
+  ROLLBACK TO SAVEPOINT savepoint_name;  -- partial rollback
+
+ANALOGY: Ctrl+Z (Undo). Goes back to the last saved state.
+
+EXAMPLE:
+  START TRANSACTION;
+  DELETE FROM STUDENTS WHERE RollNo = 101;  -- Ravi deleted
+  DELETE FROM STUDENTS WHERE RollNo = 102;  -- Priya deleted
+  -- Realise this was a mistake!
+  ROLLBACK;  ← Both deletes are UNDONE! Ravi and Priya are back.
+
+IMPORTANT CONDITIONS FOR ROLLBACK:
+  ✅ Works only on DML commands (SELECT, INSERT, UPDATE, DELETE)
+  ❌ CANNOT rollback DDL commands (CREATE, DROP, TRUNCATE — auto-committed!)
+  ❌ CANNOT rollback DCL commands (GRANT, REVOKE — auto-committed!)
+  ❌ Cannot rollback after COMMIT
+
+🎯 PYQ FACT: ROLLBACK undoes uncommitted DML changes.
+             ROLLBACK cannot undo TRUNCATE or DROP!
 ```
 
 ---
 
-## 🔥 BPSC PYQ High-Frequency Facts — SQL Commands
+### COMMAND 3: SAVEPOINT
 
-| PYQ Question Trigger | Answer |
-|---------------------|--------|
-| COMMIT does what? | Makes changes **PERMANENT** |
-| ROLLBACK does what? | **UNDOES** all uncommitted changes |
-| TRUNCATE vs DELETE — which can be rolled back? | **DELETE** can be rolled back; **TRUNCATE** cannot |
-| DDL commands examples | CREATE, ALTER, DROP, TRUNCATE |
-| DML commands examples | SELECT, INSERT, UPDATE, DELETE |
-| DCL commands examples | GRANT, REVOKE |
-| TCL commands examples | COMMIT, ROLLBACK, SAVEPOINT |
-| Which command gives permissions? | **GRANT** |
-| Which command removes permissions? | **REVOKE** |
-| Which is NOT a constraint? | **UNION** (it's a set operation) |
-| How many PRIMARY KEYS per table? | Only **1** |
-| Can UNIQUE key have NULL? | **YES** (PRIMARY KEY cannot have NULL, UNIQUE can) |
-| TRUNCATE category | **DDL** (not DML!) — many students confuse this |
-| SQL was developed by | **IBM** |
-| SQL standardized by | **ANSI** |
-| SQL type of language | **Declarative** (not procedural) |
+```
+PURPOSE: Create a CHECKPOINT within a transaction.
+         Allows PARTIAL rollback (go back to savepoint, not full rollback).
+
+SYNTAX:
+  SAVEPOINT savepoint_name;
+  ROLLBACK TO SAVEPOINT savepoint_name;
+  RELEASE SAVEPOINT savepoint_name;  -- removes the savepoint
+
+ANALOGY: Multiple save slots in a video game!
+         You can save your progress at different points and go back to any slot.
+
+EXAMPLE:
+  START TRANSACTION;
+  
+  INSERT INTO STUDENTS VALUES (101, 'Ravi', 'CS', 85);
+  SAVEPOINT sp1;  ← CHECKPOINT 1 (Ravi is in)
+  
+  INSERT INTO STUDENTS VALUES (102, 'Priya', 'Math', 90);
+  SAVEPOINT sp2;  ← CHECKPOINT 2 (Ravi + Priya are in)
+  
+  INSERT INTO STUDENTS VALUES (103, 'Wrong', 'Error', -5);  -- mistake!
+  
+  ROLLBACK TO SAVEPOINT sp2;  ← Go back to sp2 (undo only the wrong insert)
+  -- Now ONLY Ravi and Priya are in; the wrong entry is undone.
+  -- Ravi (sp1) is NOT affected!
+  
+  COMMIT;  ← Permanently save Ravi and Priya.
+
+VISUAL:
+  Start ──→ [Ravi inserted] ──(sp1)──→ [Priya inserted] ──(sp2)──→ [Wrong data] ──→ ROLLBACK TO sp2
+                                                               ↑
+                                                         Rolls back to here
+                                                       (Wrong data removed,
+                                                        Ravi + Priya kept)
+```
 
 ---
 
-## 🧠 Memory Tricks for SQL Categories
+## 🔷 SECTION 8: TCL — COMMIT vs ROLLBACK Comparison
 
 ```
-"Careful DICT" mnemonic:
-
-D → DDL  = Define/Design  (CREATE, ALTER, DROP, TRUNCATE)
-I        = (skip)
-C → DCL  = Control/Access  (GRANT, REVOKE)
-T → TCL  = Transactions    (COMMIT, ROLLBACK, SAVEPOINT)
-
-And the most used:
-M → DML  = Manipulate Data (SELECT, INSERT, UPDATE, DELETE)
+┌──────────────────────┬────────────────────────────┬───────────────────────────┐
+│       FEATURE        │          COMMIT             │         ROLLBACK          │
+├──────────────────────┼────────────────────────────┼───────────────────────────┤
+│ Purpose              │ Makes changes PERMANENT     │ UNDOES all changes since  │
+│                      │                             │ last COMMIT or SAVEPOINT  │
+├──────────────────────┼────────────────────────────┼───────────────────────────┤
+│ After execution      │ Changes saved to disk,      │ Database returns to       │
+│                      │ cannot be undone            │ previous state            │
+├──────────────────────┼──────────────────────────  ┼───────────────────────────┤
+│ Works on             │ DML, DDL (DDL auto-commits) │ DML only; NOT DDL or DCL  │
+├──────────────────────┼────────────────────────────┼───────────────────────────┤
+│ After COMMIT         │ ROLLBACK has no effect      │ N/A (too late)            │
+├──────────────────────┼────────────────────────────┼───────────────────────────┤
+│ Analogy              │ Ctrl+S (Save document)      │ Ctrl+Z (Undo)             │
+└──────────────────────┴────────────────────────────┴───────────────────────────┘
 ```
-
-**For DDL commands:**
-> **"CAD TR"** → Create, Alter, Drop, Truncate, Rename
-
-**For COMMIT vs ROLLBACK:**
-> **"COMMIT = Confirm it. ROLLBACK = Take it back."**
-
-**For TRUNCATE:**
-> **"TRUNCATE = Cut all rows but keep the skeleton (table structure). Like cutting all branches but keeping the tree trunk."**
 
 ---
 
-# ═══════════════════════════════════════════════════════
-# 🌿 PART 2: GS — BIOLOGY (Plant Physiology + Photoperiodism)
-# ═══════════════════════════════════════════════════════
+## 🔷 SECTION 9: Important WHERE, GROUP BY, HAVING — Quick Reference
 
-## 🎯 Why This Section Matters for BPSC
+```
+WHERE:    Filter rows BEFORE any grouping
+          Used with: SELECT, UPDATE, DELETE
+          Can reference any column
+          Example: WHERE Marks > 80
 
-Biology questions appear regularly in BPSC GS section. Plant physiology — especially **Photoperiodism** and **Plant Hormones** — has appeared multiple times. This section covers everything from photosynthesis to plant movements.
+GROUP BY: Group rows with same value in a column
+          Used after WHERE, before HAVING
+          Must use aggregate functions with GROUP BY
+          Example: GROUP BY DeptID
+
+HAVING:   Filter GROUPS after GROUP BY (like WHERE for groups)
+          Cannot use HAVING without GROUP BY (usually)
+          Example: HAVING COUNT(*) > 5
+
+ORDER OF EXECUTION:
+  FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT
+  
+  Mentally: "Take data → Filter rows → Group → Filter groups → Display → Sort → Limit"
+
+EXAMPLE combining all:
+  SELECT DeptID, AVG(Marks) as AvgMarks, COUNT(*) as Students
+  FROM STUDENTS
+  WHERE DeptID != 'Admin'        ← Remove Admin dept rows first
+  GROUP BY DeptID                ← Group remaining by dept
+  HAVING AVG(Marks) > 75         ← Only depts with avg > 75
+  ORDER BY AvgMarks DESC         ← Sort by avg marks
+  LIMIT 3;                       ← Show top 3 only
+
+🎯 PYQ: WHERE is used BEFORE GROUP BY; HAVING is used AFTER GROUP BY.
+        Cannot use aggregate functions (AVG, COUNT) in WHERE clause!
+```
 
 ---
 
-## ☀️ Photosynthesis — The Energy Factory of Plants
-
-**Definition:** The process by which green plants use sunlight, water, and CO₂ to manufacture food (glucose) and release oxygen.
-
-**Overall Equation:**
-```
-6CO₂ + 6H₂O  ──── Sunlight / Chlorophyll ────►  C₆H₁₂O₆  +  6O₂
-  Carbon         Water                           Glucose       Oxygen
-  dioxide
-```
-
-### Two Stages of Photosynthesis:
+## 🔷 SECTION 10: DDL Auto-Commit — The Most Critical PYQ Concept
 
 ```
-STAGE 1: LIGHT REACTIONS (Light-dependent) — occurs in THYLAKOID MEMBRANE
-────────────────────────────────────────────────────────────────────────
-• Requires: Sunlight + Chlorophyll
-• Water molecules are SPLIT (photolysis of water): 2H₂O → 4H⁺ + O₂
-• Oxygen is released here
-• Produces: ATP (energy) + NADPH (reducing power)
-• This stage produces O₂ that we breathe!
+AUTO-COMMIT RULE (THE GOLDEN PYQ RULE):
 
-                Sunlight
-                   │
-               Chlorophyll
-                   │
-         H₂O ──────►  O₂ (released) + ATP + NADPH
+DDL Commands → AUTO-COMMITTED (automatically permanent, cannot rollback)
+DCL Commands → AUTO-COMMITTED
+DML Commands → NOT auto-committed (can rollback until COMMIT is called)
 
-STAGE 2: DARK REACTIONS / CALVIN CYCLE (Light-independent) — in STROMA
-────────────────────────────────────────────────────────────────────────
-• Does NOT need direct light (but uses products from Stage 1)
-• Uses ATP + NADPH from Stage 1
-• CO₂ is FIXED (converted to glucose)
-• Also called: C3 cycle (Calvin-Benson cycle)
-• Discovered by: Melvin Calvin (Nobel Prize, 1961)
+THIS IS THE MOST TESTED CONCEPT IN SQL!
+
+SCENARIO 1: (DDL — cannot rollback)
+  CREATE TABLE TEMP (id INT);       -- DDL auto-committed
+  INSERT INTO TEMP VALUES (1);      -- DML: not yet committed
+  TRUNCATE TABLE TEMP;              -- DDL: auto-committed → data GONE permanently
+  ROLLBACK;                         -- This does NOTHING for TRUNCATE!
+  SELECT * FROM TEMP;               -- Returns EMPTY TABLE (truncate wasn't undone)
+
+SCENARIO 2: (DML — can rollback)
+  INSERT INTO STUDENTS VALUES (999, 'Test', 'CS', 50);   -- DML
+  DELETE FROM STUDENTS WHERE RollNo = 999;               -- DML
+  ROLLBACK;                                              -- Both undone!
+  SELECT * FROM STUDENTS WHERE RollNo = 999;             -- Returns row! (rollback restored it)
+
+SCENARIO 3: (COMMIT blocks rollback)
+  INSERT INTO STUDENTS VALUES (888, 'New', 'CS', 70);    -- DML
+  COMMIT;                                                -- Permanently saved!
+  ROLLBACK;                                              -- Too late! Can't undo committed data.
+  SELECT * FROM STUDENTS WHERE RollNo = 888;             -- Row still exists.
 ```
-
-**Key Pigment:** Chlorophyll (in **chloroplasts**)
-- Chlorophyll a → Main photosynthetic pigment (blue-green color)
-- Chlorophyll b → Accessory pigment (yellow-green)
-- Carotenoids → Also accessory (orange, yellow)
-
-> **🔔 Exam Fact:** Photosynthesis occurs in **chloroplasts**. The **leaf** is the primary organ of photosynthesis. Aquatic plants can use dissolved CO₂.
 
 ---
 
-## 🌙 PHOTOPERIODISM — The Most Important Topic Today
+## 🔷 SECTION 11: Complete SQL Command Summary Table
+
+```
+┌────────────┬──────────────┬────────────────────┬─────────────┬─────────────┐
+│  CATEGORY  │   COMMAND    │      PURPOSE        │AUTO-COMMIT? │ROLLBACK-ABLE│
+├────────────┼──────────────┼────────────────────┼─────────────┼─────────────┤
+│ DDL        │ CREATE       │ Create new object   │    YES      │     NO      │
+│            │ ALTER        │ Modify structure    │    YES      │     NO      │
+│            │ DROP         │ Delete object       │    YES      │     NO      │
+│            │ TRUNCATE     │ Empty table fast    │    YES      │     NO      │
+│            │ RENAME       │ Rename object       │    YES      │     NO      │
+├────────────┼──────────────┼────────────────────┼─────────────┼─────────────┤
+│ DML        │ SELECT       │ Read/query data     │    NO       │    YES      │
+│            │ INSERT       │ Add new rows        │    NO       │    YES      │
+│            │ UPDATE       │ Modify existing rows│    NO       │    YES      │
+│            │ DELETE       │ Remove specific rows│    NO       │    YES      │
+├────────────┼──────────────┼────────────────────┼─────────────┼─────────────┤
+│ DCL        │ GRANT        │ Give permissions    │    YES      │     NO      │
+│            │ REVOKE       │ Remove permissions  │    YES      │     NO      │
+├────────────┼──────────────┼────────────────────┼─────────────┼─────────────┤
+│ TCL        │ COMMIT       │ Save permanently    │    N/A      │     NO      │
+│            │ ROLLBACK     │ Undo changes        │    N/A      │     N/A     │
+│            │ SAVEPOINT    │ Create checkpoint   │    N/A      │    YES      │
+└────────────┴──────────────┴────────────────────┴─────────────┴─────────────┘
+```
+
+---
+
+## 🔷 SECTION 12: PYQ Traps Summary
+
+```
+TRAP 1: "TRUNCATE is a DML command"
+  → FALSE! TRUNCATE is DDL. DELETE is DML.
+
+TRAP 2: "TRUNCATE can be rolled back"
+  → FALSE! TRUNCATE is DDL → AUTO-COMMITTED → CANNOT be rolled back.
+           DELETE can be rolled back (it's DML).
+
+TRAP 3: "DELETE removes the table structure"
+  → FALSE! DELETE removes ROWS only; table structure remains.
+           DROP removes both structure AND data.
+
+TRAP 4: "COMMIT undoes recent changes"
+  → FALSE! COMMIT SAVES changes permanently. ROLLBACK undoes changes.
+
+TRAP 5: "ROLLBACK can undo a COMMIT"
+  → FALSE! Once COMMITted, changes are permanent. ROLLBACK cannot undo them.
+
+TRAP 6: "SELECT is a DDL command"
+  → FALSE! SELECT is DML (it manipulates/retrieves data).
+
+TRAP 7: "HAVING can be used without GROUP BY"
+  → Generally FALSE in standard SQL (HAVING works with GROUP BY).
+           WHERE is used for row-level filtering without GROUP BY.
+
+TRAP 8: "GRANT and REVOKE are DML commands"
+  → FALSE! GRANT and REVOKE are DCL (Data Control Language).
+
+TRAP 9: "WHERE and HAVING serve the same purpose"
+  → FALSE! WHERE filters rows BEFORE grouping.
+           HAVING filters groups AFTER GROUP BY.
+           Aggregate functions (COUNT, AVG) can be used in HAVING, not WHERE.
+
+TRAP 10: "ALTER TABLE deletes existing data in the table"
+  → FALSE! ALTER modifies structure without deleting data.
+           (Exception: DROP COLUMN removes column and its data)
+```
+
+---
+
+# PART 2: GENERAL STUDIES
+## 🌱 Biology — Photoperiodism
+
+---
+
+## 🔷 SECTION 1: What is Photoperiodism?
+
+### Real-Life Observation:
+
+Have you ever noticed that:
+- Some flowers bloom in SUMMER (long days, short nights)?
+- Some flowers bloom in WINTER (short days, long nights)?
+- Some plants seem to flower at any time of year?
+
+This is not random — plants MEASURE the length of day (or night) and use it as a signal for when to flower. This phenomenon is called **PHOTOPERIODISM**.
 
 ### Definition:
-**Photoperiodism** = The response of plants to the **relative length of day (light period) and night (dark period)** that determines FLOWERING.
+> **Photoperiodism is the response of plants to the RELATIVE LENGTH of day and night (photoperiod) — particularly the flowering response triggered by the duration of light and darkness in a 24-hour cycle.**
 
-### Discovered By:
-**W.W. Garner and H.A. Allard** (American Scientists, 1920) — while working on Tobacco plant (Maryland Mammoth variety).
-
+### Key Insight — It's Actually About DARKNESS, Not Light!
 ```
-KEY DISCOVERY:
-Garner & Allard found that the tobacco plant flowers only in SHORT DAYS (long nights)
-They named this phenomenon: PHOTOPERIODISM
-```
+COMMON MISCONCEPTION: Plants respond to the LENGTH OF DAY (light period)
+SCIENTIFIC TRUTH:     Plants actually measure the LENGTH OF NIGHT (dark period)!
 
-### The Critical Night (Not Day!) Concept:
+The critical period is the DARK PERIOD (night length), not the light period.
+This was discovered by Garner and Allard initially based on day length,
+but later Hamner and Bonner (1938) showed the NIGHT LENGTH is critical.
 
-> **🔔 The BIG Exam Trap:** Plants actually respond to the **length of the DARK PERIOD (night)**, NOT the light period — even though it is called "photoperiodism"!
-
-```
-The critical factor = LENGTH OF CONTINUOUS DARK PERIOD (night length)
-        ↑
-  This is what actually controls flowering!
+However: For exam purposes (especially BPSC), the textbook answer is
+         that plants respond to RELATIVE LENGTH OF DAY and NIGHT.
+         
+🎯 PYQ EXAM ANSWER: Photoperiodism = response to relative length of DAY AND NIGHT
 ```
 
 ---
 
-### 🌸 Classification of Plants Based on Photoperiodism:
+## 🔷 SECTION 2: Discovery of Photoperiodism
+
+### Garner and Allard — The Discoverers:
 
 ```
-┌─────────────────────────┬───────────────────────────────────────────────────────┐
-│ Plant Type              │ Description + Examples                                │
-├─────────────────────────┼───────────────────────────────────────────────────────┤
-│ SHORT DAY PLANTS (SDP)  │ • Flower when day is SHORTER than critical length     │
-│ = Long Night Plants     │ • Need long continuous dark period to flower          │
-│                         │ • Flower in WINTER / late autumn                      │
-│                         │ Examples: Rice, Soybean, Sugarcane, Chrysanthemum,    │
-│                         │           Cotton, Tobacco (Maryland Mammoth),         │
-│                         │           Cocklebur (Xanthium), Poinsettia            │
-├─────────────────────────┼───────────────────────────────────────────────────────┤
-│ LONG DAY PLANTS (LDP)   │ • Flower when day is LONGER than critical length      │
-│ = Short Night Plants    │ • Need short continuous dark period to flower         │
-│                         │ • Flower in SUMMER / spring                           │
-│                         │ Examples: Wheat, Barley, Oat, Radish, Spinach,        │
-│                         │           Henbane (Hyoscyamus), Sugar beet,           │
-│                         │           Carnation, Larkspur                         │
-├─────────────────────────┼───────────────────────────────────────────────────────┤
-│ DAY NEUTRAL PLANTS (DNP)│ • NOT affected by day/night length                   │
-│                         │ • Flower regardless of photoperiod                    │
-│                         │ Examples: Tomato, Maize/Corn, Sunflower, Cucumber,   │
-│                         │           Castor, Rose, Pea                           │
-└─────────────────────────┴───────────────────────────────────────────────────────┘
-```
+SCIENTISTS: W.W. GARNER and H.A. ALLARD
+YEAR:       1920
+INSTITUTION: U.S. Department of Agriculture (USDA), Maryland, USA
 
-**Visual Diagram:**
-```
-SHORT DAY PLANT (e.g., Rice):
-Day:   ████░░░░░░░░░░░░░░  (Short Day < Critical Length)
-Night: ░░░░████████████████  (Long Night > Critical Length)
-Result: FLOWERS ✿
+THE DISCOVERY STORY:
 
-LONG DAY PLANT (e.g., Wheat):
-Day:   ██████████████░░░░  (Long Day > Critical Length)
-Night: ░░░░░░░░████████████  (Short Night < Critical Length)  
-Result: FLOWERS ✿
+OBSERVATION 1: Maryland Mammoth Tobacco
+  → W.W. Garner was growing tobacco plants
+  → A special mutant variety called "MARYLAND MAMMOTH TOBACCO" grew 
+    very tall (3-5 meters!) but REFUSED to flower during summer
+  → This same plant FLOWERED in a greenhouse in WINTER!
+  → WHY would it flower in winter but not summer?
+  
+OBSERVATION 2: Soybean (Biloxi variety)
+  → H.A. Allard noticed that soybeans planted at DIFFERENT TIMES in the 
+    growing season all flowered at the SAME TIME in late summer
+  → Plants planted in May AND plants planted in July both flowered together!
+  → This meant: flowering was NOT triggered by plant age, but by some 
+    environmental signal that happened at the SAME TIME every year.
 
-DAY NEUTRAL PLANT (e.g., Tomato):
-Day:   Any length
-Night: Any length
-Result: FLOWERS regardless ✿
+CONCLUSION (1920): Both scientists concluded that the RELATIVE LENGTH OF DAY 
+AND NIGHT (the photoperiod) was the controlling factor for flowering!
+
+KEY PUBLICATION: "Effect of the Relative Length of Day and Night and Other 
+                  Factors of the Environment on Growth and Reproduction in Plants"
+                  (1920)
+
+🎯 PYQ FACT: GARNER and ALLARD discovered photoperiodism in 1920.
+             Their experimental plants: Maryland Mammoth Tobacco + Biloxi Soybean.
 ```
 
 ---
 
-### 🧬 Phytochrome — The Photoreceptor
+## 🔷 SECTION 3: Types of Plants Based on Photoperiodism
 
-The protein responsible for detecting light/dark signals is **PHYTOCHROME**.
-
-```
-Phytochrome exists in TWO forms:
-
-Pr (Red-absorbing form)    ←────── Red Light (660 nm)
-        │
-        │ absorbs red light
-        ▼
-Pfr (Far-red absorbing)    ←────── Far-red Light (730 nm)
-        │
-        │ Pfr is the ACTIVE form that promotes/inhibits flowering
-        │
-        ▼
-    DARKNESS converts Pfr → Pr (slowly)
-```
-
-**Key Point:** During continuous night (dark period), Pfr slowly converts back to Pr. This is how plants "measure" night length.
-
-> **🔔 Exam Fact:** If you interrupt the dark period with a brief flash of **RED LIGHT** (660 nm) → inhibits SDP flowering (converts Pr → Pfr). If followed by **FAR-RED LIGHT** (730 nm) → reverses the effect.
-
----
-
-## 🌱 PLANT HORMONES (Phytohormones)
-
-Plant hormones are **chemical messengers** produced in one part of the plant that affect another part. Also called **Phytohormones**.
+### TYPE 1: SHORT-DAY PLANTS (SDP) — Winter Bloomers
 
 ```
-┌────────────────┬──────────────────┬────────────────────────────────────────────┐
-│ Hormone        │ Primary Site of  │ Main Functions                             │
-│                │ Production       │                                            │
-├────────────────┼──────────────────┼────────────────────────────────────────────┤
-│ AUXIN          │ Shoot tip (apical│ • Cell elongation (growth promotion)       │
-│ (IAA)          │ meristem)        │ • Phototropism (bending toward light)      │
-│                │                  │ • Geotropism                               │
-│                │                  │ • Apical dominance (suppresses side buds) │
-│                │                  │ • Root initiation in stem cuttings         │
-│                │                  │ Discovered by: Charles Darwin (initially)  │
-│                │                  │ Isolated by: F.W. Went (1926)             │
-├────────────────┼──────────────────┼────────────────────────────────────────────┤
-│ GIBBERELLIN    │ Young leaves,    │ • Stem elongation (tallness)               │
-│ (GA₃)          │ seeds, roots     │ • Breaks seed dormancy                     │
-│                │                  │ • Promotes germination                     │
-│                │                  │ • Delays senescence (aging) of leaves      │
-│                │                  │ • Causes 'bolting' in rosette plants        │
-│                │                  │ Discovered in rice disease: Bakanae        │
-│                │                  │ (foolish seedling disease) by Kurosawa    │
-├────────────────┼──────────────────┼────────────────────────────────────────────┤
-│ CYTOKININ      │ Root tips,       │ • Cell division (cytokinesis)              │
-│ (Zeatin)       │ developing seeds │ • Delays leaf senescence                   │
-│                │                  │ • Promotes lateral bud growth              │
-│                │                  │ • Overcomes apical dominance               │
-│                │                  │ Discovered by: Skoog and Miller (1955)    │
-├────────────────┼──────────────────┼────────────────────────────────────────────┤
-│ ABSCISIC ACID  │ Leaves, roots,   │ • STRESS HORMONE — called "stress hormone" │
-│ (ABA)          │ seeds            │ • Causes stomata CLOSURE in drought        │
-│                │                  │ • Induces seed dormancy                    │
-│                │                  │ • Promotes leaf/fruit abscission (shedding)│
-│                │                  │ • Inhibits growth (growth inhibitor)       │
-│                │                  │ Also called: Dormin                        │
-├────────────────┼──────────────────┼────────────────────────────────────────────┤
-│ ETHYLENE       │ Ripening fruits, │ • Fruit RIPENING (most important role)     │
-│ (Gas hormone)  │ nodes, leaves    │ • Promotes senescence (aging + death)      │
-│                │                  │ • Causes epinasty (downward bending)       │
-│                │                  │ • Triple response in seedlings             │
-│                │                  │ • Only GASEOUS plant hormone               │
-│                │                  │ Commercial use: banana/mango ripening      │
-└────────────────┴──────────────────┴────────────────────────────────────────────┘
+DEFINITION: Plants that flower only when the DARK PERIOD (night) 
+            is LONGER THAN a critical minimum.
+            They need LONG NIGHTS to flower.
+            
+ALTERNATIVE NAME: Long-Night Plants (more scientifically accurate!)
+
+IN SIMPLE TERMS: These plants flower when DAYS ARE SHORT (nights are long)
+                 → They flower in AUTUMN and WINTER
+
+REQUIREMENT:
+  Day length: LESS THAN a critical daylength (typically < 12-14 hours)
+  Night length: MORE THAN a critical minimum (typically > 10-12 hours)
+
+EXAMPLES:
+  ✅ Chrysanthemum (Guldaudi)  → flowers in autumn/winter
+  ✅ Tobacco (Maryland Mammoth) → Garner & Allard's original plant!
+  ✅ Poinsettia (Christmas flower) → blooms in December!
+  ✅ Cocklebur (Xanthium) → classic lab experimental plant
+  ✅ Strawberry → short-day plant
+  ✅ Dahlia → flowers in autumn
+  ✅ Hemp (Cannabis)
+  ✅ Rice (many varieties) → some rice varieties are short-day plants
+
+AGRICULTURAL IMPORTANCE:
+  → Chrysanthemums grown commercially: farmers use BLACK PLASTIC SHEETS
+    to artificially CREATE LONG NIGHTS → force flowering at any time of year
+  → Poinsettias sold at Christmas: growers keep them in darkness for
+    extended periods to ensure they're ready for the holiday season.
 ```
 
----
-
-### 🌿 Quick Memory Trick for Plant Hormones:
+### TYPE 2: LONG-DAY PLANTS (LDP) — Summer Bloomers
 
 ```
-"AGACE" — All Good Children Always Excel
+DEFINITION: Plants that flower only when the LIGHT PERIOD (day) 
+            is LONGER THAN a critical minimum.
+            They need SHORT NIGHTS to flower.
+            
+ALTERNATIVE NAME: Short-Night Plants
 
-A → Auxin      → Apical growth, cell elongation
-G → Gibberellin → Growth (stem elongation), Germination  
-A → ABA         → Abscission, Arrest growth (stress, drought)
-C → Cytokinin   → Cell division
-E → Ethylene    → Every fruit ripens (gas hormone)
+IN SIMPLE TERMS: These plants flower when DAYS ARE LONG (nights are short)
+                 → They flower in SPRING and SUMMER
+
+REQUIREMENT:
+  Day length: MORE THAN a critical daylength (typically > 14-16 hours)
+  Night length: LESS THAN a critical minimum (typically < 10 hours)
+
+EXAMPLES:
+  ✅ Wheat
+  ✅ Barley
+  ✅ Oats
+  ✅ Spinach
+  ✅ Sugar beet
+  ✅ Radish
+  ✅ Lettuce
+  ✅ Mustard (Brassica) → some varieties
+  ✅ Carnation
+  ✅ Iris
+  ✅ Henbane (Hyoscyamus niger) — classic experimental plant
+
+AGRICULTURAL IMPORTANCE:
+  → Wheat is a long-day plant → needs long summer days to head and grain
+  → Growing wheat in tropical regions (short days year-round) requires
+    special varieties or artificial light extension
 ```
 
----
-
-## 🌸 TROPISMS — Directional Plant Movements
-
-Tropisms are growth movements in response to directional stimuli.
+### TYPE 3: DAY-NEUTRAL PLANTS (DNP)
 
 ```
-┌───────────────┬──────────────────┬──────────────────────────────────────────┐
-│ Tropism       │ Stimulus         │ Example                                  │
-├───────────────┼──────────────────┼──────────────────────────────────────────┤
-│ PHOTOTROPISM  │ Light            │ Shoot bends TOWARD light (+ve phototropism│
-│               │                  │ Roots grow AWAY from light (-ve)          │
-├───────────────┼──────────────────┼──────────────────────────────────────────┤
-│ GEOTROPISM    │ Gravity          │ Roots grow DOWNWARD (+ve geotropism)      │
-│ (Gravitropism)│                  │ Shoots grow UPWARD (-ve geotropism)       │
-├───────────────┼──────────────────┼──────────────────────────────────────────┤
-│ HYDROTROPISM  │ Water            │ Roots grow TOWARD water (+ve)             │
-├───────────────┼──────────────────┼──────────────────────────────────────────┤
-│ THIGMOTROPISM │ Touch/contact    │ Tendrils of pea, grapevine coil around   │
-│               │                  │ support                                  │
-├───────────────┼──────────────────┼──────────────────────────────────────────┤
-│ CHEMOTROPISM  │ Chemicals        │ Pollen tube grows toward ovule           │
-└───────────────┴──────────────────┴──────────────────────────────────────────┘
-```
+DEFINITION: Plants that CAN FLOWER regardless of the photoperiod.
+            Their flowering is NOT triggered by day/night length.
+            They use OTHER signals (temperature, age, etc.)
+            
+IN SIMPLE TERMS: These plants are "photoperiod blind" — they don't care
+                 how long the day or night is.
 
-**Key:** Auxin is responsible for PHOTOTROPISM.
-- More auxin accumulates on the DARK side of the stem
-- Dark side elongates MORE → stem bends TOWARD light
+EXAMPLES:
+  ✅ Tomato       → flowers whenever conditions are right
+  ✅ Cucumber     → day-neutral
+  ✅ Cotton       → day-neutral
+  ✅ Rose         → can flower throughout the year
+  ✅ Sunflower    → day-neutral (some varieties)
+  ✅ Maize/Corn   → most varieties are day-neutral
+  ✅ Snapdragon
 
----
-
-## 🌿 RESPIRATION IN PLANTS
-
-Plants respire (break down glucose for energy) in ALL living cells, ALL the time — unlike photosynthesis which needs light.
-
-```
-Aerobic Respiration:
-C₆H₁₂O₆  +  6O₂  ──►  6CO₂  +  6H₂O  +  38 ATP (energy)
- Glucose    Oxygen      Carbon   Water     Energy
-                        dioxide
-
-Anaerobic Respiration (no oxygen):
-C₆H₁₂O₆  ──►  2C₂H₅OH  +  2CO₂  +  2 ATP
- Glucose       Ethanol    Carbon    Energy
-```
-
-**Key Difference:**
-- Photosynthesis: Takes CO₂, Releases O₂ (in light)
-- Respiration: Takes O₂, Releases CO₂ (always, day and night)
-
-> **🔔 Exam Trap:** During DAY — both photosynthesis AND respiration occur in plants. Net effect = O₂ released (photosynthesis rate >> respiration rate). During NIGHT — only respiration occurs.
-
----
-
-## 🌸 OTHER IMPORTANT PLANT PHYSIOLOGY TOPICS
-
-### Transpiration — Loss of water through leaves
-
-- Occurs mainly through **stomata** (tiny pores in leaves)
-- Guard cells control opening/closing of stomata
-- Functions: Cools the plant, drives water absorption from roots, nutrient transport
-- **Transpiration Pull** = mechanism that pulls water from roots to leaves against gravity
-
-### Stomata:
-```
-Open Stomata (Day):           Closed Stomata (Night/Drought):
-  [Guard Cell]  [Guard Cell]      [Guard Cell][Guard Cell]
-       \      /                         |    |
-        [ OPEN ]                        [CLOSED]
-     → Gas exchange                  → Water conservation
+NOTE: Maize is often listed as day-neutral in modern cultivars, but
+      traditional varieties may show some day-length sensitivity.
 ```
 
 ---
 
-## 📝 High-Frequency GS PYQ Facts — Biology
+## 🔷 SECTION 4: The Critical Night Length — Most Important Concept
 
-| Question Trigger | Answer |
-|-----------------|--------|
-| Photoperiodism discovered by | **Garner and Allard** (1920) |
-| Photoperiodism = plant response to | **Relative length of day and night** |
-| Critical factor in photoperiodism | **Length of continuous dark period (night length)** |
-| Short Day Plants example | Rice, Soybean, Chrysanthemum, Tobacco, Sugarcane |
-| Long Day Plants example | Wheat, Barley, Spinach, Radish, Sugar beet |
-| Day Neutral Plants example | Tomato, Maize, Sunflower, Pea |
-| Hormone for fruit ripening | **Ethylene** |
-| Gaseous plant hormone | **Ethylene** |
-| Stress hormone in plants | **ABA (Abscisic Acid)** |
-| Hormone causing stem elongation | **Gibberellin** |
-| Hormone for cell division | **Cytokinin** |
-| Auxin responsible for | **Phototropism, cell elongation** |
-| Gibberellin discovered from | **Bakanae disease** of rice |
-| Photoreceptor for photoperiodism | **Phytochrome** |
-| Photosynthesis occurs in | **Chloroplasts** (specifically thylakoid membranes) |
-| O₂ released in photosynthesis from | **Water** (not CO₂) |
-| Calvin Cycle is also called | **Dark Reactions / C3 cycle** |
-| Auxin isolated by | **F.W. Went (1926)** |
-| Plant hormone = ABA also called | **Dormin** |
-| Stomata controlled by | **Guard cells** |
+```
+THE CRITICAL NIGHT (OR CRITICAL DARK PERIOD):
+
+Each short-day and long-day plant has a CRITICAL NIGHT LENGTH:
+  → SDP: must receive a dark period LONGER than its critical night to flower
+  → LDP: must receive a dark period SHORTER than its critical night to flower
+
+EXAMPLE:
+  Cocklebur (SDP): Critical night = 8.5 hours
+    → Night longer than 8.5 hours → FLOWERS ✓
+    → Night shorter than 8.5 hours → NO FLOWERING ✗
+
+THE NIGHT INTERRUPTION EXPERIMENT (Hamner & Bonner, 1938):
+  A short-day plant in long-night conditions (should flower):
+  → Give it a BRIEF FLASH OF LIGHT in the middle of the night
+  → This INTERRUPTS the continuous dark period
+  → The plant thinks it has TWO SHORT NIGHTS instead of one long night
+  → Result: DOES NOT FLOWER!
+  
+  This PROVED that it's the NIGHT LENGTH (not day length) that matters!
+  
+  Short-Day Plant Flowering = Requires CONTINUOUS long dark period
+  Even a BRIEF LIGHT FLASH in the middle of the night STOPS flowering!
+
+┌──────────────────────────────────────────────────────────────────┐
+│              NIGHT INTERRUPTION DIAGRAM                           │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│ SDP in LONG NIGHT (flowers normally):                            │
+│ ████ LIGHT ████ | ░░░░░░░░░░░ DARKNESS (LONG) ░░░░░░░░░░ = 🌸  │
+│                                                                   │
+│ SDP in LONG NIGHT with light interruption (blocked):             │
+│ ████ LIGHT ████ | ░░░░░ DARK ░░░░ FLASH ░░░░░ DARK ░░░░ = 🚫  │
+│                            ↑                                      │
+│                    Brief light flash blocks flowering             │
+└──────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-# ═══════════════════════════════════════════════════════
-# 📝 PRACTICE QUESTIONS — DAY 40
-# ═══════════════════════════════════════════════════════
+## 🔷 SECTION 5: The Role of Phytochrome
 
-> ⚠️ **STRICT RULE:** Solve ALL 50 questions before scrolling to the Answer Key.
-> The Answer Key is provided ONLY after Q50.
-> Option D = "More than one of the above" | Option E = "None of the above"
+```
+HOW DO PLANTS "MEASURE" LIGHT?
+
+The light-sensing pigment in plants is called PHYTOCHROME.
+
+PHYTOCHROME exists in two forms:
+  Pr (Phytochrome Red) → absorbs RED light (660 nm) → converts to Pfr
+  Pfr (Phytochrome Far-Red) → absorbs FAR-RED light (730 nm) → converts to Pr
+
+DURING DAYTIME (light present):
+  Pr → (red light) → Pfr (active form accumulates)
+  
+DURING NIGHTTIME (darkness):
+  Pfr slowly converts BACK to Pr
+  
+AFTER LONG NIGHT:
+  Most Pfr → Pr
+  High Pr = "signal" for SDP that night was long enough → FLOWER!
+  
+AFTER SHORT NIGHT:
+  Some Pfr remains (not enough conversion time)
+  High Pfr = signal for LDP that night was short → LDP flowers!
+
+FOR EXAM: Remember:
+  Phytochrome = light-sensing pigment in plants
+  Controls photoperiodism and seed germination
+  Two forms: Pr and Pfr (interconvertible)
+
+🎯 PYQ: PHYTOCHROME is the photoreceptor that detects light changes for photoperiodism.
+```
 
 ---
 
-# 💻 SECTION A: CS QUESTIONS — SQL COMMANDS (Q1–Q25)
+## 🔷 SECTION 6: Florigen — The Flowering Hormone
+
+```
+THE FLORIGEN CONCEPT:
+  When a plant detects the right photoperiod, the LEAF produces a signal
+  that travels to the SHOOT APEX (growing tip) and triggers FLOWERING.
+  
+  This hypothetical "flowering hormone" is called FLORIGEN.
+
+HISTORY:
+  → MIKHAIL CHAILAKHYAN (1937): Soviet scientist who proposed Florigen
+  → He grafted photoperiod-induced leaves onto non-induced plants
+    → The non-induced plants ALSO flowered!
+  → Conclusion: a transmissible chemical (florigen) moves from leaves to buds
+
+MODERN UNDERSTANDING:
+  → "Florigen" is now identified as the protein FT (FLOWERING LOCUS T)
+  → Produced in leaves → travels via phloem → reaches shoot apex → flower initiation
+  
+FOR EXAM: Florigen = Flowering Hormone, proposed by Chailakhyan (1937)
+
+🎯 PYQ: FLORIGEN = hypothetical flowering hormone proposed by CHAILAKHYAN
+```
 
 ---
 
-**Q1.** Which of the following is the correct classification of SQL commands?
+## 🔷 SECTION 7: Photoperiodism Summary Table
 
-(A) DDL, DML, DCL, TCL
-(B) DDL, DQL, DAL, TCL
-(C) DDL, DML, SQL, DCL
+```
+┌───────────────────┬────────────────────┬────────────────────┬─────────────────┐
+│   PLANT TYPE      │ CONDITION TO FLOWER│   EXAMPLES         │  SEASON         │
+├───────────────────┼────────────────────┼────────────────────┼─────────────────┤
+│ SHORT-DAY PLANT   │ Night > Critical   │ Chrysanthemum,     │ Autumn/Winter   │
+│ (SDP)             │ length             │ Tobacco, Poinsettia│                 │
+│ (=Long-Night Plant│ Short day needed   │ Cocklebur, Dahlia, │                 │
+│                   │                    │ Rice (some vars)   │                 │
+├───────────────────┼────────────────────┼────────────────────┼─────────────────┤
+│ LONG-DAY PLANT    │ Day > Critical     │ Wheat, Barley,     │ Spring/Summer   │
+│ (LDP)             │ length             │ Spinach, Sugar beet│                 │
+│ (=Short-Night     │ Long day needed    │ Oats, Radish,      │                 │
+│ Plant)            │                    │ Henbane, Mustard   │                 │
+├───────────────────┼────────────────────┼────────────────────┼─────────────────┤
+│ DAY-NEUTRAL       │ Not affected by    │ Tomato, Cotton,    │ Year-round      │
+│ PLANT (DNP)       │ photoperiod        │ Cucumber, Rose,    │ (whenever other │
+│                   │                    │ Sunflower, Corn    │ conditions met) │
+└───────────────────┴────────────────────┴────────────────────┴─────────────────┘
+```
+
+---
+
+## 🔷 SECTION 8: Agricultural Importance of Photoperiodism
+
+```
+1. CROP PLANNING:
+   Farmers must choose crop varieties appropriate for their latitude/season.
+   Short-day rice varieties: plant in summer to flower in short-day autumn.
+   Long-day wheat: plant in winter/spring so long summer days trigger flowering.
+
+2. ARTIFICIAL MANIPULATION OF FLOWERING:
+   Commercial horticulture uses light control:
+   → EXTENDING LIGHT (using artificial lights at night): Makes short-day 
+     conditions into long-day → Long-day plants flower even in winter.
+   → INTERRUPTING NIGHT (brief flash): Prevents short-day plants from flowering
+     when growers want vegetative growth (e.g., spinach kept vegetative by night break).
+   → BLACK SHEATHING (shading): Creates artificial long nights → short-day 
+     plants like chrysanthemums can be made to flower year-round.
+
+3. INTRODUCTION OF CROPS TO NEW REGIONS:
+   When moving crops to new latitudes, photoperiod response must be considered.
+   A short-day rice variety from tropical India (10-12 hrs day) cannot flower
+   well in temperate regions (16+ hrs day in summer) → needs different variety.
+
+4. VERNALIZATION CONNECTION:
+   Some plants need both correct photoperiod AND cold temperature (vernalization)
+   to flower. Wheat (winter wheat) needs cold + long days.
+```
+
+---
+
+## 🔷 SECTION 9: Key PYQ Facts for Biology
+
+```
+🎯 PHOTOPERIODISM = response to relative length of day and night
+🎯 DISCOVERED BY = W.W. GARNER and H.A. ALLARD (1920), USDA, USA
+🎯 Experimental plants: Maryland Mammoth TOBACCO + Biloxi SOYBEAN
+🎯 SHORT-DAY PLANT = needs LONG NIGHTS (flowers in autumn/winter)
+   Examples: Chrysanthemum, Tobacco, Poinsettia, Cocklebur, Dahlia
+🎯 LONG-DAY PLANT = needs SHORT NIGHTS / LONG DAYS (flowers in summer)
+   Examples: Wheat, Barley, Oats, Spinach, Sugar beet, Henbane
+🎯 DAY-NEUTRAL PLANT = not affected by photoperiod
+   Examples: Tomato, Cotton, Rose, Cucumber, Sunflower
+🎯 PHYTOCHROME = light-sensing pigment; two forms: Pr and Pfr
+🎯 FLORIGEN = hypothetical flowering hormone; proposed by CHAILAKHYAN (1937)
+🎯 NIGHT INTERRUPTION = brief flash of light at night stops SDP flowering
+🎯 SDP is more accurately called "Long-Night Plant" (night length controls it)
+🎯 CRITICAL NIGHT PERIOD = minimum dark period for SDP; cocklebur = 8.5 hrs
+🎯 RICE: most tropical varieties are short-day plants
+🎯 WHEAT: long-day plant (requires long days for grain formation)
+```
+
+---
+
+# PART 3: PRACTICE QUESTIONS
+
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: SQL Commands, DDL/DML/DCL/TCL, DELETE vs TRUNCATE, Transactions
+
+---
+
+**Q1.** SQL stands for:
+(A) Sequential Query Language
+(B) Structured Query Language
+(C) Simple Query Language
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q2.** The SQL command used to make all pending transaction changes PERMANENT is:
-
-(A) ROLLBACK
-(B) SAVEPOINT
-(C) COMMIT
-(D) SET TRANSACTION
-(E) None of the above
-
----
-
-**Q3.** Which of the following SQL commands CANNOT be rolled back?
-
-(A) DELETE
-(B) UPDATE
-(C) INSERT
-(D) More than one of the above
-(E) TRUNCATE
-
----
-
-**Q4.** The command GRANT belongs to which category of SQL?
-
-(A) DDL
-(B) DML
-(C) TCL
-(D) DCL
-
----
-
-**Q5.** Consider the following SQL commands:
-```
-INSERT INTO Employee VALUES (201, 'Mohan', 'HR');
-SAVEPOINT S1;
-UPDATE Employee SET Dept = 'IT' WHERE Emp_ID = 201;
-ROLLBACK TO S1;
-```
-After executing all four statements, what is the department of employee 201?
-
-(A) IT
-(B) HR
-(C) NULL
-(D) The row is deleted
-(E) None of the above
-
----
-
-**Q6.** Which SQL command removes ALL rows from a table but preserves the table structure, and CANNOT be rolled back?
-
-(A) DELETE
-(B) DROP
-(C) TRUNCATE
-(D) REMOVE
-(E) None of the above
-
----
-
-**Q7.** The SQL command to add a new column "Email" to an existing table "Customer" is:
-
-(A) `CREATE TABLE Customer ADD Email VARCHAR(100);`
-(B) `ALTER TABLE Customer ADD Email VARCHAR(100);`
-(C) `UPDATE TABLE Customer ADD Email VARCHAR(100);`
-(D) `MODIFY TABLE Customer ADD Email VARCHAR(100);`
-(E) None of the above
-
----
-
-**Q8.** Which of the following is NOT a valid DML command in SQL?
-
+**Q2.** Which of the following is a DDL (Data Definition Language) command?
 (A) SELECT
-(B) UPDATE
-(C) TRUNCATE
-(D) INSERT
-(E) DELETE
-
----
-
-**Q9.** The REVOKE command in SQL is used to:
-
-(A) Delete a user from the database
-(B) Undo the last transaction
-(C) Remove previously granted permissions from a user
+(B) INSERT
+(C) CREATE
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q10.** ROLLBACK in SQL:
-
-(A) Saves all changes permanently
-(B) Undoes all changes made since the last COMMIT or beginning of transaction
-(C) Rolls back only DDL changes
-(D) Creates a savepoint to return to
-(E) None of the above
-
----
-
-**Q11.** Which of the following is a DDL command?
-
-(A) SELECT
-(B) COMMIT
-(C) GRANT
-(D) DROP
-(E) None of the above
-
----
-
-**Q12.** Consider: `DELETE FROM Student;` — What does this command do?
-
-(A) Drops the Student table completely
-(B) Deletes all rows but keeps the table structure; can be rolled back
-(C) Same as TRUNCATE
-(D) Removes selected rows based on a condition
-(E) None of the above
-
----
-
-**Q13.** SQL was originally developed by:
-
-(A) Microsoft
-(B) Oracle
-(C) IBM
-(D) Sun Microsystems
-(E) None of the above
-
----
-
-**Q14.** Which of the following is NOT a valid table constraint in SQL?
-
-(A) PRIMARY KEY
-(B) FOREIGN KEY
-(C) NOT NULL
-(D) UNION
-(E) CHECK
-
----
-
-**Q15.** The difference between UNIQUE key and PRIMARY KEY is:
-
-(A) UNIQUE key allows NULL values; PRIMARY KEY does NOT allow NULL
-(B) PRIMARY KEY allows NULL; UNIQUE does not
-(C) Both allow NULL values
-(D) Both do not allow NULL values
-(E) None of the above
-
----
-
-**Q16.** A SAVEPOINT in SQL is used for:
-
-(A) Permanently saving changes to the database
-(B) Setting an intermediate point in a transaction to which a partial rollback can be done
-(C) Creating a backup of the database
+**Q3.** Which SQL command is used to ADD a new column to an existing table?
+(A) CREATE TABLE
+(B) MODIFY TABLE
+(C) ALTER TABLE ... ADD column_name datatype
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q17.** Which SQL command gives the user 'Admin' ALL privileges on the 'Orders' table?
-
-(A) `ALLOW ALL ON Orders TO Admin;`
-(B) `GRANT ALL PRIVILEGES ON Orders TO Admin;`
-(C) `PERMIT ALL ON Orders FOR Admin;`
-(D) `ACCESS ALL ON Orders TO Admin;`
-(E) None of the above
-
----
-
-**Q18.** The TCL command SET TRANSACTION is used to:
-
-(A) Delete a transaction
-(B) Set the properties of a transaction (like isolation level)
-(C) Create a new database transaction table
+**Q4.** TRUNCATE TABLE command:
+(A) Deletes the table and all its structure permanently
+(B) Removes all rows quickly but keeps the table structure; cannot be rolled back
+(C) Is a DML command that can be undone with ROLLBACK
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q19.** In SQL, DDL commands are:
-
-(A) Not auto-committed — require explicit COMMIT
-(B) Auto-committed — changes are permanent immediately and cannot be rolled back
-(C) Can be rolled back using ROLLBACK command
-(D) Require SAVEPOINT before execution
-(E) None of the above
-
----
-
-**Q20.** Which of the following SQL commands DELETES the entire table including its structure from the database?
-
-(A) TRUNCATE
-(B) DELETE
-(C) DROP
-(D) REMOVE
-(E) None of the above
-
----
-
-**Q21.** The SELECT command belongs to which category?
-
-(A) DDL
-(B) DML
-(C) DCL
-(D) TCL
-(E) None of the above
-
----
-
-**Q22.** Which of the following is the correct syntax to create a table with a check constraint?
-
-(A) `CREATE TABLE T (Age INT CHECK Age >= 18);`
-(B) `CREATE TABLE T (Age INT CHECK (Age >= 18));`
-(C) `CREATE TABLE T (Age INT VALIDATE (Age >= 18));`
-(D) `CREATE TABLE T (Age INT RESTRICT (Age >= 18));`
-(E) None of the above
-
----
-
-**Q23.** Consider two statements:
-Statement 1: TRUNCATE is a DDL command.
-Statement 2: TRUNCATE cannot be rolled back.
-
-(A) Only Statement 1 is correct
-(B) Only Statement 2 is correct
-(C) Both statements are correct
-(D) Both statements are incorrect
-(E) None of the above
-
----
-
-**Q24.** Which of the following correctly describes the FOREIGN KEY constraint?
-
-(A) It ensures all values in a column are unique
-(B) It references the PRIMARY KEY of the same or another table to enforce referential integrity
-(C) It allows NULL values to be stored
+**Q5.** Which of the following SQL commands CANNOT be rolled back using ROLLBACK?
+(A) DELETE FROM STUDENTS WHERE RollNo = 101
+(B) INSERT INTO STUDENTS VALUES (102, 'Priya', 'CS', 90)
+(C) TRUNCATE TABLE STUDENTS
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q25.** SQL is classified as what type of language?
-
-(A) Procedural language
-(B) Object-Oriented language
-(C) Declarative language
-(D) Machine language
+**Q6.** The PRIMARY difference between DELETE and TRUNCATE is:
+(A) DELETE removes both data and structure; TRUNCATE removes only data
+(B) DELETE is DML (can rollback, uses WHERE); TRUNCATE is DDL (auto-committed, no WHERE, faster)
+(C) TRUNCATE can filter rows using WHERE; DELETE cannot
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-# 🌿 SECTION B: GS QUESTIONS — BIOLOGY (Q26–Q50)
-
----
-
-**Q26.** Photoperiodism was discovered by:
-
-(A) Charles Darwin and Francis Darwin
-(B) W.W. Garner and H.A. Allard
-(C) F.W. Went and T. Cholodny
-(D) Mendel and Morgan
+**Q7.** Which SQL clause is used to filter rows BEFORE grouping?
+(A) HAVING
+(B) ORDER BY
+(C) WHERE
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q27.** Photoperiodism in plants refers to the response of plants to:
-
-(A) Intensity of light
-(B) Wavelength of light
-(C) Relative duration of light and dark periods
-(D) Total amount of light received per year
+**Q8.** Which SQL clause is used to filter GROUPS (after GROUP BY)?
+(A) WHERE
+(B) HAVING
+(C) DISTINCT
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q28.** The actual critical factor that controls flowering in photoperiodism is:
-
-(A) Length of light period (day length)
-(B) Intensity of light
-(C) Length of continuous dark period (night length)
-(D) Temperature of the environment
+**Q9.** The COMMIT command in SQL:
+(A) Undoes all recent changes made in the current transaction
+(B) Creates a checkpoint within a transaction for partial rollback
+(C) Permanently saves all changes made in the current transaction; cannot be undone by ROLLBACK
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q29.** Which of the following is a SHORT DAY PLANT?
+**Q10.** What does ROLLBACK TO SAVEPOINT sp1 do?
+(A) Permanently saves changes up to sp1
+(B) Undoes all changes made AFTER savepoint sp1 was created, restoring the state at sp1
+(C) Deletes the savepoint sp1 and commits everything before it
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q11.** GRANT and REVOKE commands belong to which SQL category?
+(A) DDL (Data Definition Language)
+(B) DML (Data Manipulation Language)
+(C) DCL (Data Control Language)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q12.** Which SQL command permanently removes an ENTIRE TABLE including its structure and all data?
+(A) DELETE FROM table_name (removes rows, keeps structure)
+(B) TRUNCATE TABLE table_name (removes rows, keeps structure)
+(C) DROP TABLE table_name (removes BOTH structure and data permanently)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q13.** In SQL, SELECT * FROM STUDENTS WHERE Marks > 80 ORDER BY Marks DESC; will:
+(A) Show students with marks > 80, sorted from lowest to highest
+(B) Show all students sorted by marks with those > 80 highlighted
+(C) Show only students with marks greater than 80, sorted from highest to lowest marks
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q14.** After executing COMMIT, a ROLLBACK command:
+(A) Undoes all committed changes
+(B) Has NO EFFECT — committed changes are permanent and cannot be undone
+(C) Creates a new savepoint at the commit point
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q15.** Which of the following SQL statements uses an AGGREGATE function correctly?
+(A) SELECT * FROM STUDENTS WHERE AVG(Marks) > 80; (aggregate in WHERE)
+(B) SELECT DeptID, AVG(Marks) FROM STUDENTS GROUP BY DeptID HAVING AVG(Marks) > 80;
+(C) SELECT DeptID FROM STUDENTS GROUP BY DeptID ORDER BY COUNT(*);
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q16.** DDL commands are described as "AUTO-COMMITTED." This means:
+(A) They run automatically every hour
+(B) Their effects are immediately and permanently saved — they cannot be undone by ROLLBACK
+(C) They commit only when the session ends
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q17.** Which command gives USER "Ravi" permission to only READ data from the STUDENTS table?
+(A) GRANT ALL ON STUDENTS TO ravi;
+(B) GRANT SELECT ON STUDENTS TO ravi;
+(C) REVOKE INSERT ON STUDENTS FROM ravi;
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q18.** UPDATE STUDENTS SET Marks = 100; (without WHERE clause) will:
+(A) Update only the first student's marks to 100
+(B) Give a syntax error — WHERE is mandatory in UPDATE
+(C) Update ALL students' marks to 100
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q19.** ACID properties of a transaction include:
+(A) Atomicity, Consistency, Isolation, Durability
+(B) Accuracy, Consistency, Independence, Data integrity
+(C) Atomicity, Compression, Isolation, Durability
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q20.** Which SQL command is used to REMOVE permissions that were previously granted?
+(A) DELETE permissions
+(B) DROP USER
+(C) REVOKE
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q21.** The correct execution order of SQL clauses is:
+(A) SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY
+(B) FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
+(C) WHERE → FROM → SELECT → GROUP BY → HAVING → ORDER BY
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q22.** Which of the following is a DML (Data Manipulation Language) command?
+(A) CREATE
+(B) TRUNCATE
+(C) DELETE
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q23.** SAVEPOINT in SQL is used for:
+(A) Permanently saving data at regular intervals automatically
+(B) Creating named checkpoints within a transaction, allowing partial rollback to that point
+(C) Saving the database schema before any DDL operations
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q24.** A bank transfer debits Account A and credits Account B. If the debit succeeds but the credit fails (due to system crash), ACID's "ATOMICITY" ensures:
+(A) Both operations are marked as successful regardless
+(B) Only the successful debit is kept; the credit is retried later
+(C) Both operations are undone — the debit is reversed, restoring the original state
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q25.** Which statement about TRUNCATE is INCORRECT?
+(A) TRUNCATE removes all rows from a table
+(B) TRUNCATE keeps the table structure intact
+(C) TRUNCATE can use a WHERE clause to remove specific rows
+(D) More than one of the above
+(E) None of the above
+
+---
+
+## 📝 GENERAL STUDIES — 25 MCQs
+### Topics: Photoperiodism, Garner & Allard, Plant Types, Phytochrome, Florigen
+
+---
+
+**Q26.** Photoperiodism in plants was discovered by:
+(A) Gregor Mendel and Charles Darwin
+(B) W.W. Garner and H.A. Allard (1920)
+(C) Mikhail Chailakhyan and Hamner
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q27.** Photoperiodism is defined as the response of plants to:
+(A) Total amount of sunlight energy received
+(B) The relative length of day and night (photoperiod)
+(C) The temperature changes in the environment
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q28.** The experimental plants used by Garner and Allard to discover photoperiodism were:
+(A) Wheat and Barley
+(B) Maryland Mammoth Tobacco and Biloxi Soybean
+(C) Chrysanthemum and Poinsettia
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q29.** SHORT-DAY PLANTS (SDP) flower when:
+(A) The day length is longer than a critical minimum
+(B) The night length is longer than a critical minimum (they need long nights)
+(C) Temperature drops below a certain level
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q30.** Which of the following is a SHORT-DAY PLANT?
 (A) Wheat
-(B) Barley
-(C) Rice
+(B) Spinach
+(C) Chrysanthemum
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q30.** Long Day Plants (LDP) flower when:
-
-(A) The day length is SHORTER than the critical photoperiod
-(B) The day length is LONGER than the critical photoperiod
-(C) Temperature drops below 10°C
-(D) The dark period is longer than 12 hours
+**Q31.** LONG-DAY PLANTS (LDP) require:
+(A) More than a critical length of DARK period to flower
+(B) More than a critical length of LIGHT period (day) / shorter nights to flower
+(C) Exposure to cold temperatures for a prolonged period before flowering
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q31.** Which of the following plants is classified as a DAY NEUTRAL PLANT?
+**Q32.** Which of the following is a LONG-DAY PLANT?
+(A) Chrysanthemum
+(B) Poinsettia
+(C) Spinach
+(D) More than one of the above
+(E) None of the above
 
-(A) Rice
-(B) Wheat
+---
+
+**Q33.** DAY-NEUTRAL PLANTS are characterised by:
+(A) Flowering only during the equinox when day and night are equal
+(B) Ability to flower regardless of photoperiod (not sensitive to day/night length)
+(C) Flowering only when day length exceeds 16 hours
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q34.** Which of the following is a DAY-NEUTRAL PLANT?
+(A) Cocklebur
+(B) Henbane
 (C) Tomato
-(D) Chrysanthemum
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q32.** The photoreceptor protein responsible for detecting the light/dark signal in photoperiodism is:
+**Q35.** Night interruption experiment (giving a brief light flash in the middle of a long night) to a SHORT-DAY PLANT will:
+(A) Stimulate flowering because more light = more energy for the plant
+(B) PREVENT flowering because the continuous dark period is broken (plant "thinks" night is short)
+(C) Have no effect because the total darkness hours remain roughly the same
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q36.** The light-sensing pigment in plants responsible for detecting photoperiod changes is:
 (A) Chlorophyll
-(B) Phytochrome
-(C) Carotenoid
-(D) Flavoprotein
-(E) None of the above
-
----
-
-**Q33.** Which plant hormone is responsible for FRUIT RIPENING and is also the ONLY GASEOUS plant hormone?
-
-(A) Auxin
-(B) Gibberellin
-(C) Cytokinin
-(D) Abscisic Acid
-(E) Ethylene
-
----
-
-**Q34.** Abscisic Acid (ABA) is also known as the "stress hormone" because:
-
-(A) It promotes rapid cell division under stress
-(B) It causes stomata to close during water stress/drought
-(C) It accelerates fruit ripening during heat stress
+(B) Carotenoid
+(C) Phytochrome
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q35.** The hormone GIBBERELLIN was first discovered in connection with which plant disease?
-
-(A) Mosaic disease of tobacco
-(B) Bakanae (foolish seedling) disease of rice
-(C) Black stem rust of wheat
-(D) Late blight of potato
+**Q37.** Phytochrome exists in two interconvertible forms. These are:
+(A) Pr (absorbs red light) and Pfr (absorbs far-red light)
+(B) Chlorophyll-a and Chlorophyll-b
+(C) Carotene and Xanthophyll
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q36.** The plant hormone that promotes CELL DIVISION and helps overcome apical dominance is:
-
-(A) Auxin
-(B) Gibberellin
-(C) Cytokinin
-(D) Ethylene
-(E) ABA
-
----
-
-**Q37.** Apical dominance in plants is caused by:
-
-(A) High concentration of Cytokinin at the shoot tip
-(B) High concentration of Auxin produced at the shoot tip that suppresses lateral bud growth
-(C) Ethylene produced in the roots
-(D) ABA accumulation in the stem
+**Q38.** "FLORIGEN" in the context of plant physiology refers to:
+(A) A growth inhibiting hormone found in roots
+(B) A hypothetical flowering hormone that transmits the flowering signal from leaves to buds
+(C) The pigment responsible for red colour in flowers
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q38.** In photosynthesis, OXYGEN is released from the splitting of:
-
-(A) Carbon dioxide (CO₂)
-(B) Water (H₂O)
-(C) Glucose (C₆H₁₂O₆)
-(D) Both CO₂ and H₂O
+**Q39.** The concept of Florigen (flowering hormone) was proposed by:
+(A) W.W. Garner
+(B) M.K. Chailakhyan (1937)
+(C) Hamner and Bonner
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q39.** The Calvin Cycle (Dark Reactions) in photosynthesis occurs in:
-
-(A) Thylakoid membranes of chloroplasts
-(B) Mitochondria
-(C) Stroma of chloroplasts
-(D) Nucleus
+**Q40.** POINSETTIA (the Christmas flower sold in December) is a short-day plant. Horticulturists ensure it flowers in time for Christmas by:
+(A) Keeping it in bright lights for 16 hours a day throughout autumn
+(B) Covering it with black cloth/shades to create artificially long nights (extending dark period)
+(C) Exposing it to cold temperatures (vernalization)
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q40.** Which of the following is CORRECT about plant respiration?
-
-(A) Plants respire only during night time
-(B) Plants respire only in the presence of light
-(C) Plants respire continuously — in all living cells, day and night
-(D) Plants respire only in leaves
+**Q41.** RICE is generally classified as:
+(A) Long-day plant (requires long summer days to flower)
+(B) Day-neutral plant (photoperiod has no effect)
+(C) Short-day plant (many tropical rice varieties need short days/long nights to flower)
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q41.** The bending of plants TOWARD light is called:
-
-(A) Geotropism
-(B) Hydrotropism
-(C) Phototropism
-(D) Thigmotropism
+**Q42.** WHEAT is classified as:
+(A) Short-day plant
+(B) Long-day plant (requires long days for grain formation and heading)
+(C) Day-neutral plant
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q42.** Which plant hormone was isolated by F.W. Went in 1926 from the coleoptile tips of oat seedlings?
-
-(A) Gibberellin
-(B) Cytokinin
-(C) Auxin (IAA — Indole Acetic Acid)
-(D) Ethylene
-(E) ABA
-
----
-
-**Q43.** The stomata in plant leaves are controlled by:
-
-(A) Mesophyll cells
-(B) Guard cells
-(C) Epidermal cells
-(D) Trichomes
-(E) None of the above
-
----
-
-**Q44.** Transpiration in plants primarily occurs through:
-
+**Q43.** In which organ of the plant is the photoperiod perceived (detected)?
 (A) Roots
-(B) Stomata on leaves
-(C) Lenticels on stem
+(B) Stem (shoot apex)
+(C) Leaves (where phytochrome is located and the signal is generated)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q45.** Which of the following correctly matches the hormone with its function?
-
-(A) Auxin → Fruit ripening
-(B) Gibberellin → Stomata closure
-(C) Cytokinin → Cell division
-(D) Ethylene → Seed dormancy
-(E) ABA → Cell elongation
-
----
-
-**Q46.** The process by which a plant loses water vapour through its aerial parts (mainly leaves) is called:
-
-(A) Transpiration
-(B) Guttation
-(C) Translocation
-(D) Plasmolysis
+**Q44.** Short-day plants are more accurately described as "Long-Night Plants" because:
+(A) They grow taller at night
+(B) Scientific evidence shows it is the LENGTH OF THE DARK PERIOD (night), not the day length, that controls flowering
+(C) They only absorb nutrients during nighttime
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q47.** Which of the following plants is a LONG DAY PLANT (requires short nights to flower)?
-
-(A) Rice
-(B) Chrysanthemum
-(C) Tobacco
-(D) Spinach
-(E) Sugarcane
-
----
-
-**Q48.** If the dark period of a short day plant is interrupted by a brief flash of light, the result is:
-
-(A) Flowering is promoted
-(B) Flowering is inhibited because the continuous dark period is disrupted
-(C) No effect on flowering
-(D) Vegetative growth stops
+**Q45.** Garner and Allard's discovery of photoperiodism was made at:
+(A) Cambridge University, England
+(B) Indian Agricultural Research Institute (IARI), New Delhi
+(C) U.S. Department of Agriculture (USDA), Maryland, USA
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q49.** Consider the following pairs:
-1. Photoperiodism — Garner and Allard
-2. Auxin isolation — F.W. Went
-3. Cytokinin discovery — Skoog and Miller
-4. Gibberellin — Bakanae disease of rice
-
-How many of the above pairs are CORRECTLY matched?
-
-(A) Only 1 and 2
-(B) Only 1, 2, and 3
-(C) All four pairs are correctly matched
-(D) Only 2 and 4
+**Q46.** Which of the following pairs is CORRECTLY matched?
+(A) Chrysanthemum — Long-day plant
+(B) Spinach — Short-day plant
+(C) Cocklebur (Xanthium) — Short-day plant (classic experimental SDP)
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q50.** ABA (Abscisic Acid) in plants is also known as:
-
-(A) Florigen
-(B) Traumatin
-(C) Dormin
-(D) Vernalin
+**Q47.** If a florist wants chrysanthemums (a short-day plant) to bloom year-round (even in summer), they should:
+(A) Expose them to 16+ hours of bright light daily
+(B) Use black plastic covers to create artificially long dark periods (simulating winter nights)
+(C) Reduce watering to trigger stress-induced flowering
+(D) More than one of the above
 (E) None of the above
 
 ---
 
-# ═══════════════════════════════════════════════════════
-# 🔑 ANSWER KEY — ALL 50 QUESTIONS
-# ═══════════════════════════════════════════════════════
-
-> ✅ Only check answers AFTER attempting all 50 questions!
-
----
-
-## 💻 CS ANSWERS — SQL Commands (Q1–Q25)
-
-| Q | Ans | Explanation |
-|---|-----|-------------|
-| 1 | **(A)** | The four SQL command categories are DDL, DML, DCL, and TCL. This is the standard classification. |
-| 2 | **(C)** | **COMMIT** makes all pending transaction changes permanent. Key PYQ fact — memorize it. |
-| 3 | **(E)** | **TRUNCATE** cannot be rolled back. DELETE, UPDATE, INSERT are all DML and can be rolled back. Option E here is TRUNCATE specifically. |
-| 4 | **(D)** | GRANT belongs to **DCL (Data Control Language)**. DCL manages permissions. |
-| 5 | **(B)** | ROLLBACK TO S1 undoes the UPDATE command, reverting Emp 201's dept back to 'HR' (the state at SAVEPOINT S1). |
-| 6 | **(C)** | **TRUNCATE** removes all rows, keeps table structure, and CANNOT be rolled back (it is a DDL command). |
-| 7 | **(B)** | `ALTER TABLE Customer ADD Email VARCHAR(100);` — ALTER is the correct DDL command to modify an existing table structure. |
-| 8 | **(C)** | **TRUNCATE** is NOT a DML command — it is a DDL command. SELECT, UPDATE, INSERT, DELETE are all DML. |
-| 9 | **(C)** | REVOKE removes previously granted permissions from a user. It is a DCL command. |
-| 10 | **(B)** | ROLLBACK **undoes all changes** made since the last COMMIT or beginning of the transaction. |
-| 11 | **(D)** | **DROP** is a DDL command. SELECT is DML, COMMIT is TCL, GRANT is DCL. |
-| 12 | **(B)** | `DELETE FROM Student;` removes ALL rows but keeps the table structure, and **can be rolled back** (it's DML). Different from TRUNCATE. |
-| 13 | **(C)** | SQL was originally developed by **IBM** in the 1970s (originally called SEQUEL). |
-| 14 | **(D)** | **UNION** is a SET OPERATION (combines results of two SELECT queries), NOT a constraint. PRIMARY KEY, FOREIGN KEY, NOT NULL, CHECK are all valid constraints. |
-| 15 | **(A)** | **UNIQUE allows NULL; PRIMARY KEY does NOT allow NULL.** Both enforce uniqueness, but only PK rejects NULL. |
-| 16 | **(B)** | SAVEPOINT sets an intermediate checkpoint in a transaction, allowing **partial rollback** to that point. |
-| 17 | **(B)** | `GRANT ALL PRIVILEGES ON Orders TO Admin;` is the correct SQL DCL syntax. |
-| 18 | **(B)** | SET TRANSACTION sets the properties of a transaction such as isolation level (READ COMMITTED, SERIALIZABLE, etc.). |
-| 19 | **(B)** | DDL commands are **auto-committed** — changes are permanent immediately and cannot be rolled back using ROLLBACK. |
-| 20 | **(C)** | **DROP** deletes the entire table including its structure. TRUNCATE only removes rows. DELETE removes rows with WHERE. |
-| 21 | **(B)** | SELECT is a **DML (Data Manipulation Language)** command — it reads/retrieves data. |
-| 22 | **(B)** | Correct CHECK syntax: `CHECK (Age >= 18)` with parentheses. |
-| 23 | **(C)** | Both statements are correct: TRUNCATE is DDL (Statement 1 ✓) and TRUNCATE cannot be rolled back (Statement 2 ✓). |
-| 24 | **(B)** | FOREIGN KEY references the PRIMARY KEY of the same or another table to enforce referential integrity. |
-| 25 | **(C)** | SQL is a **Declarative language** — you specify WHAT you want, not HOW to get it. Unlike procedural languages (C, Java). |
+**Q48.** The CRITICAL DARK PERIOD for flowering in cocklebur (a SDP) is approximately:
+(A) 2 hours
+(B) 8.5 hours (uninterrupted dark period needed)
+(C) 16 hours
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 🌿 GS ANSWERS — Biology (Q26–Q50)
-
-| Q | Ans | Explanation |
-|---|-----|-------------|
-| 26 | **(B)** | **W.W. Garner and H.A. Allard** discovered Photoperiodism in 1920 while working on tobacco plants. Direct PYQ fact. |
-| 27 | **(C)** | Photoperiodism = response to the **relative duration of light and dark periods** (NOT intensity or wavelength). |
-| 28 | **(C)** | The critical factor is the **length of continuous dark period (night)**, NOT day length. This is the classic exam trap — despite the name "photoperiodism", darkness controls it. |
-| 29 | **(C)** | **Rice** is a Short Day Plant. Wheat and Barley are Long Day Plants. |
-| 30 | **(B)** | Long Day Plants flower when day length is **LONGER than the critical photoperiod** (i.e., short nights, long days). |
-| 31 | **(C)** | **Tomato** is a Day Neutral Plant — flowers regardless of day/night length. Rice and Chrysanthemum are SDP, Wheat is LDP. |
-| 32 | **(B)** | **Phytochrome** is the photoreceptor protein that detects the light/dark signals. It exists in two interconvertible forms (Pr and Pfr). |
-| 33 | **(E)** | **Ethylene** is responsible for fruit ripening AND is the only gaseous plant hormone. |
-| 34 | **(B)** | ABA causes **stomata closure** during water stress/drought, conserving water — hence called the "stress hormone." |
-| 35 | **(B)** | Gibberellin was discovered from **Bakanae (foolish seedling) disease of rice** — infected rice grew abnormally tall. |
-| 36 | **(C)** | **Cytokinin** promotes cell division and helps overcome apical dominance (allowing lateral buds to grow). |
-| 37 | **(B)** | **Auxin** produced at the shoot tip in high concentrations suppresses the growth of lateral buds — this is apical dominance. |
-| 38 | **(B)** | In photosynthesis, O₂ is released from the splitting of **water (H₂O)** during the light reactions (photolysis of water). NOT from CO₂. |
-| 39 | **(C)** | The Calvin Cycle / Dark Reactions occurs in the **stroma of chloroplasts**. Light reactions occur in the thylakoid membranes. |
-| 40 | **(C)** | Plants **respire continuously** — in ALL living cells, ALL the time (day and night). Only photosynthesis needs light. |
-| 41 | **(C)** | Bending toward light = **Phototropism**. Bending toward gravity = geotropism. |
-| 42 | **(C)** | **Auxin (IAA — Indole Acetic Acid)** was isolated by F.W. Went in 1926 from oat coleoptile tips. |
-| 43 | **(B)** | Stomata are controlled by **guard cells** — they swell (open) or shrink (close) based on water content. |
-| 44 | **(B)** | Transpiration occurs mainly through **stomata on leaves** (also via lenticels and cuticle, but stomata is primary). |
-| 45 | **(C)** | Correct: **Cytokinin → Cell division**. Auxin = elongation; Gibberellin = stem elongation/germination; Ethylene = ripening; ABA = dormancy/closure. |
-| 46 | **(A)** | **Transpiration** = loss of water vapor through aerial parts (mainly leaves through stomata). |
-| 47 | **(D)** | **Spinach** is a Long Day Plant (requires short nights/long days). Rice, Chrysanthemum, Tobacco, Sugarcane are SDP. |
-| 48 | **(B)** | Interrupting the dark period of a Short Day Plant with light **inhibits flowering** — the continuous dark period is broken, so the SDP cannot achieve the required night length to flower. |
-| 49 | **(C)** | **All four pairs are correctly matched**: Photoperiodism-Garner&Allard ✓, Auxin-F.W.Went ✓, Cytokinin-Skoog&Miller ✓, Gibberellin-Bakanae disease ✓. |
-| 50 | **(C)** | ABA is also called **Dormin** — an older name used when it was first discovered as a dormancy-inducing compound. |
+**Q49.** Which of the following correctly represents the CATEGORIES of plants based on photoperiodism?
+(A) Photosynthetic plants, Non-photosynthetic plants, Semi-photosynthetic plants
+(B) Short-day plants, Long-day plants, Day-neutral plants
+(C) Tropical plants, Temperate plants, Alpine plants
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-# ═══════════════════════════════════════════════════════
-# 🎯 TOPPER'S CORNER — DAY 40 CHECKLIST
-# ═══════════════════════════════════════════════════════
+**Q50.** Consider the following statements:
+I.   Garner and Allard discovered photoperiodism in 1920 using tobacco and soybean.
+II.  Short-day plants need night length LONGER than a critical minimum to flower.
+III. Phytochrome is the light-sensing pigment that mediates photoperiodic response.
+IV.  Florigen is the hypothetical flowering hormone proposed by Chailakhyan in 1937.
 
-## CS SQL Commands — Must-Know Before Exam Day
+How many of the above statements are CORRECT?
+(A) Only I and II
+(B) Only II and III
+(C) All four (I, II, III, IV) are correct
+(D) More than one of the above
+(E) None of the above
 
-- [ ] All 4 categories with commands memorized (DDL, DML, DCL, TCL)
-- [ ] COMMIT = permanent. ROLLBACK = undo. (Direct PYQ)
-- [ ] TRUNCATE = DDL (NOT DML), cannot be rolled back
-- [ ] DELETE = DML, CAN be rolled back
-- [ ] GRANT = give permissions (DCL), REVOKE = remove permissions (DCL)
-- [ ] UNION is NOT a constraint (constraint trap in PYQ)
-- [ ] UNIQUE allows NULL; PRIMARY KEY does not
-- [ ] DDL = auto-committed; DML = requires explicit COMMIT
-- [ ] SQL was developed by IBM (declarative language)
-- [ ] SAVEPOINT = intermediate checkpoint in transaction
+---
+---
 
-## GS Biology — Must-Know Before Exam Day
+# ANSWER KEY
 
-- [ ] Photoperiodism discovered by Garner and Allard (1920)
-- [ ] Critical factor = length of dark period (NOT light period!)
-- [ ] SDP examples: Rice, Soybean, Chrysanthemum, Tobacco
-- [ ] LDP examples: Wheat, Barley, Spinach, Radish
-- [ ] DNP examples: Tomato, Maize, Sunflower, Pea
-- [ ] Ethylene = fruit ripening + only gaseous hormone
-- [ ] ABA = stress hormone (stomata closure)
-- [ ] Gibberellin = from Bakanae disease of rice
-- [ ] Cytokinin = cell division
-- [ ] Auxin = phototropism, cell elongation, apical dominance
-- [ ] O₂ in photosynthesis comes from WATER (not CO₂)
-- [ ] Calvin Cycle is in STROMA; Light reactions in THYLAKOID
-- [ ] Phytochrome = photoreceptor for photoperiodism
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
 
 ---
 
-## 📊 Score Yourself
+### CS Answers (Q1–Q25):
 
-| Score | Performance | Action |
-|-------|-------------|--------|
-| 45–50 | 🏆 Topper Level | Brief revision + move to Day 41 |
-| 38–44 | ✅ On Track | Re-read missed points tonight |
-| 30–37 | ⚠️ Needs Work | Re-read both CS and GS concepts today |
-| < 30  | ❌ Revise | Re-study from scratch before Day 41 |
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (B) | SQL = Structured Query Language |
+| 2 | (C) | CREATE is DDL; SELECT and INSERT are DML |
+| 3 | (C) | ALTER TABLE ... ADD is used to add a new column to existing table |
+| 4 | (B) | TRUNCATE = DDL; removes all rows fast; keeps structure; CANNOT rollback |
+| 5 | (C) | TRUNCATE is DDL (auto-committed); DELETE and INSERT are DML (can rollback) |
+| 6 | (B) | DELETE = DML (rollback-able, WHERE allowed); TRUNCATE = DDL (auto-committed, faster, no WHERE) |
+| 7 | (C) | WHERE filters rows BEFORE grouping |
+| 8 | (B) | HAVING filters groups AFTER GROUP BY |
+| 9 | (C) | COMMIT = permanently saves changes; cannot be undone by ROLLBACK |
+| 10 | (B) | ROLLBACK TO SAVEPOINT undoes only changes AFTER that savepoint |
+| 11 | (C) | GRANT and REVOKE are DCL (Data Control Language) |
+| 12 | (C) | DROP TABLE removes BOTH structure and data permanently |
+| 13 | (C) | WHERE Marks > 80 filters; ORDER BY Marks DESC sorts highest first |
+| 14 | (B) | After COMMIT, ROLLBACK has no effect — changes are permanent |
+| 15 | (B) | HAVING AVG(Marks) > 80 is correct; AVG in WHERE clause is invalid |
+| 16 | (B) | Auto-committed = immediately permanent; cannot be undone by ROLLBACK |
+| 17 | (B) | GRANT SELECT gives only read permission |
+| 18 | (C) | UPDATE without WHERE affects ALL rows |
+| 19 | (A) | ACID = Atomicity, Consistency, Isolation, Durability |
+| 20 | (C) | REVOKE removes previously granted permissions |
+| 21 | (B) | Execution order: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY |
+| 22 | (C) | DELETE is DML; CREATE and TRUNCATE are DDL |
+| 23 | (B) | SAVEPOINT creates checkpoint within transaction for partial rollback |
+| 24 | (C) | Atomicity = all or nothing; if credit fails, debit also reversed |
+| 25 | (C) | Statement C is INCORRECT: TRUNCATE has NO WHERE clause — it removes ALL rows |
 
 ---
 
-## 📅 Day 41 Preview
+### GS Answers (Q26–Q50):
 
-**CS:** SQL SELECT Query — ORDER BY, GROUP BY, HAVING, Aggregate Functions (COUNT, SUM, AVG, MAX, MIN)
-**GS:** Biology — Immunity, Lymphocytes, Vaccines, Human Diseases
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (B) | Garner and Allard (1920) — USDA, USA |
+| 27 | (B) | Photoperiodism = response to relative length of day AND night |
+| 28 | (B) | Maryland Mammoth Tobacco + Biloxi Soybean = their experimental plants |
+| 29 | (B) | SDP needs LONG NIGHTS (night > critical length) to flower |
+| 30 | (C) | Chrysanthemum = classic short-day plant |
+| 31 | (B) | LDP requires more than critical day length (long days, short nights) |
+| 32 | (C) | Spinach = long-day plant |
+| 33 | (B) | Day-neutral = not sensitive to photoperiod; flowers regardless |
+| 34 | (C) | Tomato = day-neutral plant |
+| 35 | (B) | Night interruption PREVENTS SDP flowering (breaks continuous dark period) |
+| 36 | (C) | Phytochrome = light-sensing pigment for photoperiodism |
+| 37 | (A) | Pr (absorbs red 660nm) and Pfr (absorbs far-red 730nm) |
+| 38 | (B) | Florigen = hypothetical flowering hormone transmits signal leaf→bud |
+| 39 | (B) | Chailakhyan (1937) proposed florigen concept |
+| 40 | (B) | Black cloth creates artificial long nights → SDP poinsettia flowers |
+| 41 | (C) | Rice = short-day plant (many tropical varieties need long nights) |
+| 42 | (B) | Wheat = long-day plant |
+| 43 | (C) | Leaves detect photoperiod (phytochrome in leaves) |
+| 44 | (B) | It's the dark period (night) length that actually controls flowering |
+| 45 | (C) | USDA Maryland USA — not UK or India |
+| 46 | (C) | Cocklebur (Xanthium) = classic short-day plant experimental specimen |
+| 47 | (B) | Black covers create artificial long nights → year-round flowering |
+| 48 | (B) | Cocklebur critical dark period ≈ 8.5 hours |
+| 49 | (B) | Three categories: SDP, LDP, DNP |
+| 50 | (C) | All four statements I, II, III, IV are correct |
 
-Key PYQ Fact for tomorrow: **ORDER BY default = ASC. HAVING = for GROUP BY results. COMPUTE = NOT a valid aggregate function.**
+---
+---
+
+# 🔁 DAY 40 — CRISP REVISION NOTES
+
+## ⚡ RAPID FIRE — SQL Commands
+
+### The Four Categories — One Line Each:
+```
+DDL = Define STRUCTURE: CREATE, ALTER, DROP, TRUNCATE, RENAME
+DML = Work with DATA:   SELECT, INSERT, UPDATE, DELETE
+DCL = Control ACCESS:   GRANT, REVOKE
+TCL = Manage TRANSACTIONS: COMMIT, ROLLBACK, SAVEPOINT
+
+MEMORY: "DDL Makes Structure; DML Handles Data; DCL Decides Access; TCL Tracks Transactions"
+```
+
+### The #1 PYQ Fact — Auto-Commit:
+```
+DDL commands = AUTO-COMMITTED = CANNOT be rolled back
+DML commands = NOT auto-committed = CAN be rolled back (until COMMIT)
+DCL commands = AUTO-COMMITTED
+
+SO:
+  DROP    → auto-committed → CANNOT rollback
+  TRUNCATE → auto-committed → CANNOT rollback (most tested!)
+  CREATE  → auto-committed → CANNOT rollback
+  DELETE  → can rollback ✓
+  INSERT  → can rollback ✓
+  UPDATE  → can rollback ✓
+```
+
+### DELETE vs TRUNCATE — 3 Key Differences:
+```
+1. CATEGORY: DELETE = DML (rollback-able); TRUNCATE = DDL (not rollback-able)
+2. WHERE:    DELETE = can filter rows; TRUNCATE = no WHERE clause
+3. SPEED:    TRUNCATE = faster (bulk page deallocation); DELETE = slower (logs each row)
+Both keep table STRUCTURE; only DROP removes structure.
+```
+
+### TCL Commands:
+```
+COMMIT    = Save permanently (no undo after this)
+ROLLBACK  = Undo to last COMMIT (or SAVEPOINT)
+SAVEPOINT = Create checkpoint; ROLLBACK TO SAVEPOINT = partial undo
+```
+
+### WHERE vs HAVING:
+```
+WHERE  = Before GROUP BY; filters individual ROWS; NO aggregate functions
+HAVING = After GROUP BY; filters GROUPS; aggregate functions ALLOWED
+```
 
 ---
 
-*Day 40 Complete ✅ | SQL + Plant Biology mastered | Target: 130+/150 | TOP 50 Rank 🎯*
+## ⚡ RAPID FIRE — Photoperiodism
+
+### Key Flash Cards:
+```
+PHOTOPERIODISM = Plant response to relative length of day and night
+DISCOVERED BY  = W.W. GARNER + H.A. ALLARD (1920), USDA, USA
+EXPERIMENTAL PLANTS = Maryland Mammoth TOBACCO + Biloxi SOYBEAN
+
+SHORT-DAY PLANT (SDP):
+  → Needs LONG NIGHT (night > critical length)
+  → Flowers in AUTUMN/WINTER
+  → Examples: Chrysanthemum, Tobacco, Poinsettia, Cocklebur, Dahlia, Rice
+
+LONG-DAY PLANT (LDP):
+  → Needs SHORT NIGHT / LONG DAY (day > critical length)
+  → Flowers in SPRING/SUMMER
+  → Examples: Wheat, Barley, Oats, Spinach, Sugar beet, Henbane
+
+DAY-NEUTRAL PLANT (DNP):
+  → NOT affected by photoperiod
+  → Examples: Tomato, Cotton, Rose, Cucumber, Sunflower
+
+PHYTOCHROME = Light-sensing pigment; two forms: Pr (red) and Pfr (far-red)
+FLORIGEN    = Hypothetical flowering hormone; proposed by CHAILAKHYAN (1937)
+```
+
+### Night Interruption Rule:
+```
+Give a SHORT LIGHT FLASH in the middle of long night to a SDP:
+→ PREVENTS FLOWERING (breaks the required continuous dark period)
+→ This PROVED that NIGHT LENGTH (not day length) is the actual signal
+```
+
+### Memory Tricks:
+```
+SHORT-Day Plant = LONG Night = flowers in SHORT days of winter
+  "SHORT Day = LONG Night = AUTUMN flowers" (Chrysanthemum, Poinsettia)
+
+LONG-Day Plant = SHORT Night = flowers when DAYS ARE LONG = SUMMER
+  "LONG Day = SHORT Night = SUMMER flowers" (Wheat, Spinach)
+  
+"Rice is SDP — needs Long Night like it needs a long soak in water!"
+"Wheat grows TALL in LONG summer days — it's LDP!"
+```
+
+---
+
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. **SQL categories**: DDL (CREATE, ALTER, DROP, TRUNCATE) = structure; DML (SELECT, INSERT, UPDATE, DELETE) = data; DCL (GRANT, REVOKE) = access; TCL (COMMIT, ROLLBACK, SAVEPOINT) = transactions.
+2. **Critical auto-commit rule**: DDL and DCL = AUTO-COMMITTED = CANNOT rollback; DML = can rollback; TRUNCATE is DDL → CANNOT rollback (most tested PYQ!).
+3. **DELETE vs TRUNCATE**: DELETE = DML, can rollback, uses WHERE, slower; TRUNCATE = DDL, cannot rollback, no WHERE, faster, resets auto-increment.
+4. **Photoperiodism**: Garner & Allard (1920), USDA; SDP = long night needed (Chrysanthemum, Tobacco, Rice); LDP = long day needed (Wheat, Spinach); DNP = not affected (Tomato, Cotton).
+5. **Phytochrome & Florigen**: Phytochrome (Pr/Pfr) = light sensor in leaves; Florigen = flowering hormone proposed by Chailakhyan (1937); Night interruption breaks SDP flowering.
+
+---
+
+## 📅 DAY 41 PREVIEW — What's Coming Next:
+**CS**: SQL Joins — INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN, CROSS JOIN, SELF JOIN; JOIN with conditions; Subqueries (basic); SQL functions (UPPER, LOWER, LENGTH, ROUND, NOW)
+**GS**: Indian Polity — Fundamental Rights (Articles 12-35): Right to Equality (14-18), Right to Freedom (19-22), Right Against Exploitation (23-24), Right to Freedom of Religion (25-28), Cultural & Educational Rights (29-30), Right to Constitutional Remedies (Article 32 — Dr. Ambedkar called it the "Heart and Soul" of the Constitution)
+
+---
+
+*🚀 Day 40 of 170 — You're 23.5% through! SQL is a goldmine of MCQ marks in BPSC TRE CS paper. Master the command categories and the TRUNCATE-cannot-rollback trap — these appear almost every year!*

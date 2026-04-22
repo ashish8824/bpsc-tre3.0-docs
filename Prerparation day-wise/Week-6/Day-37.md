@@ -1,1458 +1,1704 @@
-# 📅 BPSC TRE 4.0 — DAY 37
-## CS: DBMS — All Types of Keys | GS: Birsa Munda, Tribal Movements & Peasant Revolts
-
-> **Target:** Score 23+/25 CS | 23+/25 GS | **Overall Goal: TOP 50 RANK**
-> **Phase:** Phase 1 — Foundation | **Week 6 (DBMS Week)**
-> **Day 37 of 170**
+# 📅 BPSC TRE 4.0 — DAY 37 COMPLETE STUDY MODULE
+### DBMS Keys (Primary, Foreign, Super, Candidate, Composite, Unique) + Birsa Munda & Revolutionary Movements Revision
+**Target: TOP 50 RANK | Score: 130+/150**
 
 ---
 
-# ════════════════════════════════════════════
-# 💻 PART A: COMPUTER SCIENCE
-# DBMS — ALL TYPES OF KEYS (Complete Mastery)
-# ════════════════════════════════════════════
+> ⏰ **Today's Schedule**
+> - Morning (1.5 hrs): DBMS Keys — All Types, Differences, Constraints, PYQ Traps
+> - Afternoon (1 hr): History — Birsa Munda (deep dive) + Revision of Anushilan Samiti & Ghadar Party
+> - Evening (1 hr): Solve all 50 MCQs (25 CS + 25 GS)
+> - Night (30 min): Write 5 bullet revision points from today's notes
 
 ---
 
-## 🔑 WHY KEYS MATTER IN DBMS?
-
-A **KEY** in DBMS is an attribute (or set of attributes) that is used to:
-1. **Uniquely identify** a tuple (row) in a relation (table)
-2. **Establish relationships** between tables
-3. **Enforce data integrity** and avoid duplicate/invalid records
-
-> Think of a KEY as your **Aadhaar Number** — it uniquely identifies YOU among all citizens of India.
+# PART 1: COMPUTER SCIENCE
+## 📘 DBMS Keys — Deep Conceptual Guide
 
 ---
 
-## 🧠 CONCEPT 1: Understanding Uniqueness First
+## 🔷 SECTION 1: What is a Key? — The Foundation
 
-Before learning key types, understand what "uniquely identifies" means:
+### Real-Life Analogy — The Aadhaar Card:
 
-```
-STUDENT TABLE:
-┌────────┬──────────┬──────┬──────────┬────────────┐
-│ Stu_ID │ Name     │ Age  │ City     │ Phone      │
-├────────┼──────────┼──────┼──────────┼────────────┤
-│  101   │ Rahul    │  20  │ Patna    │ 9800000001 │
-│  102   │ Priya    │  21  │ Patna    │ 9800000002 │
-│  103   │ Rahul    │  20  │ Gaya     │ 9800000003 │
-│  104   │ Amit     │  22  │ Muzaff.  │ 9800000004 │
-└────────┴──────────┴──────┴──────────┴────────────┘
+Every Indian has an **Aadhaar Number** — a unique 12-digit number. No two Indians share the same Aadhaar number. It uniquely identifies you among 1.4 billion people.
 
-Which attribute UNIQUELY identifies each student?
-→ Name?    NO! Two students are named "Rahul"
-→ Age?     NO! Multiple students age 20
-→ City?    NO! Multiple students from "Patna"
-→ Stu_ID?  YES! Each student has a unique ID
-→ Phone?   YES! Each phone number is unique
-
-Both Stu_ID and Phone can uniquely identify a student.
-These are called CANDIDATE KEYS.
-```
-
----
-
-## 🧠 CONCEPT 2: SUPER KEY — The Broadest Category
-
-**Super Key** = ANY set of one or more attributes that can **uniquely identify** a tuple.
-
-> **Rule:** If an attribute or combination of attributes can uniquely identify a row → it is a Super Key.
+In a database table, a **Key** does exactly the same job — it uniquely identifies each row (record) in a table.
 
 ```
-For the STUDENT table above, Super Keys include:
-┌────────────────────────────────────────────────────┐
-│ {Stu_ID}                    ← uniquely identifies  │
-│ {Phone}                     ← uniquely identifies  │
-│ {Stu_ID, Name}              ← still unique (Stu_ID │
-│                               is already unique,   │
-│                               adding Name doesn't  │
-│                               break uniqueness)    │
-│ {Stu_ID, Age}               ← super key           │
-│ {Stu_ID, Name, Age, City}   ← super key           │
-│ {Phone, Name}               ← super key           │
-│ {Stu_ID, Phone, Name, Age, City} ← super key      │
-│                                                    │
-│ NOT a Super Key:                                   │
-│ {Name}    ← two students named Rahul               │
-│ {Age}     ← multiple students same age            │
-│ {City}    ← multiple students from same city      │
-└────────────────────────────────────────────────────┘
-
-KEY INSIGHT: A Super Key may contain EXTRA/UNNECESSARY attributes.
-```
-
-> 💡 **Memory Trick:** Super Key = ANY key that works (including ones with extra attributes). "Super" because it's the most general / inclusive category.
-
----
-
-## 🧠 CONCEPT 3: CANDIDATE KEY — Minimal Super Key
-
-**Candidate Key** = A Super Key with **NO unnecessary attributes** (minimal super key).
-
-> **Rule:** If you remove ANY attribute from a Candidate Key, it NO LONGER uniquely identifies a tuple.
-
-```
-CANDIDATE KEYS from the Student table:
-
-{Stu_ID}  → Remove Stu_ID? Can't identify uniquely. ✓ MINIMAL → CANDIDATE KEY
-{Phone}   → Remove Phone? Can't identify uniquely. ✓ MINIMAL → CANDIDATE KEY
-
-{Stu_ID, Name} → Remove Name? {Stu_ID} still unique. ✗ NOT MINIMAL → NOT Candidate Key
-{Stu_ID, Age}  → Remove Age?  {Stu_ID} still unique. ✗ NOT MINIMAL → NOT Candidate Key
-
-So for this table:
-CANDIDATE KEYS = {Stu_ID} and {Phone}
-```
-
-```
-RELATIONSHIP DIAGRAM:
-┌──────────────────────────────────────────────────┐
-│                 ALL ATTRIBUTES                   │
-│  ┌────────────────────────────────────────────┐  │
-│  │              SUPER KEYS                    │  │
-│  │  ┌──────────────────────────────────────┐  │  │
-│  │  │          CANDIDATE KEYS              │  │  │
-│  │  │   ┌───────────────────────────────┐  │  │  │
-│  │  │   │     PRIMARY KEY (1 only)      │  │  │  │
-│  │  │   └───────────────────────────────┘  │  │  │
-│  │  │   (remaining = ALTERNATE KEYS)       │  │  │
-│  │  └──────────────────────────────────────┘  │  │
-│  └────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────┘
-
-HIERARCHY: Primary Key ⊂ Candidate Key ⊂ Super Key
-```
-
-> ⚠️ **PYQ FACT:** Candidate Key = Minimal Super Key. Every Candidate Key is a Super Key but NOT every Super Key is a Candidate Key.
-
----
-
-## 🧠 CONCEPT 4: PRIMARY KEY — The Chosen One
-
-**Primary Key** = ONE Candidate Key selected by the Database Designer to be the **main identifier** for a table.
-
-### Rules of Primary Key (CRITICAL FOR EXAM):
-```
-┌─────────────────────────────────────────────────────┐
-│           PRIMARY KEY RULES — MEMORIZE!             │
-├─────────────────────────────────────────────────────┤
-│ Rule 1: Only ONE primary key per table              │
-│ Rule 2: Value must be UNIQUE for every row          │
-│ Rule 3: Value CANNOT be NULL (Not Null constraint)  │
-│ Rule 4: Value should NOT change over time           │
-│         (e.g., phone number can change → bad PK)   │
-│ Rule 5: Should be minimal (single attribute        │
-│         preferred over composite)                  │
-└─────────────────────────────────────────────────────┘
-```
-
-```
-STUDENT TABLE with Primary Key:
-┌────────┬──────────┬──────┬──────────┐
-│ Stu_ID │ Name     │ Age  │ City     │
-├────────┼──────────┼──────┼──────────┤    Stu_ID is
-│  101   │ Rahul    │  20  │ Patna    │ ← PRIMARY KEY
-│  102   │ Priya    │  21  │ Patna    │
-│  103   │ NULL     │  20  │ Gaya     │ ← ❌ INVALID! 
-│        │          │      │          │    PK cannot be NULL
-│  101   │ Suresh   │  22  │ Muzaff.  │ ← ❌ INVALID!
-│        │          │      │          │    Duplicate PK!
-└────────┴──────────┴──────┴──────────┘
-```
-
-> ⚠️ **PYQ TRAP:** "How many primary keys can a table have?" → **ONLY ONE** (not one or more — exactly ONE)
-
----
-
-## 🧠 CONCEPT 5: ALTERNATE KEY — The Backup
-
-**Alternate Key** = All Candidate Keys that are **NOT chosen** as the Primary Key.
-
-```
-If a table has Candidate Keys: {Stu_ID} and {Phone}
-→ DBA chooses {Stu_ID} as Primary Key
-→ {Phone} becomes the ALTERNATE KEY
-
-Remember:
-Primary Key + Alternate Keys = All Candidate Keys
-```
-
-> 💡 Alternate Keys are also unique! They just weren't chosen as the primary key.
-
----
-
-## 🧠 CONCEPT 6: FOREIGN KEY — The Linking Key
-
-**Foreign Key** = An attribute in one table that **refers to the Primary Key of another table**.
-
-> Foreign Key establishes a **relationship (link)** between two tables.
-
-```
-TWO TABLES EXAMPLE:
-
-STUDENT TABLE:                      DEPARTMENT TABLE:
-┌────────┬────────┬─────────┐       ┌────────┬──────────────┐
-│ Stu_ID │ Name   │ Dept_ID │       │ Dept_ID│ Dept_Name    │
-├────────┼────────┼─────────┤       ├────────┼──────────────┤
-│  101   │ Rahul  │   10    │──────▶│  10    │ Computer Sc. │
-│  102   │ Priya  │   20    │──────▶│  20    │ Mathematics  │
-│  103   │ Amit   │   10    │──────▶│  10    │ Computer Sc. │
-└────────┴────────┴─────────┘       └────────┴──────────────┘
-         ↑ STUDENT Table                      ↑ DEPARTMENT Table
-    Dept_ID here is                      Dept_ID here is
-    FOREIGN KEY                          PRIMARY KEY
-    (references Dept Table)
-
-FOREIGN KEY RULES:
-→ FK in Student table = Dept_ID
-→ FK refers to PK (Dept_ID) of Department table
-→ Every value in FK must EXIST in the referenced PK column
-  (this is REFERENTIAL INTEGRITY)
-→ A table can have MULTIPLE foreign keys
-→ FK value CAN be NULL (unlike Primary Key)
-```
-
-### Referential Integrity Constraint:
-```
-VALID situation:
-Student has Dept_ID = 10 → Department 10 EXISTS ✓
-
-INVALID situation:
-Student has Dept_ID = 99 → Department 99 does NOT EXIST ✗
-                        → REFERENTIAL INTEGRITY VIOLATED!
-```
-
-> ⚠️ **PYQ FACT:** Foreign Key REFERENCES the Primary Key of another table. FK maintains **Referential Integrity**. A table can have MULTIPLE foreign keys (unlike primary key which can have only ONE).
-
----
-
-## 🧠 CONCEPT 7: COMPOSITE KEY
-
-**Composite Key** = A key made up of **TWO OR MORE attributes** together to uniquely identify a tuple.
-
-```
-ENROLLMENT TABLE:
-(A student can enroll in multiple courses)
-
-┌────────┬───────────┬────────────┬──────────┐
-│ Stu_ID │ Course_ID │ Semester   │ Grade    │
-├────────┼───────────┼────────────┼──────────┤
-│  101   │  CS101    │  Sem-1     │  A       │
-│  101   │  CS102    │  Sem-1     │  B       │ ← Same Stu_ID
-│  102   │  CS101    │  Sem-1     │  A+      │ ← Same Course_ID
-│  101   │  CS101    │  Sem-2     │  B       │ ← Same pair?
-└────────┴───────────┴────────────┴──────────┘
-
-Here:
-→ Stu_ID alone? NOT unique (101 appears 3 times)
-→ Course_ID alone? NOT unique (CS101 appears 3 times)
-→ {Stu_ID + Course_ID} alone? Rows 1 and 4 have same values!
-→ {Stu_ID + Course_ID + Semester}? UNIQUE for every row! ✓
-
-So PRIMARY KEY = {Stu_ID, Course_ID, Semester}
-This is a COMPOSITE KEY (3 attributes together)
-```
-
-> 💡 **Key Point:** Composite key = multiple attributes. Primary key CAN be composite.
-
----
-
-## 🧠 CONCEPT 8: UNIQUE KEY
-
-**Unique Key** = Similar to Primary Key — enforces uniqueness — BUT allows **NULL values**.
-
-```
-COMPARISON: PRIMARY KEY vs UNIQUE KEY
-
-┌─────────────────┬──────────────────┬─────────────────┐
-│ PROPERTY        │ PRIMARY KEY      │ UNIQUE KEY      │
-├─────────────────┼──────────────────┼─────────────────┤
-│ Uniqueness      │ Must be unique   │ Must be unique  │
-│ NULL values     │ NOT ALLOWED      │ ALLOWED (once)  │
-│ Per table       │ Only ONE         │ Can have MANY   │
-│ Purpose         │ Main identifier  │ Alternate unique│
-│                 │ of table         │ constraint      │
-└─────────────────┴──────────────────┴─────────────────┘
-
-Example: Email address column — unique for each user,
-but some users may not provide email → can be NULL
-→ Suitable for UNIQUE KEY, not PRIMARY KEY
-```
-
-> ⚠️ **PYQ TRAP:** "Which key allows NULL values?" → **UNIQUE KEY** allows NULL. **PRIMARY KEY** does NOT allow NULL.
-
----
-
-## 🧠 CONCEPT 9: NATURAL KEY vs SURROGATE KEY
-
-```
-NATURAL KEY:
-→ A key that has real-world meaning/significance
-→ Examples: Aadhaar number, PAN card, Email address, Employee ID
-→ Naturally exists in the data
-
-SURROGATE KEY:
-→ An artificially created key with NO real-world meaning
-→ System-generated unique identifier
-→ Examples: Auto-increment ID (1, 2, 3...), UUID
-→ Used when no good natural key exists
-→ Also called: Artificial Key, Synthetic Key
-
-Which is better? Surrogate keys are preferred in practice:
-→ Never changes (natural keys like email CAN change)
-→ Simple integer (faster joins and lookups)
-→ No business meaning leaking into the database
-```
-
----
-
-## 🧠 CONCEPT 10: COMPLETE KEY COMPARISON TABLE
-
-```
-┌────────────────┬──────────────────────────────────────────────────────┐
-│ KEY TYPE       │ DEFINITION & PROPERTIES                              │
-├────────────────┼──────────────────────────────────────────────────────┤
-│ SUPER KEY      │ Any set of attributes that uniquely identifies       │
-│                │ a tuple. Can have extra/unnecessary attributes.      │
-│                │ BROADEST category. Every key is a super key.        │
-├────────────────┼──────────────────────────────────────────────────────┤
-│ CANDIDATE KEY  │ Minimal super key. No redundant attributes.         │
-│                │ Multiple candidate keys possible per table.         │
-├────────────────┼──────────────────────────────────────────────────────┤
-│ PRIMARY KEY    │ One chosen candidate key. NOT NULL. UNIQUE.         │
-│                │ Only ONE per table. Never changes ideally.          │
-├────────────────┼──────────────────────────────────────────────────────┤
-│ ALTERNATE KEY  │ Candidate keys NOT chosen as primary key.           │
-│                │ Unique but not the main identifier.                 │
-├────────────────┼──────────────────────────────────────────────────────┤
-│ FOREIGN KEY    │ References PK of another table. Can be NULL.        │
-│                │ Table can have MULTIPLE foreign keys.               │
-│                │ Enforces Referential Integrity.                     │
-├────────────────┼──────────────────────────────────────────────────────┤
-│ COMPOSITE KEY  │ Key made of 2+ attributes together.                 │
-│                │ Used when no single attribute is unique.            │
-├────────────────┼──────────────────────────────────────────────────────┤
-│ UNIQUE KEY     │ Enforces uniqueness like PK but allows NULL.        │
-│                │ Multiple per table allowed.                         │
-├────────────────┼──────────────────────────────────────────────────────┤
-│ SURROGATE KEY  │ System-generated artificial key (no real meaning).  │
-│                │ e.g., Auto-increment integers, UUID                 │
-└────────────────┴──────────────────────────────────────────────────────┘
-```
-
----
-
-## 🧠 CONCEPT 11: PYQ-Focused Trick Questions on Keys
-
-```
-COMMON EXAM TRAPS:
-
-TRAP 1: "A table can have multiple primary keys" → FALSE
-         A table has EXACTLY ONE primary key.
-
-TRAP 2: "Primary key can have NULL values" → FALSE
-         Primary key CANNOT be NULL (Entity Integrity).
-
-TRAP 3: "Foreign key must always have a value" → FALSE
-         Foreign key CAN be NULL.
-
-TRAP 4: "Candidate key = Primary key" → FALSE
-         Candidate key is ANY minimal super key.
-         Primary key is ONE chosen candidate key.
-
-TRAP 5: "All super keys are candidate keys" → FALSE
-         Candidate key ⊂ Super key (not the other way).
-
-TRAP 6: "Composite key = Foreign key" → FALSE
-         Composite key = key with multiple attributes.
-         Foreign key = key referencing another table's PK.
-
-TRAP 7: "Unique key does not allow NULL" → FALSE
-         Unique key ALLOWS NULL (unlike primary key).
-```
-
----
-
-## 🎯 QUICK REVISION FLASH CARDS (CS — Keys)
-
-```
-┌──────────────────────────────────────────────────────┐
-│ FC-1: HIERARCHY                                     │
-│ Primary Key ⊂ Candidate Key ⊂ Super Key             │
-└──────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────┐
-│ FC-2: PRIMARY KEY — 3 hard rules                    │
-│ 1. Only ONE per table                               │
-│ 2. UNIQUE (no duplicates)                           │
-│ 3. NOT NULL (can never be empty)                    │
-└──────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────┐
-│ FC-3: FOREIGN KEY — 3 key facts                     │
-│ 1. References PK of ANOTHER table                   │
-│ 2. CAN be NULL                                      │
-│ 3. Table can have MULTIPLE FKs                      │
-└──────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────┐
-│ FC-4: NULL RULES                                    │
-│ Primary Key → NULL NOT allowed                      │
-│ Foreign Key → NULL ALLOWED                          │
-│ Unique Key  → NULL ALLOWED                          │
-└──────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────┐
-│ FC-5: Candidate vs Super Key                        │
-│ Candidate Key = Minimal Super Key                   │
-│ Super Key may have extra attributes                 │
-│ Candidate Key has NO extra attributes               │
-└──────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────┐
-│ FC-6: Referential Integrity                         │
-│ FK value must EXIST in the referenced PK column     │
-│ Cannot insert FK value that doesn't exist in PK!   │
-└──────────────────────────────────────────────────────┘
-```
-
----
-
-# ══════════════════════════════════════════════════
-# 📜 PART B: GENERAL STUDIES (HISTORY)
-# Birsa Munda, Tribal Revolts & Peasant Movements
-# (Bihar-Focus — HIGH PRIORITY for BPSC TRE)
-# ══════════════════════════════════════════════════
-
----
-
-## 🧠 CONCEPT 12: Context — Why Tribal & Peasant Revolts?
-
-Before the "organized" freedom struggle of the 20th century, India saw **numerous rebellions by tribals, peasants, and zamindars** against British exploitation. These were driven by:
-
-```
-REASONS FOR TRIBAL/PEASANT REVOLTS:
-──────────────────────────────────────────────────
-1. ECONOMIC: Heavy taxation, revenue demands,
-             moneylenders exploiting tribal land
-2. SOCIAL:   British disrupting traditional tribal
-             customs and forest rights
-3. RELIGIOUS: Missionary activity threatening
-              tribal culture and identity
-4. POLITICAL: British taking away land rights,
-              Forest Acts restricting access to
-              forests that tribals depended on
-5. DISPLACEMENT: Tribals forced off their land
-                 by British policies
-```
-
----
-
-## 🧠 CONCEPT 13: BIRSA MUNDA — "Dharti Aaba" (Father of the Earth)
-
-### ⭐ MOST IMPORTANT TOPIC FOR BPSC — BIRSA MUNDA
-
-```
-┌──────────────────────────────────────────────────────────┐
-│                    BIRSA MUNDA                          │
-├──────────────────────────────────────────────────────────┤
-│ Born:         November 15, 1875                         │
-│               Ulihatu village, Ranchi district,         │
-│               (present-day Jharkhand)                   │
-│ Community:    Munda tribe                               │
-│ Nickname:     "Dharti Aaba" (Father of the Earth)      │
-│               Also called "Bhagwan" (God) by tribals    │
-│ Movement:     Ulgulan (meaning: "Great Tumult/Storm")   │
-│ Region:       Chotanagpur (Bihar/Jharkhand)            │
-│ Died:         June 9, 1900 (in British custody,        │
-│               Ranchi Jail — officially "cholera")       │
-│ Age at death: Only 25 years old!                       │
-└──────────────────────────────────────────────────────────┘
-```
-
-### Background — The Munda Community's Grievances:
-```
-MUNDA TRIBAL GRIEVANCES:
-──────────────────────────────────────────────────
-→ KHUNTKATTI system: Traditional Munda land ownership
-  (communal land held by the Munda family who cleared it)
-  
-→ British introduced ZAMINDARI SYSTEM → outsiders
-  (Diku = outsiders) took over Munda land
-
-→ "DIKU" (non-tribals = moneylenders, landlords, merchants)
-  exploited Mundas through:
-  - Moneylending at high interest
-  - Forced labour (Beth-Begari)
-  - Land grabbing when loans couldn't be repaid
-
-→ Forest Acts (1882) restricted Munda access to forests
-  → couldn't collect firewood, graze cattle
-
-→ Christian missionaries pressuring conversions
-```
-
-### Birsa Munda's Religious and Political Mission:
-```
-BIRSA'S THREE-PRONGED MISSION:
-
-1. RELIGIOUS/SPIRITUAL:
-   → Declared himself a prophet: "Birsa Bhagwan"
-   → Preached: One God (Sing Bonga), no idol worship,
-     no liquor, no animal sacrifice
-   → Combined elements of Christianity, Vaishnava
-     Hinduism, and traditional Munda beliefs
-   → His followers = "Birsaites"
-
-2. SOCIAL REFORM:
-   → Fight against the Diku (outsiders/exploiters)
-   → Restore Munda land rights (Khuntkatti system)
-   → End Beth-Begari (forced unpaid labour)
-   → Oppose missionary conversions
-
-3. POLITICAL/MILITARY:
-   → "Ulgulan" = Armed uprising (1899–1900)
-   → Aim: Establish Munda Raj (self-rule)
-   → "Abua Raj" (Our Rule) replacing "Maharani Raj"
-     (Queen's Rule = British Rule)
-```
-
-### The Ulgulan (1899–1900):
-```
-ULGULAN (THE GREAT TUMULT):
+REAL WORLD           →    DATABASE EQUIVALENT
 ────────────────────────────────────────────────
-→ Birsa organized armed revolt: December 24, 1899
-  (Christmas Eve — strategic timing)
-→ Birsa's followers attacked:
-  - Police stations
-  - Churches (symbol of missionary influence)
-  - Property of zamindars and merchants
-
-→ January 5, 1900: Battle at Dombari Hill (Ranchi)
-  British opened fire on a gathering of tribals
-  → MASSACRE at Dombari Hill
-  → Many tribals killed (including women and children)
-
-→ February 3, 1900: Birsa ARRESTED at Jamkopai forest,
-  Chakradharpur
-
-→ June 9, 1900: Birsa Munda DIED in Ranchi Jail
-  (officially: cholera; suspected: British killed him)
-  Age: 25 years
-
-SIGNIFICANCE:
-→ Birsa is the YOUNGEST person whose portrait is
-  displayed in the Central Hall of Parliament
-→ November 15 (his birthday) = "Janjati Gaurav Diwas"
-  (Tribal Pride Day) declared in 2021
-→ Jharkhand was formed on November 15, 2000
-  (his birth anniversary — deliberate tribute!)
-→ His struggle led to the
-  CHOTA NAGPUR TENANCY ACT (1908)
-  which protected tribal land rights
+Aadhaar Number       →    Primary Key (unique ID for each row)
+PAN Card Number      →    Another Candidate Key
+Mobile Number        →    Yet another Candidate Key (unique but can be NULL)
+Name                 →    NOT a key (two people can have the same name!)
 ```
 
-> 🏆 **Bihar/Jharkhand Connection:** Birsa Munda was from Chotanagpur — which was part of Bihar before Jharkhand was carved out in 2000. This is HIGHEST PRIORITY for BPSC Bihar context.
+### Formal Definition:
+> **A Key is an attribute (or a set of attributes) that uniquely identifies each row (tuple) in a database table.**
+
+### Why Are Keys Needed?
+
+```
+PROBLEM WITHOUT KEYS:
+
+STUDENT TABLE:
+┌──────────────┬─────────┬───────────┬──────┐
+│     Name     │ Course  │   City    │ Marks│
+├──────────────┼─────────┼───────────┼──────┤
+│  Ravi Kumar  │   CS    │  Patna    │  85  │
+│  Ravi Kumar  │   CS    │  Patna    │  85  │  ← DUPLICATE ROW!
+│  Priya Singh │  Math   │  Muzaffarpur│ 90 │
+└──────────────┴─────────┴───────────┴──────┘
+
+Which "Ravi Kumar" do we update? Which do we delete?
+→ AMBIGUITY! The system cannot distinguish between them.
+
+SOLUTION: Add a KEY column (like Roll Number):
+┌─────────┬──────────────┬─────────┬───────────┬──────┐
+│ Roll No │     Name     │ Course  │   City    │ Marks│
+├─────────┼──────────────┼─────────┼───────────┼──────┤
+│   101   │  Ravi Kumar  │   CS    │  Patna    │  85  │
+│   102   │  Ravi Kumar  │   CS    │  Patna    │  85  │  ← Now distinguishable!
+│   103   │  Priya Singh │  Math   │  Muzaffarpur│ 90 │
+└─────────┴──────────────┴─────────┴───────────┴──────┘
+Now Roll No 101 and 102 are clearly different students!
+```
+
+### The Big Picture — Key Hierarchy:
+
+```
+ALL POSSIBLE COMBINATIONS that can uniquely identify a row
+                        ↓
+                   SUPER KEYS
+            (all unique-identifying sets)
+                        ↓
+               CANDIDATE KEYS
+           (minimal super keys — can't remove any attribute)
+                        ↓
+     ┌─────────────────┬────────────────────────────┐
+     ↓                 ↓                            ↓
+PRIMARY KEY      ALTERNATE KEYS              (Remaining candidate
+(ONE chosen      (remaining candidate         keys not chosen)
+from candidates) keys)
+
+FOREIGN KEY → special key that LINKS two tables
+COMPOSITE KEY → key made of MULTIPLE attributes combined
+UNIQUE KEY → like primary key but allows NULL
+```
 
 ---
 
-## 🧠 CONCEPT 14: Other Important Munda & Tribal Revolts
+## 🔷 SECTION 2: SUPER KEY
+
+### Definition:
+> **A Super Key is any attribute (or set of attributes) that can UNIQUELY IDENTIFY each row in a table.**
+> It may contain EXTRA attributes that are not strictly necessary for uniqueness.
+
+### Working Example:
 
 ```
-TIMELINE OF TRIBAL REVOLTS IN CHOTANAGPUR REGION:
-──────────────────────────────────────────────────────
+STUDENTS TABLE:
+┌─────────┬──────────────┬────────────┬──────────────┬──────┐
+│ Roll No │     Name     │   Email    │    Phone     │ Marks│
+├─────────┼──────────────┼────────────┼──────────────┼──────┤
+│   101   │  Ravi Kumar  │ r@mail.com │ 9876543210   │  85  │
+│   102   │  Priya Singh │ p@mail.com │ 9876543211   │  90  │
+│   103   │  Aman Gupta  │ a@mail.com │ 9876543212   │  78  │
+└─────────┴──────────────┴────────────┴──────────────┴──────┘
 
-1. CHUAR UPRISING (1771–1809):
-   Region: Midnapore, Bengal
-   By: Chuar tribals
-   Cause: Land revenue demands, famine
+VALID SUPER KEYS (all uniquely identify a row):
+  {Roll No}                            ← unique alone
+  {Email}                              ← unique alone
+  {Phone}                              ← unique alone
+  {Roll No, Name}                      ← unique (has extra: Name is not needed!)
+  {Roll No, Email}                     ← unique (both together, but Roll No alone works)
+  {Roll No, Name, Email}               ← unique (many extra attributes)
+  {Roll No, Name, Email, Phone, Marks} ← ALL attributes — still uniquely identifies!
 
-2. KOLS REVOLT / KOLS UPRISING (1831–32):
-   Region: Chotanagpur (Bihar/Jharkhand)
-   By: Kols (Mundas and Oraons combined)
-   Cause: Alienation of land by zamindars,
-          moneylenders
-   Significance: First major tribal revolt in
-                 Chotanagpur
+NOT a valid super key:
+  {Name}  ← NOT unique (two "Ravi Kumar" could exist)
+  {Marks} ← NOT unique (multiple students can score 85)
+  {City}  ← NOT unique (many students from same city)
 
-3. SANTHAL HOOL (REBELLION) (1855–56):
-   ─────────────────────────────────────
-   Leaders: SIDO and KANHU (Murmu brothers)
-   Also:    CHAND and BHAIRAV (brothers)
-            PHULO and JHANO (sisters — also involved)
-   Region:  Santhal Parganas (now Jharkhand/Bihar)
-   Date:    June 30, 1855 (Hool Diwas)
-   Cause:
-   → Exploitation by "Mahajans" (moneylenders)
-     and zamindars
-   → Diku system — outsiders taking Santhal land
-   → Oppressive revenue collection by Company
+KEY INSIGHT: A super key may have redundant attributes.
+             Remove some and it STILL remains unique.
+```
+
+### 🎯 PYQ FACT: A Super Key is the BROADEST category. Every Primary Key, Candidate Key is also a Super Key. But not every Super Key is a Candidate Key or Primary Key.
+
+---
+
+## 🔷 SECTION 3: CANDIDATE KEY
+
+### Definition:
+> **A Candidate Key is a MINIMAL Super Key — a super key from which you CANNOT remove any attribute without losing uniqueness.**
+
+### The "Minimal" Concept Explained:
+
+```
+FROM THE SUPER KEYS ABOVE:
+  {Roll No, Name}  → Super Key, but if we remove Name → {Roll No} still unique!
+                     So {Roll No, Name} is NOT minimal → NOT a candidate key.
+
+  {Roll No}        → Super Key, and if we remove Roll No → {} nothing left!
+                     Cannot remove anything → IT IS MINIMAL → CANDIDATE KEY ✓
+
+  {Email}          → Super Key, minimal → CANDIDATE KEY ✓
+
+  {Phone}          → Super Key, minimal → CANDIDATE KEY ✓
+
+CANDIDATE KEYS for this table:
+  → {Roll No}     ← can uniquely identify alone, nothing to remove
+  → {Email}       ← can uniquely identify alone
+  → {Phone}       ← can uniquely identify alone
+
+RULE: Candidate Key = Super Key − (all super keys with unnecessary attributes)
+      Only the "bare minimum" sets that still uniquely identify rows.
+```
+
+### Super Key vs Candidate Key:
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│            SUPER KEY vs CANDIDATE KEY                             │
+├──────────────────────────────┬───────────────────────────────────┤
+│          SUPER KEY           │         CANDIDATE KEY             │
+├──────────────────────────────┼───────────────────────────────────┤
+│ Any set that uniquely        │ Minimal set that uniquely         │
+│ identifies rows              │ identifies rows                   │
+├──────────────────────────────┼───────────────────────────────────┤
+│ May have EXTRA attributes    │ No extra attributes — removing    │
+│ (redundant ones)             │ any attribute loses uniqueness    │
+├──────────────────────────────┼───────────────────────────────────┤
+│ {Roll No, Name} — valid      │ {Roll No, Name} — NOT candidate   │
+│ super key                    │ (Roll No alone is sufficient)     │
+├──────────────────────────────┼───────────────────────────────────┤
+│ Every Candidate Key IS a     │ Every Candidate Key is a          │
+│ Super Key                    │ Minimal Super Key                 │
+├──────────────────────────────┼───────────────────────────────────┤
+│ Can be INFINITE in number    │ LIMITED in number (finite)        │
+└──────────────────────────────┴───────────────────────────────────┘
+
+RELATIONSHIP:
+  All Candidate Keys are Super Keys.
+  NOT all Super Keys are Candidate Keys.
+  
+  SUPER KEY ⊃ CANDIDATE KEY  (Candidate Key is a subset of Super Keys)
+```
+
+### 🎯 PYQ FACT: A Candidate Key is always a Minimal Super Key. If you can remove any attribute and it still uniquely identifies — it's NOT a Candidate Key, just a Super Key.
+
+---
+
+## 🔷 SECTION 4: PRIMARY KEY
+
+### Definition:
+> **A Primary Key is ONE Candidate Key chosen by the database designer to be the OFFICIAL identifier of rows in a table.**
+
+### Rules of Primary Key (ALL ARE PYQ TRAPS!):
+
+```
+RULE 1: A table can have ONLY ONE Primary Key.
+        (But it can have multiple Candidate Keys — only one is "chosen" as primary)
+
+RULE 2: Primary Key value CANNOT be NULL.
+        (Every row MUST have a value for the primary key column)
+
+RULE 3: Primary Key values must be UNIQUE.
+        (No two rows can have the same primary key value)
+
+RULE 4: Primary Key is CHOSEN from Candidate Keys.
+        (If there are 3 candidate keys, the designer picks 1 as primary)
+
+RULE 5: Primary Key values should NOT change over time.
+        (Stable identifier — Roll No is better than Name which can change)
+```
+
+### Visual Example:
+
+```
+STUDENTS TABLE:
+┌──────────┬──────────────┬────────────┬──────────────┬──────┐
+│ Roll No  │     Name     │   Email    │    Phone     │ Marks│
+│ [PK] 🔑  │              │            │              │      │
+├──────────┼──────────────┼────────────┼──────────────┼──────┤
+│   101    │  Ravi Kumar  │ r@mail.com │ 9876543210   │  85  │
+│   102    │  Priya Singh │ p@mail.com │ 9876543211   │  90  │
+│  NULL    │  Aman Gupta  │ a@mail.com │ 9876543212   │  78  │ ← INVALID! NULL not allowed
+│   101    │  Kiran Verma │ k@mail.com │ 9876543213   │  92  │ ← INVALID! Duplicate PK
+└──────────┴──────────────┴────────────┴──────────────┴──────┘
+
+EXPLANATION:
+  Roll No = PRIMARY KEY (chosen from candidates: Roll No, Email, Phone)
+  Row 3: Roll No = NULL → REJECTED by DBMS (PK cannot be NULL!)
+  Row 4: Roll No = 101 (already exists) → REJECTED (PK must be UNIQUE!)
+```
+
+### Choosing a Good Primary Key:
+
+```
+GOOD Primary Keys:
+  ✅ Roll Number (students)   → never changes, always unique
+  ✅ Employee ID              → assigned by company, never repeats
+  ✅ Aadhaar Number           → government-assigned, universally unique
+  ✅ Account Number           → bank-assigned, unique per account
+  ✅ ISBN (books)             → unique per book edition
+  ✅ Auto-increment integer   → system generates 1, 2, 3, 4... automatically
+
+BAD Primary Keys (and why):
+  ❌ Name              → multiple people can have same name
+  ❌ Phone Number      → can change, can be shared
+  ❌ Email             → can change when company changes
+  ❌ Date of Birth     → multiple people born same day
+  ❌ City/Address      → many people in same city
+```
+
+---
+
+## 🔷 SECTION 5: FOREIGN KEY
+
+### Definition:
+> **A Foreign Key is an attribute in one table that REFERENCES the Primary Key of another table. It is used to LINK two tables and enforce referential integrity.**
+
+### Real-Life Analogy — The Library System:
+
+```
+Think of a library:
+  BOOKS table has a column "LibrarianID" (who added the book).
+  LIBRARIANS table has "LibrarianID" as its primary key.
+  
+  The "LibrarianID" in BOOKS table is a FOREIGN KEY.
+  It points to a LIBRARIAN who actually exists.
+  You can't have a book added by Librarian #999 if librarian #999 doesn't exist!
+```
+
+### Two-Table Example — Students and Departments:
+
+```
+DEPARTMENTS Table:
+┌────────┬──────────────────────┬───────────┐
+│ DeptID │     DeptName         │   HOD     │
+│  [PK]🔑│                      │           │
+├────────┼──────────────────────┼───────────┤
+│   CS   │  Computer Science    │  Dr. Rao  │
+│  Math  │  Mathematics         │  Dr. Jha  │
+│  Phys  │  Physics             │  Dr. Gupta│
+└────────┴──────────────────────┴───────────┘
+
+STUDENTS Table:
+┌─────────┬──────────────┬──────┬────────┐
+│ Roll No │     Name     │Marks │ DeptID │
+│  [PK]🔑 │              │      │  [FK]🔗│
+├─────────┼──────────────┼──────┼────────┤
+│   101   │  Ravi Kumar  │  85  │   CS   │ ← Refers to DeptID 'CS' in DEPARTMENTS
+│   102   │  Priya Singh │  90  │  Math  │ ← Refers to DeptID 'Math'
+│   103   │  Aman Gupta  │  78  │   CS   │ ← Refers to DeptID 'CS'
+│   104   │  Kiran Verma │  92  │  Bio   │ ← INVALID! 'Bio' doesn't exist in DEPARTMENTS!
+└─────────┴──────────────┴──────┴────────┘
+
+ARROW DIAGRAM:
+STUDENTS.DeptID  ──────────→  DEPARTMENTS.DeptID
+    (Foreign Key)                  (Primary Key)
+
+RULE: Foreign Key value MUST either:
+  (a) Match an existing Primary Key value in the referenced table, OR
+  (b) Be NULL (foreign key CAN be NULL, unlike primary key!)
+```
+
+### Properties of Foreign Key:
+
+```
+PROPERTY 1: Foreign Key REFERENCES the Primary Key of ANOTHER table.
+             (Usually; technically it can reference any UNIQUE key)
+
+PROPERTY 2: Foreign Key CAN be NULL.
+             (Meaning: this row has no department assigned yet — valid!)
+
+PROPERTY 3: Foreign Key ENFORCES Referential Integrity.
+             (Can't have a student in dept 'Bio' if 'Bio' dept doesn't exist)
+
+PROPERTY 4: Multiple Foreign Keys can exist in one table.
+             (A table can have many columns referencing other tables)
+
+PROPERTY 5: Foreign Key can reference the SAME TABLE (self-referencing).
+             Example: EMPLOYEE table where ManagerID references EmployeeID
+             in the same EMPLOYEE table!
+             
+             EMPLOYEES:
+             ┌────────────┬───────────┬───────────┐
+             │ EmployeeID │   Name    │ ManagerID │
+             │   [PK]     │           │   [FK]    │
+             ├────────────┼───────────┼───────────┤
+             │    E01     │  Ravi     │  NULL     │ ← CEO has no manager
+             │    E02     │  Priya    │   E01     │ ← Priya's manager is Ravi
+             │    E03     │  Aman     │   E01     │ ← Aman's manager is Ravi
+             └────────────┴───────────┴───────────┘
+```
+
+### Referential Integrity:
+
+```
+REFERENTIAL INTEGRITY = The rule that a Foreign Key value must match
+                        a Primary Key value in the referenced table
+                        (or be NULL).
+
+WHAT HAPPENS WHEN VIOLATED?
+  → DBMS REJECTS the operation!
+  
+EXAMPLE VIOLATIONS:
+  
+  INSERT violation:
+    Try to add student with DeptID = 'Bio' when 'Bio' doesn't exist.
+    → DBMS: REJECTED! Foreign key constraint violated.
+  
+  DELETE violation:
+    Try to DELETE the 'CS' department when CS students exist.
+    → DBMS: REJECTED! (or CASCADE — delete all CS students too)
+  
+  UPDATE violation:
+    Try to change DeptID 'CS' to 'CompSci' in DEPARTMENTS.
+    → DBMS: REJECTED! (or CASCADE UPDATE — updates all references)
+
+CASCADING OPTIONS (what happens when parent row is changed/deleted):
+  ON DELETE CASCADE   → Delete child rows when parent deleted
+  ON DELETE SET NULL  → Set FK to NULL when parent deleted
+  ON DELETE RESTRICT  → Prevent deletion if children exist (default)
+  ON UPDATE CASCADE   → Update FK values when PK changes
+```
+
+---
+
+## 🔷 SECTION 6: COMPOSITE KEY
+
+### Definition:
+> **A Composite Key is a key made up of TWO OR MORE attributes that together uniquely identify a row. No single attribute alone is sufficient.**
+
+### When Do We Need Composite Keys?
+
+```
+SCENARIO: A student can enroll in MULTIPLE courses.
+          A course can have MULTIPLE students.
+          (Many-to-Many relationship)
+
+ENROLLMENT Table:
+┌─────────┬────────────┬────────┬───────────┐
+│ Roll No │  CourseID  │ Marks  │   Grade   │
+├─────────┼────────────┼────────┼───────────┤
+│   101   │    CS101   │   85   │     A     │
+│   101   │    Math101 │   90   │     A+    │  ← Same Roll No, different course!
+│   102   │    CS101   │   78   │     B+    │  ← Same CourseID, different student!
+│   102   │    Math101 │   88   │     A     │
+└─────────┴────────────┴────────┴───────────┘
+
+Can Roll No alone be Primary Key? NO! — Roll No 101 appears twice.
+Can CourseID alone be Primary Key? NO! — CS101 appears twice.
+
+SOLUTION: Composite Key = {Roll No + CourseID}
+  → (101, CS101) — UNIQUE ✓
+  → (101, Math101) — UNIQUE ✓
+  → (102, CS101) — UNIQUE ✓
+  → (102, Math101) — UNIQUE ✓
+  
+  Together they uniquely identify each enrollment!
+```
+
+### Visual Representation:
+
+```
+ENROLLMENT TABLE with COMPOSITE KEY:
+
+┌─────────┬────────────┬────────┬───────────┐
+│ Roll No │  CourseID  │ Marks  │   Grade   │
+│  [CK1]  │   [CK2]   │        │           │
+│ ════════╧════════════ (Composite PK) ════ │
+├─────────┼────────────┼────────┼───────────┤
+│   101   │    CS101   │   85   │     A     │
+│   101   │   Math101  │   90   │     A+    │
+│   102   │    CS101   │   78   │     B+    │
+└─────────┴────────────┴────────┴───────────┘
+
+COMPOSITE KEY = {Roll No} + {CourseID} together
+
+Other examples of Composite Keys:
+  → {Flight Number + Date} for FLIGHT BOOKINGS
+  → {Employee ID + Project ID} for PROJECT ASSIGNMENTS
+  → {OrderID + ProductID} for ORDER ITEMS
+  → {SenderID + ReceiverID + Date} for MESSAGES
+```
+
+### 🚨 PYQ TRAP: Composite Key is NOT necessarily a Primary Key:
+```
+A Composite Key refers to any key made of multiple attributes.
+If that composite key is chosen as the primary key, it becomes a
+COMPOSITE PRIMARY KEY.
+
+The term "composite key" describes the STRUCTURE (multi-attribute),
+not the TYPE (primary/foreign/etc).
+```
+
+---
+
+## 🔷 SECTION 7: UNIQUE KEY
+
+### Definition:
+> **A Unique Key ensures that all values in a column (or combination of columns) are unique — BUT unlike the Primary Key, it CAN contain NULL values.**
+
+### Unique Key vs Primary Key — The Critical Difference:
+
+```
+┌──────────────────────────┬────────────────────────────────────────┐
+│       PRIMARY KEY        │            UNIQUE KEY                  │
+├──────────────────────────┼────────────────────────────────────────┤
+│ Only ONE per table       │ Multiple unique keys allowed per table │
+├──────────────────────────┼────────────────────────────────────────┤
+│ CANNOT be NULL           │ CAN be NULL                           │
+│ (NULL is not allowed)    │ (but NULL only once — NULL ≠ NULL!)   │
+├──────────────────────────┼────────────────────────────────────────┤
+│ Automatically creates    │ Also creates an index (but not the     │
+│ clustered index          │ clustered/primary index)               │
+├──────────────────────────┼────────────────────────────────────────┤
+│ Main identifier of row   │ Additional uniqueness constraint,      │
+│                          │ not the "main" identifier              │
+├──────────────────────────┼────────────────────────────────────────┤
+│ Cannot be duplicate      │ Cannot be duplicate (except NULL!)     │
+├──────────────────────────┼────────────────────────────────────────┤
+│ Example: Roll No         │ Example: Email, Phone Number           │
+└──────────────────────────┴────────────────────────────────────────┘
+```
+
+### Why Does NULL Behavior Matter?
+
+```
+NULL in databases means "unknown" or "not provided."
+
+NULL ≠ NULL in SQL! (Two NULLs are NOT equal to each other)
+
+UNIQUE KEY with NULL:
+  Email column (UNIQUE KEY):
+  ┌──────────────────┐
+  │     Email        │
+  ├──────────────────┤
+  │  r@mail.com      │  → Unique ✓
+  │  p@mail.com      │  → Unique ✓
+  │  NULL            │  → Allowed! (student hasn't provided email)
+  │  NULL            │  → ALSO Allowed! (another student, also no email)
+  │  r@mail.com      │  → REJECTED! Duplicate non-NULL value
+  └──────────────────┘
+
+Why are TWO NULLs allowed in Unique Key?
+  Because NULL means "unknown" — two unknowns can't be compared.
+  They could potentially be different values!
+
+PRIMARY KEY with NULL:
+  Roll No column (PRIMARY KEY):
+  ┌──────────────────┐
+  │    Roll No       │
+  ├──────────────────┤
+  │     101          │  → Valid ✓
+  │     NULL         │  → REJECTED! Primary key cannot be NULL
+  └──────────────────┘
+```
+
+---
+
+## 🔷 SECTION 8: ALTERNATE KEY
+
+### Definition:
+> **Alternate Keys are all Candidate Keys that were NOT chosen as the Primary Key.**
+
+```
+EXAMPLE:
+  Candidate Keys: {Roll No}, {Email}, {Phone}
+  Primary Key chosen: {Roll No}
+  
+  Alternate Keys: {Email}, {Phone}
+  (They could have been primary key, but weren't chosen)
+  
+  ALTERNATE KEY = CANDIDATE KEY − PRIMARY KEY
+
+These are still enforced as UNIQUE constraints in the database!
+They just aren't the "official" primary identifier.
+```
+
+---
+
+## 🔷 SECTION 9: Complete Keys Comparison — Master Reference Table
+
+```
+┌──────────────┬────────────────────────┬──────────────┬──────────────────────────┐
+│   KEY TYPE   │       DEFINITION       │  NULL ALLOWED│      EXAMPLE             │
+├──────────────┼────────────────────────┼──────────────┼──────────────────────────┤
+│ Super Key    │ Any set that uniquely  │ Not applicable│ {Roll No}, {Roll No,Name}│
+│              │ identifies rows        │ (set-based)  │ {Email, Phone}, etc.     │
+├──────────────┼────────────────────────┼──────────────┼──────────────────────────┤
+│ Candidate Key│ Minimal super key      │ No           │ {Roll No}, {Email},      │
+│              │ (nothing removable)    │ (usually)    │ {Phone}                  │
+├──────────────┼────────────────────────┼──────────────┼──────────────────────────┤
+│ Primary Key  │ ONE chosen candidate   │ NO — never   │ Roll No (chosen from     │
+│              │ key; main identifier   │              │ candidate keys)          │
+├──────────────┼────────────────────────┼──────────────┼──────────────────────────┤
+│ Foreign Key  │ References PK of       │ YES — allowed│ DeptID in STUDENTS       │
+│              │ another table          │              │ refs DeptID in DEPTS     │
+├──────────────┼────────────────────────┼──────────────┼──────────────────────────┤
+│ Composite Key│ Two or more attributes │ Depends on   │ {Roll No + CourseID}     │
+│              │ combined as a key      │ key type     │ in ENROLLMENT            │
+├──────────────┼────────────────────────┼──────────────┼──────────────────────────┤
+│ Unique Key   │ Ensures uniqueness;    │ YES — allowed│ Email column with        │
+│              │ NOT the primary ID     │ (multiple NULLs│ UNIQUE constraint       │
+├──────────────┼────────────────────────┼──────────────┼──────────────────────────┤
+│ Alternate Key│ Candidate keys NOT     │ No           │ Email, Phone (when       │
+│              │ chosen as PK           │ (usually)    │ Roll No is chosen as PK) │
+└──────────────┴────────────────────────┴──────────────┴──────────────────────────┘
+```
+
+---
+
+## 🔷 SECTION 10: Visual Diagram — Primary Key & Foreign Key Relationship
+
+```
+TWO-TABLE RELATIONSHIP DIAGRAM:
+
+DEPARTMENTS Table                    STUDENTS Table
+─────────────────────────           ─────────────────────────────────────────
+│ DeptID [PK🔑] │ DeptName │        │ RollNo [PK🔑]│ Name  │ DeptID [FK🔗] │
+├───────────────┼──────────┤        ├──────────────┼───────┼───────────────┤
+│     CS        │ Comp Sci │◄──────┐│     101      │ Ravi  │      CS       │
+│    Math       │ Maths    │◄────┐ ││     102      │ Priya │     Math      │
+│    Phys       │ Physics  │     │ ││     103      │ Aman  │      CS       │
+└───────────────┴──────────┘     │ │└──────────────┴───────┴───────────────┘
+                                  │ │                                ↑
+                                  │ │                                │
+                                  └─┼────────────────────────────────┘
+                                    │ STUDENTS.DeptID → DEPARTMENTS.DeptID
+                                    │ (Foreign Key → Primary Key)
+
+ARROW DIRECTION:  FK Table ──→ PK Table
+                  (Child)       (Parent)
+
+RULES ENFORCED:
+  → Can't add student with DeptID not in DEPARTMENTS
+  → Can't delete a department that has students
+  → Primary Key (DeptID in DEPARTMENTS) = unique, not null
+  → Foreign Key (DeptID in STUDENTS) = can be null (student not yet assigned)
+```
+
+---
+
+## 🔷 SECTION 11: Key Relationships Diagram
+
+```
+                    ┌─────────────────────────────────────┐
+                    │         ALL ATTRIBUTES               │
+                    │  (Name, Age, Roll No, Email, Phone) │
+                    └──────────────────┬──────────────────┘
+                                       │ Some subsets uniquely identify rows
+                                       ▼
+                    ┌─────────────────────────────────────┐
+                    │           SUPER KEYS                │
+                    │  {Roll No}, {Email}, {Phone},       │
+                    │  {Roll No, Name}, {Roll No, Email}, │
+                    │  {All attributes}, etc.             │
+                    └──────────────────┬──────────────────┘
+                                       │ Remove redundant attributes
+                                       ▼
+                    ┌─────────────────────────────────────┐
+                    │         CANDIDATE KEYS              │
+                    │  {Roll No}, {Email}, {Phone}        │
+                    │  (MINIMAL — can't remove anything!) │
+                    └─────────────┬───────────────────────┘
+                                  │
+              ┌───────────────────┼─────────────────────┐
+              ▼                   │                     ▼
+  ┌──────────────────┐            │         ┌──────────────────────┐
+  │   PRIMARY KEY    │            │         │    ALTERNATE KEYS    │
+  │  {Roll No}       │            │         │  {Email}, {Phone}    │
+  │  (ONE chosen)    │            │         │  (remaining ones)    │
+  └──────────────────┘            │         └──────────────────────┘
+                                  │
+              ┌───────────────────┼─────────────────────┐
+              ▼                   ▼                     ▼
+  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
+  │   FOREIGN KEY    │  │  COMPOSITE KEY   │  │   UNIQUE KEY     │
+  │ (links tables)   │  │ (multi-attribute)│  │ (unique, can NULL)│
+  └──────────────────┘  └──────────────────┘  └──────────────────┘
+```
+
+---
+
+## 🔷 SECTION 12: Common PYQ Patterns and Traps
+
+```
+TRAP 1: "A table can have multiple Primary Keys"
+  → FALSE! A table has ONLY ONE Primary Key.
+           But can have multiple CANDIDATE keys, ALTERNATE keys, UNIQUE keys.
+
+TRAP 2: "Primary Key can be NULL"
+  → FALSE! Primary Key CANNOT be NULL. EVER.
+           UNIQUE KEY can be NULL.
+           FOREIGN KEY can be NULL.
+
+TRAP 3: "Foreign Key references the Foreign Key of another table"
+  → FALSE! Foreign Key references the PRIMARY KEY of another table.
+           (Sometimes it can reference any UNIQUE key, but PK is standard answer)
+
+TRAP 4: "Candidate Key = Primary Key"
+  → FALSE! Primary Key is ONE candidate key.
+           There can be MULTIPLE candidate keys; only ONE is primary.
+
+TRAP 5: "Super Key and Candidate Key are the same"
+  → FALSE! Super Key may have extra (redundant) attributes.
+           Candidate Key is MINIMAL — no extra attributes.
+
+TRAP 6: "Unique Key and Primary Key are the same"
+  → FALSE! Primary Key: NO NULL, only ONE per table.
+           Unique Key: NULL allowed, MULTIPLE per table.
+
+TRAP 7: "Composite Key means Primary Key with multiple tables"
+  → FALSE! Composite Key = ONE key made of MULTIPLE ATTRIBUTES in the SAME table.
+           Nothing to do with "multiple tables."
+
+TRAP 8: "Removing one attribute from Super Key always makes it invalid"
+  → FALSE! That's only true for Candidate Keys.
+           Super Keys can have extra attributes — removing extras still leaves it valid.
+
+TRAP 9: "Foreign Key creates a relationship between rows in the SAME table"
+  → PARTIALLY TRUE! A Foreign Key CAN self-reference (same table).
+                    But typically it links two DIFFERENT tables.
+
+TRAP 10: "A Candidate Key cannot be NULL"
+  → Generally TRUE — candidate keys, like primary keys, should not be NULL
+    as they are meant to uniquely identify rows.
+```
+
+---
+
+# PART 2: GENERAL STUDIES
+## ⚔️ History — Birsa Munda: Deep Dive + Revolutionary Movements Revision
+
+---
+
+## 🔷 SECTION 1: BIRSA MUNDA — Complete Story
+
+### Early Life — From Shepherd Boy to Prophet:
+
+```
+BORN:      15 November 1875
+VILLAGE:   Ulihatu, Khunti district, Chota Nagpur (now Jharkhand)
+TRIBE:     Munda (Adivasi community)
+FATHER:    Sugana Munda (poor agricultural labourer)
+RELIGION:  Born into a family that converted to Christianity
+           (his father worked for a German Lutheran missionary)
+
+EDUCATION:
+  → Attended a missionary school in Chaibasa
+  → Intelligent student; exposed to both Christian and Hindu teachings
+  → Later LEFT Christianity → returned to tribal Sarna religion
+  → Began synthesising traditional Munda beliefs with reformist ideas
+
+YOUNG BIRSA:
+  → Worked as a shepherd
+  → Deeply affected by seeing tribal lands being grabbed by moneylenders
+  → Witnessed British forest laws stripping tribals of their livelihood
+  → By 1895, declared himself a DIVINE MESSENGER of God (Singbonga)
+```
+
+### The Four-Pronged Exploitation:
+
+```
+WHY DID BIRSA REVOLT? Four forces crushing the Munda tribals:
+
+1. DIKU SYSTEM (Moneylenders):
+   "Diku" = outsider/non-tribal in Mundari language
+   → Hindu traders and moneylenders came to Chota Nagpur
+   → Gave tribals loans at EXTREME interest rates
+   → When tribals couldn't repay → seized their ancestral lands
+   → Tribals became bonded labourers (BETHEGARI system) on their own land!
    
-   What happened:
-   → Sido declared "Company Rule over, God's Rule begins"
-   → Massive armed uprising — thousands of Santhals
-   → British suppressed it with army — 15,000+ Santhals killed
-   → Sido and Kanhu were HANGED (1856)
+2. BRITISH FOREST ACTS (1878):
+   → Reserved Forests declared — tribals BANNED from entering forests
+   → Could no longer collect firewood, fruits, hunt game, graze animals
+   → Forests = core of tribal life → suddenly illegal!
+   → Tribals lost their PRIMARY source of livelihood overnight
    
-   Legacy:
-   → Led to creation of SANTHAL PARGANAS as a
-     separate administrative district (1856)
-   → June 30 = Hool Diwas (observed in Jharkhand)
+3. ZAMINDARI/LANDLORD SYSTEM:
+   → Non-tribal landlords (thikadars) given control over tribal lands
+   → Tribals had to pay rent for land they had owned for generations
+   → Couldn't afford rent → eviction → landlessness
+   
+4. CHRISTIAN MISSIONARIES:
+   → Active conversion campaigns in Chota Nagpur
+   → Traditional tribal culture, dances, festivals being eroded
+   → Birsa saw this as cultural attack on Munda identity
+   
+BIRSA'S RESPONSE: "ABUA DIS-OM RE ABUA RAJA" (Our land, our rule!)
+```
 
-4. MUNDA REVOLT (ULGULAN) (1899–1900):
-   Leader: Birsa Munda (detailed above)
+### Birsa as Dharmical (Religious) Leader:
 
-5. TAna BHAGAT MOVEMENT (1914):
-   Leader: Jatra Oraon (later Tana Bhagat)
-   Region: Chotanagpur (Ranchi)
-   Nature: Socio-religious reform movement
-           Influenced by Birsa Munda's legacy
-   Method: Non-violence (unlike Birsa's armed revolt)
-   Later: Merged with Gandhian Non-Cooperation Movement
+```
+BIRSA'S RELIGIOUS MOVEMENT (1895-1900):
+
+He declared himself the messenger of Singbonga (the Sun God / supreme deity):
+  → "Sing" = Sun, "Bonga" = God in Mundari
+  
+HIS PROCLAMATIONS:
+  → Stop paying rent to landlords (they have NO right to our land)
+  → Reject alcohol (traditional problem in tribal communities)
+  → Stop eating beef (to connect with Hindu communities)
+  → Abandon Christian conversion attempts
+  → Return to the SARNA religion (original Munda tribal religion)
+  → Purify tribal society
+  
+MIRACLES ATTRIBUTED TO HIM:
+  → Claimed to heal the sick
+  → Said to make the blind see
+  → Followers believed he could stop British bullets with magic!
+  
+This religious authority was CRUCIAL — it mobilised thousands who might not
+have joined a purely political movement.
+
+HE WAS CALLED:
+  → "DHARTI ABBA"   = Father of the Earth
+  → "BHAGWAN BIRSA" = God Birsa (by followers)
+  → "BIRSA BHAGWAN" in tribal songs and oral traditions
+```
+
+### First Arrest (1895):
+
+```
+FIRST ARREST: 1895
+  → British authorities alarmed by Birsa's growing influence
+  → Arrested for spreading sedition and inciting tribals
+  → Imprisoned for 2 years in Hazaribag Jail (1895-1897)
+
+EFFECT OF IMPRISONMENT:
+  → Made him MORE famous — tribals saw him as a martyr
+  → Upon release (1897), his following had GROWN!
+  → Now moved from purely religious message to ARMED REVOLT
+```
+
+### The ULGULAN (1899-1900) — The Great Revolt:
+
+```
+ULGULAN = "The Great Tumult" / "The Great Revolt"
+           (from Mundari word for disorder/uprising)
+
+PREPARATION (1897-1899):
+  → Birsa organised his followers militarily
+  → Weapons: bows and arrows, axes, farming tools
+  → Strategy: Guerrilla warfare against British forces and landlords
+  → Network: Spread across Khunti, Ranchi, Singhbhum districts
+
+THE REVOLT BEGINS (December 1899):
+  → Christmas Eve 1899: Birsa's forces attacked missionary churches and 
+    police outposts near Khunti
+  → January 1900: Armed attacks on British establishments and landlord properties
+  → Goal: Drive out British, Diku moneylenders, missionaries from Chota Nagpur
+          Establish "Birsa Raj" — Munda self-rule
+
+BRITISH RESPONSE:
+  → Deployed large military forces
+  → Superior weapons (guns) vs tribal bows and arrows
+  → January-February 1900: Systematic crackdown
+
+BATTLE OF DOMBARI HILL (9 January 1900):
+  → Major confrontation at Dombari Hill (Khunti)
+  → British forces fired upon gathered Mundas
+  → Hundreds of tribals killed — the "Jallianwala" of the tribal movement
+  → Birsa and remaining followers fled into forests
+
+CAPTURE:
+  → Birsa Munda captured on 3 FEBRUARY 1900
+  → Location: Jamkopai forest, near Chakradharpur
+  → Arrested by British forces; brought to Ranchi Jail
+```
+
+### Death and Legacy:
+
+```
+DEATH IN PRISON:
+  → Died: 9 JUNE 1900 in RANCHI JAIL
+  → Official British cause: CHOLERA
+  → Tribals (and many historians) believe: POISONED by British
+  → Age at death: 25 years
+  → Duration of revolt: approximately 6 months (Dec 1899 - Feb 1900)
+
+IMMEDIATE AFTERMATH:
+  → Mass trials — hundreds imprisoned, transported
+  → Birsa's closest followers sentenced to long terms
+  → British shaken by the scale of tribal resistance
+
+LONG-TERM LEGACY:
+  
+  1. CHOTA NAGPUR TENANCY ACT (1908):
+     → DIRECT legislative response to Birsa's movement
+     → Prohibited transfer of tribal land to NON-TRIBALS
+     → Still in force today in Jharkhand!
+     → Considered Birsa's GREATEST legal legacy
+  
+  2. CHOTANAGPUR TENANCY AMENDMENT:
+     → Repeatedly amended to strengthen tribal protections
+  
+  3. JHARKHAND STATE:
+     → Demand for a separate state for Adivasis of Chota Nagpur
+     → Jharkhand created on 15 November 2000
+     → DATE CHOSEN = Birsa Munda's birthday! (15 November)
+  
+  4. NATIONAL RECOGNITION:
+     → Portrait in Central Hall of INDIAN PARLIAMENT
+       (One of very few non-mainstream leaders given this honour)
+     → Birsa Munda Airport, Ranchi — named after him
+     → Birsa Institute of Technology, Dhanbad — named after him
+     → Birsa Agricultural University, Ranchi — named after him
+     → His image on Indian currency notes (₹5 coin, postal stamps)
+  
+  5. INSPIRATION FOR LATER MOVEMENTS:
+     → Inspired Jharkhand tribal rights movement
+     → Model for tribal self-determination
+     → Celebrated as FIRST tribal freedom fighter
+```
+
+### Timeline of Birsa Munda's Life:
+
+```
+1875  Born, 15 November, Ulihatu village, Khunti, Chota Nagpur
+      │
+1886  Attends missionary school, Chaibasa (age ~11)
+      │
+1890  Returns from school; witnesses tribal exploitation firsthand
+      │
+1895  Declares himself DIVINE MESSENGER of Singbonga
+      │ British arrest him for sedition
+      │ Imprisoned in Hazaribag Jail
+      │
+1897  RELEASED from jail → following has grown enormously
+      │ Shifts from religious to political-military planning
+      │
+1899  Dec: ULGULAN BEGINS — attacks on churches, police posts
+Dec 24│
+      │
+1900  Jan: Full-scale revolt across Khunti, Ranchi
+9 Jan │ BATTLE OF DOMBARI HILL — British massacre of tribals
+      │
+3 Feb │ BIRSA MUNDA CAPTURED at Jamkopai forest
+      │
+9 Jun │ DIES IN RANCHI JAIL (official: cholera; age: 25)
+      │
+1908  CHOTA NAGPUR TENANCY ACT — direct legacy of Ulgulan
+      │
+2000  JHARKHAND STATE created on 15 November (Birsa's birthday)
 ```
 
 ---
 
-## 🧠 CONCEPT 15: SANTHAL REVOLT (1855) — Detailed
+## 🔷 SECTION 2: REVOLUTIONARY MOVEMENTS — QUICK REVISION
+
+### ANUSHILAN SAMITI — Rapid Revision:
 
 ```
-SANTHAL HOOL — KEY FACTS:
-┌──────────────────────────────────────────────────────┐
-│ Year:    1855–56                                    │
-│ Region:  Santhal Parganas (Rajmahal Hills area)    │
-│          Present-day Jharkhand + parts of Bengal   │
-│ Leaders: SIDO and KANHU Murmu (two brothers)       │
-│ Date:    June 30, 1855 = HOOL DIWAS                │
-│ Slogan:  "Abua Raj Seter Janaa, Maharani Raj Tundu │
-│          Janaa" (Our rule has come, Queen's rule   │
-│          has ended)                                │
-│ Cause:   Exploitation by zamindars, mahajans       │
-│          (moneylenders), and the East India Company│
-│ Result:  Suppressed by British Army                │
-│          → Santhal Parganas District created 1856  │
-│          → Santhal Parganas Tenancy Act (1876)     │
-└──────────────────────────────────────────────────────┘
+FOUNDED:    1902, Calcutta
+FOUNDERS:   Pramathanath Mitra; Barindra Kumar Ghosh (active leader)
+DHAKA BRANCH: 1906, Pulin Bihari Das (most radical branch)
+COVER:      Physical training societies (gymnasiums) — hide revolutionary activities
+
+KEY EVENTS:
+  → Alipore Bomb Case (1908): Khudiram Bose + Prafulla Chaki
+    → Muzaffarpur bomb attack on Magistrate Kingsford (missed target)
+    → Prafulla Chaki: killed himself upon arrest
+    → Khudiram Bose: HANGED on 11 August 1908, age 18 (youngest martyr!)
+    → Aurobindo Ghosh: arrested in Alipore Bomb Case, later ACQUITTED
+
+AUROBINDO GHOSH CONNECTION:
+  → Sri Aurobindo = intellectual backing for revolutionary Bengal
+  → After acquittal, turned to spiritualism — left politics
+  → Established ashram in Pondicherry
+  → His younger brother Barindra = active Anushilan member
+
+IDEOLOGY: Hindu religious symbolism + violent resistance + Bankim's "Anandamath"
+
+🎯 PYQ MEMORY TRICK: 
+  Anushilan = "Practice" → They "practiced" revolution in gymnasia
+  1902 = year of founding (just after Queen Victoria died in 1901)
 ```
 
----
-
-## 🧠 CONCEPT 16: PEASANT MOVEMENTS — Key Revolts
+### ABHINAV BHARAT — Rapid Revision:
 
 ```
-IMPORTANT PEASANT REVOLTS:
-────────────────────────────────────────────────────────
+FOUNDED:    1904, Nasik, Maharashtra
+FOUNDER:    Vinayak Damodar Savarkar (V.D. Savarkar / Veer Savarkar)
+MEANING:    Abhinav = "New/Young" + Bharat = India → "Young India"
+INSPIRED BY: Giuseppe Mazzini's "Young Italy" movement
 
-1. INDIGO (NEEL) REVOLT (1859–60):
-   Region: Bengal (mainly Nadia, Jessore districts)
-   By: Indigo cultivators forced by British planters
-   Context: Farmers FORCED to grow indigo (Neel)
-            on their best land at fixed low prices
-   Leaders: Digambar Biswas, Bishnu Biswas
-   Impact:
-   → Dinabandhu Mitra wrote play "Nil Darpan" (1860)
-     (Mirror of Indigo) exposing British cruelty
-   → British set up Indigo Commission (1860)
-   → Indigo cultivation declined
+KEY CONTRIBUTIONS:
+  → First to demand PURNA SWARAJ (complete independence)
+    (Congress at this time only asked for "dominion status"!)
+  → Savarkar's book: "The Indian War of Independence, 1857"
+    → First to call 1857 a WAR OF INDEPENDENCE (not a mutiny)
+  → Connected with India House, London (Shyamji Krishna Varma)
+  → Smuggled pistols from Paris via Madame Bhikaji Cama
 
-2. DECCAN RIOTS (1875):
-   Region: Pune and Ahmednagar (Maharashtra)
-   By: Peasants against moneylenders (mainly Marwari
-       and Gujarati traders)
-   Cause: Heavy debt burden from moneylenders
-   Nature: Mainly social — burning of debt bonds
+NASIK CONSPIRACY CASE (1909-1910):
+  → Anant Laxman Kanhere (Abhinav Bharat member) assassinated
+    A.M.T. Jackson, Collector of Nasik
+  → Pistols traced to Savarkar
+  → Savarkar arrested in London, tried to escape at Marseilles (CAUGHT)
+  → Sentenced: 50 YEARS imprisonment (two consecutive 25-year terms!)
+  → Sent to CELLULAR JAIL (KALA PANI), Port Blair, Andaman Islands
 
-3. CHAMPARAN SATYAGRAHA (1917):
-   Region: Champaran, Bihar
-   Leader: GANDHI (first Satyagraha in India)
-   Issue: Tinkathia system — indigo farmers forced
-          to grow indigo on 3/20 of their land
-   Result:
-   → Gandhi's investigation exposed British injustice
-   → Champaran Agrarian Act (1917) passed
-   → Tinkathia system abolished
-   → Gandhi became famous nationally
+CELLULAR JAIL:
+  → Also called "Kala Pani" (Black Waters)
+  → Most feared punishment in colonial India
+  → Today: National Memorial, Port Blair
+  → Savarkar's cell can be visited!
 
-4. KHEDA SATYAGRAHA (1918):
-   Region: Kheda, Gujarat
-   Leader: Gandhi + Vallabhbhai Patel
-   Issue: Despite crop failure, British demanded
-          full land revenue
-   Result: Revenue collection suspended
-
-5. BARDOLI SATYAGRAHA (1928):
-   Region: Bardoli, Surat (Gujarat)
-   Leader: SARDAR VALLABHBHAI PATEL
-   Issue: Government raised land revenue by 30%
-   Result: Revenue hike withdrawn
-   Note: "Sardar" title given to Patel by women
-         of Bardoli after this movement's success
+🎯 PYQ MEMORY TRICK:
+  Abhinav Bharat = ABhi Nav (newly born) India = NEW India Society
+  Nasik 1904 = N(4) A(bharat) S(avarkar) I(independence) K(ala Pani)
 ```
 
----
-
-## 🧠 CONCEPT 17: ANUSHILAN SAMITI — Full Details
+### GHADAR PARTY — Rapid Revision:
 
 ```
-┌──────────────────────────────────────────────────────┐
-│              ANUSHILAN SAMITI                       │
-├──────────────────────────────────────────────────────┤
-│ Founded:    1902                                    │
-│ Location:   Calcutta (Bengal)                      │
-│ Founders:   Satish Chandra Bose, P. Mitter,        │
-│             Promotha Mitter                         │
-│             (Aurobindo Ghosh also linked)          │
-│ Inspired by: Bal Gangadhar Tilak's writings        │
-│ Nature:     Secret revolutionary organization       │
-│             focused on physical fitness + armed    │
-│             resistance                             │
-│                                                     │
-│ DHAKA BRANCH (1906):                               │
-│ → Founded by Pulin Bihari Das                      │
-│ → More radical and militant                        │
-│ → Involved in bombmaking, revolutionary acts       │
-│                                                     │
-│ KEY MEMBERS:                                        │
-│ → Barindra Kumar Ghosh (Aurobindo's brother)       │
-│ → Yugantar group emerged from Anushilan Samiti     │
-│   activities                                       │
-└──────────────────────────────────────────────────────┘
-```
+FOUNDED:    21 April 1913, San Francisco, California, USA
+MEANING:    Ghadar = REVOLT / MUTINY (Urdu-Punjabi) — invokes 1857
+FOUNDERS:   Sohan Singh Bhakna (President), Har Dayal (intellectual)
+HQ:         Astoria, Oregon (later San Francisco)
 
----
+NEWSPAPER "GHADAR":
+  → First issue: 1 NOVEMBER 1913
+  → Languages: Punjabi, Urdu, Hindi, Gujarati, Pashto (5+ languages!)
+  → Tagline: "Angrezi Raj ka Dushman" (Enemy of British Rule)
+  → Distributed FREE — funded by diaspora donations
+  → Smuggled into India and British colonies
 
-## 🧠 CONCEPT 18: Important British Acts Related to Tribal Areas
+MEMBERSHIP:
+  → Primarily PUNJABI SIKH workers and former soldiers in North America
+  → Also Hindus and Muslims — INCLUSIVE, non-communal ideology
+  → International network: USA, Canada, Philippines, Fiji, Singapore, Hong Kong
 
-```
-KEY LEGISLATION FOR TRIBAL PROTECTION:
-──────────────────────────────────────────────────────
+GHADAR MUTINY 1915:
+  → CONTEXT: World War I (1914) — Britain fighting Germany
+  → PLAN: Return to India, incite Indian soldiers to mutiny against British
+  → RETURN: Thousands of Ghadarites sailed back to India (1914-15)
+  → FAILURE: INFORMERS revealed plans to British intelligence
+  → RESULT: Mass arrests at Indian ports; 42 EXECUTED
+    → Including KARTAR SINGH SARABHA (age 19!) — hanged 16 Nov 1915
+  → Hundreds more imprisoned, transported to Kala Pani
 
-1. SANTHAL PARGANAS TENANCY ACT (1876):
-   → Protected Santhal land from being sold to non-tribals
-   → After the Santhal Hool (1855)
+KARTAR SINGH SARABHA:
+  → Youngest major Ghadar revolutionary; 19 years when hanged
+  → From Sarabha village, Ludhiana, Punjab
+  → Bhagat Singh kept his PHOTO in his pocket at all times!
+  → Called him his "Guru" and "ideal"
 
-2. CHOTA NAGPUR TENANCY ACT (1908):
-   → Protected tribal land rights in Chotanagpur
-   → Direct result of Birsa Munda's Ulgulan
-   → Restricted transfer of tribal land to non-tribals
-   → Strengthened Khuntkatti rights
-
-3. SCHEDULED AREAS AND SCHEDULED TRIBES
-   (ARTICLES 244, 275 in Constitution):
-   → After independence, 5th Schedule protects
-     tribal areas
-   → Governor has special powers for Scheduled Areas
-
-Note for BPSC:
-The Chota Nagpur Tenancy Act (1908) is a DIRECT
-consequence of Birsa Munda's movement — very
-frequently asked in BPSC Bihar context!
+🎯 PYQ KEY DISTINCTIONS:
+  → Ghadar was INTERNATIONAL (not India-based like Anushilan/Abhinav Bharat)
+  → Ghadar was NON-COMMUNAL (Sikhs + Hindus + Muslims together!)
+  → 1913 = founding year (during Delhi Durbar preparations)
+  → Sohan Singh Bhakna = President (not Har Dayal, who was intellectual)
 ```
 
 ---
 
-## 🎯 QUICK REVISION FLASH CARDS (GS — History)
+## 🔷 SECTION 3: Comparison Table — Three Revolutionary Organisations
 
 ```
-┌──────────────────────────────────────────────────────┐
-│ FC-1: BIRSA MUNDA — Core Facts                     │
-│ Born: Nov 15, 1875 | Died: June 9, 1900 (age 25)  │
-│ Place: Ulihatu, Ranchi | Community: Munda tribe    │
-│ Movement: Ulgulan | Nickname: Dharti Aaba           │
-│ Result: Chota Nagpur Tenancy Act (1908)             │
-└──────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────┐
-│ FC-2: SANTHAL HOOL — Core Facts                    │
-│ Year: 1855–56 | Date: June 30 = Hool Diwas         │
-│ Leaders: SIDO and KANHU Murmu                      │
-│ Region: Santhal Parganas                           │
-│ Result: Santhal Parganas district created           │
-└──────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────┐
-│ FC-3: KOLS REVOLT                                  │
-│ Year: 1831–32 | Region: Chotanagpur                │
-│ By: Kols (Mundas + Oraons)                         │
-│ First major tribal revolt in Chotanagpur           │
-└──────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────┐
-│ FC-4: INDIGO REVOLT                                │
-│ Year: 1859–60 | Region: Bengal                     │
-│ Leaders: Digambar Biswas, Bishnu Biswas            │
-│ Play: "Nil Darpan" by Dinabandhu Mitra             │
-└──────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────┐
-│ FC-5: CHAMPARAN — Bihar Connection                 │
-│ Year: 1917 | Leader: Gandhi                        │
-│ Issue: Tinkathia (3/20 land for indigo)            │
-│ First Satyagraha in India by Gandhi                │
-└──────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────┐
-│ FC-6: BARDOLI SATYAGRAHA                           │
-│ Year: 1928 | Leader: Vallabhbhai Patel             │
-│ Title "Sardar" given by women of Bardoli           │
-│ Issue: 30% revenue hike → reversed                 │
-└──────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────┐
-│ FC-7: JHARKHAND CONNECTION (BPSC-specific!)        │
-│ Jharkhand formed: November 15, 2000                │
-│ = Birsa Munda's birthday! (deliberate tribute)     │
-│ Janjati Gaurav Diwas = November 15                 │
-└──────────────────────────────────────────────────────┘
+┌──────────────────┬─────────────────┬──────────────────┬────────────────────┐
+│    FEATURE       │ ANUSHILAN SAMITI│  ABHINAV BHARAT  │   GHADAR PARTY     │
+├──────────────────┼─────────────────┼──────────────────┼────────────────────┤
+│ Founded          │ 1902            │ 1904             │ 1913               │
+├──────────────────┼─────────────────┼──────────────────┼────────────────────┤
+│ Place            │ Calcutta        │ Nasik            │ San Francisco      │
+├──────────────────┼─────────────────┼──────────────────┼────────────────────┤
+│ Founder          │ P.N. Mitra;     │ V.D. Savarkar    │ Sohan Singh Bhakna │
+│                  │ Barindra Ghosh  │                  │ (Har Dayal = intel)│
+├──────────────────┼─────────────────┼──────────────────┼────────────────────┤
+│ Region           │ Bengal          │ Maharashtra      │ Punjab (diaspora)  │
+├──────────────────┼─────────────────┼──────────────────┼────────────────────┤
+│ Base             │ India (Bengal)  │ India+London     │ North America      │
+├──────────────────┼─────────────────┼──────────────────┼────────────────────┤
+│ Inspiration      │ Bankim's        │ Mazzini's        │ 1857 Revolt spirit │
+│                  │ Anandamath      │ Young Italy      │                    │
+├──────────────────┼─────────────────┼──────────────────┼────────────────────┤
+│ Key Event        │ Alipore Bomb    │ Nasik Conspiracy │ Ghadar Mutiny 1915 │
+│                  │ Case (1908)     │ (1909)           │ (FAILED)           │
+├──────────────────┼─────────────────┼──────────────────┼────────────────────┤
+│ Key Martyr       │ Khudiram Bose   │ Anant Kanhere    │ Kartar Singh       │
+│                  │ (age 18, 1908)  │                  │ Sarabha (age 19)   │
+├──────────────────┼─────────────────┼──────────────────┼────────────────────┤
+│ Communal?        │ Hindu-leaning   │ Hindu-leaning    │ NON-COMMUNAL       │
+│                  │                 │                  │ (Sikh+Hindu+Muslim)│
+├──────────────────┼─────────────────┼──────────────────┼────────────────────┤
+│ Newspaper        │ None (books)    │ None (books)     │ "Ghadar" newspaper │
+├──────────────────┼─────────────────┼──────────────────┼────────────────────┤
+│ Outcome          │ Suppressed;     │ Savarkar 50 yrs  │ 1915 mutiny failed;│
+│                  │ members jailed  │ Kala Pani         │ 42 hanged          │
+└──────────────────┴─────────────────┴──────────────────┴────────────────────┘
 ```
 
 ---
 
-# ══════════════════════════════════════════════
-# 📝 PRACTICE QUESTIONS — DAY 37
-# Attempt ALL 50 FIRST → Check answers ONLY at end
-# ══════════════════════════════════════════════
+# PART 3: PRACTICE QUESTIONS
+
+## 📝 COMPUTER SCIENCE — 25 MCQs
+### Topics: All Types of DBMS Keys, Differences, Constraints
 
 ---
 
-## 💻 SECTION 1: CS — DBMS Keys (25 Questions)
-### Easy → Medium → Hard → PYQ-Style → Tricky
-
-> ⚠️ **DO NOT look at the answer key while solving. Write your answers (A/B/C/D/E) on paper first!**
-
----
-
-**Q1. [EASY] Which type of key can uniquely identify a tuple and may contain extra/redundant attributes?**
-
-(A) Candidate Key
-(B) Primary Key
-(C) Super Key
+**Q1.** A KEY in a database is used to:
+(A) Encrypt the database for security
+(B) Uniquely identify each row (record) in a table
+(C) Connect the database to the internet
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q2. [EASY] A Primary Key in a relational table CANNOT have which of the following?**
-
-(A) Unique values
-(B) Single attribute
-(C) NULL values
+**Q2.** A SUPER KEY is defined as:
+(A) The most important key in the database
+(B) Any attribute or set of attributes that can uniquely identify a row (may have redundant attributes)
+(C) The key that links two tables
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q3. [EASY] How many Primary Keys can a single table have in a relational database?**
-
-(A) As many as needed
-(B) Two at most
-(C) One and exactly one
+**Q3.** A CANDIDATE KEY is:
+(A) Any key that could potentially become a primary key in the future
+(B) A minimal super key — removing any attribute destroys uniqueness
+(C) A key used only in hierarchical databases
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q4. [EASY] A Foreign Key in a table refers to the __________ of another table.**
-
-(A) Foreign Key
-(B) Candidate Key
-(C) Primary Key
+**Q4.** Which of the following is TRUE about a PRIMARY KEY?
+(A) A table can have multiple primary keys
+(B) Primary key values can be NULL if the record is incomplete
+(C) A table can have only ONE primary key, and it cannot be NULL
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q5. [EASY] The constraint that states "every value of a foreign key must exist in the referenced primary key" is called:**
-
-(A) Entity Integrity Constraint
-(B) Domain Constraint
-(C) Referential Integrity Constraint
+**Q5.** Consider the STUDENTS table with columns: RollNo, Name, Email, Phone, Marks.
+RollNo, Email, and Phone each uniquely identify a student. Which are CANDIDATE KEYS?
+(A) Only RollNo (as it was chosen as primary key)
+(B) {RollNo, Name} and {Email, Phone}
+(C) {RollNo}, {Email}, and {Phone} — all three are candidate keys
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q6. [EASY] A key made up of two or more attributes to uniquely identify a tuple is called:**
-
-(A) Super Key
-(B) Alternate Key
-(C) Composite Key
+**Q6.** {RollNo, Name} is a super key in the STUDENTS table because RollNo alone uniquely identifies students. Is {RollNo, Name} also a Candidate Key?
+(A) Yes, because it uniquely identifies each row
+(B) No, because removing Name still leaves uniqueness — it is NOT minimal
+(C) Yes, all super keys are candidate keys
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q7. [MEDIUM] What is the relationship between Candidate Key and Super Key?**
-
-(A) Every Super Key is a Candidate Key
-(B) Every Candidate Key is a Super Key, but not vice versa
-(C) They are the same thing
+**Q7.** A FOREIGN KEY:
+(A) Is always the primary key of the same table
+(B) References the PRIMARY KEY (or unique key) of another table to maintain relationships
+(C) Cannot contain NULL values
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q8. [MEDIUM] In a student table, both {StudentID} and {EmailAddress} can uniquely identify each student. If {StudentID} is chosen as the Primary Key, then {EmailAddress} becomes:**
-
-(A) Foreign Key
-(B) Super Key only
-(C) Alternate Key
+**Q8.** REFERENTIAL INTEGRITY enforced by a Foreign Key means:
+(A) All data must be in alphabetical order
+(B) A foreign key value must either match an existing primary key value in the referenced table or be NULL
+(C) Foreign keys must be numeric
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q9. [MEDIUM] Which of the following keys ALLOWS NULL values?**
+**Q9.** A COMPOSITE KEY is:
+(A) A primary key shared between two different tables
+(B) A key consisting of two or more attributes that together uniquely identify a row
+(C) A key that connects to foreign keys in multiple tables
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q10.** In an ENROLLMENT table with columns (RollNo, CourseID, Marks, Grade), if neither RollNo nor CourseID alone is unique, but their combination is — the primary key should be:
+(A) {RollNo} alone
+(B) {CourseID} alone
+(C) {RollNo, CourseID} as a Composite Primary Key
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q11.** Which of the following is the KEY DIFFERENCE between a PRIMARY KEY and a UNIQUE KEY?
+(A) Primary Key ensures uniqueness; Unique Key does not
+(B) Primary Key cannot be NULL and only one allowed per table; Unique Key can be NULL and multiple allowed
+(C) Unique Key links two tables; Primary Key does not
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q12.** Can a FOREIGN KEY have a NULL value?
+(A) No — foreign key values must always reference an existing primary key
+(B) Yes — a NULL foreign key means this record has no associated parent record
+(C) Only if the primary key it references is also NULL
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q13.** ALTERNATE KEYS are defined as:
+(A) Keys used as alternatives to the primary key in queries
+(B) All candidate keys that were NOT chosen as the primary key
+(C) Foreign keys that can be used as primary keys in another table
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q14.** Which of the following statements about SUPER KEYS is CORRECT?
+(A) Every Candidate Key is a Super Key, but not every Super Key is a Candidate Key
+(B) Every Super Key is a Candidate Key
+(C) Super Keys and Candidate Keys are completely different with no overlap
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q15.** In a DEPARTMENTS table with DeptID as Primary Key, and a STUDENTS table with DeptID as Foreign Key, what happens if you try to DELETE a department that still has students?
+(A) The department is deleted; students remain with a dangling reference
+(B) DBMS enforces referential integrity — either rejects the deletion or cascades the delete
+(C) The students table is automatically deleted
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q16.** A table has 5 attributes. How many Super Keys can it theoretically have?
+(A) Exactly 5
+(B) Exactly 1
+(C) Potentially many — any subset of attributes that uniquely identifies rows qualifies
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q17.** Which key type LINKS two tables and maintains their relationship?
 (A) Primary Key
-(B) Candidate Key
-(C) Unique Key
-(D) More than one of the above (Foreign Key also allows NULL)
-(E) None of the above
-
----
-
-**Q10. [MEDIUM] Consider a table with attributes {A, B, C, D}. If {A} alone can uniquely identify each tuple, which of the following is definitely a Super Key?**
-
-(A) {B, C} only
-(B) {A, B, C, D}
-(C) {C, D} only
-(D) More than one of the above (any set containing A is a super key)
-(E) None of the above
-
----
-
-**Q11. [MEDIUM] A table in a university database has the following candidate keys: {StudentID} and {AadhaarNumber}. The DBA has chosen {StudentID} as the primary key. Which statement is TRUE?**
-
-(A) {AadhaarNumber} is now a foreign key
-(B) {AadhaarNumber} is now an alternate key
-(C) {AadhaarNumber} loses its uniqueness property
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q12. [MEDIUM] In which scenario is a COMPOSITE KEY most commonly used as a Primary Key?**
-
-(A) When the table has only one attribute
-(B) When no single attribute can uniquely identify a tuple
-(C) When the table has a foreign key
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q13. [MEDIUM] A SURROGATE KEY is best described as:**
-
-(A) A key that references another table's primary key
-(B) A system-generated artificial identifier with no real-world meaning
-(C) A key formed by combining two natural keys
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q14. [HARD] A relation R has attributes: {EmployeeID, SSN, Name, Department, Phone}. Both EmployeeID and SSN uniquely identify each employee. What is the MINIMUM number of candidate keys in R?**
-
-(A) One
-(B) Two
-(C) Three
-(D) More than one of the above
-(E) None of the above (depends on other attributes)
-
----
-
-**Q15. [HARD] If a foreign key column in a child table contains a NULL value, which statement is CORRECT?**
-
-(A) It violates Referential Integrity
-(B) It is a valid situation — FK can be NULL
-(C) It violates Entity Integrity
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q16. [HARD] Consider the following table: ORDERS(OrderID, CustomerID, ProductID, Quantity). CustomerID is a FK referencing CUSTOMERS table. ProductID is a FK referencing PRODUCTS table. How many foreign keys does the ORDERS table have?**
-
-(A) One
-(B) Two
-(C) Three
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q17. [HARD] Which integrity constraint ensures that a Primary Key attribute can never contain a NULL value?**
-
-(A) Referential Integrity
-(B) Domain Integrity
-(C) Entity Integrity
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q18. [PYQ-STYLE] Which of the following statements about Primary Key is CORRECT?**
-
-(A) A table can have more than one primary key
-(B) Primary key values can be NULL if no better option exists
-(C) Primary key uniquely identifies each tuple and cannot be NULL
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q19. [PYQ-STYLE] Consider the following statements:
-(I) Candidate Key is always a Super Key
-(II) Super Key is always a Candidate Key
-(III) Primary Key is always a Candidate Key
-(IV) Alternate Key is a Primary Key
-
-Which of the above are CORRECT?**
-
-(A) I and II only
-(B) I and III only
-(C) II and IV only
-(D) More than one of the above (I, II and III are correct)
-(E) None of the above
-
----
-
-**Q20. [PYQ-STYLE] A Foreign Key establishes which of the following?**
-
-(A) Entity Integrity between rows of the same table
-(B) Referential Integrity between two tables
-(C) Domain constraint on attribute values
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q21. [PYQ-STYLE] Which key uniquely identifies records but DIFFERS from the Primary Key in that it allows NULL?**
-
-(A) Alternate Key
-(B) Candidate Key
-(C) Unique Key
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q22. [TRICKY] In a table, a set of attributes {A, B} forms a Super Key. If removing attribute B still leaves {A} as a valid unique identifier, then {A, B} is:**
-
-(A) A Candidate Key
-(B) Only a Super Key (not a Candidate Key)
-(C) A Primary Key
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q23. [TRICKY] A teacher table has: {TeacherID, AadhaarNo, Name, Subject}. If both TeacherID and AadhaarNo are unique for every teacher, how many candidate keys does this table have (assuming no other attribute is unique)?**
-
-(A) One
-(B) Three
-(C) Two
-(D) More than one of the above
-(E) None of the above
-
----
-
-**Q24. [TRICKY] A student's email address changes because they graduate and lose their university email. This is a reason why email is NOT recommended as a:**
-
-(A) Foreign Key
 (B) Composite Key
-(C) Primary Key
+(C) Foreign Key
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q25. [TRICKY] Which of the following CAN appear multiple times in the same table as different keys?**
-
-(A) Primary Keys
-(B) Foreign Keys
-(C) Super Keys of the minimal type only
-(D) More than one of the above (Foreign Keys and Unique Keys can appear multiple times)
-(E) None of the above
-
----
----
-
-## 📜 SECTION 2: GS — Birsa Munda, Tribal & Peasant Revolts (25 Questions)
-
-> ⚠️ **Attempt ALL 25 questions first. No peeking at answers!**
-
----
-
-**Q26. [EASY] Birsa Munda's movement is known as:**
-
-(A) Tana Bhagat Movement
-(B) Ulgulan
-(C) Hool
+**Q18.** Can a table have MORE THAN ONE Candidate Key?
+(A) No — each table has exactly one candidate key (the primary key)
+(B) Yes — a table can have multiple candidate keys, but only one is chosen as primary
+(C) No — candidate keys exist only in theory, not in practice
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q27. [EASY] Birsa Munda was born on:**
-
-(A) November 15, 1875
-(B) June 9, 1875
-(C) January 30, 1880
+**Q19.** Which of the following is an example of a COMPOSITE KEY?
+(A) Roll Number in a Students table (single column, unique)
+(B) {Flight Number + Date} in a Flight Bookings table (both needed for uniqueness)
+(C) Email address in an accounts table (single, unique column)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q28. [EASY] The Santhal Hool of 1855 was led by:**
-
-(A) Birsa Munda and Tana Bhagat
-(B) Sido and Kanhu Murmu
-(C) Jatra Oraon and Singhbhum leaders
+**Q20.** In an EMPLOYEES table where ManagerID is a Foreign Key referencing EmployeeID in the SAME EMPLOYEES table — this is called:
+(A) A Composite Key
+(B) A Self-Referencing (Recursive) Foreign Key
+(C) A Candidate Key
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q29. [EASY] Champaran Satyagraha (1917) was related to which crop issue?**
-
-(A) Jute cultivation under forced conditions
-(B) Rice cultivation and zamindari oppression
-(C) Forced indigo cultivation (Tinkathia system)
+**Q21.** Two students have the same name. To distinguish them, the DBMS uses:
+(A) The Name column (since their values are identical, DBMS knows they're different)
+(B) A Primary Key (like RollNo or StudentID) that is unique for each student
+(C) The DBMS cannot distinguish students with the same name
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q30. [EASY] The title "Sardar" was given to Vallabhbhai Patel after which movement?**
-
-(A) Kheda Satyagraha (1918)
-(B) Bardoli Satyagraha (1928)
-(C) Non-Cooperation Movement (1920)
+**Q22.** Which of the following is CORRECT about a UNIQUE KEY?
+(A) A table can have only one Unique Key
+(B) Unique Key values must never be NULL
+(C) A table can have multiple Unique Keys, and they allow NULL values
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q31. [EASY] Birsa Munda's nickname "Dharti Aaba" means:**
-
-(A) Son of the Earth
-(B) Father of the Earth
-(C) King of the Jungle
+**Q23.** The relationship SUPER KEY ⊃ CANDIDATE KEY means:
+(A) All Super Keys are also Candidate Keys
+(B) All Candidate Keys are Super Keys, but some Super Keys are NOT Candidate Keys
+(C) Candidate Keys and Super Keys are unrelated concepts
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q32. [MEDIUM] The Chotanagpur Tenancy Act (1908) was a direct outcome of which movement?**
-
-(A) Santhal Hool (1855)
-(B) Tana Bhagat Movement (1914)
-(C) Birsa Munda's Ulgulan (1899–1900)
+**Q24.** Consider: A BANK DATABASE has ACCOUNTS table (AccountNo as PK) and TRANSACTIONS table (TransactionID as PK, AccountNo as FK).
+If a customer closes their account (AccountNo deleted from ACCOUNTS), what should happen to their transactions in TRANSACTIONS table?
+(A) Transactions remain with AccountNo now invalid — creates orphan records (BAD)
+(B) DBMS either rejects the deletion of the account (RESTRICT) or deletes all transactions too (CASCADE)
+(C) Transactions automatically move to a backup table
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q33. [MEDIUM] The Jharkhand state was carved out of Bihar on which date — and why is that date significant?**
-
-(A) October 2, 2000 — Gandhi Jayanti
-(B) November 15, 2000 — Birsa Munda's birth anniversary
-(C) August 15, 2000 — Independence Day
+**Q25.** A student is asked: "Which keys can be NULL?"
+The CORRECT answer is:
+(A) Primary Key and Candidate Key can be NULL; Foreign Key and Unique Key cannot
+(B) Foreign Key and Unique Key can be NULL; Primary Key cannot be NULL
+(C) All keys can be NULL in DBMS
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q34. [MEDIUM] The play "Nil Darpan" written by Dinabandhu Mitra (1860) exposed the exploitation in which movement?**
+## 📝 GENERAL STUDIES — 25 MCQs
+### Topics: Birsa Munda (Deep Dive) + Anushilan Samiti + Abhinav Bharat + Ghadar Party Revision
 
-(A) Santhal Hool
-(B) Indigo (Neel) Revolt
-(C) Deccan Riots
+---
+
+**Q26.** Birsa Munda was born in which village and district?
+(A) Ranchi city, Ranchi district
+(B) Ulihatu village, Khunti district, Chota Nagpur
+(C) Chakradharpur, Singhbhum district
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q35. [MEDIUM] The Santhal Parganas region was constituted as a separate district mainly as a result of:**
-
-(A) Birsa Munda's Ulgulan (1899)
-(B) Santhal Hool (1855)
-(C) Kols Revolt (1831)
+**Q27.** What does "Diku" mean in the context of the Munda tribal society?
+(A) A traditional tribal dance form
+(B) An outsider/non-tribal (usually moneylenders and traders who exploited tribals)
+(C) A type of forest product collected by Mundas
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q36. [MEDIUM] "Hool Diwas" is observed on June 30 every year in Jharkhand to commemorate:**
-
-(A) Birsa Munda's birth anniversary
-(B) The Santhal Hool which began on June 30, 1855
-(C) The formation of Jharkhand state
+**Q28.** The Munda tribal revolt led by Birsa Munda is known as "Ulgulan." What period did it cover?
+(A) 1857-1858
+(B) 1899-1900
+(C) 1919-1920
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q37. [MEDIUM] The Kols Revolt (1831–32) in Chotanagpur was a combined uprising of which communities?**
-
-(A) Mundas and Santhal tribes
-(B) Mundas and Oraon tribes
-(C) Santhal and Gond tribes
+**Q29.** The "Battle of Dombari Hill" during the Ulgulan is historically compared to which other event?
+(A) Battle of Plassey — British victory over Indian forces
+(B) Jallianwala Bagh Massacre — British firing on unarmed/lightly-armed gathered people
+(C) Battle of Panipat — decisive confrontation for territorial control
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q38. [MEDIUM] In Birsa Munda's ideology, the term "Diku" referred to:**
-
-(A) British colonial officers
-(B) Non-tribal outsiders who exploited tribals (moneylenders, zamindars, merchants)
-(C) The traditional tribal village head
+**Q30.** Birsa Munda was first arrested in 1895 and sent to which jail?
+(A) Ranchi Jail
+(B) Andaman Cellular Jail (Kala Pani)
+(C) Hazaribag Jail
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q39. [MEDIUM] The Anushilan Samiti was founded in Calcutta in 1902. Its Dhaka branch was established by:**
-
-(A) Barindra Kumar Ghosh
-(B) Aurobindo Ghosh
-(C) Pulin Bihari Das
+**Q31.** What was Birsa Munda's PRIMARY religious deity that he claimed to speak for?
+(A) Lord Shiva (Hindu deity)
+(B) Singbonga (Sun God / supreme deity in Munda tribal religion)
+(C) Jesus Christ (Christian God — from his missionary education)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q40. [HARD] Which of the following correctly describes the "Tinkathia System" that led to the Champaran Satyagraha?**
-
-(A) Peasants had to cultivate indigo on 3/20 of their land for British planters
-(B) Peasants had to pay 3 types of taxes on their land
-(C) Three categories of land revenue were imposed on peasants
+**Q32.** The Chota Nagpur Tenancy Act (1908) was a direct legislative consequence of:
+(A) The Ghadar Mutiny of 1915
+(B) The Santhal Uprising of 1855
+(C) Birsa Munda's Ulgulan (1899-1900) — protecting tribal land rights
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q41. [HARD] The "Khuntkatti" system referred to in Birsa Munda's movement was:**
-
-(A) A British revenue collection method
-(B) Traditional Munda communal land ownership system
-(C) A form of forced labour (Beth-Begari) imposed on tribals
+**Q33.** Birsa Munda's image is placed in:
+(A) The Red Fort museum in Delhi
+(B) The Central Hall of the Indian Parliament
+(C) The National Museum in New Delhi
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q42. [HARD] Birsa Munda was arrested on February 3, 1900, from which location?**
-
-(A) Dombari Hill, Ranchi
-(B) Ulihatu village
-(C) Jamkopai forest, Chakradharpur
+**Q34.** Why is 15 November significant both for Birsa Munda and for Jharkhand?
+(A) It is the date of Birsa's death and also Independence Day of Jharkhand
+(B) It is Birsa Munda's birthday (1875) and also Jharkhand's Foundation Day (2000)
+(C) It is the date of the Ulgulan's beginning and Jharkhand's first election
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q43. [HARD] The "Dombari Hill" incident (January 5, 1900) during Birsa Munda's Ulgulan resulted in:**
-
-(A) British being defeated and forced to retreat
-(B) Birsa Munda's arrest at this location
-(C) British opening fire on a tribal gathering — massacre
+**Q35.** Birsa Munda was captured on 3 February 1900 from which location?
+(A) Dombari Hill, Khunti
+(B) Jamkopai forest, near Chakradharpur
+(C) Ranchi city centre
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q44. [PYQ-STYLE] Consider the following pairs (Movement — Year):
-(I) Santhal Hool — 1855
-(II) Kols Revolt — 1831
-(III) Birsa Munda's Ulgulan — 1885
-(IV) Indigo Revolt — 1859
-
-Which pairs are CORRECTLY matched?**
-
-(A) I, II and IV only
-(B) I and II only
-(C) All four are correct
+**Q36.** The Anushilan Samiti used physical training organisations as a COVER for their activities. What was the name of the famous case that exposed their revolutionary activities?
+(A) Chittagong Armoury Raid (1930)
+(B) Alipore Bomb Case (1908)
+(C) Nasik Conspiracy Case (1909)
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q45. [PYQ-STYLE] Which of the following is correctly matched?
-(Person — Title/Nickname)**
-
-(A) Birsa Munda — "Lokmanya"
-(B) Birsa Munda — "Dharti Aaba"
-(C) Sido Murmu — "Dharti Aaba"
+**Q37.** Khudiram Bose and Prafulla Chaki attempted to bomb whose carriage at Muzaffarpur in 1908?
+(A) The Governor of Bengal
+(B) District Magistrate Kingsford
+(C) The Viceroy of India
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q46. [PYQ-STYLE] Which of the following statements about the Tana Bhagat Movement is CORRECT?**
-
-(A) It was founded by Birsa Munda in 1899
-(B) It was started by Jatra Oraon in 1914 and was non-violent
-(C) It was an armed revolt against British rule in Santhal Parganas
+**Q38.** Sri Aurobindo (Aurobindo Ghosh) was connected to which revolutionary organisation and what was the outcome of his involvement?
+(A) Ghadar Party — he was deported to Andaman
+(B) Anushilan Samiti — arrested in Alipore Bomb Case but ACQUITTED; then turned to spiritualism
+(C) Abhinav Bharat — sentenced to 50 years imprisonment
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q47. [PYQ-STYLE] "Janjati Gaurav Diwas" (Tribal Pride Day) celebrated on November 15 was officially declared in:**
-
-(A) 2000, when Jharkhand was formed
-(B) 2021, by the Central Government
-(C) 1947, at independence
+**Q39.** Abhinav Bharat's ideology was primarily inspired by which foreign revolutionary?
+(A) Karl Marx — socialist revolution
+(B) Vladimir Lenin — Russian Revolution
+(C) Giuseppe Mazzini — "Young Italy" movement for Italian independence
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q48. [TRICKY] In which jail did Birsa Munda die, and what was the official cause?**
-
-(A) Hazaribagh Jail — tuberculosis
-(B) Ranchi Jail — cholera
-(C) Calcutta Jail — dysentery
+**Q40.** V.D. Savarkar was arrested in London and tried to escape at which European city?
+(A) Paris, France
+(B) Marseilles, France (while being transported back to India)
+(C) Rome, Italy
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q49. [TRICKY] Birsa Munda is the youngest person whose portrait is displayed in:**
-
-(A) The Bihar Legislative Assembly
-(B) The Central Hall of Parliament (Lok Sabha), New Delhi
-(C) The Jharkhand Raj Bhavan
+**Q41.** Who founded the Ghadar Party and what was his role?
+(A) Har Dayal — founder and president
+(B) Sohan Singh Bhakna — founder and first president; Har Dayal was the intellectual leader
+(C) Kartar Singh Sarabha — founder; Sohan Singh Bhakna was intellectual leader
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-**Q50. [TRICKY] The Bardoli Satyagraha (1928) was launched against which specific issue?**
-
-(A) Forced indigo cultivation
-(B) A 30% hike in land revenue by the British government
-(C) Caste discrimination against peasants
+**Q42.** The Ghadar newspaper was DISTINCTIVE in that:
+(A) It was published only in English for educated elites
+(B) It was published in multiple languages (Punjabi, Urdu, Hindi, Gujarati, Pashto) and distributed free of cost
+(C) It was published from London and had British government funding
 (D) More than one of the above
 (E) None of the above
 
 ---
 
-# ════════════════════════════════════════════
-# ✅ ANSWER KEY — DAY 37
-# (Check ONLY after completing all 50 questions!)
-# ════════════════════════════════════════════
+**Q43.** The 1915 Ghadar Mutiny was planned to coincide with:
+(A) India's Independence Day
+(B) World War I — taking advantage of Britain being distracted fighting Germany
+(C) The Delhi Durbar celebrations of King George V
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 💻 CS ANSWERS (Q1–Q25)
-
-| Q# | Ans | Explanation |
-|----|-----|-------------|
-| Q1 | **(C)** | **Super Key** = any set of attributes that uniquely identifies, including sets with extra attributes |
-| Q2 | **(C)** | Primary Key **CANNOT have NULL values** (Entity Integrity constraint) |
-| Q3 | **(C)** | **Exactly ONE** primary key per table — neither zero nor two |
-| Q4 | **(C)** | Foreign Key references the **Primary Key** of another (referenced) table |
-| Q5 | **(C)** | **Referential Integrity** = every FK value must exist in referenced PK |
-| Q6 | **(C)** | **Composite Key** = key formed by 2 or more attributes together |
-| Q7 | **(B)** | Every Candidate Key IS a Super Key (minimal one), but Super Keys may have extra attributes making them NOT Candidate Keys |
-| Q8 | **(C)** | When one candidate key is chosen as PK, remaining ones become **Alternate Keys** |
-| Q9 | **(D)** | **More than one** — both Unique Key AND Foreign Key allow NULL values |
-| Q10 | **(D)** | **More than one** — ANY set containing {A} is a super key: {A}, {A,B}, {A,B,C}, {A,B,C,D}, etc. |
-| Q11 | **(B)** | AadhaarNumber remains unique — it becomes the **Alternate Key** |
-| Q12 | **(B)** | Composite key used **when no single attribute is unique** by itself |
-| Q13 | **(B)** | Surrogate Key = **artificially created, system-generated** identifier (no real-world meaning) |
-| Q14 | **(B)** | {EmployeeID} and {SSN} are both minimal unique identifiers = **2 candidate keys** |
-| Q15 | **(B)** | FK **CAN be NULL** — this does NOT violate referential integrity (null means "no relationship") |
-| Q16 | **(B)** | ORDERS table has **two** foreign keys: CustomerID and ProductID |
-| Q17 | **(C)** | **Entity Integrity** states PK cannot be NULL. Referential Integrity is about FK. |
-| Q18 | **(C)** | Primary Key must be **unique AND NOT NULL** — this is the core definition |
-| Q19 | **(B)** | I ✓ (Candidate Key IS a Super Key) | II ✗ (Super Key need NOT be Candidate Key) | III ✓ (Primary Key IS a Candidate Key) | IV ✗ (Alternate Key is NOT Primary Key) |
-| Q20 | **(B)** | FK establishes **Referential Integrity between two tables** |
-| Q21 | **(C)** | **Unique Key** — unique like PK but allows NULL (PK does not allow NULL) |
-| Q22 | **(B)** | Since {A} alone uniquely identifies (making B redundant), {A,B} is **only a Super Key**, NOT a Candidate Key (not minimal) |
-| Q23 | **(C)** | **Two** candidate keys: {TeacherID} and {AadhaarNo} |
-| Q24 | **(C)** | Primary Key should ideally **never change** — a changeable value like email is a poor choice for PK |
-| Q25 | **(D)** | **More than one** — Foreign Keys (multiple allowed per table) AND Unique Keys (multiple allowed per table) can appear multiple times |
+**Q44.** Kartar Singh Sarabha of the Ghadar Party is specially remembered for:
+(A) Writing the most revolutionary pamphlets in the Ghadar newspaper
+(B) Being hanged at age 19 in 1915 and being the primary inspiration for Bhagat Singh
+(C) Founding the Dhaka Anushilan Samiti
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-## 📜 GS ANSWERS (Q26–Q50)
-
-| Q# | Ans | Explanation |
-|----|-----|-------------|
-| Q26 | **(B)** | Birsa Munda's armed movement = **Ulgulan** (Great Tumult) |
-| Q27 | **(A)** | Born **November 15, 1875** — Ulihatu, Ranchi |
-| Q28 | **(B)** | Santhal Hool led by **Sido and Kanhu Murmu** (brothers) |
-| Q29 | **(C)** | Tinkathia = forced to grow indigo on **3/20 (3 kathhas per bigha) of land** |
-| Q30 | **(B)** | "Sardar" title given after **Bardoli Satyagraha (1928)** |
-| Q31 | **(B)** | "Dharti Aaba" = **Father of the Earth** |
-| Q32 | **(C)** | Chotanagpur Tenancy Act 1908 = direct result of **Birsa Munda's Ulgulan** |
-| Q33 | **(B)** | Jharkhand formed **November 15, 2000** — deliberately chosen as Birsa Munda's birth anniversary |
-| Q34 | **(B)** | "Nil Darpan" exposed cruelty in the **Indigo (Neel) Revolt** |
-| Q35 | **(B)** | Santhal Parganas district created after the **Santhal Hool (1855)** |
-| Q36 | **(B)** | Hool Diwas = **June 30, 1855** — when Santhal Hool began |
-| Q37 | **(B)** | Kols Revolt = combined uprising of **Mundas and Oraon** tribes |
-| Q38 | **(B)** | "Diku" = **non-tribal outsiders** (moneylenders, merchants, zamindars) who exploited tribals |
-| Q39 | **(C)** | Dhaka branch of Anushilan Samiti = **Pulin Bihari Das** (1906) |
-| Q40 | **(A)** | Tinkathia = peasants forced to grow indigo on **3/20 (3 kattha per bigha) of their land** |
-| Q41 | **(B)** | Khuntkatti = **traditional Munda communal land ownership** by the family that cleared the forest |
-| Q42 | **(C)** | Arrested at **Jamkopai forest, Chakradharpur** (Feb 3, 1900) |
-| Q43 | **(C)** | Dombari Hill = British **fired on tribal gathering** → massacre of Munda men, women, children |
-| Q44 | **(A)** | I ✓ (1855), II ✓ (1831), III ✗ (Ulgulan was 1899–1900, NOT 1885!), IV ✓ (1859) |
-| Q45 | **(B)** | **Birsa Munda = "Dharti Aaba"** (Father of the Earth). "Lokmanya" = Bal Gangadhar Tilak |
-| Q46 | **(B)** | Tana Bhagat Movement = **Jatra Oraon, 1914, non-violent**, later merged with Gandhi's movement |
-| Q47 | **(B)** | Janjati Gaurav Diwas declared by Central Government in **2021** |
-| Q48 | **(B)** | Died in **Ranchi Jail**, officially **cholera** (June 9, 1900) |
-| Q49 | **(B)** | Youngest person's portrait in the **Central Hall of Parliament (Lok Sabha), New Delhi** |
-| Q50 | **(B)** | Bardoli Satyagraha was against **30% hike in land revenue** |
+**Q45.** Which of the following correctly states where Birsa Munda DIED?
+(A) Cellular Jail, Port Blair, Andaman Islands
+(B) Ranchi Jail, on 9 June 1900
+(C) Hazaribag Jail, during his second imprisonment
+(D) More than one of the above
+(E) None of the above
 
 ---
 
-# 📊 YOUR SCORE TRACKER — DAY 37
+**Q46.** The Bethegari system, against which Birsa Munda revolted, was:
+(A) A type of tax imposed on tribal religious practices
+(B) Forced/bonded labour imposed on tribals by non-tribal landlords
+(C) A British educational system for tribal children
+(D) More than one of the above
+(E) None of the above
 
+---
+
+**Q47.** Match the following correctly:
+1. Anushilan Samiti — (i) 1913, San Francisco
+2. Abhinav Bharat — (ii) 1902, Calcutta
+3. Ghadar Party — (iii) 1904, Nasik
+
+(A) 1-(ii), 2-(iii), 3-(i) — Anushilan=Calcutta, Abhinav=Nasik, Ghadar=SF
+(B) 1-(i), 2-(ii), 3-(iii)
+(C) 1-(iii), 2-(i), 3-(ii)
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q48.** The BIRSA MUNDA AIRPORT is located in which city?
+(A) Dhanbad, Jharkhand
+(B) Ranchi, Jharkhand
+(C) Patna, Bihar
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q49.** Which statement about the GHADAR PARTY is INCORRECT?
+(A) It was founded in 1913 in San Francisco, USA
+(B) Its membership was exclusively Sikh — Hindus and Muslims were not members
+(C) It published the newspaper "Ghadar" in multiple languages
+(D) More than one of the above
+(E) None of the above
+
+---
+
+**Q50.** Consider the following pairs:
+I.   Dhaka Anushilan Samiti — Pulin Bihari Das
+II.  Abhinav Bharat — V.D. Savarkar — Inspired by Young Italy
+III. Ghadar Party — Sohan Singh Bhakna — 1913 — San Francisco
+IV.  Birsa Munda — "Dharti Abba" — Munda tribe — CNT Act 1908
+
+How many of the above pairs are CORRECTLY matched?
+(A) Only I and II
+(B) Only II and III
+(C) All four (I, II, III, IV) are correctly matched
+(D) More than one of the above
+(E) None of the above
+
+---
+---
+
+# ANSWER KEY
+
+## ⚠️ DO NOT LOOK UNTIL YOU HAVE ATTEMPTED ALL 50 QUESTIONS
+
+---
+
+### CS Answers (Q1–Q25):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 1 | (B) | Key = uniquely identifies each row in a table |
+| 2 | (B) | Super Key = any set (including with redundant attributes) that uniquely identifies rows |
+| 3 | (B) | Candidate Key = MINIMAL super key — nothing removable |
+| 4 | (C) | ONE primary key per table; CANNOT be NULL |
+| 5 | (C) | All three (RollNo, Email, Phone) are minimal unique identifiers = candidate keys |
+| 6 | (B) | {RollNo, Name} is not minimal — Name is redundant; NOT a candidate key |
+| 7 | (B) | Foreign Key references PK of another table for relationships |
+| 8 | (B) | Referential Integrity = FK must match existing PK or be NULL |
+| 9 | (B) | Composite Key = two or more attributes combined as a key |
+| 10 | (C) | Neither alone is unique; combined {RollNo, CourseID} = Composite PK |
+| 11 | (B) | PK: no NULL, one per table; Unique Key: NULL allowed, multiple per table |
+| 12 | (B) | Foreign Key CAN be NULL (record with no parent association) |
+| 13 | (B) | Alternate Keys = all candidate keys NOT chosen as primary key |
+| 14 | (A) | All Candidate Keys are Super Keys; not all Super Keys are Candidate Keys |
+| 15 | (B) | Referential integrity: DBMS either rejects or cascades the delete |
+| 16 | (C) | Any subset of attributes that uniquely identifies rows = super key; many possible |
+| 17 | (C) | Foreign Key links two tables and enforces their relationship |
+| 18 | (B) | Multiple candidate keys possible; only ONE chosen as primary |
+| 19 | (B) | {Flight Number + Date} = classic composite key (both needed together) |
+| 20 | (B) | FK referencing same table's PK = self-referencing (recursive) FK |
+| 21 | (B) | Primary Key (unique ID) distinguishes rows with identical names |
+| 22 | (C) | Multiple Unique Keys allowed per table; NULL values permitted |
+| 23 | (B) | All Candidate Keys ⊆ Super Keys; not all Super Keys are minimal |
+| 24 | (B) | DBMS enforces referential integrity: RESTRICT or CASCADE |
+| 25 | (B) | Foreign Key and Unique Key can be NULL; Primary Key CANNOT |
+
+---
+
+### GS Answers (Q26–Q50):
+
+| Q | Answer | Key Reason |
+|---|--------|-----------|
+| 26 | (B) | Ulihatu village, Khunti district, Chota Nagpur |
+| 27 | (B) | Diku = outsider/non-tribal exploiter (moneylenders, traders) |
+| 28 | (B) | Ulgulan = 1899-1900 (December 1899 to February 1900) |
+| 29 | (B) | Dombari Hill = British firing on tribal gathering, compared to Jallianwala |
+| 30 | (C) | First arrest 1895 → Hazaribag Jail (NOT Andaman) |
+| 31 | (B) | Singbonga = Sun God, supreme deity of Munda tribal religion |
+| 32 | (C) | CNT Act 1908 = direct result of Ulgulan to protect tribal land |
+| 33 | (B) | Central Hall of Indian Parliament has Birsa's portrait |
+| 34 | (B) | 15 November = Birsa's birthday (1875) + Jharkhand Foundation Day (2000) |
+| 35 | (B) | Captured at Jamkopai forest, near Chakradharpur |
+| 36 | (B) | Alipore Bomb Case (1908) exposed Anushilan's revolutionary activities |
+| 37 | (B) | Khudiram Bose attempted to bomb Magistrate Kingsford's carriage |
+| 38 | (B) | Aurobindo = Anushilan-linked; acquitted in Alipore case; became spiritual leader |
+| 39 | (C) | Savarkar inspired by Giuseppe Mazzini's "Young Italy" movement |
+| 40 | (B) | Savarkar tried to escape at Marseilles, France — was caught |
+| 41 | (B) | Sohan Singh Bhakna = founder + president; Har Dayal = intellectual backbone |
+| 42 | (B) | Multi-language, free distribution, smuggled into India |
+| 43 | (B) | Planned for WWI — Britain distracted by Germany; 1914-15 window |
+| 44 | (B) | Hanged age 19 (Nov 1915); Bhagat Singh's primary inspiration |
+| 45 | (B) | Died in Ranchi Jail, 9 June 1900 |
+| 46 | (B) | Bethegari = forced/bonded labour system on tribal lands |
+| 47 | (A) | 1-Anushilan=Calcutta(ii); 2-Abhinav=Nasik(iii); 3-Ghadar=SF(i) |
+| 48 | (B) | Birsa Munda Airport is in Ranchi, Jharkhand |
+| 49 | (B) | Statement B is INCORRECT — Ghadar was NON-COMMUNAL (Sikh+Hindu+Muslim) |
+| 50 | (C) | All four pairs are correctly matched |
+
+---
+---
+
+# 🔁 DAY 37 — CRISP REVISION NOTES
+
+## ⚡ RAPID FIRE — DBMS Keys
+
+### The Key Hierarchy — One Paragraph:
 ```
-CS Score:  _____ / 25      Target: 23+/25
-GS Score:  _____ / 25      Target: 23+/25
-Total:     _____ / 50      Target: 46+/50
+Start with SUPER KEYS (any set of attributes that uniquely identifies rows — 
+may have redundant extras). Remove redundant attributes → get CANDIDATE KEYS 
+(minimal super keys). Choose ONE candidate key as PRIMARY KEY (cannot be NULL, 
+only one per table). Remaining candidate keys = ALTERNATE KEYS. 
+FOREIGN KEY links two tables by referencing another table's PK (can be NULL). 
+COMPOSITE KEY = multiple attributes combined as one key. 
+UNIQUE KEY = unique + can be NULL (unlike PK).
+```
 
-Review Mistakes:
-→ CS below 20? Reread Key Hierarchy + FK/PK rules
-→ GS below 20? Reread Birsa Munda and Santhal flash cards
+### One-Liner Definitions:
+```
+Super Key:     Any unique-identifying set (may have extras)
+Candidate Key: MINIMAL super key (nothing removable without losing uniqueness)
+Primary Key:   ONE chosen candidate key; NOT NULL; UNIQUE; only ONE per table
+Foreign Key:   References PK of another table; CAN be NULL; enforces referential integrity
+Composite Key: Key made of 2+ attributes combined (when no single attribute is unique)
+Unique Key:    Ensures uniqueness; CAN be NULL; MULTIPLE per table allowed
+Alternate Key: Candidate keys NOT chosen as primary key
+```
+
+### Critical Differences — Must Know:
+```
+PRIMARY KEY vs UNIQUE KEY:
+  Primary: Cannot be NULL | Only ONE per table
+  Unique:  CAN be NULL   | MULTIPLE per table
+
+SUPER KEY vs CANDIDATE KEY:
+  Super:     May have extra attributes (not minimal)
+  Candidate: Strictly minimal — remove anything = loses uniqueness
+
+CANDIDATE KEY vs PRIMARY KEY:
+  Candidate: Multiple can exist
+  Primary:   ONLY ONE chosen from candidates
+
+FOREIGN KEY vs PRIMARY KEY:
+  Foreign:  References another table's PK | CAN be NULL
+  Primary:  Main identifier of own table  | CANNOT be NULL
+```
+
+### PYQ Traps — 10 One-Liners:
+```
+✅ Only ONE Primary Key per table (but multiple candidate keys!)
+✅ Primary Key CANNOT be NULL — ever!
+✅ Unique Key CAN be NULL (multiple NULLs allowed too!)
+✅ Foreign Key REFERENCES the PRIMARY KEY of another table (not foreign key)
+✅ Foreign Key CAN be NULL
+✅ Candidate Key is always MINIMAL — {RollNo, Name} where RollNo alone works = NOT candidate key
+✅ Every Candidate Key IS a Super Key; not every Super Key is a Candidate Key
+✅ Composite Key = MULTIPLE ATTRIBUTES in ONE table (not multiple tables!)
+✅ Alternate Key = Candidate Keys - Primary Key
+✅ Referential Integrity: FK must match existing PK value OR be NULL
 ```
 
 ---
 
-# 🔁 NIGHT REVISION — 5 BULLET SUMMARY
+## ⚡ RAPID FIRE — Birsa Munda & Revolutionary Movements
 
-Write these from memory before sleeping tonight:
+### Birsa Munda — 10 Must-Know Facts:
+```
+1. Born:       15 November 1875, Ulihatu, Khunti, Chota Nagpur
+2. Tribe:      Munda (Adivasi)
+3. Called:     "Dharti Abba" (Father of the Earth) + "Bhagvan Birsa"
+4. Singbonga:  Supreme deity he claimed to speak for (Sun God)
+5. Revolt:     ULGULAN = 1899-1900 (Dec 1899 - Feb 1900)
+6. Battle:     Dombari Hill (9 Jan 1900) — compared to Jallianwala
+7. Captured:   3 February 1900 at Jamkopai forest
+8. Died:       9 June 1900, Ranchi Jail (age 25; officially "cholera")
+9. Legacy:     CNT Act 1908 — tribal land protection (still in force!)
+10. Honour:    Portrait in Parliament; Birsa Munda Airport, Ranchi;
+               Jharkhand Foundation Day = 15 November (his birthday)
+```
 
-**CS — DBMS Keys:**
-1. Super Key ⊃ Candidate Key ⊃ Primary Key | Candidate Key = Minimal Super Key
-2. Primary Key: Only ONE per table | NOT NULL | UNIQUE — non-negotiable!
-3. Foreign Key: References PK of another table | CAN be NULL | Multiple FKs allowed
-4. Unique Key: Like PK but ALLOWS NULL | Multiple per table
-5. Referential Integrity: FK value must EXIST in referenced PK | violated if FK value absent
+### Three Revolutionary Organisations — Flash Card:
+```
+ANUSHILAN SAMITI (1902, Calcutta):
+  → P.N. Mitra, Barindra Ghosh; Dhaka branch: Pulin Bihari Das (1906)
+  → Cover: gymnasiums/physical training
+  → Key event: Alipore Bomb Case (1908) — Khudiram Bose hanged at 18
 
-**GS — Tribal/Peasant Revolts:**
-1. Birsa Munda: Born Nov 15, 1875 | Ulgulan (1899–1900) | Dharti Aaba | Died age 25 in jail
-2. Santhal Hool: 1855 | Sido-Kanhu | Hool Diwas = June 30 | Santhal Parganas district created
-3. Kols Revolt: 1831–32 | Mundas + Oraons | Chotanagpur | First major tribal revolt
-4. Indigo Revolt: 1859–60 | Bengal | Nil Darpan play by Dinabandhu Mitra
-5. Champaran (1917) Gandhi's first Satyagraha | Bardoli (1928) Patel → "Sardar" title
+ABHINAV BHARAT (1904, Nasik):
+  → V.D. Savarkar; inspired by Mazzini's Young Italy
+  → First to say 1857 = "War of Independence"
+  → Nasik Conspiracy (1909): Savarkar → 50 yrs → Cellular Jail (Kala Pani)
+
+GHADAR PARTY (1913, San Francisco):
+  → Sohan Singh Bhakna (president), Har Dayal (intellect)
+  → Newspaper "Ghadar": multilingual, free, tagline = "Angrezi Raj ka Dushman"
+  → Non-communal: Sikh+Hindu+Muslim together (unique feature!)
+  → 1915 mutiny FAILED (informers); 42 hanged; Kartar Singh Sarabha (age 19)
+  → Kartar Singh Sarabha = Bhagat Singh's idol
+```
 
 ---
 
-# 🚀 TOMORROW — DAY 38 PREVIEW
-
-**CS:** ER Model & Relational Model — Entities, Attributes, Relationships, Cardinality (1:1, 1:N, M:N)
-**GS:** Geography — Types of Soil in India, Black Soil, Cotton Belt, Red Soil, Laterite
-
-*"Every key concept you master today = one question you won't miss on exam day!"* 🎯
+## 🎯 TONIGHT'S 5-BULLET SUMMARY (Write in your notebook):
+1. **Key hierarchy**: Super Key ⊃ Candidate Key → Primary Key (one, no NULL); Alternate Keys = remaining candidates; Foreign Key = links tables (can be NULL); Unique Key = unique but allows NULL.
+2. **PK vs Unique Key**: Primary Key = ONE per table + CANNOT be NULL; Unique Key = MULTIPLE per table + CAN be NULL — this is the most tested distinction!
+3. **Composite Key**: Two or more attributes combined as a key when NO single attribute alone uniquely identifies a row (example: {RollNo + CourseID} in Enrollment table).
+4. **Birsa Munda**: Born 15 Nov 1875; Ulgulan 1899-1900; Dharti Abba; captured 3 Feb 1900; died Ranchi Jail 9 Jun 1900 (age 25); legacy = CNT Act 1908; 15 Nov = Jharkhand Day.
+5. **Revolutionary trio**: Anushilan 1902 Calcutta (Khudiram 18 yrs, Alipore); Abhinav Bharat 1904 Nasik (Savarkar, 50 yrs, Kala Pani); Ghadar 1913 San Francisco (Sohan Singh Bhakna, Kartar Singh Sarabha 19 yrs, non-communal).
 
 ---
-*Day 37 of 170 | BPSC TRE 4.0 | CS + GS Dual Track | Target: TOP 50 RANK | 130+/150*
+
+## 📅 DAY 38 PREVIEW — What's Coming Next:
+**CS**: ER Model (Entity-Relationship Model) — Entities, Attributes (simple, composite, derived, multi-valued), Relationships, ER Diagrams, Cardinality (1:1, 1:N, M:N), Participation Constraints (Total vs Partial), Weak Entities, ER to Relational mapping
+**GS**: Indian Polity — Fundamental Rights (Articles 12-35): Right to Equality (14-18), Right to Freedom (19-22), Right Against Exploitation (23-24), Right to Freedom of Religion (25-28), Cultural & Educational Rights (29-30), Right to Constitutional Remedies (32)
+
+---
+
+*🚀 Day 37 of 170 — You're 21.7% through. DBMS Keys are a foundational topic — every advanced DBMS concept (normalization, ER Model, SQL joins) builds on what you learned today. Master the key distinctions now to make everything easier later!*
